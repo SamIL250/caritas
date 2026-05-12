@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand Primary */
+  --color-primary: #7A1515;
+  --color-primary-hover: #5e1010;
+  --color-primary-light: #fdf2f2;
+  --color-primary-soft: rgba(122, 21, 21, 0.05);
+  
+  /* Backgrounds */
+  --color-page-bg: #f8f7f5;
+  --color-card-bg: #ffffff;
+  --color-sidebar-bg: #ffffff;
+  
+  /* Text */
+  --color-text-primary: #1a1817;
+  --color-text-secondary: #5c5552;
+  --color-text-muted: #948b87;
+  
+  /* Borders */
+  --color-border-default: #eae7e4;
+  --color-border-soft: #f3f0ee;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-poppins: 'Poppins', sans-serif;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-soft: var(--color-primary-soft);
+  
+  --color-primary-orange: #8c2208;
+  --color-primary-orange-hover: #a1280a;
+  
+  --color-page-bg: var(--color-page-bg);
+  --color-card-bg: var(--color-card-bg);
+  --color-sidebar-bg: var(--color-sidebar-bg);
+  
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  
+  --color-border-default: var(--color-border-default);
+  --color-border-soft: var(--color-border-soft);
+
+  --font-sans: var(--font-sans);
+  --font-poppins: var(--font-poppins);
+}
+
+body {
+  background-color: var(--color-page-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  @keyframes subtle-zoom {
+    0% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .animate-subtle-zoom {
+    animation: subtle-zoom 20s ease-out forwards;
+  }
+
+  @keyframes auth-left-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .auth-left-enter {
+    animation: auth-left-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}

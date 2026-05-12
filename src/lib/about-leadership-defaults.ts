@@ -1,0 +1,115 @@
+/** Default CMS payload for leadership chronicle — aligned with original-web/about.html */
+
+export const LEADERSHIP_CHRONICLE_DEFAULT_CONTENT = {
+  eyebrow: "Leadership Chronicle",
+  eyebrow_icon: "fa-scroll",
+  title: "A Legacy of Faithful Service",
+  subtitle:
+    "Since 1959, faithful shepherds have guided Caritas Rwanda through decades of challenge, growth, and transformation — each era leaving a lasting mark on our mission.",
+  anchor_id: "leadership",
+  watermark_text: "SINCE 1959",
+  groups: [
+    {
+      subgroup_label: "Chairpersons",
+      subgroup_icon: "fa-crown",
+      era_span: "1959 — Present",
+      members: [
+        {
+          year: "1959",
+          name: "Archbishop Perraudin",
+          role: "Founding Chairperson",
+          photo_url: "/img/Chairperson/perraudin.jpg",
+        },
+        {
+          year: "1972",
+          name: "H.E. Mgr. Jean Baptiste Gahamanyi",
+          role: "Chairperson",
+          photo_url: "/img/Chairperson/gahamanyi.png",
+        },
+        {
+          year: "1997",
+          name: "H.E. Mgr. Thaddée Ntihinyurwa",
+          role: "Chairperson",
+          photo_url: "",
+        },
+        {
+          year: "2022",
+          name: "H.E. Mgr. Anaclet Mwumvaneza",
+          role: "Chairperson — Nyundo Diocese",
+          photo_url: "/img/Chairperson/anaclet.jpg",
+          featured: true,
+        },
+      ],
+    },
+    {
+      subgroup_label: "Secretary Generals",
+      subgroup_icon: "fa-person-chalkboard",
+      era_span: "1961 — Present",
+      members: [
+        {
+          year: "1961",
+          name: "Father Arthur Dejemeppe",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Arthur Dejemeppe.jpg",
+        },
+        { era_gap: true, era_label: "Founding\nEra" },
+        {
+          year: "1972",
+          name: "Father Roger Pien",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Roger Pien.jpg",
+        },
+        {
+          year: "1973",
+          name: "Father Cyriaque Munyansanga",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Cyriaque Munyansanga.png",
+        },
+        {
+          year: "1977",
+          name: "Father Carles Maria Giol",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Carles Maria Giol.png",
+        },
+        {
+          year: "1978",
+          name: "Father Michel Descombes",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Descombers.jpg",
+        },
+        { era_gap: true, era_label: "Modern\nEra" },
+        {
+          year: "1995",
+          name: "Father Callixte Twagirayezu",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Callixte Twagirayezu.jpg",
+        },
+        {
+          year: "1996",
+          name: "Msgr. Oreste Incimatata",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Mgr. ORESTE INCIMATATA.jpg",
+        },
+        {
+          year: "2013",
+          name: "H.E. Mgr. Anaclet Mwumvaneza",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/anaclet.jpg",
+        },
+        {
+          year: "2016",
+          name: "H.E. Mgr. JMV Twagirayezu",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/JMV Twagirayezu.jpg",
+        },
+        {
+          year: "2023",
+          name: "Father Oscar Kagimbura",
+          role: "Secretary General",
+          photo_url: "/img/Secretary Generals/Oscar Kagimbura.png",
+          featured: true,
+        },
+      ],
+    },
+  ],
+};

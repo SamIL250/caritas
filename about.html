@@ -1,0 +1,3023 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Caritas Rwanda</title>
+    <meta name="description" content="Learn about Caritas Rwanda's 66-year history, mission, vision, values, and nationwide network of faith-driven service.">
+    <link rel="icon" type="image/png" href="img/fav.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary-dark:   #003366;
+            --primary-orange: #8c2208;
+            --white:          #ffffff;
+            --text-dark:      #1a1a2e;
+            --text-light:     #6b7280;
+            --red:            #a5280d;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background: #f8f5f0;
+            line-height: 1.6;
+        }
+
+        img { display: block; max-width: 100%; }
+        a   { text-decoration: none; color: inherit; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ══════════════════════════════════════════
+           NAVBAR
+        ══════════════════════════════════════════ */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: #ffffff;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            padding: 0;
+        }
+
+        .navbar-container {
+            max-width: 100%;
+            margin: 0;
+            background: #ffffff;
+            border-radius: 0;
+            padding: 0.85rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo { max-width: 80px; flex-shrink: 0; }
+        .logo img { max-width: 100%; }
+
+        nav { display: none; align-items: center; gap: 1.5rem; flex: 1; }
+        nav ul { list-style: none; display: flex; align-items: center; gap: 0.3rem; flex: 1; justify-content: center; flex-wrap: wrap; }
+
+        nav a {
+            color: #1a1a2e;
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.2s ease, color 0.2s ease;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px; left: 1rem; right: 1rem;
+            height: 2px;
+            background: var(--red);
+            transform: scaleX(0);
+            transition: transform 0.25s ease;
+        }
+        nav a:hover::after { transform: scaleX(1); }
+        nav a.current { background: var(--red); color: #fff !important; border-radius: 4px; }
+
+        /* Dropdown */
+        nav ul li { position: relative; }
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: transparent;
+            padding-top: 1rem;
+            min-width: 210px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+            z-index: 999;
+            pointer-events: none;
+        }
+        nav ul li:hover .nav-dropdown {
+            opacity: 1; visibility: visible;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        .nav-dropdown-inner {
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 14px;
+            padding: 0.6rem;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.14);
+            position: relative;
+        }
+        .nav-dropdown-inner::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 10px; height: 10px;
+            background: #ffffff;
+            border-left: 1px solid rgba(0,0,0,0.08);
+            border-top: 1px solid rgba(0,0,0,0.08);
+            border-radius: 2px 0 0 0;
+        }
+        .nav-dropdown a {
+            display: flex; align-items: center; gap: 0.65rem;
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dark) !important;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .nav-dropdown a::after { display: none !important; }
+        .nav-dropdown a:hover { background: rgba(165,40,13,0.85); color: #fff !important; }
+        .nav-dropdown a i { width: 18px; text-align: center; color: var(--red); font-size: 0.8rem; }
+        .nav-dropdown a:hover i { color: #fff; }
+        .nav-dropdown-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 0.4rem 0.6rem; }
+
+        /* Programs dropdown — horizontal cards */
+        .nav-dropdown-cards {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            min-width: max-content;
+        }
+        .nav-dropdown-cards a {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.9rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            min-width: 82px;
+            text-align: center;
+        }
+        .nav-dropdown-cards a i {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(165,40,13,0.08);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        .nav-dropdown-cards a:hover i { background: rgba(255,255,255,0.18); }
+
+        .caret { font-size: 0.7rem; margin-left: 0.2rem; }
+
+        .nav-donate { margin-left: auto; flex-shrink: 0; }
+        .btn-donate {
+            background: #7a1d06; color: #ffffff;
+            padding: 0.75rem 2rem; font-size: 0.88rem;
+            border-radius: 100px; font-weight: 600;
+            border: none; cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(122,29,6,0.4);
+        }
+        .btn-donate:hover { background: #a5300d; transform: translateY(-2px); }
+
+        .nav-toggle {
+            display: block; background: none; border: none;
+            color: #1a1a2e; font-size: 1.5rem; cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            nav { display: flex; }
+            .nav-toggle { display: none; }
+        }
+
+        /* ══════════════════════════════════════════
+           PAGE HERO
+        ══════════════════════════════════════════ */
+        .page-hero {
+            min-height: 0;
+            background:
+                linear-gradient(160deg, rgba(3,17,43,0.88) 0%, rgba(122,29,6,0.75) 100%),
+                url('img/slide1.png') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 1.5rem 3.5rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('img/bg_1.png') center/cover;
+            opacity: 0.04;
+        }
+        .page-hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 760px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.9);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            margin-bottom: 1.2rem;
+        }
+        .page-hero h1 {
+            font-size: clamp(1.9rem, 5vw, 3.2rem);
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+        .page-hero h1 span {
+            background: linear-gradient(135deg, #e8a87c, #c86030);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .page-hero p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.75);
+            max-width: 560px;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+        }
+        .hero-breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.55);
+        }
+        .hero-breadcrumb a { color: rgba(255,255,255,0.75); transition: color 0.2s; }
+        .hero-breadcrumb a:hover { color: #fff; }
+        .hero-breadcrumb span { color: rgba(255,255,255,0.35); }
+
+        /* Quick nav pills below hero */
+        .hero-quick-nav {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .qnav-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.85);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.5rem 1.1rem;
+            border-radius: 100px;
+            transition: all 0.25s ease;
+        }
+        .qnav-pill:hover {
+            background: rgba(165,40,13,0.7);
+            border-color: rgba(165,40,13,0.5);
+            color: #fff;
+        }
+
+        /* ══════════════════════════════════════════
+           SHARED SECTION STYLES
+        ══════════════════════════════════════════ */
+        section { padding: 5.5rem 1.5rem; }
+        .section-light  { background: #ffffff; }
+        .section-warm   { background: #f7f3ef; }
+        .section-cream  { background: linear-gradient(135deg, #f9f5f1 0%, #fff8f5 100%); }
+
+        .sub-section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(165,40,13,0.08);
+            color: #a5280d;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 1rem;
+        }
+        .sub-section-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: #0d1b2a;
+            line-height: 1.2;
+            margin-bottom: 0.7rem;
+        }
+        .sub-section-subtitle {
+            font-size: 1rem;
+            color: #5a6a7a;
+            max-width: 580px;
+            line-height: 1.75;
+            margin-bottom: 3.5rem;
+        }
+        .head-center { text-align: center; }
+        .head-center .sub-section-subtitle { margin: 0 auto 3.5rem; }
+
+        /* ══════════════════════════════════════════
+           SECTION 1 — CHAIRPERSON STATEMENT
+        ══════════════════════════════════════════ */
+        .chairperson-section {
+            background: linear-gradient(135deg, #03112b 0%, #1a0808 100%);
+            padding: 5.5rem 1.5rem;
+        }
+        .chairperson-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .chairperson-inner { grid-template-columns: 1fr; text-align: center; }
+        }
+        .chairperson-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .chairperson-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid rgba(165,40,13,0.6);
+            box-shadow: 0 0 0 8px rgba(165,40,13,0.15), 0 20px 60px rgba(0,0,0,0.5);
+            object-fit: cover;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: rgba(255,255,255,0.3);
+            overflow: hidden;
+        }
+        .chairperson-photo i { font-size: 4rem; color: rgba(255,255,255,0.25); }
+        .chairperson-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+        .chairperson-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+        }
+        .chairperson-title {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.55);
+            text-align: center;
+            line-height: 1.5;
+        }
+        .chairperson-content { position: relative; }
+        .quote-mark {
+            font-size: 8rem;
+            line-height: 0.8;
+            color: rgba(165,40,13,0.3);
+            font-family: Georgia, serif;
+            leading-trim: both;
+            display: block;
+            margin-bottom: -1rem;
+        }
+        .chairperson-quote {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.85;
+            font-style: italic;
+        }
+        .chairperson-quote strong { color: #fff; font-style: normal; }
+        .chairperson-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #a5280d, #c03015);
+            border-radius: 2px;
+            margin: 1.5rem 0;
+        }
+        .chairperson-meta {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 2 — OUR HISTORY BENTO
+        ══════════════════════════════════════════ */
+        .hist-bento {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.15rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Base card */
+        .hist-card {
+            position: relative; overflow: hidden;
+            border-radius: 24px; padding: 2.2rem 2rem 2rem;
+            min-height: 230px;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+        .hist-card:hover { transform: translateY(-6px); }
+
+        /* Colour themes */
+        .hist-card--light {
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.07);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+        }
+        .hist-card--light:hover { box-shadow: 0 20px 48px rgba(0,0,0,0.11); }
+        .hist-card--crimson {
+            background: linear-gradient(140deg, #8a1e08 0%, #c03015 60%, #d94020 100%);
+        }
+        .hist-card--crimson:hover { box-shadow: 0 20px 52px rgba(165,40,13,0.4); }
+        .hist-card--navy {
+            background: linear-gradient(140deg, #071525 0%, #0d2540 55%, #0f3058 100%);
+        }
+        .hist-card--navy:hover { box-shadow: 0 20px 52px rgba(5,30,70,0.45); }
+        .hist-card--gold {
+            background: linear-gradient(140deg, #5a3500 0%, #9a6000 50%, #c07800 100%);
+        }
+        .hist-card--gold:hover { box-shadow: 0 20px 52px rgba(120,80,0,0.4); }
+
+        /* Span helpers */
+        .hist-span2 { grid-column: span 2; }
+        .hist-span3 { grid-column: span 3; min-height: 200px; }
+
+        /* Huge watermark year */
+        .hist-yr-bg {
+            position: absolute; right: -0.05em; top: 50%;
+            transform: translateY(-50%);
+            font-size: 9rem; font-weight: 900; line-height: 1;
+            letter-spacing: -0.04em; user-select: none; pointer-events: none;
+            opacity: 0.07;
+        }
+        .hist-card--light  .hist-yr-bg { color: #a5280d; }
+        .hist-card--crimson .hist-yr-bg,
+        .hist-card--navy .hist-yr-bg,
+        .hist-card--gold .hist-yr-bg  { color: #fff; }
+
+        /* Top accent bar */
+        .hist-card--light::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #a5280d, rgba(165,40,13,0.15));
+            border-radius: 24px 24px 0 0;
+        }
+
+        /* Icon circle */
+        .hist-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 46px; height: 46px; border-radius: 13px;
+            font-size: 1.2rem; margin-bottom: 1.1rem;
+            position: relative; z-index: 1; flex-shrink: 0;
+        }
+        .hist-card--light   .hist-icon { background: rgba(165,40,13,0.09); color: #a5280d; }
+        .hist-card--crimson .hist-icon,
+        .hist-card--navy    .hist-icon,
+        .hist-card--gold    .hist-icon { background: rgba(255,255,255,0.14); color: #fff; }
+
+        /* Era + year pill row */
+        .hist-meta {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 0.7rem; position: relative; z-index: 1;
+        }
+        .hist-era-pill {
+            font-size: 0.58rem; font-weight: 800; letter-spacing: 0.14em;
+            text-transform: uppercase; padding: 0.18rem 0.6rem;
+            border-radius: 100px;
+        }
+        .hist-card--light   .hist-era-pill { background: rgba(165,40,13,0.09); color: #a5280d; }
+        .hist-card--crimson .hist-era-pill,
+        .hist-card--navy    .hist-era-pill,
+        .hist-card--gold    .hist-era-pill { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.85); }
+        .hist-year-tag {
+            font-size: 0.72rem; font-weight: 800;
+        }
+        .hist-card--light   .hist-year-tag { color: #a5280d; }
+        .hist-card--crimson .hist-year-tag,
+        .hist-card--navy    .hist-year-tag,
+        .hist-card--gold    .hist-year-tag { color: rgba(255,255,255,0.65); }
+
+        /* Title */
+        .hist-title {
+            font-size: 1.15rem; font-weight: 800; line-height: 1.3;
+            margin-bottom: 0.65rem; position: relative; z-index: 1;
+        }
+        .hist-card--light   .hist-title { color: #0d1b2a; }
+        .hist-card--crimson .hist-title,
+        .hist-card--navy    .hist-title,
+        .hist-card--gold    .hist-title { color: #fff; }
+
+        /* Body */
+        .hist-body {
+            font-size: 0.86rem; line-height: 1.74; margin: 0;
+            position: relative; z-index: 1;
+        }
+        .hist-card--light   .hist-body { color: #5a6a7a; }
+        .hist-card--crimson .hist-body,
+        .hist-card--navy    .hist-body,
+        .hist-card--gold    .hist-body { color: rgba(255,255,255,0.68); }
+        .hist-card--light   .hist-body strong { color: #0d1b2a; }
+        .hist-card--crimson .hist-body strong,
+        .hist-card--navy    .hist-body strong,
+        .hist-card--gold    .hist-body strong { color: #fff; }
+
+        /* Jubilee card inner row (span3) */
+        .hist-jubilee-inner {
+            display: flex; align-items: center; gap: 2.5rem;
+            flex-wrap: wrap; position: relative; z-index: 1;
+        }
+        .hist-jubilee-stats {
+            display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1rem;
+        }
+        .hist-stat-item { text-align: center; }
+        .hist-stat-num {
+            font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1;
+        }
+        .hist-stat-lbl { font-size: 0.68rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+        @media (max-width: 768px) {
+            .hist-bento { grid-template-columns: repeat(2, 1fr); }
+            .hist-span3 { grid-column: span 2; }
+        }
+        @media (max-width: 520px) {
+            .hist-bento { grid-template-columns: 1fr; }
+            .hist-span2, .hist-span3 { grid-column: span 1; }
+            .hist-yr-bg { font-size: 6rem; }
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 3 — MISSION / VISION / VALUES
+        ══════════════════════════════════════════ */
+        /* ══ MVV SECTION — Dark Glassmorphism ══ */
+        .mvv-section {
+            position: relative; overflow: hidden;
+            background: #ffffff;
+            padding: 6rem 1.5rem;
+        }
+        .mvv-section .container { position: relative; z-index: 1; }
+        .mvv-section .sub-section-label {
+            background: rgba(165,40,13,0.08); border-color: rgba(165,40,13,0.18);
+            color: #a5280d;
+        }
+        .mvv-section .sub-section-label i { color: #a5280d; }
+        .mvv-section .sub-section-title { color: #0d1b2a; }
+        .mvv-section .sub-section-subtitle { color: #5a6a7a; }
+
+        /* Background orbs */
+        .mvv-orb {
+            position: absolute; border-radius: 50%;
+            pointer-events: none; filter: blur(100px);
+        }
+        .mvv-orb-1 {
+            width: 500px; height: 500px; opacity: 0.55;
+            background: radial-gradient(circle, rgba(165,40,13,0.08), transparent 68%);
+            top: -120px; left: -100px;
+        }
+        .mvv-orb-2 {
+            width: 420px; height: 420px; opacity: 0.5;
+            background: radial-gradient(circle, rgba(0,50,130,0.07), transparent 68%);
+            bottom: 80px; right: -80px;
+        }
+        .mvv-orb-3 {
+            width: 300px; height: 300px; opacity: 0.45;
+            background: radial-gradient(circle, rgba(192,120,0,0.07), transparent 68%);
+            top: 55%; left: 42%; transform: translate(-50%,-50%);
+        }
+
+        /* Three main glass cards */
+        .mvv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.6rem; max-width: 1100px;
+            margin: 0 auto 3rem;
+        }
+        .mvv-card {
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 28px; padding: 2.6rem 2.2rem;
+            position: relative; overflow: hidden;
+            transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease;
+        }
+        .mvv-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            border-radius: 28px 28px 0 0;
+        }
+        .mvv-card.mission::before  { background: linear-gradient(90deg,#a5280d,#e03015); }
+        .mvv-card.vision::before   { background: linear-gradient(90deg,#003da0,#0066cc); }
+        .mvv-card.values-c::before { background: linear-gradient(90deg,#c07800,#e09500); }
+
+        /* Corner glow blob inside each card */
+        .mvv-card::after {
+            content: ''; position: absolute;
+            width: 200px; height: 200px; border-radius: 50%;
+            bottom: -70px; right: -50px;
+            filter: blur(55px); opacity: 0.10;
+            transition: opacity 0.32s;
+        }
+        .mvv-card.mission::after  { background: #a5280d; }
+        .mvv-card.vision::after   { background: #0055cc; }
+        .mvv-card.values-c::after { background: #c07800; }
+
+        .mvv-card.mission  { box-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9); }
+        .mvv-card.vision   { box-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9); }
+        .mvv-card.values-c { box-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9); }
+
+        .mvv-card:hover { transform: translateY(-8px); }
+        .mvv-card:hover::after { opacity: 0.18; }
+        .mvv-card.mission:hover  { box-shadow: 0 22px 52px rgba(165,40,13,0.15), inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(165,40,13,0.18); }
+        .mvv-card.vision:hover   { box-shadow: 0 22px 52px rgba(0,51,130,0.15),  inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,80,180,0.18); }
+        .mvv-card.values-c:hover { box-shadow: 0 22px 52px rgba(192,120,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(192,120,0,0.18); }
+
+        .mvv-icon {
+            width: 62px; height: 62px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.48rem; margin-bottom: 1.5rem;
+            position: relative; z-index: 1;
+        }
+        .mission .mvv-icon  { background: rgba(165,40,13,0.1);  color: #a5280d; border: 1px solid rgba(165,40,13,0.18); }
+        .vision  .mvv-icon  { background: rgba(0,55,140,0.1);   color: #003da0; border: 1px solid rgba(0,80,180,0.18); }
+        .values-c .mvv-icon { background: rgba(192,120,0,0.1);  color: #c07800; border: 1px solid rgba(192,120,0,0.18); }
+
+        .mvv-card-label {
+            font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em;
+            text-transform: uppercase; margin-bottom: 0.52rem;
+            position: relative; z-index: 1;
+        }
+        .mission  .mvv-card-label { color: #a5280d; }
+        .vision   .mvv-card-label { color: #003da0; }
+        .values-c .mvv-card-label { color: #c07800; }
+
+        .mvv-card h3 {
+            font-size: 1.42rem; font-weight: 800; color: #0d1b2a;
+            margin-bottom: 1rem; line-height: 1.25;
+            position: relative; z-index: 1;
+        }
+        .mvv-card p {
+            font-size: 0.91rem; color: #5a6a7a;
+            line-height: 1.82; margin: 0; position: relative; z-index: 1;
+        }
+        .mvv-card p strong { color: #0d1b2a; font-weight: 700; }
+
+        /* Divider between cards and values grid */
+        .mvv-divider {
+            display: flex; align-items: center; gap: 1.4rem;
+            max-width: 1100px; margin: 0 auto 2.4rem;
+        }
+        .mvv-divider::before, .mvv-divider::after {
+            content: ''; flex: 1; height: 1px;
+            background: rgba(165,40,13,0.12);
+        }
+        .mvv-divider span {
+            font-size: 0.64rem; font-weight: 800; letter-spacing: 0.18em;
+            text-transform: uppercase; color: rgba(165,40,13,0.5);
+            white-space: nowrap;
+        }
+
+        /* Values glass pills */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(162px, 1fr));
+            gap: 0.85rem; max-width: 1100px; margin: 0 auto;
+        }
+        .value-pill {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(165,40,13,0.10);
+            border-radius: 18px; padding: 1.3rem 1rem;
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; gap: 0.68rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+        }
+        .value-pill:hover {
+            transform: translateY(-5px);
+            border-color: rgba(165,40,13,0.28);
+            box-shadow: 0 14px 34px rgba(165,40,13,0.13);
+        }
+        .value-pill-icon {
+            width: 46px; height: 46px;
+            background: linear-gradient(135deg, rgba(165,40,13,0.08), rgba(165,40,13,0.15));
+            border: 1px solid rgba(165,40,13,0.15);
+            border-radius: 13px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a5280d; font-size: 1.1rem;
+            transition: background 0.25s;
+        }
+        .value-pill:hover .value-pill-icon {
+            background: linear-gradient(135deg, rgba(165,40,13,0.15), rgba(165,40,13,0.25));
+        }
+        .value-pill-name {
+            font-size: 0.79rem; font-weight: 700;
+            color: #0d1b2a; line-height: 1.3;
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 5 — NETWORK & DIOCESES
+        ══════════════════════════════════════════ */
+        .network-stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.2rem;
+            max-width: 1100px;
+            margin: 0 auto 3.5rem;
+        }
+        .net-stat-card {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(165,40,13,0.14);
+            border-radius: 20px;
+            padding: 1.8rem 1.2rem;
+            text-align: center;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+            transition: transform 0.25s ease;
+        }
+        .net-stat-card:hover { transform: translateY(-4px); }
+        .net-stat-number {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #a5280d;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .net-stat-label { font-size: 0.78rem; color: #5a6a7a; font-weight: 600; line-height: 1.35; }
+
+        /* Diocese Gallery Cards */
+        .diocese-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.1rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .diocese-card {
+            position: relative;
+            height: 230px;
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+            transition: transform 0.32s ease, box-shadow 0.32s ease;
+        }
+        .diocese-card:hover {
+            transform: translateY(-6px) scale(1.015);
+            box-shadow: 0 18px 48px rgba(0,0,0,0.22);
+        }
+
+        /* Full-bleed photo */
+        .dioc-bg {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+        .diocese-card:hover .dioc-bg { transform: scale(1.1); }
+
+        /* Gradient overlays */
+        .dioc-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(10,10,20,0.82) 0%,
+                rgba(10,10,20,0.38) 45%,
+                rgba(10,10,20,0.05) 100%
+            );
+            transition: opacity 0.3s ease;
+        }
+        .diocese-card:hover .dioc-overlay {
+            background: linear-gradient(
+                to top,
+                rgba(140,20,5,0.72) 0%,
+                rgba(10,10,20,0.35) 50%,
+                rgba(10,10,20,0.05) 100%
+            );
+        }
+
+        /* Shine sweep on hover */
+        .diocese-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(
+                115deg,
+                transparent 35%,
+                rgba(255,255,255,0.07) 50%,
+                transparent 65%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .diocese-card:hover::after { opacity: 1; }
+
+        /* Number badge */
+        .dioc-num {
+            position: absolute; top: 0.85rem; left: 0.85rem;
+            width: 30px; height: 30px;
+            background: rgba(165,40,13,0.85);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.68rem; font-weight: 800;
+            color: #fff; letter-spacing: 0.03em;
+            backdrop-filter: blur(6px);
+            z-index: 2;
+        }
+
+        /* Bottom text */
+        .dioc-info {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 1.25rem 1rem 1rem;
+            z-index: 2;
+            transform: translateY(4px);
+            transition: transform 0.3s ease;
+        }
+        .diocese-card:hover .dioc-info { transform: translateY(0); }
+
+        .dioc-name {
+            font-size: 0.9rem; font-weight: 800;
+            color: #fff; line-height: 1.3;
+            margin-bottom: 0.28rem;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+        }
+        .dioc-est {
+            font-size: 0.68rem; font-weight: 600;
+            color: rgba(255,220,200,0.88);
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .dioc-est i { font-size: 0.6rem; }
+
+        /* Special Nyundo Zones card */
+        .diocese-card--special .dioc-bg-placeholder {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #1a0f05 0%, #3d1500 50%, #5c2000 100%);
+        }
+        .diocese-card--special .dioc-icon-center {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .diocese-card--special .dioc-icon-center i {
+            font-size: 2.5rem; color: rgba(255,190,60,0.75);
+        }
+        .diocese-card--special .dioc-icon-center span {
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
+            text-transform: uppercase; color: rgba(255,200,100,0.55);
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 6 — LEADERSHIP CHRONICLE TIMELINE
+        ══════════════════════════════════════════ */
+        .ldr-section { position: relative; overflow: hidden; }
+        .ldr-section::before {
+            content: 'SINCE 1959';
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%,-50%) rotate(-12deg);
+            font-size: 7rem; font-weight: 900; letter-spacing: 0.2em;
+            color: rgba(165,40,13,0.035); white-space: nowrap;
+            pointer-events: none; user-select: none; z-index: 0;
+        }
+        .ldr-section > .container { position: relative; z-index: 1; }
+
+        .ldr-era-block { margin-bottom: 3.5rem; }
+        .ldr-era-block:last-child { margin-bottom: 0; }
+
+        .ldr-era-header {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.75rem; padding-bottom: 0.9rem;
+            border-bottom: 2px solid rgba(165,40,13,0.12);
+        }
+        .ldr-era-title {
+            font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em;
+            text-transform: uppercase; color: #a5280d;
+            display: flex; align-items: center; gap: 0.45rem;
+        }
+        .ldr-era-title i { font-size: 0.8rem; }
+        .ldr-era-span {
+            margin-left: auto; font-size: 0.68rem; font-weight: 600;
+            color: #6b7280; background: rgba(165,40,13,0.07);
+            border: 1px solid rgba(165,40,13,0.14);
+            padding: 0.18rem 0.7rem; border-radius: 100px;
+        }
+
+        .ldr-scroll-wrap { position: relative; }
+        .ldr-scroll-wrap::after {
+            content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+            width: 64px; pointer-events: none; z-index: 2;
+            background: linear-gradient(to right, transparent, #f7f3ef 90%);
+        }
+        .ldr-scroll {
+            overflow-x: auto; padding-bottom: 0.75rem;
+            scrollbar-width: thin; scrollbar-color: rgba(165,40,13,0.28) transparent;
+        }
+        .ldr-scroll::-webkit-scrollbar { height: 4px; }
+        .ldr-scroll::-webkit-scrollbar-track { background: transparent; }
+        .ldr-scroll::-webkit-scrollbar-thumb { background: rgba(165,40,13,0.28); border-radius: 2px; }
+
+        .ldr-timeline {
+            display: flex; align-items: flex-start;
+            position: relative; min-width: max-content;
+            padding: 0 2rem 0.5rem;
+        }
+        .ldr-timeline::after {
+            content: ''; position: absolute;
+            top: 110px; left: 0; right: 0; height: 2px;
+            background: linear-gradient(to right,
+                transparent 0%, rgba(165,40,13,0.22) 3%,
+                rgba(165,40,13,0.22) 97%, transparent 100%);
+        }
+
+        .ldr-node {
+            display: flex; flex-direction: column; align-items: center;
+            width: 150px; flex-shrink: 0; position: relative;
+            padding-bottom: 0.25rem; transition: transform 0.28s ease;
+            cursor: default;
+        }
+        .ldr-node:hover { transform: translateY(-5px); }
+
+        .ldr-photo {
+            width: 86px; height: 86px; border-radius: 50%;
+            overflow: hidden; flex-shrink: 0;
+            border: 3px solid rgba(165,40,13,0.22);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+            background: #e0d5ce; margin-bottom: 0;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .ldr-node:hover .ldr-photo {
+            border-color: rgba(165,40,13,0.55);
+            box-shadow: 0 8px 28px rgba(165,40,13,0.22);
+        }
+        .ldr-photo img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            filter: sepia(0.18) contrast(1.04) brightness(0.97);
+            transition: filter 0.3s;
+        }
+        .ldr-node:hover .ldr-photo img { filter: sepia(0) contrast(1) brightness(1); }
+        .ldr-photo-placeholder {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; color: rgba(165,40,13,0.32);
+        }
+
+        .ldr-connector {
+            width: 2px; height: 18px; flex-shrink: 0;
+            background: linear-gradient(to bottom, rgba(165,40,13,0.18), rgba(165,40,13,0.35));
+        }
+        .ldr-dot {
+            width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0;
+            background: #a5280d; border: 3px solid #f7f3ef;
+            box-shadow: 0 0 0 2px rgba(165,40,13,0.35);
+            position: relative; z-index: 1;
+        }
+        .ldr-year-label {
+            font-size: 0.66rem; font-weight: 800; color: #a5280d;
+            letter-spacing: 0.04em; margin: 0.45rem 0 0.4rem;
+        }
+        .ldr-name {
+            font-size: 0.77rem; font-weight: 700; color: #0d1b2a;
+            text-align: center; line-height: 1.38;
+            margin-bottom: 0.28rem; padding: 0 0.35rem;
+        }
+        .ldr-role {
+            font-size: 0.67rem; color: #6b7280;
+            text-align: center; padding: 0 0.35rem;
+        }
+        .ldr-current-badge {
+            display: inline-block; background: #a5280d; color: #fff;
+            font-size: 0.58rem; font-weight: 800; letter-spacing: 0.1em;
+            text-transform: uppercase; padding: 0.14rem 0.55rem;
+            border-radius: 100px; margin-top: 0.35rem;
+        }
+
+        .ldr-node--current .ldr-photo {
+            border-color: #a5280d;
+            box-shadow: 0 0 0 5px rgba(165,40,13,0.12), 0 8px 28px rgba(165,40,13,0.28);
+        }
+        .ldr-node--current .ldr-dot {
+            width: 17px; height: 17px;
+            box-shadow: 0 0 0 3px rgba(165,40,13,0.22), 0 0 10px rgba(165,40,13,0.4);
+        }
+        .ldr-node--current .ldr-year-label { font-size: 0.7rem; }
+
+        .ldr-era-gap {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; width: 48px; flex-shrink: 0;
+            position: relative; padding-top: 0;
+        }
+        .ldr-era-gap::before {
+            content: ''; position: absolute;
+            top: 110px; bottom: 0; left: 50%;
+            width: 1px;
+            background: repeating-linear-gradient(
+                to bottom, rgba(165,40,13,0.25) 0, rgba(165,40,13,0.25) 5px,
+                transparent 5px, transparent 10px);
+        }
+        .ldr-era-gap-label {
+            writing-mode: vertical-rl; transform: rotate(180deg);
+            font-size: 0.55rem; font-weight: 800; letter-spacing: 0.12em;
+            text-transform: uppercase; color: rgba(165,40,13,0.45);
+            background: rgba(165,40,13,0.07); border: 1px solid rgba(165,40,13,0.15);
+            border-radius: 6px; padding: 0.4rem 0.25rem;
+            position: relative; z-index: 1; margin-top: 110px;
+            line-height: 1.3;
+        }
+
+        /* ══════════════════════════════════════════
+           KEY STATS INFOGRAPHIC
+        ══════════════════════════════════════════ */
+        /* ── Stats Banner ── */
+        .stats-banner {
+            background: #ffffff;
+            padding: 2.8rem 2rem;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        /* Subtle background tint orbs */
+        .stats-banner::before,
+        .stats-banner::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .stats-banner::before {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(165,40,13,0.06) 0%, transparent 70%);
+            top: -200px; left: -100px;
+        }
+        .stats-banner::after {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0,51,102,0.05) 0%, transparent 70%);
+            bottom: -180px; right: -80px;
+        }
+        .stats-banner-grid {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            max-width: 1160px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 22px;
+            box-shadow:
+                0 4px 24px rgba(0,0,0,0.06),
+                0 1px 0 rgba(255,255,255,0.9) inset,
+                0 -1px 0 rgba(0,0,0,0.04) inset;
+            overflow: hidden;
+        }
+        .stats-banner-item {
+            flex: 1;
+            text-align: center;
+            padding: 1.8rem 1rem;
+            position: relative;
+            transition: background 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .stats-banner-item:hover {
+            background: rgba(165,40,13,0.04);
+        }
+        .stats-banner-icon {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            background: rgba(165,40,13,0.08);
+            border: 1px solid rgba(165,40,13,0.15);
+            display: flex; align-items: center; justify-content: center;
+            color: #a5280d;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            transition: background 0.25s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .stats-banner-item:hover .stats-banner-icon {
+            background: rgba(165,40,13,0.15);
+            transform: scale(1.12) rotate(-6deg);
+        }
+        /* Vertical dividers between items */
+        .stats-banner-item + .stats-banner-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 18%; bottom: 18%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1), transparent);
+        }
+        .stats-banner-number {
+            font-size: 2.1rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(135deg, #0d1b2a 0%, #0d1b2a 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .stats-banner-number span {
+            background: linear-gradient(135deg, #a5280d, #e05c3a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stats-banner-label {
+            font-size: 0.72rem;
+            color: #6b7280;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            line-height: 1.35;
+        }
+        @media (max-width: 860px) {
+            .stats-banner-grid {
+                flex-wrap: wrap;
+                border-radius: 18px;
+            }
+            .stats-banner-item { flex: 0 0 33.333%; border-radius: 0; }
+            .stats-banner-item:nth-child(3n+1)::before { display: none; }
+        }
+        @media (max-width: 480px) {
+            .stats-banner { padding: 2rem 1rem; }
+            .stats-banner-item { flex: 0 0 50%; }
+            .stats-banner-item:nth-child(odd)::before { display: none; }
+        }
+
+        /* ══════════════════════════════════════════
+           FOOTER
+        ══════════════════════════════════════════ */
+        footer {
+            background: linear-gradient(160deg, #03112b 0%, #08203f 60%, #1a0808 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-banner {
+            background: rgba(165,40,13,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 1.8rem 2rem;
+        }
+        .footer-banner-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-banner-tagline { font-size: 1.1rem; font-weight: 700; }
+        .footer-banner-tagline span { color: #e8a87c; }
+        .footer-banner-cta {
+            background: #a5280d;
+            color: #fff;
+            padding: 0.7rem 1.8rem;
+            border-radius: 100px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+        .footer-banner-cta:hover { background: #7a1d06; }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 3rem;
+            padding: 4rem 2rem;
+        }
+        @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+
+        .footer-logo { max-width: 70px; margin-bottom: 1rem; filter: brightness(0) invert(1); }
+        .footer-tagline { font-size: 0.87rem; color: rgba(255,255,255,0.55); line-height: 1.75; margin-bottom: 1.5rem; }
+        .ft-socials { display: flex; gap: 0.6rem; }
+        .ft-social-btn {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.88rem;
+            transition: all 0.25s ease;
+        }
+        .ft-social-btn:hover { background: #a5280d; border-color: #a5280d; color: #fff; }
+
+        .ft-col-heading { font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 1.2rem; }
+        .ft-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+        .ft-links a { font-size: 0.88rem; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+        .ft-links a:hover { color: #fff; }
+
+        .ft-newsletter-text { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 1rem; }
+        .ft-newsletter-form { display: flex; flex-direction: column; gap: 0.7rem; }
+        .ft-newsletter-input {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-size: 0.88rem;
+            outline: none;
+        }
+        .ft-newsletter-input::placeholder { color: rgba(255,255,255,0.35); }
+        .ft-newsletter-btn {
+            background: #a5280d;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .ft-newsletter-btn:hover { background: #7a1d06; }
+
+        .ft-bottom {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            padding: 1.5rem 2rem;
+        }
+        .ft-bottom-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .ft-bottom-left { font-size: 0.82rem; color: rgba(255,255,255,0.4); display: flex; flex-direction: column; gap: 0.2rem; }
+        .ft-bottom-links { display: flex; gap: 1.5rem; }
+        .ft-bottom-links a { font-size: 0.82rem; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+        .ft-bottom-links a:hover { color: #fff; }
+
+        /* ══════════════════════════════════════
+           BE PART OF THE CHANGE — SECTION
+        ══════════════════════════════════════ */
+        .bpc-section {
+            position: relative;
+            padding: 6rem 1.5rem;
+            background: linear-gradient(135deg, #1e0608 0%, #12101a 45%, #04101f 100%);
+            overflow: hidden;
+        }
+
+        /* Floating background orbs */
+        .bpc-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bpc-orb-1 {
+            width: 580px; height: 580px;
+            top: -200px; left: -140px;
+            background: radial-gradient(circle, rgba(165,37,50,0.16) 0%, transparent 65%);
+            animation: bpcOrb1 13s ease-in-out infinite alternate;
+        }
+        .bpc-orb-2 {
+            width: 480px; height: 480px;
+            bottom: -140px; right: -100px;
+            background: radial-gradient(circle, rgba(0,51,102,0.2) 0%, transparent 65%);
+            animation: bpcOrb2 16s ease-in-out infinite alternate;
+        }
+        .bpc-orb-3 {
+            width: 320px; height: 320px;
+            top: 38%; left: 48%;
+            background: radial-gradient(circle, rgba(91,169,196,0.08) 0%, transparent 65%);
+        }
+        @keyframes bpcOrb1 {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(36px, 28px) scale(1.12); }
+        }
+        @keyframes bpcOrb2 {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(-28px, -36px) scale(1.14); }
+        }
+        .bpc-dot-grid {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* Inner wrapper */
+        .bpc-inner {
+            position: relative; z-index: 1;
+            max-width: 1200px; margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .bpc-header { text-align: center; margin-bottom: 4rem; }
+        .bpc-eyebrow {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(165,37,50,0.18);
+            border: 1px solid rgba(165,37,50,0.35);
+            color: #ff9999;
+            font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            padding: 0.38rem 1.1rem; border-radius: 100px;
+            margin-bottom: 1.1rem;
+        }
+        .bpc-title {
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 900; color: #fff;
+            line-height: 1.08; letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+        .bpc-title span {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa07a 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bpc-subtitle {
+            font-size: 1rem; color: rgba(255,255,255,0.5);
+            max-width: 540px; margin: 0 auto; line-height: 1.78;
+        }
+
+        /* ── Two-column grid ── */
+        .bpc-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 1.4rem; align-items: start;
+        }
+        @media (max-width: 900px) { .bpc-grid { grid-template-columns: 1fr; } }
+
+        /* ── Glassmorphism base ── */
+        .glass-card {
+            background: rgba(255,255,255,0.065);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(255,255,255,0.11);
+            border-radius: 24px;
+            transition: background 0.35s ease, border-color 0.35s ease,
+                        transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.35s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-5px);
+            box-shadow: 0 28px 64px rgba(0,0,0,0.35);
+        }
+
+        /* ── Featured big card ── */
+        .bpc-feat-card { padding: 0; overflow: hidden; }
+        .bpc-feat-img-wrap {
+            position: relative;
+            width: 100%; height: 300px;
+            overflow: hidden;
+        }
+        .bpc-feat-img-wrap img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform 0.6s ease;
+        }
+        .bpc-feat-card:hover .bpc-feat-img-wrap img { transform: scale(1.04); }
+        .bpc-feat-img-placeholder {
+            width: 100%; height: 300px;
+            background: linear-gradient(135deg, rgba(165,37,50,0.35) 0%, rgba(0,51,102,0.35) 100%);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 1rem;
+            font-size: 4.5rem; color: rgba(255,255,255,0.25);
+        }
+        .bpc-feat-img-label {
+            font-size: 0.72rem; font-weight: 700;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .bpc-feat-badge {
+            position: absolute; top: 1rem; left: 1rem;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: rgba(165,37,50,0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 1.2px; text-transform: uppercase;
+            padding: 0.3rem 0.85rem; border-radius: 100px;
+        }
+        .bpc-feat-body { padding: 1.8rem; }
+        .bpc-feat-name {
+            font-size: 1.55rem; font-weight: 800; color: #fff;
+            margin-bottom: 0.35rem; line-height: 1.2;
+        }
+        .bpc-feat-location {
+            font-size: 0.78rem; color: rgba(255,255,255,0.4);
+            margin-bottom: 1.1rem;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .bpc-feat-story {
+            font-size: 0.9rem; color: rgba(255,255,255,0.65);
+            line-height: 1.78; margin-bottom: 1.5rem;
+            border-left: 2px solid rgba(165,37,50,0.5);
+            padding-left: 1rem;
+        }
+
+        /* Progress bar */
+        .bpc-progress-wrap { margin-bottom: 1.4rem; }
+        .bpc-progress-labels {
+            display: flex; justify-content: space-between;
+            align-items: baseline; margin-bottom: 0.55rem;
+        }
+        .bpc-raised { font-size: 1.15rem; font-weight: 800; color: #fff; }
+        .bpc-goal   { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+        .bpc-bar-track {
+            width: 100%; height: 9px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 100px; overflow: hidden;
+        }
+        .bpc-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #A52532 0%, #ff6b6b 100%);
+            border-radius: 100px;
+            position: relative; overflow: hidden;
+        }
+        .bpc-bar-fill::after {
+            content: '';
+            position: absolute; top: 0; left: -60%;
+            width: 40%; height: 100%;
+            background: rgba(255,255,255,0.25);
+            animation: barShimmer 2.2s ease-in-out infinite;
+        }
+        @keyframes barShimmer {
+            0%   { left: -60%; }
+            100% { left: 160%; }
+        }
+
+        /* Stats row */
+        .bpc-stats-row {
+            display: flex; gap: 1.6rem;
+            flex-wrap: wrap; margin-bottom: 1.8rem;
+        }
+        .bpc-stat { display: flex; flex-direction: column; gap: 0.1rem; }
+        .bpc-stat-num {
+            font-size: 1.2rem; font-weight: 800; color: #fff; line-height: 1;
+        }
+        .bpc-stat-label {
+            font-size: 0.67rem; color: rgba(255,255,255,0.38);
+            text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;
+        }
+
+        /* Donate button */
+        .bpc-donate-btn {
+            display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+            width: 100%;
+            background: linear-gradient(135deg, #A52532 0%, #c94050 100%);
+            color: #fff; font-size: 0.95rem; font-weight: 700;
+            padding: 0.95rem 1.5rem; border-radius: 100px;
+            border: none; cursor: pointer; font-family: inherit;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 28px rgba(165,37,50,0.45);
+        }
+        .bpc-donate-btn:hover {
+            background: linear-gradient(135deg, #8c1d28, #a52532);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(165,37,50,0.55);
+        }
+
+        /* ── Right column ── */
+        .bpc-right-col { display: flex; flex-direction: column; gap: 1.2rem; }
+
+        /* Small person card */
+        .bpc-small-card {
+            padding: 1.3rem;
+            display: flex; gap: 1.1rem; align-items: flex-start;
+        }
+        .bpc-avatar {
+            width: 68px; height: 68px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(165,37,50,0.3), rgba(0,51,102,0.3));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: rgba(255,255,255,0.35);
+            flex-shrink: 0; overflow: hidden;
+        }
+        .bpc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .bpc-small-info { flex: 1; min-width: 0; }
+        .bpc-small-tag {
+            font-size: 0.6rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.2px;
+            color: #ff8888; margin-bottom: 0.28rem;
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .bpc-small-name {
+            font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.28rem;
+        }
+        .bpc-small-desc {
+            font-size: 0.76rem; color: rgba(255,255,255,0.48);
+            line-height: 1.55; margin-bottom: 0.7rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .bpc-small-bar-track {
+            width: 100%; height: 5px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 100px; overflow: hidden; margin-bottom: 0.35rem;
+        }
+        .bpc-small-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5BA9C4, #7fccdf);
+            border-radius: 100px;
+        }
+        .bpc-small-progress-text {
+            font-size: 0.66rem; color: rgba(255,255,255,0.38);
+            display: flex; justify-content: space-between;
+        }
+        .bpc-small-donate {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            margin-top: 0.75rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.75);
+            font-size: 0.72rem; font-weight: 700;
+            padding: 0.32rem 0.9rem; border-radius: 100px;
+            text-decoration: none; cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .bpc-small-donate:hover {
+            background: rgba(165,37,50,0.3);
+            border-color: rgba(165,37,50,0.5);
+            color: #fff;
+        }
+
+        /* Impact counter panel */
+        .bpc-impact-panel {
+            padding: 1.6rem;
+            background: rgba(165,37,50,0.1);
+            border-color: rgba(165,37,50,0.22);
+        }
+        .bpc-impact-header {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 1.4rem;
+        }
+        .bpc-impact-icon {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: rgba(165,37,50,0.25);
+            display: flex; align-items: center; justify-content: center;
+            color: #ff8888; font-size: 0.85rem;
+        }
+        .bpc-impact-title {
+            font-size: 0.72rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.5);
+        }
+        .bpc-impact-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem;
+        }
+        .bpc-impact-item { display: flex; flex-direction: column; gap: 0.15rem; }
+        .bpc-impact-num {
+            font-size: 1.55rem; font-weight: 900; color: #fff; line-height: 1;
+        }
+        .bpc-impact-label {
+            font-size: 0.67rem; color: rgba(255,255,255,0.4);
+            text-transform: uppercase; letter-spacing: 0.6px;
+            font-weight: 600; line-height: 1.3;
+        }
+
+        /* ── Bottom CTA row ── */
+        .bpc-cta-row {
+            display: flex; align-items: center; justify-content: center;
+            gap: 1rem; margin-top: 3.5rem; flex-wrap: wrap;
+        }
+        .bpc-cta-primary {
+            display: inline-flex; align-items: center; gap: 0.55rem;
+            background: linear-gradient(135deg, #A52532, #c94050);
+            color: #fff; font-size: 0.92rem; font-weight: 700;
+            padding: 0.88rem 2.4rem; border-radius: 100px;
+            text-decoration: none;
+            box-shadow: 0 8px 28px rgba(165,37,50,0.4);
+            transition: all 0.3s ease;
+        }
+        .bpc-cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 42px rgba(165,37,50,0.52);
+        }
+        .bpc-cta-ghost {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.88rem; font-weight: 600;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.16);
+            padding: 0.88rem 1.6rem; border-radius: 100px;
+            transition: all 0.25s ease;
+        }
+        .bpc-cta-ghost:hover {
+            color: #fff; border-color: rgba(255,255,255,0.38);
+            background: rgba(255,255,255,0.06);
+        }
+
+        @media (max-width: 600px) {
+            .bpc-title { font-size: 2.2rem; }
+            .bpc-feat-body { padding: 1.3rem; }
+            .bpc-stats-row { gap: 1rem; }
+            .bpc-cta-row { flex-direction: column; }
+            .bpc-cta-primary, .bpc-cta-ghost { width: 100%; justify-content: center; }
+        }
+    
+        /* ── Diocese Read More Button ── */
+        .dioc-readmore {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            margin-top: 0.55rem;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.28);
+            color: #fff; font-size: 0.62rem; font-weight: 700;
+            letter-spacing: 0.07em; text-transform: uppercase;
+            padding: 0.28rem 0.72rem; border-radius: 100px;
+            cursor: pointer; backdrop-filter: blur(4px);
+            transition: background 0.22s, border-color 0.22s, transform 0.22s;
+            opacity: 0.72;
+        }
+        .diocese-card:hover .dioc-readmore {
+            opacity: 1; background: rgba(165,40,13,0.72);
+            border-color: rgba(165,40,13,0.5); transform: translateX(2px);
+        }
+        .dioc-readmore i { font-size: 0.55rem; transition: transform 0.2s; }
+        .diocese-card:hover .dioc-readmore i { transform: translateX(3px); }
+
+        /* ── Diocese Modal ── */
+        .dioc-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(5,5,15,0.62);
+            backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+            z-index: 9000; display: flex;
+            align-items: center; justify-content: center;
+            padding: 1rem; opacity: 0; pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .dioc-modal-overlay.is-open { opacity: 1; pointer-events: all; }
+        .dioc-modal {
+            background: #fff; border-radius: 22px;
+            width: 100%; max-width: 510px; overflow: hidden;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.38);
+            transform: translateY(22px) scale(0.96);
+            transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative; max-height: 88vh; overflow-y: auto;
+            scrollbar-width: thin; scrollbar-color: rgba(165,40,13,0.2) transparent;
+        }
+        .dioc-modal-overlay.is-open .dioc-modal { transform: translateY(0) scale(1); }
+
+        .dioc-modal-imgwrap { position: relative; height: 195px; overflow: hidden; }
+        .dioc-modal-imgwrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .dioc-modal-imgwrap::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 55%, transparent 100%);
+        }
+        .dioc-modal-titlewrap {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 1rem 1.25rem; z-index: 1;
+        }
+        .dioc-modal-numbadge {
+            display: inline-block; background: rgba(165,40,13,0.88);
+            color: #fff; font-size: 0.6rem; font-weight: 800;
+            padding: 0.14rem 0.5rem; border-radius: 6px; margin-bottom: 0.32rem;
+        }
+        .dioc-modal-name {
+            font-size: 1.22rem; font-weight: 800; color: #fff;
+            line-height: 1.22; text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .dioc-modal-closebtn {
+            position: absolute; top: 0.7rem; right: 0.7rem;
+            width: 32px; height: 32px;
+            background: rgba(0,0,0,0.32); border: none; border-radius: 50%;
+            color: #fff; font-size: 0.82rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10; backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+        .dioc-modal-closebtn:hover { background: rgba(165,40,13,0.78); }
+
+        .dioc-modal-body { padding: 1.35rem 1.4rem 0.75rem; }
+        .dioc-info-row {
+            display: flex; align-items: flex-start; gap: 0.85rem;
+            padding: 0.72rem 0; border-bottom: 1px solid rgba(0,0,0,0.055);
+        }
+        .dioc-info-row:last-child { border-bottom: none; }
+        .dioc-row-icon {
+            width: 32px; height: 32px; flex-shrink: 0;
+            background: rgba(165,40,13,0.08); border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a5280d; font-size: 0.78rem; margin-top: 0.08rem;
+        }
+        .dioc-row-label {
+            font-size: 0.64rem; font-weight: 700; color: #9ca3af;
+            text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.15rem;
+        }
+        .dioc-row-val {
+            font-size: 0.87rem; color: #0d1b2a; font-weight: 500; line-height: 1.45;
+        }
+        .dioc-row-val a { color: #a5280d; text-decoration: none; font-weight: 600; }
+        .dioc-row-val a:hover { text-decoration: underline; }
+
+        .dioc-modal-footer {
+            padding: 0.9rem 1.4rem 1.35rem;
+            display: flex; gap: 0.7rem; flex-wrap: wrap;
+        }
+        .dioc-modal-visit {
+            flex: 1; min-width: 130px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+            background: #a5280d; color: #fff; font-size: 0.8rem; font-weight: 700;
+            padding: 0.65rem 1.1rem; border-radius: 11px; text-decoration: none;
+            transition: background 0.2s;
+        }
+        .dioc-modal-visit:hover { background: #7a1d06; color: #fff; }
+        .dioc-modal-dismiss {
+            flex: 0 0 auto; background: rgba(0,0,0,0.055); border: none;
+            color: #6b7280; font-size: 0.8rem; font-weight: 600;
+            padding: 0.65rem 1.1rem; border-radius: 11px;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .dioc-modal-dismiss:hover { background: rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <!-- ══ NAVBAR ══ -->
+    <header>
+        <div class="navbar-container">
+            <a href="index.html" class="logo">
+                <img src="img/logo_bg.png" alt="Caritas Rwanda">
+            </a>
+            <button class="nav-toggle" aria-label="Toggle menu">☰</button>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li class="has-dropdown">
+                        <a href="about.html" class="current">About <span class="caret">▾</span></a>
+                        <div class="nav-dropdown">
+                            <div class="nav-dropdown-inner">
+                                <a href="#history"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+                                <a href="#mission"><i class="fa-solid fa-bullseye"></i>  Mission</a>
+                                <a href="#mission"><i class="fa-solid fa-eye"></i>  Vision</a>
+                                <a href="#values"><i class="fa-solid fa-star"></i> Values</a>
+                                <div class="nav-dropdown-divider"></div>
+                                <a href="#network"><i class="fa-solid fa-network-wired"></i> Network</a>
+                                <a href="#network"><i class="fa-solid fa-church"></i> All Dioceses</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="index.html#programs">Programs <span class="caret">▾</span></a>
+                        <div class="nav-dropdown">
+                            <div class="nav-dropdown-inner nav-dropdown-cards">
+                                <a href="index.html#programs"><i class="fa-solid fa-calculator"></i> Finance &amp; Administration</a>
+                                <a href="index.html#programs"><i class="fa-solid fa-people-roof"></i> Social Welfare</a>
+                                <a href="index.html#programs"><i class="fa-solid fa-heart-pulse"></i> Health</a>
+                                <a href="index.html#programs"><i class="fa-solid fa-seedling"></i> Development</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="index.html#get-involved">Get Involved</a></li>
+                    <li class="has-dropdown">
+                        <a href="publications.html">Publications <span class="caret">▾</span></a>
+                        <div class="nav-dropdown">
+                            <div class="nav-dropdown-inner">
+                                <a href="publications.html#annual-reports"><i class="fa-solid fa-chart-bar"></i> Annual Reports</a>
+                                <a href="publications.html#newsletters"><i class="fa-solid fa-newspaper"></i> Newsletters</a>
+                                <div class="nav-dropdown-divider"></div>
+                                <a href="publications.html#success-stories"><i class="fa-solid fa-star"></i> Success Stories</a>
+                                <a href="publications.html#latest-news"><i class="fa-solid fa-rss"></i> Latest News</a>
+                                <a href="publications.html#strategic"><i class="fa-solid fa-map"></i> Strategic Plan</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+                <a href="index.html#contact" class="btn-donate nav-donate">Donate</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ══ PAGE HERO ══ -->
+    <div class="page-hero">
+        <div class="page-hero-inner">
+            <div class="hero-eyebrow">
+                <i class="fa-solid fa-circle-info"></i> About Caritas Rwanda
+            </div>
+            <h1>66 Years of <span>Faith, Hope</span><br>&amp; Compassionate Service</h1>
+            <p>From a small charity established by Rwanda's Catholic Bishops in 1959 to a nationwide humanitarian network — discover the story, the mission, and the people behind Caritas Rwanda.</p>
+            <div class="hero-breadcrumb">
+                <a href="index.html">Home</a>
+                <span>›</span>
+                <span>About Us</span>
+            </div>
+            <div class="hero-quick-nav">
+                <a href="#history"    class="qnav-pill"><i class="fa-solid fa-clock-rotate-left"></i> Our History</a>
+                <a href="#mission"    class="qnav-pill"><i class="fa-solid fa-bullseye"></i> Mission &amp; Vision</a>
+                <a href="#values"     class="qnav-pill"><i class="fa-solid fa-star"></i> Our Values</a>
+                <a href="#network"    class="qnav-pill"><i class="fa-solid fa-network-wired"></i> Our Network</a>
+                <a href="#leadership" class="qnav-pill"><i class="fa-solid fa-user-tie"></i> Leadership</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ KEY STATS BANNER ══ -->
+    <div class="stats-banner">
+        <div class="stats-banner-grid">
+
+            <div class="stats-banner-item">
+                <div class="stats-banner-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="stats-banner-number">
+                    <span class="stat-count" data-target="66" data-suffix="+">0</span>
+                </div>
+                <div class="stats-banner-label">Years of Service</div>
+            </div>
+
+            <div class="stats-banner-item">
+                <div class="stats-banner-icon"><i class="fa-solid fa-people-group"></i></div>
+                <div class="stats-banner-number">
+                    <span class="stat-count" data-target="7" data-suffix="M+">0</span>
+                </div>
+                <div class="stats-banner-label">People Served</div>
+            </div>
+
+            <div class="stats-banner-item">
+                <div class="stats-banner-icon"><i class="fa-solid fa-church"></i></div>
+                <div class="stats-banner-number">
+                    <span class="stat-count" data-target="10" data-suffix="">0</span>
+                </div>
+                <div class="stats-banner-label">Diocesan Caritas</div>
+            </div>
+
+            <div class="stats-banner-item">
+                <div class="stats-banner-icon"><i class="fa-solid fa-hands-holding-child"></i></div>
+                <div class="stats-banner-number">
+                    <span class="stat-count" data-target="56" data-suffix="K+">0</span>
+                </div>
+                <div class="stats-banner-label">Active Volunteers</div>
+            </div>
+
+            <div class="stats-banner-item">
+                <div class="stats-banner-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                <div class="stats-banner-number">
+                    <span class="stat-count" data-target="120" data-suffix="">0</span>
+                </div>
+                <div class="stats-banner-label">Catholic Health Facilities</div>
+            </div>
+
+            <div class="stats-banner-item">
+                <div class="stats-banner-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                <div class="stats-banner-number">
+                    <span class="stat-count" data-prefix="$" data-target="72" data-suffix="M">0</span>
+                </div>
+                <div class="stats-banner-label">Budget Mobilized (2015–2024)</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ CHAIRPERSON STATEMENT ══ -->
+    <div class="chairperson-section">
+        <div class="chairperson-inner container">
+            <div class="chairperson-visual">
+                <div class="chairperson-photo">
+                    <img src="img/Chairperson/anaclet.jpg" alt="H.E. Mgr. Anaclet Mwumvaneza">
+                </div>
+                <div class="chairperson-name">H.E. Mgr. Anaclet Mwumvaneza</div>
+                <div class="chairperson-title">Bishop of Nyundo Diocese<br>Chairperson, Caritas Rwanda</div>
+            </div>
+            <div class="chairperson-content">
+                <span class="quote-mark">"</span>
+                <p class="chairperson-quote">
+                    Catholic Church is proud of Caritas Rwanda's <strong>66 years of services</strong> to Rwandans, especially its contribution to socio-economic development, health promotion, paying particular attention to the poor, the sick, the elderly, people living with disabilities, refugees — as well as building a just and resilient society.
+                    <br><br>
+                    May this be not only a reminder of the past, but above all an invitation to continue the mission of charity and service to the poor, so that the Gospel may continue to be <strong>Good News for every Rwandan</strong>.
+                </p>
+                <div class="chairperson-divider"></div>
+                <div class="chairperson-meta">Chairperson's Statement — 125th Jubilee of Evangelization, 2025</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ OUR HISTORY ══ -->
+    <section class="section-warm" id="history">
+        <div class="container">
+            <div class="head-center">
+                <div class="sub-section-label"><i class="fa-solid fa-clock-rotate-left"></i> Our History</div>
+                <h2 class="sub-section-title">Six Decades of Faith &amp; Service</h2>
+                <p class="sub-section-subtitle">From a small charity established by Catholic Bishops to a nationwide humanitarian network — our journey spans over 66 years of unwavering service to the most vulnerable Rwandans.</p>
+            </div>
+
+            <div class="hist-bento">
+
+                <!-- 1959 — FEATURED (span 2) -->
+                <div class="hist-card hist-card--crimson hist-span2">
+                    <div class="hist-yr-bg">1959</div>
+                    <div class="hist-icon"><i class="fa-solid fa-church"></i></div>
+                    <div class="hist-meta">
+                        <span class="hist-era-pill">Founding</span>
+                        <span class="hist-year-tag">1959</span>
+                    </div>
+                    <div class="hist-title">Creation of Caritas Rwanda</div>
+                    <p class="hist-body"><strong>Secours Catholique Rwandais</strong> established by the Catholic Bishops of Rwanda — a Gospel-rooted response to humanitarian hardship and the call to serve the poor without discrimination.</p>
+                </div>
+
+                <!-- 1960 -->
+                <div class="hist-card hist-card--light">
+                    <div class="hist-yr-bg">1960</div>
+                    <div class="hist-icon"><i class="fa-solid fa-gavel"></i></div>
+                    <div class="hist-meta">
+                        <span class="hist-era-pill">Founding</span>
+                        <span class="hist-year-tag">1960</span>
+                    </div>
+                    <div class="hist-title">Legal Registration</div>
+                    <p class="hist-body">Officially registered as a <strong>non-profit organization</strong> by Prime Minister's Order No. 488/08 — formal legal standing to operate nationally.</p>
+                </div>
+
+                <!-- 1963 -->
+                <div class="hist-card hist-card--light">
+                    <div class="hist-yr-bg">1963</div>
+                    <div class="hist-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <div class="hist-meta">
+                        <span class="hist-era-pill">Founding</span>
+                        <span class="hist-year-tag">1963</span>
+                    </div>
+                    <div class="hist-title">Name Change</div>
+                    <p class="hist-body">Renamed to <strong>Caritas Rwanda</strong> by Prime Minister's Order No. 75/08 — aligning with the global Caritas confederation identity.</p>
+                </div>
+
+                <!-- 1965 — span 2 -->
+                <div class="hist-card hist-card--navy hist-span2">
+                    <div class="hist-yr-bg">1965</div>
+                    <div class="hist-icon"><i class="fa-solid fa-globe"></i></div>
+                    <div class="hist-meta">
+                        <span class="hist-era-pill">Global</span>
+                        <span class="hist-year-tag">1965</span>
+                    </div>
+                    <div class="hist-title">International Membership</div>
+                    <p class="hist-body">Became a member of <strong>Caritas Internationalis</strong> — a confederation of 162 National Caritas across the world — expanding our reach through global solidarity and partnership.</p>
+                </div>
+
+                <!-- 1994 — span 2 -->
+                <div class="hist-card hist-card--navy hist-span2">
+                    <div class="hist-yr-bg">1994</div>
+                    <div class="hist-icon"><i class="fa-solid fa-hands-holding-circle"></i></div>
+                    <div class="hist-meta">
+                        <span class="hist-era-pill">Recovery</span>
+                        <span class="hist-year-tag">1994+</span>
+                    </div>
+                    <div class="hist-title">Post-Genocide Expansion</div>
+                    <p class="hist-body">Following the Genocide against the Tutsi, Caritas Rwanda expanded to include <strong>Health, Development, and Finance &amp; Administration</strong> departments to meet Rwanda's vast recovery needs.</p>
+                </div>
+
+                <!-- 2012 -->
+                <div class="hist-card hist-card--light">
+                    <div class="hist-yr-bg">2012</div>
+                    <div class="hist-icon"><i class="fa-solid fa-building-columns"></i></div>
+                    <div class="hist-meta">
+                        <span class="hist-era-pill">Modern Era</span>
+                        <span class="hist-year-tag">2012</span>
+                    </div>
+                    <div class="hist-title">National NGO Status</div>
+                    <p class="hist-body">Registered as a <strong>National Non-Governmental Organisation</strong> under Law No. 04/2012 — an independent humanitarian mandate for the future.</p>
+                </div>
+
+                <!-- 2025 — JUBILEE full width (span 3) -->
+                <div class="hist-card hist-card--gold hist-span3">
+                    <div class="hist-yr-bg">2025</div>
+                    <div class="hist-jubilee-inner">
+                        <div style="flex:1; min-width:220px; position:relative; z-index:1;">
+                            <div class="hist-icon" style="margin-bottom:0.9rem;"><i class="fa-solid fa-trophy"></i></div>
+                            <div class="hist-meta">
+                                <span class="hist-era-pill">Jubilee</span>
+                                <span class="hist-year-tag">2025</span>
+                            </div>
+                            <div class="hist-title">125th Jubilee of Evangelization</div>
+                            <p class="hist-body">Celebrating <strong>125 years of evangelization</strong> in Rwanda and 66 years of Caritas service — a milestone of faith, perseverance, and nationwide impact.</p>
+                        </div>
+                        <div class="hist-jubilee-stats">
+                            <div class="hist-stat-item">
+                                <div class="hist-stat-num">7M+</div>
+                                <div class="hist-stat-lbl">People Served</div>
+                            </div>
+                            <div class="hist-stat-item">
+                                <div class="hist-stat-num">10</div>
+                                <div class="hist-stat-lbl">Dioceses</div>
+                            </div>
+                            <div class="hist-stat-item">
+                                <div class="hist-stat-num">56K+</div>
+                                <div class="hist-stat-lbl">Volunteers</div>
+                            </div>
+                            <div class="hist-stat-item">
+                                <div class="hist-stat-num">66</div>
+                                <div class="hist-stat-lbl">Years of Service</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ MISSION / VISION / VALUES CARDS ══ -->
+    <!-- ══ MISSION · VISION · VALUES — Glassmorphism ══ -->
+    <section class="mvv-section" id="mission">
+        <!-- Background orbs -->
+        <div class="mvv-orb mvv-orb-1"></div>
+        <div class="mvv-orb mvv-orb-2"></div>
+        <div class="mvv-orb mvv-orb-3"></div>
+
+        <div class="container">
+            <div class="head-center">
+                <div class="sub-section-label"><i class="fa-solid fa-bullseye"></i> Who We Are</div>
+                <h2 class="sub-section-title">Mission, Vision &amp; Values</h2>
+                <p class="sub-section-subtitle">Guided by the Word of God and the principles of Catholic Social Teaching, every action we take is rooted in dignity, solidarity, and justice.</p>
+            </div>
+
+            <!-- Three glass cards -->
+            <div class="mvv-grid">
+                <div class="mvv-card mission">
+                    <div class="mvv-icon"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="mvv-card-label">Our Mission</div>
+                    <h3>Serve &amp; Develop</h3>
+                    <p>To assist people in need and promote their <strong>integral human development</strong>, drawing on Charity as per the Word of God — reaching the poor, sick, elderly, refugees, people with disabilities, and all vulnerable communities across Rwanda.</p>
+                </div>
+                <div class="mvv-card vision">
+                    <div class="mvv-icon"><i class="fa-solid fa-eye"></i></div>
+                    <div class="mvv-card-label">Our Vision</div>
+                    <h3>Promoting Human Dignity for All</h3>
+                    <p>A Rwanda where every person — regardless of background, status, or circumstance — lives with full dignity, equal rights, and the opportunity to flourish in body, mind, and spirit through inclusive, non-discriminatory interventions.</p>
+                </div>
+                <div class="mvv-card values-c">
+                    <div class="mvv-icon"><i class="fa-solid fa-star"></i></div>
+                    <div class="mvv-card-label">Our Values</div>
+                    <h3>Principles We Live By</h3>
+                    <p>Eleven guiding principles rooted in the Gospel — <strong>Advocacy, Compassion, Equity, Hope, Human Dignity, Justice, Service, Solidarity</strong>, Stewardship &amp; Accountability, Environment Protection, and Subsidiarity &amp; Partnership.</p>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="mvv-divider"><span><i class="fa-solid fa-star" style="margin-right:0.5rem;opacity:0.5;"></i> Core Values</span></div>
+
+            <!-- Values pills -->
+            <div class="values-grid" id="values">
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-megaphone"></i></div>
+                    <div class="value-pill-name">Advocacy</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-heart"></i></div>
+                    <div class="value-pill-name">Compassion</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div class="value-pill-name">Equity</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="value-pill-name">Environment Protection</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-sun"></i></div>
+                    <div class="value-pill-name">Hope</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-person-rays"></i></div>
+                    <div class="value-pill-name">Human Dignity</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-gavel"></i></div>
+                    <div class="value-pill-name">Justice</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <div class="value-pill-name">Service</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="value-pill-name">Solidarity</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="value-pill-name">Stewardship &amp; Accountability</div>
+                </div>
+                <div class="value-pill">
+                    <div class="value-pill-icon"><i class="fa-solid fa-people-group"></i></div>
+                    <div class="value-pill-name">Subsidiarity &amp; Partnership</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ OUR NETWORK & ALL DIOCESES ══ -->
+    <section class="section-light" id="network">
+        <div class="container">
+            <div class="head-center">
+                <div class="sub-section-label"><i class="fa-solid fa-network-wired"></i> Our Network</div>
+                <h2 class="sub-section-title">Reaching Every Corner of Rwanda</h2>
+                <p class="sub-section-subtitle">From 2 founding dioceses in 1959 to a network of 10 Diocesan Caritas spanning the entire country — our reach grows deeper every year.</p>
+            </div>
+
+            <div class="network-stats-row">
+                <div class="net-stat-card">
+                    <div class="net-stat-number">10</div>
+                    <div class="net-stat-label">Diocesan Caritas</div>
+                </div>
+                <div class="net-stat-card">
+                    <div class="net-stat-number">236</div>
+                    <div class="net-stat-label">Parish Caritas</div>
+                </div>
+                <div class="net-stat-card">
+                    <div class="net-stat-number">1,016</div>
+                    <div class="net-stat-label">Sub-Parish Caritas</div>
+                </div>
+                <div class="net-stat-card">
+                    <div class="net-stat-number">34,080</div>
+                    <div class="net-stat-label">Basic Christian Communities</div>
+                </div>
+                <div class="net-stat-card">
+                    <div class="net-stat-number">56,345+</div>
+                    <div class="net-stat-label">Active Volunteers</div>
+                </div>
+            </div>
+
+            <div class="diocese-grid">
+
+                <!-- 01 Kabgayi -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/Kabgayi_Basilica_Catholic_Church.jpg" alt="Kabgayi Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">01</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Kabgayi Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. February 1952</div>
+                        <button class="dioc-readmore" data-diocese="kabgayi">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 02 Nyundo -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/WhatsApp%20Image%202025-10-16%20at%2012.47.37_785f3d99.jpg" alt="Nyundo Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">02</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Nyundo Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. November 1959</div>
+                        <button class="dioc-readmore" data-diocese="nyundo">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 03 Butare -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/caption.jpg" alt="Butare Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">03</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Butare Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. December 1960</div>
+                        <button class="dioc-readmore" data-diocese="butare">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 04 Ruhengeri -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/Cathedrale_Fatima_Ruhengeri.jpg" alt="Ruhengeri Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">04</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Ruhengeri Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. September 1961</div>
+                        <button class="dioc-readmore" data-diocese="ruhengeri">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 05 Kibungo -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/Capture.PNG" alt="Kibungo Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">05</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Kibungo Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. September 1968</div>
+                        <button class="dioc-readmore" data-diocese="kibungo">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 06 Kigali -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/Kabgayi_Basilica_Catholic_Church.jpg" alt="Kigali Archdiocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">06</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Kigali Archdiocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. April 1976</div>
+                        <button class="dioc-readmore" data-diocese="kigali">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 07 Byumba -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/BYumba.jpg" alt="Byumba Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">07</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Byumba Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. November 1981</div>
+                        <button class="dioc-readmore" data-diocese="byumba">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 08 Cyangugu -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/cyangugu.jpg" alt="Cyangugu Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">08</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Cyangugu Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. November 1981</div>
+                        <button class="dioc-readmore" data-diocese="cyangugu">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- 09 Gikongoro -->
+                <div class="diocese-card">
+                    <img class="dioc-bg" src="img/Diocese/cropped-Cathedrale-Diocese-Gikongoro-BG-1-scaled-7.jpg" alt="Gikongoro Diocese">
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-num">09</div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Gikongoro Diocese</div>
+                        <div class="dioc-est"><i class="fa-solid fa-cross"></i> Est. March 1992</div>
+                        <button class="dioc-readmore" data-diocese="gikongoro">Details <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Nyundo Special Zones -->
+                <div class="diocese-card diocese-card--special">
+                    <div class="dioc-bg-placeholder"></div>
+                    <div class="dioc-overlay"></div>
+                    <div class="dioc-icon-center">
+                        <i class="fa-solid fa-star"></i>
+                        <span>Pastoral Zones</span>
+                    </div>
+                    <div class="dioc-info">
+                        <div class="dioc-name">Nyundo — 2 Zones</div>
+                        <div class="dioc-est"><i class="fa-solid fa-location-dot"></i> Gisenyi &amp; Kibuye</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ LEADERSHIP CHRONICLE ══ -->
+    <section class="section-warm ldr-section" id="leadership">
+        <div class="container">
+            <div class="head-center">
+                <div class="sub-section-label"><i class="fa-solid fa-scroll"></i> Leadership Chronicle</div>
+                <h2 class="sub-section-title">A Legacy of Faithful Service</h2>
+                <p class="sub-section-subtitle">Since 1959, faithful shepherds have guided Caritas Rwanda through decades of challenge, growth, and transformation — each era leaving a lasting mark on our mission.</p>
+            </div>
+
+            <!-- CHAIRPERSONS TIMELINE -->
+            <div class="ldr-era-block">
+                <div class="ldr-era-header">
+                    <div class="ldr-era-title"><i class="fa-solid fa-crown"></i> Chairpersons</div>
+                    <span class="ldr-era-span">1959 — Present</span>
+                </div>
+                <div class="ldr-scroll-wrap">
+                    <div class="ldr-scroll">
+                        <div class="ldr-timeline">
+
+                            <!-- Archbishop Perraudin (founding) -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Chairperson/perraudin.jpg" alt="Archbishop Perraudin">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1959</div>
+                                <div class="ldr-name">Archbishop Perraudin</div>
+                                <div class="ldr-role">Founding Chairperson</div>
+                            </div>
+
+                            <!-- Gahamanyi -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Chairperson/gahamanyi.png" alt="H.E. Mgr. Jean Baptiste Gahamanyi">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1972</div>
+                                <div class="ldr-name">H.E. Mgr. Jean Baptiste Gahamanyi</div>
+                                <div class="ldr-role">Chairperson</div>
+                            </div>
+
+                            <!-- Ntihinyurwa (no photo) -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <div class="ldr-photo-placeholder"><i class="fa-solid fa-user-tie"></i></div>
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1997</div>
+                                <div class="ldr-name">H.E. Mgr. Thaddée Ntihinyurwa</div>
+                                <div class="ldr-role">Chairperson</div>
+                            </div>
+
+                            <!-- Anaclet — Current -->
+                            <div class="ldr-node ldr-node--current">
+                                <div class="ldr-photo">
+                                    <img src="img/Chairperson/anaclet.jpg" alt="H.E. Mgr. Anaclet Mwumvaneza">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">2022</div>
+                                <div class="ldr-name">H.E. Mgr. Anaclet Mwumvaneza</div>
+                                <div class="ldr-role">Chairperson — Nyundo Diocese</div>
+                                <span class="ldr-current-badge">Current</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECRETARY GENERALS TIMELINE -->
+            <div class="ldr-era-block">
+                <div class="ldr-era-header">
+                    <div class="ldr-era-title"><i class="fa-solid fa-person-chalkboard"></i> Secretary Generals</div>
+                    <span class="ldr-era-span">1961 — Present</span>
+                </div>
+                <div class="ldr-scroll-wrap">
+                    <div class="ldr-scroll">
+                        <div class="ldr-timeline">
+
+                            <!-- Arthur Dejemeppe -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Arthur%20Dejemeppe.jpg" alt="Father Arthur Dejemeppe">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1961</div>
+                                <div class="ldr-name">Father Arthur Dejemeppe</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Era gap: Founding Era -->
+                            <div class="ldr-era-gap">
+                                <div class="ldr-era-gap-label">Founding<br>Era</div>
+                            </div>
+
+                            <!-- Roger Pien -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Roger%20Pien.jpg" alt="Father Roger Pien">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1972</div>
+                                <div class="ldr-name">Father Roger Pien</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Cyriaque Munyansanga -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Cyriaque%20Munyansanga.png" alt="Father Cyriaque Munyansanga">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1973</div>
+                                <div class="ldr-name">Father Cyriaque Munyansanga</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Carles Maria Giol -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Carles%20Maria%20Giol.png" alt="Father Carles Maria Giol">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1977</div>
+                                <div class="ldr-name">Father Carles Maria Giol</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Michel Descombes -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Descombers.jpg" alt="Father Michel Descombes">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1978</div>
+                                <div class="ldr-name">Father Michel Descombes</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Era gap: Modern Era -->
+                            <div class="ldr-era-gap">
+                                <div class="ldr-era-gap-label">Modern<br>Era</div>
+                            </div>
+
+                            <!-- Callixte Twagirayezu -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Callixte%20Twagirayezu.jpg" alt="Father Callixte Twagirayezu">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1995</div>
+                                <div class="ldr-name">Father Callixte Twagirayezu</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Oreste Incimatata -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg" alt="Monsignor Oreste Incimatata">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">1996</div>
+                                <div class="ldr-name">Msgr. Oreste Incimatata</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Anaclet as Sec Gen -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/anaclet.jpg" alt="H.E. Mgr. Anaclet Mwumvaneza">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">2013</div>
+                                <div class="ldr-name">H.E. Mgr. Anaclet Mwumvaneza</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- JMV Twagirayezu -->
+                            <div class="ldr-node">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/JMV%20Twagirayezu.jpg" alt="H.E. Mgr. Jean Marie Vianney Twagirayezu">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">2016</div>
+                                <div class="ldr-name">H.E. Mgr. JMV Twagirayezu</div>
+                                <div class="ldr-role">Secretary General</div>
+                            </div>
+
+                            <!-- Oscar Kagimbura — Current -->
+                            <div class="ldr-node ldr-node--current">
+                                <div class="ldr-photo">
+                                    <img src="img/Secretary%20Generals/Oscar%20Kagimbura.png" alt="Father Oscar Kagimbura">
+                                </div>
+                                <div class="ldr-connector"></div>
+                                <div class="ldr-dot"></div>
+                                <div class="ldr-year-label">2023</div>
+                                <div class="ldr-name">Father Oscar Kagimbura</div>
+                                <div class="ldr-role">Secretary General</div>
+                                <span class="ldr-current-badge">Current</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ══ BE PART OF THE CHANGE ══ -->
+    <section class="bpc-section" id="donate">
+
+        <!-- Background decoration -->
+        <div class="bpc-orb bpc-orb-1"></div>
+        <div class="bpc-orb bpc-orb-2"></div>
+        <div class="bpc-orb bpc-orb-3"></div>
+        <div class="bpc-dot-grid"></div>
+
+        <div class="bpc-inner">
+
+            <!-- Section header -->
+            <div class="bpc-header">
+                <div class="bpc-eyebrow"><i class="fa-solid fa-heart"></i>&nbsp; Community Support</div>
+                <h2 class="bpc-title">Be Part of<br><span>the Change</span></h2>
+                <p class="bpc-subtitle">Every donation transforms a real life. Meet the people behind the numbers &mdash; and choose to make a difference today.</p>
+            </div>
+
+            <!-- Two-column grid -->
+            <div class="bpc-grid">
+
+                <!-- ─── FEATURED PERSON CARD ─── -->
+                <div class="glass-card bpc-feat-card">
+
+                    <!-- Image / placeholder -->
+                    <div class="bpc-feat-img-wrap" style="position:relative;">
+                        <img src="img/story_1.jpg" alt="Marie Uwimana — Beneficiary" style="width:100%;height:100%;object-fit:cover;display:block;">
+                        <span class="bpc-feat-badge"><i class="fa-solid fa-hand-holding-medical"></i>&nbsp; Medical Support</span>
+                    </div>
+
+                    <div class="bpc-feat-body">
+                        <h3 class="bpc-feat-name">Marie Uwimana, 68</h3>
+                        <p class="bpc-feat-location">
+                            <i class="fa-solid fa-location-dot"></i> Nyaruguru District, Southern Province
+                        </p>
+                        <p class="bpc-feat-story">
+                            Marie raised six children alone after losing her husband in 1994. Today she suffers from chronic diabetes and cannot afford her monthly medication. Your support will cover six months of treatment and ensure Marie can continue to be the pillar of her family.
+                        </p>
+
+                        <!-- Progress -->
+                        <div class="bpc-progress-wrap">
+                            <div class="bpc-progress-labels">
+                                <span class="bpc-raised">RWF 340,000 raised</span>
+                                <span class="bpc-goal">Goal: RWF 600,000</span>
+                            </div>
+                            <div class="bpc-bar-track">
+                                <div class="bpc-bar-fill" style="width:57%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="bpc-stats-row">
+                            <div class="bpc-stat">
+                                <span class="bpc-stat-num">57%</span>
+                                <span class="bpc-stat-label">Funded</span>
+                            </div>
+                            <div class="bpc-stat">
+                                <span class="bpc-stat-num">124</span>
+                                <span class="bpc-stat-label">Donors</span>
+                            </div>
+                            <div class="bpc-stat">
+                                <span class="bpc-stat-num">14</span>
+                                <span class="bpc-stat-label">Days Left</span>
+                            </div>
+                        </div>
+
+                        <a href="index.html#contact" class="bpc-donate-btn">
+                            <i class="fa-solid fa-heart"></i> Donate to Marie&rsquo;s Care
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ─── RIGHT COLUMN ─── -->
+                <div class="bpc-right-col">
+
+                    <!-- Small card 1 — Education -->
+                    <div class="glass-card bpc-small-card">
+                        <div class="bpc-avatar"><img src="img/youth.jpg" alt="Jean-Pierre Habimana"></div>
+                        <div class="bpc-small-info">
+                            <p class="bpc-small-tag"><i class="fa-solid fa-book-open"></i> Education</p>
+                            <p class="bpc-small-name">Jean-Pierre Habimana, 12</p>
+                            <p class="bpc-small-desc">An orphan from Musanze seeking school fees and supplies to complete his primary education and build a future.</p>
+                            <div class="bpc-small-bar-track">
+                                <div class="bpc-small-bar-fill" style="width:72%;"></div>
+                            </div>
+                            <div class="bpc-small-progress-text">
+                                <span>RWF 180,000 raised</span>
+                                <span>72% of RWF 250,000</span>
+                            </div>
+                            <a href="index.html#contact" class="bpc-small-donate">
+                                <i class="fa-solid fa-hand-holding-heart"></i> Support Jean-Pierre
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Small card 2 — Livelihood -->
+                    <div class="glass-card bpc-small-card">
+                        <div class="bpc-avatar"><img src="img/live_hoods.jpg" alt="Emmanuel Nkurunziza"></div>
+                        <div class="bpc-small-info">
+                            <p class="bpc-small-tag" style="color:#7fccdf;"><i class="fa-solid fa-briefcase"></i> Livelihood</p>
+                            <p class="bpc-small-name">Emmanuel Nkurunziza, 24</p>
+                            <p class="bpc-small-desc">A young man from Rwamagana seeking vocational training funds to become a licensed electrician and support his widowed mother.</p>
+                            <div class="bpc-small-bar-track">
+                                <div class="bpc-small-bar-fill" style="width:45%; background:linear-gradient(90deg,#1F7A6E,#2ecc9d);"></div>
+                            </div>
+                            <div class="bpc-small-progress-text">
+                                <span>RWF 90,000 raised</span>
+                                <span>45% of RWF 200,000</span>
+                            </div>
+                            <a href="index.html#contact" class="bpc-small-donate">
+                                <i class="fa-solid fa-hand-holding-heart"></i> Support Emmanuel
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Aggregate impact panel -->
+                    <div class="glass-card bpc-impact-panel">
+                        <div class="bpc-impact-header">
+                            <div class="bpc-impact-icon"><i class="fa-solid fa-chart-line"></i></div>
+                            <span class="bpc-impact-title">Our Collective Impact</span>
+                        </div>
+                        <div class="bpc-impact-grid">
+                            <div class="bpc-impact-item">
+                                <span class="bpc-impact-num">2,340</span>
+                                <span class="bpc-impact-label">Families Supported</span>
+                            </div>
+                            <div class="bpc-impact-item">
+                                <span class="bpc-impact-num">RWF&nbsp;48M</span>
+                                <span class="bpc-impact-label">Raised This Year</span>
+                            </div>
+                            <div class="bpc-impact-item">
+                                <span class="bpc-impact-num">12</span>
+                                <span class="bpc-impact-label">Active Campaigns</span>
+                            </div>
+                            <div class="bpc-impact-item">
+                                <span class="bpc-impact-num">98%</span>
+                                <span class="bpc-impact-label">Funds Direct to People</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- end right col -->
+            </div><!-- end grid -->
+
+            <!-- Bottom CTA -->
+            <div class="bpc-cta-row">
+                <a href="index.html#contact" class="bpc-cta-primary">
+                    <i class="fa-solid fa-heart"></i> Start Donating Today
+                </a>
+                <a href="index.html#get-involved" class="bpc-cta-ghost">
+                    <i class="fa-solid fa-hand-holding-heart"></i> Volunteer with Us
+                </a>
+            </div>
+
+        </div><!-- end inner -->
+    </section>
+    <!-- ══ FOOTER ══ -->
+    <footer>
+        <div class="footer-banner">
+            <div class="footer-banner-inner">
+                <div class="footer-banner-tagline">Serving Rwanda with <span>Faith, Hope</span> &amp; Love.</div>
+                <a href="index.html#contact" class="footer-banner-cta">
+                    <i class="fa-solid fa-envelope"></i> Get In Touch
+                </a>
+            </div>
+        </div>
+        <div class="footer-grid">
+            <div>
+                <img src="img/logo_caritas.png" alt="Caritas Rwanda" class="footer-logo">
+                <p class="footer-tagline">Committed to the promotion of human dignity and integral development, inspired by the Gospel and Catholic social teaching.</p>
+                <div class="ft-socials">
+                    <a href="https://twitter.com" class="ft-social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://youtube.com" class="ft-social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://facebook.com" class="ft-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://linkedin.com" class="ft-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://flickr.com" class="ft-social-btn" aria-label="Flickr"><i class="fab fa-flickr"></i></a>
+                </div>
+            </div>
+            <div>
+                <div class="ft-col-heading">Quick Links</div>
+                <ul class="ft-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="index.html#programs">Our Programs</a></li>
+                    <li><a href="index.html#stories">News</a></li>
+                    <li><a href="#">Annual Reports</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="ft-col-heading">Our Programs</div>
+                <ul class="ft-links">
+                    <li><a href="index.html#programs">Administration &amp; Finance</a></li>
+                    <li><a href="index.html#programs">Social Welfare</a></li>
+                    <li><a href="index.html#programs">Health</a></li>
+                    <li><a href="index.html#programs">Development</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="ft-col-heading">Stay Updated</div>
+                <p class="ft-newsletter-text">Subscribe to our newsletter and get the latest stories, program updates, and impact reports delivered to your inbox.</p>
+                <form class="ft-newsletter-form" onsubmit="event.preventDefault()">
+                    <input class="ft-newsletter-input" type="email" placeholder="your@email.com" required>
+                    <button class="ft-newsletter-btn" type="submit">
+                        <i class="fa-solid fa-paper-plane"></i> Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="ft-bottom">
+            <div class="ft-bottom-inner">
+                <div class="ft-bottom-left">
+                    <div>&copy; 2026 Caritas Rwanda. All rights reserved.</div>
+                    <div>Designed &amp; developed by <strong>Lerony Software Company</strong></div>
+                </div>
+                <div class="ft-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const header = document.querySelector('header');
+        const navbar = document.querySelector('.navbar-container');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+                navbar.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile nav toggle
+        document.querySelector('.nav-toggle').addEventListener('click', () => {
+            const nav = document.querySelector('nav');
+            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            nav.style.flexDirection = 'column';
+            nav.style.position = 'absolute';
+            nav.style.top = '100%';
+            nav.style.left = '0';
+            nav.style.right = '0';
+            nav.style.background = 'rgba(10,20,50,0.97)';
+            nav.style.padding = '1.5rem';
+            nav.style.borderRadius = '0 0 20px 20px';
+        });
+    </script>
+
+    <!-- ══ DIOCESE MODAL ══ -->
+    <div class="dioc-modal-overlay" id="diocModal" role="dialog" aria-modal="true" aria-labelledby="diocModalName">
+        <div class="dioc-modal">
+            <button class="dioc-modal-closebtn" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="dioc-modal-imgwrap">
+                <img id="diocModalImg" src="" alt="">
+                <div class="dioc-modal-titlewrap">
+                    <div class="dioc-modal-numbadge" id="diocModalNum"></div>
+                    <div class="dioc-modal-name" id="diocModalName"></div>
+                </div>
+            </div>
+            <div class="dioc-modal-body">
+                <div class="dioc-info-row">
+                    <div class="dioc-row-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div>
+                        <div class="dioc-row-label">Date Founded</div>
+                        <div class="dioc-row-val" id="diocModalFounded"></div>
+                    </div>
+                </div>
+                <div class="dioc-info-row">
+                    <div class="dioc-row-icon"><i class="fa-solid fa-mitre"></i></div>
+                    <div>
+                        <div class="dioc-row-label">Bishop / Archbishop</div>
+                        <div class="dioc-row-val" id="diocModalBishop"></div>
+                    </div>
+                </div>
+                <div class="dioc-info-row">
+                    <div class="dioc-row-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <div class="dioc-row-label">Address</div>
+                        <div class="dioc-row-val" id="diocModalAddress"></div>
+                    </div>
+                </div>
+                <div class="dioc-info-row">
+                    <div class="dioc-row-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div>
+                        <div class="dioc-row-label">Telephone</div>
+                        <div class="dioc-row-val" id="diocModalPhone"></div>
+                    </div>
+                </div>
+                <div class="dioc-info-row" id="diocModalEmailRow">
+                    <div class="dioc-row-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <div class="dioc-row-label">Email</div>
+                        <div class="dioc-row-val" id="diocModalEmail"></div>
+                    </div>
+                </div>
+                <div class="dioc-info-row">
+                    <div class="dioc-row-icon"><i class="fa-solid fa-globe"></i></div>
+                    <div>
+                        <div class="dioc-row-label">Website</div>
+                        <div class="dioc-row-val" id="diocModalWebsite"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dioc-modal-footer">
+                <a class="dioc-modal-visit" id="diocModalVisit" href="#" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Website
+                </a>
+                <button class="dioc-modal-dismiss">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const DB = {
+            kabgayi: {
+                num:'01', name:'Kabgayi Diocese',
+                image:'img/Diocese/Kabgayi_Basilica_Catholic_Church.jpg',
+                founded:'February 14, 1952',
+                bishop:'Mgr. Balthazar Ntivuguruzwa',
+                address:'Eveche, B.P. 66, Muhanga (Gitarama), Rwanda',
+                phone:'+250 788 633 463', email:null,
+                website:'http://www.diocesekabgayi.org/', websiteLabel:'diocesekabgayi.org'
+            },
+            nyundo: {
+                num:'02', name:'Nyundo Diocese',
+                image:'img/Diocese/WhatsApp%20Image%202025-10-16%20at%2012.47.37_785f3d99.jpg',
+                founded:'November 10, 1959',
+                bishop:'H.E. Mgr. Anaclet Mwumvaneza',
+                address:'Évêché, B.P. 85, Gisenyi (Rubavu), Rwanda',
+                phone:'+250 782 188 862', email:null,
+                website:'http://www.nyundodiocese.info/', websiteLabel:'nyundodiocese.info'
+            },
+            butare: {
+                num:'03', name:'Butare Diocese',
+                image:'img/Diocese/caption.jpg',
+                founded:'December 20, 1960',
+                bishop:'Mgr. Jean Bosco Ntagungira',
+                address:'Eveche, B.P. 69, Butare (Huye), Rwanda',
+                phone:'+250 788 303 720', email:null,
+                website:'https://butarecatholicdiocese.com/', websiteLabel:'butarecatholicdiocese.com'
+            },
+            ruhengeri: {
+                num:'04', name:'Ruhengeri Diocese',
+                image:'img/Diocese/Cathedrale_Fatima_Ruhengeri.jpg',
+                founded:'September 11, 1961',
+                bishop:'Mgr. Vincent Harolimana',
+                address:'Curia Diocesaine, Avenue Mikeno, B.P. 45, Ruhengeri, Rwanda',
+                phone:'+250 788 742 632', email:null,
+                website:'https://www.dioceseruhengeri.org/', websiteLabel:'dioceseruhengeri.org'
+            },
+            kibungo: {
+                num:'05', name:'Kibungo Diocese',
+                image:'img/Diocese/Capture.PNG',
+                founded:'September 5, 1968',
+                bishop:'—',
+                address:'B.P. 30, Kibungo, Rwanda',
+                phone:'+250 789 589 308', email:'diokib@yahoo.fr',
+                website:'https://www.diocesekibungo.com/', websiteLabel:'diocesekibungo.com'
+            },
+            kigali: {
+                num:'06', name:'Kigali Archdiocese',
+                image:'img/Diocese/Kabgayi_Basilica_Catholic_Church.jpg',
+                founded:'April 10, 1976',
+                bishop:'Cardinal Antoine Kambanda',
+                address:'KN 69 St, B.P. 715, Kigali, Rwanda',
+                phone:'+250 794 411 194', email:'info@archdioceseofkigali.org',
+                website:'https://archdioceseofkigali.org/', websiteLabel:'archdioceseofkigali.org'
+            },
+            byumba: {
+                num:'07', name:'Byumba Diocese',
+                image:'img/Diocese/BYumba.jpg',
+                founded:'November 14, 1981',
+                bishop:'Mgr. Papias Musengamana',
+                address:'B.P. 5, Byumba (Gicumbi, Province du Nord), Rwanda',
+                phone:'+250 788 676 620', email:'info@byumbadiocese.org',
+                website:'https://byumbadiocese.org/', websiteLabel:'byumbadiocese.org'
+            },
+            cyangugu: {
+                num:'08', name:'Cyangugu Diocese',
+                image:'img/Diocese/cyangugu.jpg',
+                founded:'November 5, 1981',
+                bishop:'Mgr. Edouard Sinayobye',
+                address:'B.P. 05, Cyangugu, Rwanda',
+                phone:'+250 788 308 810', email:'diocesecyangugu@gmail.com',
+                website:'https://www.diocesecyangugu.com/', websiteLabel:'diocesecyangugu.com'
+            },
+            gikongoro: {
+                num:'09', name:'Gikongoro Diocese',
+                image:'img/Diocese/cropped-Cathedrale-Diocese-Gikongoro-BG-1-scaled-7.jpg',
+                founded:'March 30, 1992',
+                bishop:'—',
+                address:'B.P. 77, Gikongoro, Rwanda',
+                phone:'+250 535 077 / +250 535 079', email:'evechegik@yahoo.fr',
+                website:'https://www.diocesegikongoro.com/', websiteLabel:'diocesegikongoro.com'
+            }
+        };
+
+        const overlay = document.getElementById('diocModal');
+        const img     = document.getElementById('diocModalImg');
+        const numEl   = document.getElementById('diocModalNum');
+        const nameEl  = document.getElementById('diocModalName');
+        const founded = document.getElementById('diocModalFounded');
+        const bishop  = document.getElementById('diocModalBishop');
+        const address = document.getElementById('diocModalAddress');
+        const phone   = document.getElementById('diocModalPhone');
+        const emailEl = document.getElementById('diocModalEmail');
+        const emailRow= document.getElementById('diocModalEmailRow');
+        const website = document.getElementById('diocModalWebsite');
+        const visitBtn= document.getElementById('diocModalVisit');
+
+        function open(key) {
+            const d = DB[key]; if (!d) return;
+            img.src = d.image; img.alt = d.name;
+            numEl.textContent = d.num;
+            nameEl.textContent = d.name;
+            founded.textContent = d.founded;
+            bishop.textContent = d.bishop;
+            address.textContent = d.address;
+            phone.innerHTML = '<a href="tel:' + d.phone + '">' + d.phone + '</a>';
+            if (d.email) {
+                emailEl.innerHTML = '<a href="mailto:' + d.email + '">' + d.email + '</a>';
+                emailRow.style.display = 'flex';
+            } else {
+                emailRow.style.display = 'none';
+            }
+            website.innerHTML = '<a href="' + d.website + '" target="_blank" rel="noopener">' + d.websiteLabel + '</a>';
+            visitBtn.href = d.website;
+            overlay.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            overlay.classList.remove('is-open');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.dioc-readmore').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                open(btn.dataset.diocese);
+            });
+        });
+
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+        document.querySelectorAll('.dioc-modal-closebtn, .dioc-modal-dismiss').forEach(function(el) {
+            el.addEventListener('click', close);
+        });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
+    })();
+    </script>
+
+    <script>
+    /* ── Stats Banner Count-Up ── */
+    (function () {
+        function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+        function runCounter(el) {
+            var target  = parseInt(el.dataset.target, 10);
+            var suffix  = el.dataset.suffix  || '';
+            var prefix  = el.dataset.prefix  || '';
+            var duration = 1800;
+            var start    = performance.now();
+            function tick(now) {
+                var p = Math.min((now - start) / duration, 1);
+                var val = Math.floor(easeOutQuart(p) * target);
+                el.textContent = prefix + val + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+                else el.textContent = prefix + target + suffix;
+            }
+            requestAnimationFrame(tick);
+        }
+
+        var triggered = false;
+        var counters  = document.querySelectorAll('.stat-count');
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting && !triggered) {
+                    triggered = true;
+                    counters.forEach(function (el, i) {
+                        setTimeout(function () { runCounter(el); }, i * 120);
+                    });
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.4 });
+
+        var banner = document.querySelector('.stats-banner');
+        if (banner) observer.observe(banner);
+    })();
+    </script>
+</body>
+</html>

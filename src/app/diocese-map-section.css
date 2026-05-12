@@ -1,0 +1,568 @@
+/* Diocese network map — ported from reference `index.html` (Leaflet section). */
+
+.diocese-map-section {
+    position: relative;
+    background: linear-gradient(135deg, #fce8e8 0%, #ffffff 40%, #e8f5f2 100%);
+    padding: 6rem 1.5rem;
+    overflow: hidden;
+}
+.diocese-map-section::before {
+    content: "";
+    position: absolute;
+    width: 720px;
+    height: 720px;
+    top: -200px;
+    right: -160px;
+    background: radial-gradient(circle, rgba(145, 19, 19, 0.22) 0%, transparent 60%);
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+}
+.diocese-map-section::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    bottom: -160px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(31, 122, 110, 0.2) 0%, transparent 60%);
+    border-radius: 50%;
+    filter: blur(65px);
+    pointer-events: none;
+}
+.diocese-map-inner::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(91, 169, 196, 0.18) 0%, transparent 65%);
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.diocese-map-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 2rem;
+    align-items: start;
+    position: relative;
+    z-index: 2;
+}
+@media (max-width: 960px) {
+    .diocese-map-inner {
+        grid-template-columns: 1fr;
+    }
+}
+
+.diocese-map-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 28px;
+    padding: 2rem 1.6rem;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.diocese-map-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #911313;
+}
+.diocese-map-eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #911313;
+    box-shadow:
+        0 0 10px rgba(145, 19, 19, 0.6),
+        0 0 20px rgba(145, 19, 19, 0.25);
+    animation: diocese-map-pulse 2s ease-in-out infinite;
+}
+@keyframes diocese-map-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow:
+            0 0 10px rgba(145, 19, 19, 0.6),
+            0 0 20px rgba(145, 19, 19, 0.25);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(0.6);
+        box-shadow: 0 0 5px rgba(145, 19, 19, 0.3);
+    }
+}
+.diocese-map-title {
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+    font-weight: 900;
+    color: #1a1a2e;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+.diocese-map-title span {
+    background: linear-gradient(135deg, #c0392b 0%, #911313 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.diocese-map-desc {
+    font-size: 0.86rem;
+    color: #6b7280;
+    line-height: 1.75;
+}
+
+.diocese-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin: 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(145, 19, 19, 0.3) transparent;
+}
+.diocese-list::-webkit-scrollbar {
+    width: 4px;
+}
+.diocese-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+.diocese-list::-webkit-scrollbar-thumb {
+    background: rgba(145, 19, 19, 0.3);
+    border-radius: 4px;
+}
+
+.diocese-list-item {
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    border-radius: 14px;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+        background 0.25s,
+        border-color 0.25s,
+        box-shadow 0.25s,
+        transform 0.2s;
+}
+.diocese-list-item:hover {
+    background: rgba(255, 247, 247, 0.9);
+    border-color: rgba(145, 19, 19, 0.25);
+    box-shadow: 0 4px 20px rgba(145, 19, 19, 0.1);
+    transform: translateX(4px);
+}
+.diocese-list-item.active {
+    background: rgba(254, 242, 242, 0.95);
+    border-color: rgba(145, 19, 19, 0.5);
+    box-shadow: 0 4px 24px rgba(145, 19, 19, 0.15);
+}
+
+.diocese-list-hit {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    border-radius: 14px;
+}
+
+.diocese-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #9ca3af;
+    font-size: 0.68rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition:
+        background 0.22s,
+        color 0.22s,
+        border-color 0.22s,
+        box-shadow 0.22s;
+}
+.diocese-list-item:hover .diocese-num {
+    background: #fde8e8;
+    border-color: rgba(145, 19, 19, 0.3);
+    color: #911313;
+}
+.diocese-list-item.active .diocese-num {
+    background: #911313;
+    border-color: #911313;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(145, 19, 19, 0.45);
+}
+.diocese-list-name {
+    flex: 1;
+}
+.diocese-list-name strong {
+    display: block;
+    font-size: 0.81rem;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.3;
+}
+.diocese-list-name span {
+    font-size: 0.69rem;
+    color: #9ca3af;
+}
+.diocese-list-name span i {
+    font-size: 0.6rem;
+    margin-right: 2px;
+    color: #911313;
+}
+.diocese-list-arrow {
+    color: #d1d5db;
+    font-size: 0.7rem;
+    transition:
+        color 0.2s,
+        transform 0.2s;
+}
+.diocese-list-item:hover .diocese-list-arrow,
+.diocese-list-item.active .diocese-list-arrow {
+    color: #911313;
+    transform: translateX(4px);
+}
+
+.diocese-map-wrap {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.38);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 28px;
+    padding: 1.1rem;
+    box-shadow:
+        0 12px 48px rgba(145, 19, 19, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    gap: 0.9rem;
+}
+
+.rwanda-map-shell {
+    position: relative;
+    width: 100%;
+}
+.rwanda-map-canvas {
+    height: 500px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 960px) {
+    .rwanda-map-canvas {
+        height: 340px;
+    }
+}
+
+.diocese-info-bar {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 14px;
+    padding: 0.9rem 1.2rem;
+    color: #9ca3af;
+    font-size: 0.82rem;
+    transition: all 0.35s ease;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.diocese-info-bar.has-data {
+    background: rgba(254, 242, 242, 0.75);
+    border-color: rgba(145, 19, 19, 0.2);
+    box-shadow:
+        0 2px 12px rgba(145, 19, 19, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    color: #374151;
+}
+.diocese-info-bar-text strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.2rem;
+}
+.diocese-info-bar-text p {
+    font-size: 0.77rem;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.diocese-info-bar-icon-muted {
+    color: rgba(148, 163, 184, 0.85);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.88) !important;
+    border: 1px solid rgba(255, 255, 255, 0.95) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15) !important;
+    color: #1f2937 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    min-width: 300px !important;
+}
+.leaflet-popup-tip-container {
+    margin-top: -1px;
+}
+.leaflet-popup-tip {
+    background: rgba(255, 255, 255, 0.95) !important;
+}
+.leaflet-popup-content {
+    margin: 0 !important;
+    width: auto !important;
+}
+.leaflet-popup-close-button {
+    z-index: 10 !important;
+    color: #fff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    top: 8px !important;
+    right: 10px !important;
+    font-size: 18px !important;
+}
+
+.lp-img-wrap {
+    width: 100%;
+    height: 175px;
+    overflow: hidden;
+    position: relative;
+}
+.lp-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.lp-img-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.55) 100%);
+}
+.lp-body {
+    padding: 16px 18px 18px;
+}
+.lp-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 5px;
+    line-height: 1.25;
+}
+.lp-arch {
+    font-size: 0.62rem;
+    background: #911313;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-left: 6px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+.lp-city {
+    font-size: 0.75rem;
+    color: #911313;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.lp-meta {
+    font-size: 0.74rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 5px;
+}
+.lp-meta i {
+    color: #911313;
+    font-size: 0.68rem;
+}
+.lp-desc {
+    font-size: 0.83rem;
+    color: #4b5563;
+    line-height: 1.65;
+    margin-bottom: 14px;
+    margin-top: 8px;
+}
+.lp-contacts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.lp-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.77rem;
+    font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        border-color 0.2s;
+    flex: 1;
+    justify-content: center;
+}
+.lp-contact-btn:hover {
+    background: #fde8e8;
+    color: #911313;
+    border-color: rgba(145, 19, 19, 0.3);
+}
+.lp-web-btn {
+    background: #911313;
+    color: #fff;
+    border-color: #911313;
+    box-shadow: 0 4px 14px rgba(145, 19, 19, 0.35);
+}
+.lp-web-btn:hover {
+    background: #7a0f0f;
+}
+
+.diocese-info-img {
+    width: 80px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(145, 19, 19, 0.15);
+}
+.diocese-info-contacts {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+.diocese-contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.71rem;
+    font-weight: 600;
+    color: #911313;
+    text-decoration: none;
+    background: #fde8e8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(145, 19, 19, 0.2);
+    transition: background 0.2s;
+}
+.diocese-contact-link:hover {
+    background: #fbd5d5;
+}
+
+.diocese-list-thumb {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1.5px solid #e5e7eb;
+}
+.diocese-list-thumb--empty {
+    display: inline-block;
+    background: #f3f4f6;
+}
+
+.map-center-card {
+    position: absolute;
+    z-index: 1000;
+    width: 300px;
+    max-width: calc(100% - 16px);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.98);
+    border-radius: 22px;
+    box-shadow:
+        0 24px 56px rgba(0, 0, 0, 0.18),
+        0 4px 14px rgba(145, 19, 19, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.82);
+    transition:
+        opacity 0.25s ease,
+        transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.map-center-card.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+}
+.map-card-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 20;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 0.82rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background 0.2s,
+        transform 0.2s;
+    line-height: 1;
+}
+.map-card-close:hover {
+    background: rgba(0, 0, 0, 0.62);
+    transform: scale(1.1);
+}

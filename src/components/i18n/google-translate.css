@@ -1,0 +1,38 @@
+/* Hide embedded Google Translate UI; we drive language via a custom control. */
+
+.google-translate-mount {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+iframe.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+.goog-te-gadget {
+  font-size: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+.goog-te-gadget-icon {
+  display: none !important;
+}
