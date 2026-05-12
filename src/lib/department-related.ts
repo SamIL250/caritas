@@ -15,10 +15,15 @@ export type DepartmentRelatedRow = {
   meta_label: string | null;
 };
 
-/** Prefer external URL when present; otherwise internal paths (programs slug, publications anchor hash). */
+/** Prefer external URL when present; otherwise internal paths (programs slug, publications anchor hash, news anchor). */
 export function resolveDepartmentRelatedHref(row: DepartmentRelatedRow): string {
   const ext = row.link_external?.trim();
   if (ext) return ext;
+  if (row.source_kind === "news") {
+    const anchor = row.link_anchor?.trim();
+    if (anchor) return `/news#story-${anchor}`;
+    return "/news";
+  }
   if (row.source_kind === "program" && row.link_path?.trim()) return row.link_path.trim();
   if (row.source_kind === "publication") {
     const base = row.link_path?.trim() || "/publications";
@@ -47,7 +52,7 @@ export async function fetchDepartmentRelatedContent(
     p_exclude_publication_id: args.excludePublicationId ?? null,
     p_limit: args.limit ?? 18,
     p_publication_category_slugs:
-      args.publicationCategorySlugs ?? ["success_story", "recent_update"],
+      args.publicationCategorySlugs ?? ["success_story", "recent_update", "newsletter"],
   });
 
   if (error) throw new Error(error.message);

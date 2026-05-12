@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 import {
   encodeProgramAssetUrl,
   formatProgramDate,
-  programDetailHref,
 } from "@/lib/programs";
-import {
-  fetchProgramBySlug,
-  fetchRelatedPrograms,
-} from "../get-programs-data";
+import { fetchProgramBySlug } from "../get-programs-data";
+import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { fetchDepartmentRelatedContent } from "@/lib/department-related";
+import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
+import { CampaignFullStory } from "@/components/website/campaigns/CampaignFullStory";
+import { ProgramPillarAside } from "@/components/website/programs/ProgramPillarAside";
+import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
 
+import "../../campaigns/campaign-detail-page.css";
+import "../program-detail-page.css";
 import "../programs-page.css";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -34,9 +39,21 @@ export default async function ProgramArticlePage({ params }: PageProps) {
   if (!found) notFound();
 
   const { program, category } = found;
-  const related = await fetchRelatedPrograms(program.category_id, program.id, 3);
+  const supabase = await createClient();
+
+  const relatedRows = await fetchDepartmentRelatedContent(supabase, {
+    departmentId: program.category_id,
+    excludeProgramId: program.id,
+    limit: 48,
+    publicationCategorySlugs: ["success_story", "recent_update", "newsletter"],
+  });
+
+  const relatedSections = groupDepartmentRowsForProgramPage(relatedRows);
 
   const coverUrl = encodeProgramAssetUrl(program.cover_image_url);
+  const storyHtml =
+    program.body?.trim() !== "" ? sanitizeStaffRichText(program.body!.trim()) : "";
+
   const externalHref =
     program.external_url?.trim() && /^https?:\/\//i.test(program.external_url)
       ? program.external_url.trim()
@@ -44,8 +61,10 @@ export default async function ProgramArticlePage({ params }: PageProps) {
         ? encodeProgramAssetUrl(program.external_url)
         : "";
 
+  const pillarSlug = category?.slug ?? program.category;
+
   return (
-    <div className="prog-article-page">
+    <div className="campaign-detail-root program-detail-flush">
       <header className="prog-article-hero">
         <div className="prog-article-hero-bg" aria-hidden>
           {coverUrl ? (
@@ -54,9 +73,17 @@ export default async function ProgramArticlePage({ params }: PageProps) {
           ) : null}
         </div>
         <div className="prog-article-hero-inner">
-          <Link href="/programs" className="prog-article-back">
-            <i className="fa-solid fa-arrow-left" aria-hidden /> All programs
-          </Link>
+          <nav className="campaign-hero-breadcrumb program-detail-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/programs">All programs</Link>
+            <span aria-hidden> / </span>
+            {category ? (
+              <Link href={`/programs#${encodeURIComponent(category.slug)}`}>{category.label}</Link>
+            ) : (
+              <span>{pillarSlug}</span>
+            )}
+            <span aria-hidden> / </span>
+            <span className="campaign-hero-bc-current">{program.title}</span>
+          </nav>
           {category ? (
             <span className="prog-article-eyebrow">
               {category.icon ? <i className={category.icon} aria-hidden /> : null}
@@ -88,60 +115,29 @@ export default async function ProgramArticlePage({ params }: PageProps) {
         </div>
       </header>
 
-      <div className="prog-article-body-wrap">
-        <article className="prog-article-card-body">
-          {program.body ? (
-            <div
-              className="prog-article-content"
-              // body is sanitized on save (sanitize-staff-html) and authored by trusted staff
-              dangerouslySetInnerHTML={{ __html: program.body }}
-            />
-          ) : (
-            <p className="prog-article-content">
-              {program.excerpt || "Full story coming soon."}
-            </p>
-          )}
+      <article className="campaign-detail-body">
+        <div className="campaign-detail-body-grid">
+          <CampaignFullStory key={`${program.id}-${program.updated_at}`} html={storyHtml} />
+          <ProgramPillarAside category={category} pillarSlug={pillarSlug} />
+        </div>
+      </article>
 
-          {externalHref ? (
-            <div className="prog-article-extlink">
-              <span>Looking for more detail or the original source?</span>
-              <a href={externalHref} target="_blank" rel="noopener noreferrer">
-                Visit external link <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden />
-              </a>
-            </div>
-          ) : null}
-        </article>
-      </div>
-
-      {related.length > 0 ? (
-        <section className="prog-related">
-          <h3>More from {category?.label ?? "this program area"}</h3>
-          <div className="prog-article-grid">
-            {related.map((p) => (
-              <Link key={p.id} href={programDetailHref(p)} className="prog-article-card">
-                <div className="prog-article-img">
-                  {p.cover_image_url.trim() ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={encodeProgramAssetUrl(p.cover_image_url)} alt={p.cover_image_alt || p.title} />
-                  ) : null}
-                  {p.tag_label ? <div className="prog-article-tag">{p.tag_label}</div> : null}
-                </div>
-                <div className="prog-article-body">
-                  <div className="prog-article-meta">
-                    <i className="fa-solid fa-calendar" aria-hidden />
-                    {formatProgramDate(p.published_at) || "Recently"}
-                  </div>
-                  <div className="prog-article-title">{p.title}</div>
-                  {p.excerpt ? <p className="prog-article-excerpt">{p.excerpt}</p> : null}
-                  <div className="prog-article-link">
-                    Read <i className="fa-solid fa-arrow-right" aria-hidden />
-                  </div>
-                </div>
-              </Link>
-            ))}
+      {externalHref ? (
+        <div className="program-external-callout-wrap">
+          <div className="program-external-callout">
+            <span>Looking for more detail or the original source?</span>
+            <a href={externalHref} target="_blank" rel="noopener noreferrer">
+              Visit external link{" "}
+              <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden />
+            </a>
           </div>
-        </section>
+        </div>
       ) : null}
+
+      <ProgramRelatedHub
+        pillarLabel={category?.label ?? pillarSlug}
+        sections={relatedSections}
+      />
     </div>
   );
 }
