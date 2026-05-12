@@ -15,6 +15,7 @@ import {
 } from "@/app/actions/newsletter";
 import { sanitizeNewsletterHtml } from "@/lib/newsletter-html";
 import { wrapBroadcastMessageHtml } from "@/lib/newsletter-email-layout";
+import { NewsletterBodyEditor } from "@/components/dashboard/newsletter/NewsletterBodyEditor";
 
 type SubscriberSnippet = Pick<
   NewsletterSubscriberRow,
@@ -136,7 +137,8 @@ export default function NewsletterDashboardClient(props: {
         <Card className="border border-stone-200 bg-white p-5 shadow-sm sm:p-6">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Compose broadcast</h2>
           <p className="mt-1 text-sm text-stone-500">
-            HTML is wrapped in your branded shell; each recipient gets a unique unsubscribe link at the bottom.
+            Your message is wrapped in the branded email shell; each recipient gets a unique unsubscribe link at the
+            bottom.
           </p>
           <form className="mt-5 space-y-4" onSubmit={submitBroadcast}>
             <div className="space-y-1">
@@ -149,16 +151,10 @@ export default function NewsletterDashboardClient(props: {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-stone-700">HTML body</label>
-              <textarea
-                value={htmlBody}
-                onChange={(e) => setHtmlBody(e.target.value)}
-                rows={14}
-                className="w-full rounded-md border border-[var(--color-border-default)] bg-transparent px-3 py-2 font-mono text-[13px] leading-relaxed text-stone-800"
-                spellCheck={false}
-              />
+              <label className="text-sm font-medium text-stone-700">Message body</label>
+              <NewsletterBodyEditor value={htmlBody} onChange={setHtmlBody} />
               <p className="text-[11px] text-stone-400">
-                Tip: keep layouts simple — paragraphs, headings, and links work best across mail clients.
+                Use the toolbar for fonts, spacing, and styles — stick to simple layouts for the best results in inboxes.
               </p>
             </div>
             <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-stone-200 bg-stone-50/80 px-3 py-2.5 text-sm text-stone-700">
