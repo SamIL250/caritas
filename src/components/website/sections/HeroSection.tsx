@@ -126,7 +126,7 @@ export default function HeroSection({
   const { openModal } = useDonation();
   
   return (
-    <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-stone-900 font-poppins">
+    <section className="relative min-h-[90vh] lg:h-screen lg:min-h-[800px] flex items-center pt-28 pb-16 sm:pt-36 sm:pb-20 md:pt-40 md:pb-24 lg:pt-44 lg:pb-28 overflow-hidden bg-stone-950 font-poppins">
       {/* overflow-hidden clips sliding layers so nothing flashes the fallback bg between slides */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="sync" initial={false} custom={slideDir}>
@@ -169,50 +169,50 @@ export default function HeroSection({
             >
               {/* Hero Badge */}
               {slide.badge_text && (
-                <div className="inline-block px-6 py-2 rounded-full !bg-white/10 !border !border-white/20 !backdrop-blur-xl !text-[10px] md:!text-[11px] !font-black !text-white !uppercase !tracking-[0.3em] !mb-8 !shadow-xl !shadow-black/20">
+                <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-md text-[10px] md:text-xs font-semibold tracking-wider text-white uppercase mb-5 shadow-lg shadow-black/10 select-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary-orange animate-pulse mr-2" />
                   {slide.badge_text}
                 </div>
               )}
 
               <h1 
-                className="!text-[2.5rem] sm:!text-6xl md:!text-7xl lg:!text-8xl !font-black !leading-[1] !mb-8 !tracking-[-0.03em]"
+                className="!text-3xl sm:!text-5xl md:!text-6xl lg:!text-7xl !font-extrabold !leading-[1.15] !mb-5 !tracking-tight"
                 style={{ 
                   color: displayTextColor,
-                  textShadow: '0 10px 40px rgba(0,0,0,0.5)',
-                  wordSpacing: '-0.02em'
+                  textShadow: '0 8px 30px rgba(0,0,0,0.4)',
                 }}
               >
                 {slide.heading}
               </h1>
               
               <p 
-                className="!text-[1.1rem] md:!text-xl !leading-[1.6] !mb-12 !max-w-2xl !opacity-90 !font-medium"
+                className="!text-sm sm:!text-base md:!text-lg lg:!text-xl !leading-relaxed !mb-8 !max-w-2xl !opacity-85 !font-normal"
                 style={{ 
                   color: displayTextColor,
-                  textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+                  textShadow: '0 2px 8px rgba(0,0,0,0.25)'
                 }}
               >
                 {slide.subheading}
               </p>
               
-              <div className="flex flex-wrap gap-6 !mt-2">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-5 !mt-2">
                 {slide.cta_url && slide.cta_text && (
                   slide.cta_url === '#donate' ? (
                     <button 
                       onClick={() => openModal()}
-                      className="!px-12 !py-5 !bg-primary-orange !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-primary-orange-hover !transition-all hover:!scale-105 active:!scale-95 !shadow-[0_15px_40px_-10px_rgba(140,34,8,0.5)] !flex !items-center !gap-3 !group !relative !overflow-hidden"
+                      className="!px-7 sm:!px-8 !py-3.5 sm:!py-4 !bg-primary-orange !text-white !font-bold !uppercase !tracking-wider !text-[11px] sm:!text-xs !rounded-full hover:!bg-primary-orange-hover !transition-all hover:!scale-[1.03] active:!scale-[0.98] !shadow-[0_10px_30px_-8px_rgba(140,34,8,0.45)] !flex !items-center !gap-2.5 !group !relative !overflow-hidden"
                     >
                       <span className="relative z-10">{slide.cta_text}</span>
-                      <span className="relative z-10 group-hover:translate-x-1.5 !transition-transform !duration-300">→</span>
+                      <span className="relative z-10 group-hover:translate-x-1 !transition-transform !duration-300">→</span>
                       <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                     </button>
                   ) : (
                     <Link 
                       href={slide.cta_url}
-                      className="!px-12 !py-5 !bg-primary-orange !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-primary-orange-hover !transition-all hover:!scale-105 active:!scale-95 !shadow-[0_15px_40px_-10px_rgba(140,34,8,0.5)] !flex !items-center !gap-3 !group !relative !overflow-hidden"
+                      className="!px-7 sm:!px-8 !py-3.5 sm:!py-4 !bg-primary-orange !text-white !font-bold !uppercase !tracking-wider !text-[11px] sm:!text-xs !rounded-full hover:!bg-primary-orange-hover !transition-all hover:!scale-[1.03] active:!scale-[0.98] !shadow-[0_10px_30px_-8px_rgba(140,34,8,0.45)] !flex !items-center !gap-2.5 !group !relative !overflow-hidden"
                     >
                       <span className="relative z-10">{slide.cta_text}</span>
-                      <span className="relative z-10 group-hover:translate-x-1.5 !transition-transform !duration-300">→</span>
+                      <span className="relative z-10 group-hover:translate-x-1 !transition-transform !duration-300">→</span>
                       <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                     </Link>
                   )
@@ -222,14 +222,14 @@ export default function HeroSection({
                   slide.secondary_cta_url === '#donate' ? (
                     <button 
                       onClick={() => openModal()}
-                      className="!px-12 !py-5 !bg-white/5 !backdrop-blur-xl !border !border-white/20 !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-white/15 !transition-all hover:!scale-105 active:!scale-95 !flex !items-center !gap-2 !shadow-xl"
+                      className="!px-7 sm:!px-8 !py-3.5 sm:!py-4 !bg-white/5 !backdrop-blur-md !border !border-white/15 !text-white !font-bold !uppercase !tracking-wider !text-[11px] sm:!text-xs !rounded-full hover:!bg-white/10 hover:!border-white/25 !transition-all hover:!scale-[1.03] active:!scale-[0.98] !flex !items-center !gap-2 !shadow-lg !shadow-black/5"
                     >
                       {slide.secondary_cta_text}
                     </button>
                   ) : (
                     <Link 
                       href={slide.secondary_cta_url || '#'}
-                      className="!px-12 !py-5 !bg-white/5 !backdrop-blur-xl !border !border-white/20 !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-white/15 !transition-all hover:!scale-105 active:!scale-95 !flex !items-center !gap-2 !shadow-xl"
+                      className="!px-7 sm:!px-8 !py-3.5 sm:!py-4 !bg-white/5 !backdrop-blur-md !border !border-white/15 !text-white !font-bold !uppercase !tracking-wider !text-[11px] sm:!text-xs !rounded-full hover:!bg-white/10 hover:!border-white/25 !transition-all hover:!scale-[1.03] active:!scale-[0.98] !flex !items-center !gap-2 !shadow-lg !shadow-black/5"
                     >
                       {slide.secondary_cta_text}
                     </Link>
@@ -248,24 +248,24 @@ export default function HeroSection({
             type="button"
             onClick={goPrev}
             aria-label="Previous hero slide"
-            className="hero-carousel-btn hero-carousel-btn--prev"
+            className="!hidden md:!inline-flex hero-carousel-btn hero-carousel-btn--prev"
           >
-            <ChevronLeft size={26} strokeWidth={2.25} aria-hidden />
+            <ChevronLeft size={24} strokeWidth={2} aria-hidden />
           </button>
           <button
             type="button"
             onClick={goNext}
             aria-label="Next hero slide"
-            className="hero-carousel-btn hero-carousel-btn--next"
+            className="!hidden md:!inline-flex hero-carousel-btn hero-carousel-btn--next"
           >
-            <ChevronRight size={26} strokeWidth={2.25} aria-hidden />
+            <ChevronRight size={24} strokeWidth={2} aria-hidden />
           </button>
         </>
       )}
 
       {/* Slide Indicators */}
       {slides.length > 1 && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2.5">
           {slides.map((_, idx) => (
             <button
               key={idx}
@@ -274,7 +274,7 @@ export default function HeroSection({
               aria-label={`Go to slide ${idx + 1} of ${slides.length}`}
               aria-current={currentSlide === idx ? 'true' : undefined}
               className={`h-1.5 transition-all duration-500 rounded-full ${
-                currentSlide === idx ? 'w-10 bg-[#8c2208]' : 'w-4 bg-white/30 hover:bg-white/50'
+                currentSlide === idx ? 'w-8 bg-[#8c2208]' : 'w-2 bg-white/30 hover:bg-white/50'
               }`}
             />
           ))}
