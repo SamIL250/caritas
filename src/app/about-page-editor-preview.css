@@ -754,6 +754,125 @@
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
+.page-editor-section-preview.about-page-preview .dc-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.page-editor-section-preview.about-page-preview .dc-card {
+  background: #ffffff;
+  border: none;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+.page-editor-section-preview.about-page-preview .dc-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+.page-editor-section-preview.about-page-preview .dc-card-img-placeholder {
+  width: 100%;
+  height: 160px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d1d5db;
+  font-size: 2rem;
+}
+.page-editor-section-preview.about-page-preview .dc-card-body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.page-editor-section-preview.about-page-preview .dc-card-arch-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #fff;
+  background: #911313;
+  border-radius: 5px;
+  padding: 2px 7px;
+  margin-bottom: 0.5rem;
+  align-self: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.page-editor-section-preview.about-page-preview .dc-card-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin-bottom: 0.2rem;
+}
+.page-editor-section-preview.about-page-preview .dc-card-city {
+  font-size: 0.7rem;
+  color: #911313;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+.page-editor-section-preview.about-page-preview .dc-card-desc {
+  font-size: 0.76rem;
+  color: #5a6a7a;
+  line-height: 1.6;
+  margin-bottom: 0.85rem;
+  flex: 1;
+}
+.page-editor-section-preview.about-page-preview .dc-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.85rem;
+}
+.page-editor-section-preview.about-page-preview .dc-card-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: #6b7280;
+}
+.page-editor-section-preview.about-page-preview .dc-card-meta-row i {
+  color: #911313;
+  font-size: 0.65rem;
+  width: 13px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.page-editor-section-preview.about-page-preview .dc-card-btns {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+.page-editor-section-preview.about-page-preview .dc-card-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1.5px solid #e5e7eb;
+  background: #f9fafb;
+  color: #374151;
+}
+.page-editor-section-preview.about-page-preview .dc-card-btn.primary {
+  background: #911313;
+  color: #fff;
+  border-color: #911313;
+}
 .page-editor-section-preview.about-page-preview .diocese-card {
   position: relative;
   height: 230px;
@@ -1338,4 +1457,297 @@
 
 .page-editor-canvas-about .page-editor-toolbar-pill {
   border-color: var(--page-editor-chrome-edge);
+}
+
+/* ════════════════════════════════════════════
+   Metrics Page — Preview styles
+   Mirrors website.css metrics-* classes but
+   scoped under .page-editor-section-preview
+   ════════════════════════════════════════════ */
+
+/* ── KPI Strip ── */
+.page-editor-section-preview .metrics-kpi-strip {
+  width: 100%;
+}
+.page-editor-section-preview .metrics-kpi-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.page-editor-section-preview .metrics-kpi-card {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.page-editor-section-preview .metrics-kpi-card:hover {
+  border-color: #d1d5db;
+}
+.page-editor-section-preview .metrics-kpi-icon {
+  font-size: 1.3rem;
+  color: var(--kpi-color, #8c2208);
+  margin-bottom: 0.65rem;
+}
+.page-editor-section-preview .metrics-kpi-val {
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  font-weight: 800;
+  color: #0d1b2a;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.page-editor-section-preview .metrics-kpi-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+}
+
+/* ── Stat Cards ── */
+.page-editor-section-preview .metrics-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.page-editor-section-preview .metrics-stat-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  transition: border-color 0.2s;
+}
+.page-editor-section-preview .metrics-stat-card:hover {
+  border-color: #d1d5db;
+}
+.page-editor-section-preview .metrics-stat-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.page-editor-section-preview .metrics-stat-card-body {
+  flex: 1;
+  min-width: 0;
+}
+.page-editor-section-preview .metrics-stat-card-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.page-editor-section-preview .metrics-stat-card-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+.page-editor-section-preview .metrics-stat-card-sub {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 0.2rem;
+}
+
+/* ── Program Card ── */
+.page-editor-section-preview .metrics-program-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+}
+.page-editor-section-preview .metrics-program-header {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 2rem;
+}
+.page-editor-section-preview .metrics-program-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.page-editor-section-preview .metrics-program-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0d1b2a;
+}
+.page-editor-section-preview .metrics-program-desc {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-top: 0.1rem;
+}
+.page-editor-section-preview .metrics-program-stats {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.page-editor-section-preview .metrics-program-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.page-editor-section-preview .metrics-program-stat-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #0d1b2a;
+}
+.page-editor-section-preview .metrics-program-stat-lbl {
+  font-size: 0.7rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.page-editor-section-preview .metrics-program-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+.page-editor-section-preview .metrics-prog-bar-wrap {
+  width: 100%;
+  max-width: 600px;
+}
+.page-editor-section-preview .metrics-prog-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.35rem;
+}
+.page-editor-section-preview .metrics-prog-bar-track {
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 100px;
+  overflow: hidden;
+}
+.page-editor-section-preview .metrics-prog-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+}
+.page-editor-section-preview .metrics-program-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  max-width: 700px;
+}
+.page-editor-section-preview .metrics-program-callout i {
+  font-size: 1rem;
+  margin-top: 0.1rem;
+}
+.page-editor-section-preview .metrics-program-callout p {
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Reach Grid ── */
+.page-editor-section-preview .metrics-reach-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin-bottom: 0.35rem;
+}
+.page-editor-section-preview .metrics-reach-sub {
+  font-size: 0.85rem;
+  color: #6b7280;
+  max-width: 500px;
+  line-height: 1.6;
+}
+.page-editor-section-preview .metrics-reach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.page-editor-section-preview .metrics-reach-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.page-editor-section-preview .metrics-reach-card:hover {
+  border-color: #d1d5db;
+}
+.page-editor-section-preview .metrics-reach-card-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  margin: 0 auto 1rem;
+}
+.page-editor-section-preview .metrics-reach-card-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0d1b2a;
+  margin-bottom: 0.75rem;
+}
+.page-editor-section-preview .metrics-reach-card-stat {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+}
+.page-editor-section-preview .metrics-reach-card-stat .val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  line-height: 1;
+}
+.page-editor-section-preview .metrics-reach-card-stat .lbl {
+  font-size: 0.65rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+.page-editor-section-preview .metrics-reach-card-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+.page-editor-section-preview .metrics-reach-card-details .divider {
+  color: #d1d5db;
+}
+
+/* ── Overview Tab (metrics_panel_title/sub) ── */
+.page-editor-section-preview .metrics-panel-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin-bottom: 0.5rem;
+}
+.page-editor-section-preview .metrics-panel-sub {
+  font-size: 0.9rem;
+  color: #6b7280;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
 }

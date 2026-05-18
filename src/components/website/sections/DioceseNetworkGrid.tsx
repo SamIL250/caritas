@@ -292,7 +292,41 @@ function DioceseModal({
   );
 }
 
-export function DioceseNetworkGrid({ items }: { items: DioceseCard[] }) {
+function getDioceseCity(name: string): string {
+  const n = name.toLowerCase();
+  if (n.includes("kigali")) return "KIGALI";
+  if (n.includes("kabgayi")) return "MUHANGA";
+  if (n.includes("butare")) return "HUYE";
+  if (n.includes("byumba")) return "GICUMBI";
+  if (n.includes("cyangugu")) return "RUSIZI";
+  if (n.includes("gikongoro")) return "NYAMAGABE";
+  if (n.includes("kibungo")) return "NGOMA";
+  if (n.includes("nyundo")) return "RUBAVU";
+  if (n.includes("ruhengeri")) return "MUSANZE";
+  return "";
+}
+
+function getDioceseDescription(name: string): string {
+  const n = name.toLowerCase();
+  if (n.includes("kigali")) return "The metropolitan see of Rwanda. The Cathedral of Notre-Dame des Victoires stands at the heart of the capital.";
+  if (n.includes("kabgayi")) return "Home to the historic Kabgayi Basilica, one of the oldest and most significant Catholic centres in Rwanda.";
+  if (n.includes("butare")) return "Serving the southern Rwanda region, centred in the university city of Huye (Butare).";
+  if (n.includes("byumba")) return "Covering the northern highlands of Rwanda, centred in Byumba (Gicumbi district).";
+  if (n.includes("cyangugu")) return "Located in southwestern Rwanda on the shores of Lake Kivu, serving the Rusizi area.";
+  if (n.includes("gikongoro")) return "Covering the hilly terrain of southern-western Rwanda in the Nyamagabe district.";
+  if (n.includes("kibungo")) return "Serving the eastern region of Rwanda, centred in Kibungo (Ngoma district).";
+  if (n.includes("nyundo")) return "Covering the northwest of Rwanda along Lake Kivu, centred in Rubavu (Gisenyi).";
+  if (n.includes("ruhengeri")) return "Nestled at the foot of the Virunga volcanoes, serving northern Rwanda from Musanze.";
+  return "";
+}
+
+export function DioceseNetworkGrid({
+  items,
+  showFullInfo = false,
+}: {
+  items: DioceseCard[];
+  showFullInfo?: boolean;
+}) {
   const nameId = useId();
   const [active, setActive] = useState<{ card: DioceseCard; idx: number } | null>(
     null,
@@ -308,7 +342,7 @@ export function DioceseNetworkGrid({ items }: { items: DioceseCard[] }) {
 
   return (
     <>
-      <div className="diocese-grid">
+      <div className={showFullInfo ? "dc-cards-grid" : "diocese-grid"}>
         {rows.map((d, i) => {
           const special = isSpecialDiocese(d);
           const src = typeof d.image === "string" ? d.image.trim() : "";
@@ -336,6 +370,113 @@ export function DioceseNetworkGrid({ items }: { items: DioceseCard[] }) {
                   <div className="dioc-est">
                     <i className="fa-solid fa-location-dot" aria-hidden />
                     {d.date_line}
+                  </div>
+                </div>
+              </article>
+            );
+          }
+
+          if (showFullInfo) {
+            const nameStr = typeof d.name === "string" ? d.name : "";
+            const isArchdiocese = nameStr.toLowerCase().includes("archdiocese");
+            const badgeText = isArchdiocese ? "Archdiocese" : "Diocese";
+            const city = (d as any).city || getDioceseCity(nameStr);
+            const desc = (d as any).description || getDioceseDescription(nameStr);
+            const bishop = (d as any).bishop || d.modal?.bishop;
+            const founded = (d as any).founded || d.modal?.founded;
+            const phone = (d as any).phone || d.modal?.phone;
+            const website = (d as any).website || d.modal?.website || d.details_href;
+            const telHref = typeof phone === "string" ? phoneTelHref(phone) : null;
+
+            return (
+              <article key={`${d.name}-${i}`} className="dc-card">
+                {/* Cover image */}
+                {src ? (
+                  <img
+                    src={imgSrc(src)}
+                    alt={d.name}
+                    className="dc-card-img"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="dc-card-img-placeholder" aria-hidden>
+                    <i className="fa-solid fa-church" />
+                  </div>
+                )}
+
+                <div className="dc-card-body">
+                  {/* Archdiocese / Diocese badge */}
+                  <div className="dc-card-arch-badge">
+                    {badgeText}
+                  </div>
+
+                  {/* Name */}
+                  <div className="dc-card-title">{d.name}</div>
+
+                  {/* City / HQ */}
+                  {city ? (
+                    <div className="dc-card-city">
+                      <i className="fa-solid fa-location-dot" aria-hidden />
+                      {city}
+                    </div>
+                  ) : null}
+
+                  {/* Description */}
+                  {desc ? (
+                    <div className="dc-card-desc">{desc}</div>
+                  ) : null}
+
+                  {/* Meta rows — bishop, founded, phone */}
+                  <div className="dc-card-meta">
+                    {bishop && bishop !== "—" ? (
+                      <div className="dc-card-meta-row">
+                        <i className="fa-solid fa-user-tie" aria-hidden />
+                        {bishop}
+                      </div>
+                    ) : null}
+                    {founded ? (
+                      <div className="dc-card-meta-row">
+                        <i className="fa-regular fa-calendar" aria-hidden />
+                        Est. {founded}
+                      </div>
+                    ) : null}
+                    {phone ? (
+                      <div className="dc-card-meta-row">
+                        <i className="fa-solid fa-phone" aria-hidden />
+                        {phone}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="dc-card-btns">
+                    {telHref ? (
+                      <a href={telHref} className="dc-card-btn">
+                        <i className="fa-solid fa-phone" aria-hidden />
+                        Call
+                      </a>
+                    ) : (
+                      <span className="dc-card-btn" style={{ opacity: 0.4, cursor: 'default' }}>
+                        <i className="fa-solid fa-phone" aria-hidden />
+                        Call
+                      </span>
+                    )}
+                    {website ? (
+                      <a
+                        href={website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="dc-card-btn primary"
+                      >
+                        <i className="fa-solid fa-globe" aria-hidden />
+                        Website
+                      </a>
+                    ) : (
+                      <span className="dc-card-btn" style={{ opacity: 0.4, cursor: 'default' }}>
+                        <i className="fa-solid fa-globe" aria-hidden />
+                        Website
+                      </span>
+                    )}
                   </div>
                 </div>
               </article>

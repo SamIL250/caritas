@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { 
-  ChevronLeft, 
-  GripVertical, 
-  Eye, 
-  EyeOff, 
-  Plus, 
-  Trash2, 
-  RefreshCw, 
+import {
+  ChevronLeft,
+  GripVertical,
+  Eye,
+  EyeOff,
+  Plus,
+  Trash2,
+  RefreshCw,
   ExternalLink,
   Monitor,
   Smartphone,
@@ -30,11 +30,11 @@ import { MediaPicker } from '@/components/dashboard/MediaPicker';
 import { createClient } from '@/lib/supabase/client';
 import { SECTION_ICONS, SECTION_LABELS, DEFAULT_SECTION_CONTENT } from '@/lib/constants';
 import { FEATURED_CAMPAIGN_SIDEBAR_MAX } from '@/lib/featured-campaign-home-data';
-import { 
-  saveSection, 
-  saveHero, 
-  deleteSection, 
-  toggleSectionVisibility, 
+import {
+  saveSection,
+  saveHero,
+  deleteSection,
+  toggleSectionVisibility,
   reorderSections,
   addSection,
   updatePageStatus,
@@ -88,6 +88,10 @@ import LeadershipGridSection from '@/components/website/sections/LeadershipGridS
 import AboutSection from '@/components/website/sections/AboutSection';
 import VideoGallerySection from '@/components/website/sections/VideoGallerySection';
 import DioceseMapSection from '@/components/website/sections/DioceseMapSection';
+import MetricsKpiStrip from '@/components/website/sections/MetricsKpiStrip';
+import MetricsStatCards from '@/components/website/sections/MetricsStatCards';
+import MetricsProgramCard from '@/components/website/sections/MetricsProgramCard';
+import MetricsReachGrid from '@/components/website/sections/MetricsReachGrid';
 import NewsLandingHero from '@/components/website/news/NewsLandingHero';
 import NewsNewsletterFooter from '@/components/website/news/NewsNewsletterFooter';
 import NewsFeedSectionPreview from '@/components/dashboard/pages/NewsFeedSectionPreview';
@@ -190,10 +194,10 @@ export default function PageEditorClient({
     localStateRef.current = localState;
   }, [localState]);
   const [slideState, setSlideState] = useState<any>(null); // For editing a specific slide
-  
+
   const [hasChanges, setHasChanges] = useState(false);
   const [slideHasChanges, setSlideHasChanges] = useState(false);
-  
+
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -264,7 +268,7 @@ export default function PageEditorClient({
 
   const previewCanvasRef = useRef<HTMLDivElement | null>(null);
   const resizeStartRef = useRef<{ x: number; width: number } | null>(null);
-  
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showUnsavedConfirm, setShowUnsavedConfirm] = useState<string | null>(null); // target id to switch to
@@ -502,7 +506,7 @@ export default function PageEditorClient({
       const newIndex = sections.findIndex(s => s.id === over.id);
       const newSections = arrayMove(sections, oldIndex, newIndex);
       setSections(newSections);
-      
+
       const orders = newSections.map((s, idx) => ({ id: s.id, order: (idx + 1) * 10 }));
       await reorderSections(orders);
       setIsStale(true);
@@ -543,10 +547,10 @@ export default function PageEditorClient({
         const o = localState.options || {};
         const qn = Array.isArray(o.quick_nav)
           ? o.quick_nav.map((n: any) => ({
-              label: String(n.label || ''),
-              href: String(n.href || '#'),
-              icon: typeof n.icon === 'string' ? n.icon.replace(/^fa-solid\s+/i, '').trim() : undefined,
-            }))
+            label: String(n.label || ''),
+            href: String(n.href || '#'),
+            icon: typeof n.icon === 'string' ? n.icon.replace(/^fa-solid\s+/i, '').trim() : undefined,
+          }))
           : [];
         return (
           <PageHeroSection
@@ -623,7 +627,7 @@ export default function PageEditorClient({
         );
       }
       return (
-        <HeroSection 
+        <HeroSection
           heading={localState.heading}
           subheading={localState.subheading}
           cta_text={localState.cta_text}
@@ -698,7 +702,7 @@ export default function PageEditorClient({
       case 'timeline': return <TimelineSection {...props} />;
       case 'pillar_cards': return <PillarCardsSection {...props} />;
       case 'values_grid': return <ValuesGridSection {...props} />;
-      case 'network_section': return <NetworkSection {...props} />;
+      case 'network_section': return <NetworkSection {...props} showFullInfo={page.slug === 'diocesan'} />;
       case 'diocese_map_section': return <DioceseMapSection {...props} />;
       case 'leadership_grid': return <LeadershipGridSection {...props} />;
       case 'video_gallery': return <VideoGallerySection {...props} />;
@@ -725,6 +729,22 @@ export default function PageEditorClient({
             />
           </div>
         );
+      case 'metrics_kpis': return <div className="p-6"><MetricsKpiStrip items={props.items || []} /></div>;
+      case 'metrics_stat_cards': return <div className="p-6"><MetricsStatCards cards={props.items || []} /></div>;
+      case 'metrics_overview':
+        return (
+          <div className="p-8 max-w-4xl mx-auto">
+            <div className="mb-6">
+              <h3 className="metrics-panel-title">{props.heading || 'Organisation Overview'}</h3>
+              <p className="metrics-panel-sub">{props.subheading}</p>
+            </div>
+            {props.items && props.items.length > 0 ? (
+              <MetricsStatCards cards={props.items} />
+            ) : null}
+          </div>
+        );
+      case 'metrics_program': return <div className="p-6"><MetricsProgramCard content={props} /></div>;
+      case 'metrics_reach': return <div className="p-6"><MetricsReachGrid content={props} /></div>;
       default: return <div>Unknown section type: {section.type}</div>;
     }
   };
@@ -767,15 +787,15 @@ export default function PageEditorClient({
         </div>
 
         <div className="flex items-center gap-3">
-          <a 
-            href={page.slug === 'home' ? '/' : `/${page.slug}`} 
-            target="_blank" 
+          <a
+            href={page.slug === 'home' ? '/' : `/${page.slug}`}
+            target="_blank"
             className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:ring-offset-1 h-9 px-4 py-2 hover:bg-stone-100 text-stone-600 gap-2"
           >
             <ExternalLink size={16} />
             View layout
           </a>
-          <Button 
+          <Button
             variant={page.status === 'published' ? 'secondary' : 'primary'}
             onClick={handlePublishToggle}
           >
@@ -788,15 +808,14 @@ export default function PageEditorClient({
         {/* Left Panel — fixed min width, draggable max; independent vertical scroll */}
         <aside
           style={{ width: leftPanelWidth }}
-          className={`relative z-10 flex min-h-0 shrink-0 flex-col overflow-hidden border-r bg-white ${
-            editorWarmChrome ? 'border-[#ece8e2]' : 'border-stone-200 shadow-sm'
-          }`}
+          className={`relative z-10 flex min-h-0 shrink-0 flex-col overflow-hidden border-r bg-white ${editorWarmChrome ? 'border-[#ece8e2]' : 'border-stone-200 shadow-sm'
+            }`}
         >
           {selectedId ? (
             /* Edit Form */
             <div className="flex h-full min-h-0 flex-col">
               <div className="flex shrink-0 items-center gap-3 border-b border-stone-100 p-4">
-                <button 
+                <button
                   onClick={() => handleSelectSection(null)}
                   className="p-1 hover:bg-stone-50 rounded-lg text-stone-400 hover:text-stone-900"
                 >
@@ -811,7 +830,7 @@ export default function PageEditorClient({
               </div>
 
               <div className="min-h-0 flex-1 overflow-y-auto p-4 space-y-6">
-                <SectionForm 
+                <SectionForm
                   type={selectedId === 'hero' ? 'hero' : sections.find(s => s.id === selectedId)?.type || ''}
                   state={localState}
                   onChange={handleUpdateLocal}
@@ -826,8 +845,8 @@ export default function PageEditorClient({
 
               <div className="shrink-0 space-y-3 border-t border-stone-100 bg-stone-50 p-4">
                 {selectedId !== 'hero' && (
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="w-full text-red-600 hover:bg-red-50 hover:text-red-700 justify-start"
                     onClick={() => setShowDeleteConfirm(true)}
                   >
@@ -835,8 +854,8 @@ export default function PageEditorClient({
                     Delete section
                   </Button>
                 )}
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   className="w-full"
                   disabled={!hasChanges || saving}
                   onClick={handleSave}
@@ -863,7 +882,7 @@ export default function PageEditorClient({
               <div className="shrink-0 border-b border-stone-100 p-4">
                 <h2 className="text-sm font-bold text-stone-900 uppercase tracking-wider">Page Sections</h2>
               </div>
-              
+
               <div className="min-h-0 flex-1 overflow-y-auto p-2 space-y-1">
                 {/* Hero is always first and not sortable in this list */}
                 <button
@@ -874,19 +893,19 @@ export default function PageEditorClient({
                   <span>Hero Section</span>
                 </button>
 
-                <DndContext 
+                <DndContext
                   sensors={sensors}
                   collisionDetection={closestCenter}
                   onDragEnd={handleDragEnd}
                 >
-                  <SortableContext 
+                  <SortableContext
                     items={sections.map(s => s.id)}
                     strategy={verticalListSortingStrategy}
                   >
                     {sections.map((section) => (
-                      <SortableItem 
-                        key={section.id} 
-                        section={section} 
+                      <SortableItem
+                        key={section.id}
+                        section={section}
                         isSelected={selectedId === section.id}
                         onSelect={() => handleSelectSection(section.id)}
                         onToggleVisibility={(e) => {
@@ -897,7 +916,7 @@ export default function PageEditorClient({
                     ))}
                   </SortableContext>
                 </DndContext>
-                
+
                 <button
                   onClick={() => setShowAddModal(true)}
                   className="w-full flex items-center justify-center gap-2 p-3 mt-4 border-2 border-dashed border-stone-100 rounded-xl text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515] hover:bg-[#7A1515]/5 transition-all text-sm font-bold"
@@ -908,7 +927,7 @@ export default function PageEditorClient({
               </div>
 
               <div className="shrink-0 border-t border-stone-100 p-4 text-center">
-                <button 
+                <button
                   onClick={() => setActiveTab('full')}
                   className="text-xs font-bold text-[#7A1515] hover:underline flex items-center justify-center gap-1 mx-auto"
                 >
@@ -928,9 +947,8 @@ export default function PageEditorClient({
           aria-valuemin={EDITOR_SIDEBAR_WIDTH_MIN}
           aria-valuemax={sidebarMaxPx}
           tabIndex={0}
-          className={`group relative z-20 w-px shrink-0 cursor-col-resize select-none border-r border-transparent bg-transparent after:absolute after:inset-y-0 after:-left-2 after:right-[-11px] after:w-3 after:content-[''] hover:after:bg-stone-200/70 ${
-            isResizingSidebar ? 'after:bg-[#7A1515]/30' : ''
-          }`}
+          className={`group relative z-20 w-px shrink-0 cursor-col-resize select-none border-r border-transparent bg-transparent after:absolute after:inset-y-0 after:-left-2 after:right-[-11px] after:w-3 after:content-[''] hover:after:bg-stone-200/70 ${isResizingSidebar ? 'after:bg-[#7A1515]/30' : ''
+            }`}
           onMouseDown={onSidebarResizeStart}
           onTouchStart={onSidebarResizeStartTouch}
           onKeyDown={(e) => {
@@ -957,23 +975,20 @@ export default function PageEditorClient({
           {/* Tab Bar */}
           <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2">
             <div
-              className={`flex bg-white p-1 rounded-xl border ${
-                editorWarmChrome ? 'page-editor-toolbar-pill border-[#dcd6cf]' : 'shadow-sm border-stone-200'
-              }`}
+              className={`flex bg-white p-1 rounded-xl border ${editorWarmChrome ? 'page-editor-toolbar-pill border-[#dcd6cf]' : 'shadow-sm border-stone-200'
+                }`}
             >
               <button
                 onClick={() => setActiveTab('preview')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${
-                  activeTab === 'preview' ? 'bg-[#7A1515] text-white' : 'text-stone-500 hover:text-stone-900'
-                }`}
+                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'preview' ? 'bg-[#7A1515] text-white' : 'text-stone-500 hover:text-stone-900'
+                  }`}
               >
                 Section Preview
               </button>
               <button
                 onClick={() => setActiveTab('full')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${
-                  activeTab === 'full' ? 'bg-[#7A1515] text-white' : 'text-stone-500 hover:text-stone-900'
-                }`}
+                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'full' ? 'bg-[#7A1515] text-white' : 'text-stone-500 hover:text-stone-900'
+                  }`}
               >
                 Full Page
               </button>
@@ -981,9 +996,8 @@ export default function PageEditorClient({
 
             {activeTab === 'preview' && (
               <div
-                className={`flex flex-col gap-2 rounded-xl border bg-white p-2 sm:flex-row sm:items-center sm:justify-end ${
-                  editorWarmChrome ? 'page-editor-toolbar-pill border-[#dcd6cf]' : 'border-stone-200 shadow-sm'
-                }`}
+                className={`flex flex-col gap-2 rounded-xl border bg-white p-2 sm:flex-row sm:items-center sm:justify-end ${editorWarmChrome ? 'page-editor-toolbar-pill border-[#dcd6cf]' : 'border-stone-200 shadow-sm'
+                  }`}
               >
                 <div
                   className="flex flex-wrap items-center gap-0.5"
@@ -993,11 +1007,10 @@ export default function PageEditorClient({
                   <button
                     type="button"
                     onClick={() => setPreviewDeviceOverride('desktop')}
-                    className={`rounded-lg p-2 transition-colors ${
-                      effectivePreviewMode === 'desktop'
+                    className={`rounded-lg p-2 transition-colors ${effectivePreviewMode === 'desktop'
                         ? 'bg-stone-100 text-[#7A1515]'
                         : 'text-stone-400 hover:bg-stone-50 hover:text-stone-600'
-                    }`}
+                      }`}
                     title="Desktop width"
                     aria-pressed={effectivePreviewMode === 'desktop'}
                   >
@@ -1006,11 +1019,10 @@ export default function PageEditorClient({
                   <button
                     type="button"
                     onClick={() => setPreviewDeviceOverride('tablet')}
-                    className={`rounded-lg p-2 transition-colors ${
-                      effectivePreviewMode === 'tablet'
+                    className={`rounded-lg p-2 transition-colors ${effectivePreviewMode === 'tablet'
                         ? 'bg-stone-100 text-[#7A1515]'
                         : 'text-stone-400 hover:bg-stone-50 hover:text-stone-600'
-                    }`}
+                      }`}
                     title="Tablet width"
                     aria-pressed={effectivePreviewMode === 'tablet'}
                   >
@@ -1019,11 +1031,10 @@ export default function PageEditorClient({
                   <button
                     type="button"
                     onClick={() => setPreviewDeviceOverride('mobile')}
-                    className={`rounded-lg p-2 transition-colors ${
-                      effectivePreviewMode === 'mobile'
+                    className={`rounded-lg p-2 transition-colors ${effectivePreviewMode === 'mobile'
                         ? 'bg-stone-100 text-[#7A1515]'
                         : 'text-stone-400 hover:bg-stone-50 hover:text-stone-600'
-                    }`}
+                      }`}
                     title="Mobile width"
                     aria-pressed={effectivePreviewMode === 'mobile'}
                   >
@@ -1032,11 +1043,10 @@ export default function PageEditorClient({
                   <button
                     type="button"
                     onClick={() => setPreviewDeviceOverride(null)}
-                    className={`ml-1 rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wide transition-colors ${
-                      previewDeviceOverride === null
+                    className={`ml-1 rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wide transition-colors ${previewDeviceOverride === null
                         ? 'bg-[#7A1515]/10 text-[#7A1515]'
                         : 'text-stone-400 hover:bg-stone-100 hover:text-stone-700'
-                    }`}
+                      }`}
                     title="Match device frame to available preview width"
                   >
                     Auto
@@ -1056,34 +1066,31 @@ export default function PageEditorClient({
 
           <div
             ref={previewCanvasRef}
-            className={`relative flex min-h-0 flex-1 flex-col justify-start overflow-hidden ${
-              isAboutPage ? 'page-editor-canvas-about' : ''
-            }`}
+            className={`relative flex min-h-0 flex-1 flex-col justify-start overflow-hidden ${isAboutPage ? 'page-editor-canvas-about' : ''
+              }`}
           >
             {activeTab === 'preview' ? (
               <div
-                className={`page-editor-preview-viewport mx-auto min-h-0 flex-1 max-w-full overflow-y-auto overflow-x-hidden rounded-xl border ${
-                  isAboutPage
+                className={`page-editor-preview-viewport mx-auto min-h-0 flex-1 max-w-full overflow-y-auto overflow-x-hidden rounded-xl border ${isAboutPage
                     ? 'border-[#dcd6cf] bg-[#f8f6f3]'
                     : isNewsPage || isPublicationsPage
                       ? 'border-[#dcd8d0] bg-[#eae5de]'
                       : 'border-stone-200 bg-stone-100/70'
-                }`}
+                  }`}
                 style={{
                   width: previewFrameWidthStyle,
                 }}
               >
                 {/* Constrain width so @media (min-width: …) in section CSS matches a real viewport, not the full editor */}
                 <div
-                  className={`page-editor-preview-sheet page-editor-section-preview flex min-h-full w-full flex-col p-0 ${
-                    isAboutPage
+                  className={`page-editor-preview-sheet page-editor-section-preview flex min-h-full w-full flex-col p-0 ${isAboutPage
                       ? 'about-page-preview border-x border-[#ece8e2] bg-[#f8f6f3]'
                       : isNewsPage
                         ? 'news-page-root bg-[#f7f5f2]'
                         : isPublicationsPage
                           ? 'pub-page-root bg-[#f7f5f2]'
                           : 'bg-white'
-                  }`}
+                    }`}
                 >
                   {renderPreview()}
                 </div>
@@ -1111,15 +1118,14 @@ export default function PageEditorClient({
                   </div>
                 )}
                 <div
-                  className={`relative min-h-0 flex-1 overflow-hidden bg-white ${
-                    isAboutPage
+                  className={`relative min-h-0 flex-1 overflow-hidden bg-white ${isAboutPage
                       ? 'page-editor-full-review border border-[#e8e4df] rounded-xl'
                       : isNewsPage || isPublicationsPage
                         ? 'page-editor-full-review border border-[#e2dcd4] rounded-xl'
                         : 'border border-stone-200'
-                  }`}
+                    }`}
                 >
-                  <iframe 
+                  <iframe
                     ref={iframeRef}
                     src={`/${page.slug}`}
                     className="h-full min-h-0 w-full border-none bg-white pointer-events-none"
@@ -1135,8 +1141,8 @@ export default function PageEditorClient({
       </div>
 
       {/* Modals & Dialogs */}
-      <Modal 
-        isOpen={showAddModal} 
+      <Modal
+        isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         title="Add a section"
       >
@@ -1165,10 +1171,10 @@ export default function PageEditorClient({
           })}
         </div>
       </Modal>
-      
+
       {/* Slide Editor Modal */}
-      <Modal 
-        isOpen={!!selectedSlideId} 
+      <Modal
+        isOpen={!!selectedSlideId}
         onClose={() => {
           if (slideHasChanges && !confirm("Unsaved changes will be lost. Continue?")) return;
           setSelectedSlideId(null);
@@ -1180,10 +1186,10 @@ export default function PageEditorClient({
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Badge Text</label>
-                <input 
-                  type="text" 
-                  value={slideState.badge_text || ''} 
-                  onChange={(e) => { setSlideState({...slideState, badge_text: e.target.value}); setSlideHasChanges(true); }}
+                <input
+                  type="text"
+                  value={slideState.badge_text || ''}
+                  onChange={(e) => { setSlideState({ ...slideState, badge_text: e.target.value }); setSlideHasChanges(true); }}
                   className="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm"
                   placeholder="e.g. WELCOME TO CARITAS RWANDA"
                 />
@@ -1191,19 +1197,19 @@ export default function PageEditorClient({
 
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Heading</label>
-                <input 
-                  type="text" 
-                  value={slideState.heading || ''} 
-                  onChange={(e) => { setSlideState({...slideState, heading: e.target.value}); setSlideHasChanges(true); }}
+                <input
+                  type="text"
+                  value={slideState.heading || ''}
+                  onChange={(e) => { setSlideState({ ...slideState, heading: e.target.value }); setSlideHasChanges(true); }}
                   className="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Subheading</label>
-                <textarea 
-                  value={slideState.subheading || ''} 
-                  onChange={(e) => { setSlideState({...slideState, subheading: e.target.value}); setSlideHasChanges(true); }}
+                <textarea
+                  value={slideState.subheading || ''}
+                  onChange={(e) => { setSlideState({ ...slideState, subheading: e.target.value }); setSlideHasChanges(true); }}
                   className="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm min-h-[100px]"
                 />
               </div>
@@ -1211,19 +1217,19 @@ export default function PageEditorClient({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Primary Button Text</label>
-                  <input 
-                    type="text" 
-                    value={slideState.cta_text || ''} 
-                    onChange={(e) => { setSlideState({...slideState, cta_text: e.target.value}); setSlideHasChanges(true); }}
+                  <input
+                    type="text"
+                    value={slideState.cta_text || ''}
+                    onChange={(e) => { setSlideState({ ...slideState, cta_text: e.target.value }); setSlideHasChanges(true); }}
                     className="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm"
                   />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Primary Button URL</label>
-                  <input 
-                    type="text" 
-                    value={slideState.cta_url || ''} 
-                    onChange={(e) => { setSlideState({...slideState, cta_url: e.target.value}); setSlideHasChanges(true); }}
+                  <input
+                    type="text"
+                    value={slideState.cta_url || ''}
+                    onChange={(e) => { setSlideState({ ...slideState, cta_url: e.target.value }); setSlideHasChanges(true); }}
                     className="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm"
                   />
                 </div>
@@ -1247,11 +1253,11 @@ export default function PageEditorClient({
                   </Button>
                 </div>
                 {showSlideMediaPicker && (
-                  <MediaPicker 
-                    isOpen={true} 
-                    onClose={() => setShowSlideMediaPicker(false)} 
+                  <MediaPicker
+                    isOpen={true}
+                    onClose={() => setShowSlideMediaPicker(false)}
                     onSelect={(m: any) => {
-                      setSlideState({...slideState, image_url: m.url}); 
+                      setSlideState({ ...slideState, image_url: m.url });
                       setSlideHasChanges(true);
                       setShowSlideMediaPicker(false);
                     }}
@@ -1261,13 +1267,13 @@ export default function PageEditorClient({
             </div>
 
             <div className="flex justify-end gap-3 pt-6 border-t border-stone-100">
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 onClick={() => setSelectedSlideId(null)}
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleSaveSlide}
                 disabled={!slideHasChanges || saving}
                 className="bg-[#7A1515] hover:bg-[#5e1010] text-white min-w-[120px]"
@@ -1287,8 +1293,8 @@ export default function PageEditorClient({
         description="This will permanently remove this slide from the hero carousel."
       />
 
-      <Modal 
-        isOpen={!!errorDetails} 
+      <Modal
+        isOpen={!!errorDetails}
         onClose={() => setErrorDetails(null)}
         title="Operation Failed"
       >
@@ -1348,31 +1354,29 @@ function SortableItem({ section, isSelected, onSelect, onToggleVisibility }: any
     <div
       ref={setNodeRef}
       style={style}
-      className={`group w-full flex items-center gap-3 p-3 rounded-xl transition-all text-sm font-medium border-2 ${
-        isSelected 
-          ? 'bg-[#7A1515]/5 border-[#7A1515]/20 text-[#7A1515]' 
+      className={`group w-full flex items-center gap-3 p-3 rounded-xl transition-all text-sm font-medium border-2 ${isSelected
+          ? 'bg-[#7A1515]/5 border-[#7A1515]/20 text-[#7A1515]'
           : 'bg-white border-transparent hover:bg-stone-50 text-stone-600'
-      }`}
+        }`}
       onClick={onSelect}
     >
-      <button 
-        {...attributes} 
+      <button
+        {...attributes}
         {...listeners}
         className="cursor-grab active:cursor-grabbing p-1 text-stone-300 hover:text-stone-500"
       >
         <GripVertical size={16} />
       </button>
-      
+
       <Icon size={18} className={isSelected ? 'text-[#7A1515]' : 'text-stone-400'} />
       <span className="flex-1 truncate text-left">
         {(section.name && String(section.name).trim()) || SECTION_LABELS[section.type] || section.type}
       </span>
-      
-      <button 
+
+      <button
         onClick={onToggleVisibility}
-        className={`p-1.5 rounded-lg transition-colors ${
-          section.visible ? 'text-stone-300 hover:text-stone-900' : 'text-amber-500'
-        }`}
+        className={`p-1.5 rounded-lg transition-colors ${section.visible ? 'text-stone-300 hover:text-stone-900' : 'text-amber-500'
+          }`}
       >
         {section.visible ? <Eye size={16} /> : <EyeOff size={16} />}
       </button>
@@ -1380,10 +1384,10 @@ function SortableItem({ section, isSelected, onSelect, onToggleVisibility }: any
   );
 }
 
-function SectionForm({ 
-  type, 
-  state, 
-  onChange, 
+function SectionForm({
+  type,
+  state,
+  onChange,
   onOptionsChange,
   slides,
   onAddSlide,
@@ -1420,9 +1424,9 @@ function SectionForm({
         return (
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
-            <input 
-              type="text" 
-              value={value || ''} 
+            <input
+              type="text"
+              value={value || ''}
               onChange={(e) => onChange(key, e.target.value)}
               className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515]"
               placeholder={key.includes('url') ? 'e.g. /about or #donate' : ''}
@@ -1436,9 +1440,9 @@ function SectionForm({
         return (
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
-            <textarea 
+            <textarea
               rows={options?.rows || 3}
-              value={value || ''} 
+              value={value || ''}
               onChange={(e) => onChange(key, e.target.value)}
               className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515]"
             />
@@ -1461,9 +1465,9 @@ function SectionForm({
               </Button>
             </div>
             {showMediaPicker === key && (
-              <MediaPicker 
-                isOpen={true} 
-                onClose={() => setShowMediaPicker(null)} 
+              <MediaPicker
+                isOpen={true}
+                onClose={() => setShowMediaPicker(null)}
                 onSelect={(m) => handleMediaSelect(key, m)}
               />
             )}
@@ -1478,9 +1482,8 @@ function SectionForm({
                 <button
                   key={align}
                   onClick={() => onChange(key, align)}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${
-                    value === align ? 'bg-white text-[#7A1515] shadow-sm' : 'text-stone-400 hover:text-stone-600'
-                  }`}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${value === align ? 'bg-white text-[#7A1515] shadow-sm' : 'text-stone-400 hover:text-stone-600'
+                    }`}
                 >
                   {align}
                 </button>
@@ -1495,10 +1498,10 @@ function SectionForm({
               <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
               <span className="text-[10px] font-bold text-stone-600">{Math.round((value ?? 0) * 100)}%</span>
             </div>
-            <input 
-              type="range" 
-              min={options?.min || 0} 
-              max={options?.max || 1} 
+            <input
+              type="range"
+              min={options?.min || 0}
+              max={options?.max || 1}
               step={options?.step || 0.1}
               value={value ?? 0}
               onChange={(e) => onChange(key, parseFloat(e.target.value))}
@@ -1511,9 +1514,9 @@ function SectionForm({
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
             <div className="flex items-center gap-3">
-              <input 
-                type="color" 
-                value={value || '#7A1515'} 
+              <input
+                type="color"
+                value={value || '#7A1515'}
                 onChange={(e) => onChange(key, e.target.value)}
                 className="w-10 h-10 p-0 border-0 rounded-lg cursor-pointer bg-transparent"
               />
@@ -1527,7 +1530,7 @@ function SectionForm({
 
   const renderOptionField = (label: string, key: string, type: 'text' | 'textarea' | 'image' = 'text') => {
     const value = state.options?.[key] || '';
-    
+
     if (type === 'image') {
       return (
         <div className="space-y-1.5">
@@ -1548,9 +1551,9 @@ function SectionForm({
             </Button>
           </div>
           {showMediaPicker === key && (
-            <MediaPicker 
-              isOpen={true} 
-              onClose={() => setShowMediaPicker(null)} 
+            <MediaPicker
+              isOpen={true}
+              onClose={() => setShowMediaPicker(null)}
               onSelect={(m: any) => {
                 onOptionsChange(key, m.url);
                 setShowMediaPicker(null);
@@ -1599,9 +1602,8 @@ function SectionForm({
             <button
               key={alignOption}
               onClick={() => onOptionsChange('align', alignOption)}
-              className={`flex-1 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${
-                value === alignOption ? 'bg-white text-[#7A1515] shadow-sm' : 'text-stone-400 hover:text-stone-600'
-              }`}
+              className={`flex-1 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${value === alignOption ? 'bg-white text-[#7A1515] shadow-sm' : 'text-stone-400 hover:text-stone-600'
+                }`}
             >
               {alignOption}
             </button>
@@ -1617,9 +1619,9 @@ function SectionForm({
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
         <div className="flex items-center gap-3">
-          <input 
-            type="color" 
-            value={value} 
+          <input
+            type="color"
+            value={value}
             onChange={(e) => onOptionsChange(key, e.target.value)}
             className="w-10 h-10 p-0 border-0 rounded-lg cursor-pointer bg-transparent"
           />
@@ -1637,10 +1639,10 @@ function SectionForm({
           <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
           <span className="text-[10px] font-bold text-stone-600">{Math.round(value * 100)}%</span>
         </div>
-        <input 
-          type="range" 
-          min={options?.min || 0} 
-          max={options?.max || 1} 
+        <input
+          type="range"
+          min={options?.min || 0}
+          max={options?.max || 1}
           step={options?.step || 0.05}
           value={value}
           onChange={(e) => onOptionsChange(key, parseFloat(e.target.value))}
@@ -1765,10 +1767,10 @@ function SectionForm({
                 <Plus size={14} /> Add Slide
               </Button>
             </div>
-            
+
             <div className="space-y-3">
               {(slides || []).map((slide: any, index: number) => (
-                <div 
+                <div
                   key={slide.id}
                   className="p-3 bg-white border border-stone-200 rounded-xl flex items-center gap-3 hover:border-[#7A1515]/30 transition-all cursor-pointer group"
                   onClick={() => onSelectSlide(slide.id)}
@@ -1787,7 +1789,7 @@ function SectionForm({
                     <p className="text-[10px] text-stone-500 truncate">{slide.subheading || 'No description'}</p>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button 
+                    <button
                       className="p-1.5 text-stone-400 hover:text-red-600 transition-colors"
                       onClick={(e) => { e.stopPropagation(); onDeleteSlide(slide.id); }}
                     >
@@ -2772,31 +2774,31 @@ function SectionForm({
               <Plus size={12} className="mr-1" />
               Add stat
             </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="text-xs h-8"
-                  onClick={() =>
-                    onChange('stats', [
-                      { icon: 'fa-users', value: '150', value_suffix: 'K+', label: 'Lives Transformed' },
-                      {
-                        icon: 'fa-calendar-check',
-                        value: '67',
-                        value_suffix: '+',
-                        label: 'Years of Service',
-                      },
-                      { icon: 'fa-church', value: '9', value_suffix: '', label: 'Dioceses Covered' },
-                      {
-                        icon: 'fa-hands-helping',
-                        value: '8',
-                        value_suffix: 'K',
-                        label: 'Active Volunteers',
-                      },
-                    ])
-                  }
-                >
-                  Load default four
-                </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              className="text-xs h-8"
+              onClick={() =>
+                onChange('stats', [
+                  { icon: 'fa-users', value: '150', value_suffix: 'K+', label: 'Lives Transformed' },
+                  {
+                    icon: 'fa-calendar-check',
+                    value: '67',
+                    value_suffix: '+',
+                    label: 'Years of Service',
+                  },
+                  { icon: 'fa-church', value: '9', value_suffix: '', label: 'Dioceses Covered' },
+                  {
+                    icon: 'fa-hands-helping',
+                    value: '8',
+                    value_suffix: 'K',
+                    label: 'Active Volunteers',
+                  },
+                ])
+              }
+            >
+              Load default four
+            </Button>
             <Button type="button" variant="secondary" className="text-xs h-8" onClick={() => onChange('stats', [])}>
               Clear all stats
             </Button>
@@ -3568,7 +3570,7 @@ function SectionForm({
             {state.images?.map((img: any, idx: number) => (
               <div key={idx} className="aspect-square bg-stone-100 rounded-lg overflow-hidden relative group">
                 <img src={img.url} className="w-full h-full object-cover" />
-                <button 
+                <button
                   onClick={() => {
                     const newImages = state.images.filter((_: any, i: number) => i !== idx);
                     onChange('images', newImages);
@@ -3579,7 +3581,7 @@ function SectionForm({
                 </button>
               </div>
             ))}
-            <button 
+            <button
               onClick={() => setShowMediaPicker('gallery')}
               className="aspect-square bg-stone-50 border-2 border-dashed border-stone-200 rounded-lg flex items-center justify-center text-stone-400 hover:text-[#7A1515] hover:border-[#7A1515] transition-all"
             >
@@ -3587,9 +3589,9 @@ function SectionForm({
             </button>
           </div>
           {showMediaPicker === 'gallery' && (
-            <MediaPicker 
-              isOpen={true} 
-              onClose={() => setShowMediaPicker(null)} 
+            <MediaPicker
+              isOpen={true}
+              onClose={() => setShowMediaPicker(null)}
               multi={true}
               onSelect={(m: any) => {
                 const newImages = [...(state.images || []), ...(Array.isArray(m) ? m.map(item => ({ url: item.url })) : [{ url: m.url }])];
@@ -3609,9 +3611,8 @@ function SectionForm({
                 <button
                   key={col}
                   onClick={() => onChange('columns', col)}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    state.columns === col ? 'bg-white text-[#7A1515] shadow-sm' : 'text-stone-400 hover:text-stone-600'
-                  }`}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${state.columns === col ? 'bg-white text-[#7A1515] shadow-sm' : 'text-stone-400 hover:text-stone-600'
+                    }`}
                 >
                   {col} Columns
                 </button>
@@ -3625,9 +3626,9 @@ function SectionForm({
                 <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0">
                   <img src={img.url} className="w-full h-full object-cover" />
                 </div>
-                <input 
-                  type="text" 
-                  value={img.alt || ''} 
+                <input
+                  type="text"
+                  value={img.alt || ''}
                   onChange={(e) => {
                     const newImages = [...state.images];
                     newImages[idx].alt = e.target.value;
@@ -3636,7 +3637,7 @@ function SectionForm({
                   className="flex-1 bg-transparent border-0 p-0 text-xs focus:ring-0"
                   placeholder="Alt text"
                 />
-                <button 
+                <button
                   onClick={() => {
                     const newImages = state.images.filter((_: any, i: number) => i !== idx);
                     onChange('images', newImages);
@@ -3652,9 +3653,9 @@ function SectionForm({
             </Button>
           </div>
           {showMediaPicker === 'image_grid' && (
-            <MediaPicker 
-              isOpen={true} 
-              onClose={() => setShowMediaPicker(null)} 
+            <MediaPicker
+              isOpen={true}
+              onClose={() => setShowMediaPicker(null)}
               onSelect={(m: any) => {
                 const newImages = [...(state.images || []), { url: m.url, alt: m.filename.split('.')[0] }];
                 onChange('images', newImages);
@@ -4943,47 +4944,47 @@ function SectionForm({
         blurb: string;
         preview: React.ReactNode;
       }[] = [
-        {
-          id: 'spotlight',
-          title: 'Spotlight',
-          blurb: 'Big featured player on the left, scrollable up-next list on the right.',
-          preview: (
-            <div className="grid grid-cols-3 gap-1">
-              <div className="col-span-2 h-12 rounded bg-stone-300" />
-              <div className="space-y-1">
-                <div className="h-3 rounded bg-stone-200" />
-                <div className="h-3 rounded bg-stone-200" />
-                <div className="h-3 rounded bg-stone-200" />
+          {
+            id: 'spotlight',
+            title: 'Spotlight',
+            blurb: 'Big featured player on the left, scrollable up-next list on the right.',
+            preview: (
+              <div className="grid grid-cols-3 gap-1">
+                <div className="col-span-2 h-12 rounded bg-stone-300" />
+                <div className="space-y-1">
+                  <div className="h-3 rounded bg-stone-200" />
+                  <div className="h-3 rounded bg-stone-200" />
+                  <div className="h-3 rounded bg-stone-200" />
+                </div>
               </div>
-            </div>
-          ),
-        },
-        {
-          id: 'grid',
-          title: 'Grid',
-          blurb: 'Equal-weight cards in a 3-column grid (2 on tablet, 1 on mobile).',
-          preview: (
-            <div className="grid grid-cols-3 gap-1">
-              <div className="h-10 rounded bg-stone-300" />
-              <div className="h-10 rounded bg-stone-300" />
-              <div className="h-10 rounded bg-stone-300" />
-            </div>
-          ),
-        },
-        {
-          id: 'carousel',
-          title: 'Carousel',
-          blurb: 'Horizontal swipe row with snap-to-card scrolling and side arrows.',
-          preview: (
-            <div className="grid grid-cols-4 gap-1 overflow-hidden">
-              <div className="h-12 rounded bg-stone-300" />
-              <div className="h-12 rounded bg-stone-300" />
-              <div className="h-12 rounded bg-stone-300" />
-              <div className="h-12 rounded bg-stone-200" />
-            </div>
-          ),
-        },
-      ];
+            ),
+          },
+          {
+            id: 'grid',
+            title: 'Grid',
+            blurb: 'Equal-weight cards in a 3-column grid (2 on tablet, 1 on mobile).',
+            preview: (
+              <div className="grid grid-cols-3 gap-1">
+                <div className="h-10 rounded bg-stone-300" />
+                <div className="h-10 rounded bg-stone-300" />
+                <div className="h-10 rounded bg-stone-300" />
+              </div>
+            ),
+          },
+          {
+            id: 'carousel',
+            title: 'Carousel',
+            blurb: 'Horizontal swipe row with snap-to-card scrolling and side arrows.',
+            preview: (
+              <div className="grid grid-cols-4 gap-1 overflow-hidden">
+                <div className="h-12 rounded bg-stone-300" />
+                <div className="h-12 rounded bg-stone-300" />
+                <div className="h-12 rounded bg-stone-300" />
+                <div className="h-12 rounded bg-stone-200" />
+              </div>
+            ),
+          },
+        ];
 
       const videos = (state.videos as Array<Record<string, unknown>>) || [];
       const patchVideo = (idx: number, key: string, value: unknown) => {
@@ -5041,11 +5042,10 @@ function SectionForm({
                     key={opt.id}
                     type="button"
                     onClick={() => onChange('layout', opt.id)}
-                    className={`text-left p-3 rounded-xl border transition-all ${
-                      active
+                    className={`text-left p-3 rounded-xl border transition-all ${active
                         ? 'border-[#7A1515] bg-[#7A1515]/5 shadow-sm'
                         : 'border-stone-200 bg-white hover:border-stone-300'
-                    }`}
+                      }`}
                   >
                     <div className="mb-2">{opt.preview}</div>
                     <div className="text-xs font-bold text-stone-800">{opt.title}</div>
@@ -5419,6 +5419,351 @@ function SectionForm({
         </div>
       );
     }
+    case 'metrics_kpis':
+      return (
+        <div className="space-y-6">
+          <p className="text-[10px] text-stone-500 leading-relaxed">
+            KPI strip: add key performance indicators with icon, value, label, and accent color.
+          </p>
+          {(state.items || []).map((item: any, idx: number) => (
+            <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
+              <p className="text-[10px] font-bold text-stone-500 uppercase">KPI {idx + 1}</p>
+              <input
+                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                placeholder="Icon (e.g. fa-people-group)"
+                value={item.icon || ''}
+                onChange={(e) => {
+                  const list = [...(state.items || [])];
+                  list[idx] = { ...list[idx], icon: e.target.value };
+                  onChange('items', list);
+                }}
+              />
+              <input
+                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                placeholder="Value (e.g. 500K+)"
+                value={item.value || ''}
+                onChange={(e) => {
+                  const list = [...(state.items || [])];
+                  list[idx] = { ...list[idx], value: e.target.value };
+                  onChange('items', list);
+                }}
+              />
+              <input
+                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                placeholder="Label"
+                value={item.label || ''}
+                onChange={(e) => {
+                  const list = [...(state.items || [])];
+                  list[idx] = { ...list[idx], label: e.target.value };
+                  onChange('items', list);
+                }}
+              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="color"
+                  className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
+                  value={item.color || '#911313'}
+                  onChange={(e) => {
+                    const list = [...(state.items || [])];
+                    list[idx] = { ...list[idx], color: e.target.value };
+                    onChange('items', list);
+                  }}
+                />
+                <span className="text-[10px] font-mono text-stone-500 uppercase">{item.color || '#911313'}</span>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="w-full py-2 border-2 border-dashed border-stone-200 rounded-xl text-xs font-bold text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515] transition-all"
+            onClick={() => onChange('items', [...(state.items || []), { icon: 'fa-circle', value: '', label: '', color: '#911313' }])}
+          >
+            + Add KPI
+          </button>
+        </div>
+      );
+    case 'metrics_stat_cards':
+      return (
+        <div className="space-y-6">
+          <p className="text-[10px] text-stone-500 leading-relaxed">
+            Stat cards: key statistics shown below the KPI strip.
+          </p>
+          {(state.items || []).map((item: any, idx: number) => (
+            <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
+              <p className="text-[10px] font-bold text-stone-500 uppercase">Card {idx + 1}</p>
+              <input
+                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                placeholder="Icon class (e.g. fa-calendar-check)"
+                value={item.icon || ''}
+                onChange={(e) => {
+                  const list = [...(state.items || [])];
+                  list[idx] = { ...list[idx], icon: e.target.value };
+                  onChange('items', list);
+                }}
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                  placeholder="Value"
+                  value={item.value || ''}
+                  onChange={(e) => {
+                    const list = [...(state.items || [])];
+                    list[idx] = { ...list[idx], value: e.target.value };
+                    onChange('items', list);
+                  }}
+                />
+                <input
+                  className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                  placeholder="Label"
+                  value={item.label || ''}
+                  onChange={(e) => {
+                    const list = [...(state.items || [])];
+                    list[idx] = { ...list[idx], label: e.target.value };
+                    onChange('items', list);
+                  }}
+                />
+              </div>
+              <input
+                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                placeholder="Sub label (optional)"
+                value={item.sub_label || ''}
+                onChange={(e) => {
+                  const list = [...(state.items || [])];
+                  list[idx] = { ...list[idx], sub_label: e.target.value };
+                  onChange('items', list);
+                }}
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-bold text-stone-400 uppercase">Icon color</span>
+                  <input
+                    type="color"
+                    className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
+                    value={item.icon_color || '#911313'}
+                    onChange={(e) => {
+                      const list = [...(state.items || [])];
+                      list[idx] = { ...list[idx], icon_color: e.target.value };
+                      onChange('items', list);
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-bold text-stone-400 uppercase">Icon bg</span>
+                  <input
+                    type="color"
+                    className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
+                    value={item.icon_bg || '#fce4e4'}
+                    onChange={(e) => {
+                      const list = [...(state.items || [])];
+                      list[idx] = { ...list[idx], icon_bg: e.target.value };
+                      onChange('items', list);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="w-full py-2 border-2 border-dashed border-stone-200 rounded-xl text-xs font-bold text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515] transition-all"
+            onClick={() => onChange('items', [...(state.items || []), { icon: 'fa-circle', value: '', label: '', icon_color: '#911313', icon_bg: '#fce4e4' }])}
+          >
+            + Add Stat Card
+          </button>
+        </div>
+      );
+    case 'metrics_overview':
+      return (
+        <div className="space-y-6">
+          <p className="text-[10px] text-stone-500 leading-relaxed">
+            Organisation overview tab content.
+          </p>
+          {renderField('Tab label', 'tab_label', 'text')}
+          {renderField('Heading', 'heading', 'text')}
+          {renderField('Subheading', 'subheading', 'textarea', { rows: 2 })}
+        </div>
+      );
+    case 'metrics_program':
+      return (
+        <div className="space-y-6">
+          <p className="text-[10px] text-stone-500 leading-relaxed">
+            Program tab — edit the program detail card.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {renderField('Tab label', 'tab_label', 'text')}
+            {renderField('Tab icon', 'tab_icon', 'text')}
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {renderField('Program name', 'name', 'text')}
+            {renderField('Icon class', 'icon', 'text')}
+          </div>
+          {renderField('Description', 'description', 'textarea', { rows: 3 })}
+          <div className="grid grid-cols-3 gap-3">
+            {renderField('Icon color', 'icon_color', 'color')}
+            {renderField('Icon bg', 'icon_bg', 'color')}
+            {renderField('Accent color', 'accent_color', 'color')}
+          </div>
+          <div className="space-y-1">
+            <p className="text-[10px] font-bold uppercase text-stone-400">Stats</p>
+            {(state.stats || []).map((s: any, idx: number) => (
+              <div key={idx} className="grid grid-cols-2 gap-2 rounded-lg border border-stone-100 bg-stone-50 p-2">
+                <input
+                  className="w-full rounded border border-stone-200 p-2 text-xs"
+                  placeholder="Value"
+                  value={s.value || ''}
+                  onChange={(e) => {
+                    const list = [...(state.stats || [])];
+                    list[idx] = { ...list[idx], value: e.target.value };
+                    onChange('stats', list);
+                  }}
+                />
+                <input
+                  className="w-full rounded border border-stone-200 p-2 text-xs"
+                  placeholder="Label"
+                  value={s.label || ''}
+                  onChange={(e) => {
+                    const list = [...(state.stats || [])];
+                    list[idx] = { ...list[idx], label: e.target.value };
+                    onChange('stats', list);
+                  }}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              className="w-full py-1.5 text-[10px] font-bold text-stone-400 hover:text-[#7A1515] border border-dashed border-stone-200 rounded-lg"
+              onClick={() => onChange('stats', [...(state.stats || []), { value: '', label: '' }])}
+            >
+              + Add Stat
+            </button>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[10px] font-bold uppercase text-stone-400">Progress bars</p>
+            {(state.progress_bars || []).map((b: any, idx: number) => (
+              <div key={idx} className="grid grid-cols-2 gap-2 rounded-lg border border-stone-100 bg-stone-50 p-2">
+                <input
+                  className="w-full rounded border border-stone-200 p-2 text-xs"
+                  placeholder="Label"
+                  value={b.label || ''}
+                  onChange={(e) => {
+                    const list = [...(state.progress_bars || [])];
+                    list[idx] = { ...list[idx], label: e.target.value };
+                    onChange('progress_bars', list);
+                  }}
+                />
+                <div className="flex items-center gap-1">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    className="w-full rounded border border-stone-200 p-2 text-xs"
+                    placeholder="78"
+                    value={b.percent ?? ''}
+                    onChange={(e) => {
+                      const list = [...(state.progress_bars || [])];
+                      list[idx] = { ...list[idx], percent: Number(e.target.value) };
+                      onChange('progress_bars', list);
+                    }}
+                  />
+                  <span className="text-[10px] text-stone-400">%</span>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="w-full py-1.5 text-[10px] font-bold text-stone-400 hover:text-[#7A1515] border border-dashed border-stone-200 rounded-lg"
+              onClick={() => onChange('progress_bars', [...(state.progress_bars || []), { label: '', percent: 0 }])}
+            >
+              + Add Progress Bar
+            </button>
+          </div>
+          {renderField('Callout text', 'callout', 'text')}
+        </div>
+      );
+    case 'metrics_reach':
+      return (
+        <div className="space-y-6">
+          <p className="text-[10px] text-stone-500 leading-relaxed">
+            Geographic reach tab — province-level data.
+          </p>
+          {renderField('Heading', 'heading', 'text')}
+          {renderField('Subheading', 'subheading', 'textarea', { rows: 2 })}
+          <div className="space-y-1">
+            <p className="text-[10px] font-bold uppercase text-stone-400">Provinces</p>
+            {(state.provinces || []).map((p: any, idx: number) => (
+              <div key={idx} className="rounded-lg border border-stone-100 bg-stone-50 p-3 space-y-2">
+                <p className="text-[10px] font-bold text-stone-500">Province {idx + 1}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className="w-full rounded border border-stone-200 p-2 text-xs"
+                    placeholder="Name"
+                    value={p.name || ''}
+                    onChange={(e) => {
+                      const list = [...(state.provinces || [])];
+                      list[idx] = { ...list[idx], name: e.target.value };
+                      onChange('provinces', list);
+                    }}
+                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
+                      value={p.color || '#911313'}
+                      onChange={(e) => {
+                        const list = [...(state.provinces || [])];
+                        list[idx] = { ...list[idx], color: e.target.value };
+                        onChange('provinces', list);
+                      }}
+                    />
+                    <span className="text-[9px] font-mono text-stone-400 uppercase">{p.color || '#911313'}</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <input
+                    className="w-full rounded border border-stone-200 p-2 text-xs"
+                    type="number"
+                    placeholder="Dioceses"
+                    value={p.dioceses ?? ''}
+                    onChange={(e) => {
+                      const list = [...(state.provinces || [])];
+                      list[idx] = { ...list[idx], dioceses: Number(e.target.value) };
+                      onChange('provinces', list);
+                    }}
+                  />
+                  <input
+                    className="w-full rounded border border-stone-200 p-2 text-xs"
+                    placeholder="Beneficiaries"
+                    value={p.beneficiaries || ''}
+                    onChange={(e) => {
+                      const list = [...(state.provinces || [])];
+                      list[idx] = { ...list[idx], beneficiaries: e.target.value };
+                      onChange('provinces', list);
+                    }}
+                  />
+                  <input
+                    className="w-full rounded border border-stone-200 p-2 text-xs"
+                    type="number"
+                    placeholder="Districts"
+                    value={p.districts ?? ''}
+                    onChange={(e) => {
+                      const list = [...(state.provinces || [])];
+                      list[idx] = { ...list[idx], districts: Number(e.target.value) };
+                      onChange('provinces', list);
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="w-full py-1.5 text-[10px] font-bold text-stone-400 hover:text-[#7A1515] border border-dashed border-stone-200 rounded-lg"
+              onClick={() => onChange('provinces', [...(state.provinces || []), { name: '', color: '#911313', dioceses: 0, beneficiaries: '', districts: 0 }])}
+            >
+              + Add Province
+            </button>
+          </div>
+        </div>
+      );
     default:
       return <div className="py-8 text-center text-stone-400 text-xs italic">Fields for this type not yet implemented.</div>;
   }

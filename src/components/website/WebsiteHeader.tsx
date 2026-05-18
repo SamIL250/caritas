@@ -184,6 +184,12 @@ export default function WebsiteHeader() {
             </li>
 
             <li>
+              <Link href="/diocesan" className={isActive('/diocesan') ? 'current' : ''} onClick={closeNav}>
+                Diocesan Caritas
+              </Link>
+            </li>
+
+            <li>
               <Link href="/news" onClick={closeNav}>
                 News
               </Link>

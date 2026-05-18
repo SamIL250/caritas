@@ -24,6 +24,10 @@ import {
   BookOpen,
   PlayCircle,
   Compass,
+  PieChart,
+  Activity,
+  Presentation,
+  TrendingUp,
 } from "lucide-react";
 import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
@@ -450,6 +454,51 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
       },
     ],
   },
+  metrics_kpis: {
+    items: [
+      { icon: "fa-people-group", value: "500K+", label: "Beneficiaries", color: "#ff9a6c" },
+      { icon: "fa-church", value: "9", label: "Dioceses", color: "#4ade80" }
+    ]
+  },
+  metrics_stat_cards: {
+    items: [
+      { icon: "fa-calendar-check", icon_color: "#911313", icon_bg: "rgba(145,19,19,0.08)", value: "1959", label: "Year Founded", sub_label: "By Catholic Bishops" }
+    ]
+  },
+  metrics_overview: {
+    tab_key: "overview",
+    tab_label: "Organisation Overview",
+    tab_icon: "fa-building-columns",
+    heading: "Organisation Overview",
+    subheading: "Key facts about Caritas Rwanda",
+    highlights: [
+      { value: "500K+", label: "Beneficiaries Reached", color: "#911313" }
+    ]
+  },
+  metrics_program: {
+    tab_key: "program",
+    tab_label: "New Program",
+    tab_icon: "fa-heart-pulse",
+    name: "New Program",
+    description: "Program description",
+    icon: "fa-heart-pulse",
+    icon_color: "#dc2626",
+    icon_bg: "rgba(220,38,38,0.09)",
+    accent_color: "#dc2626",
+    stats: [{ value: "15,000+", label: "Reached" }],
+    progress_bars: [{ label: "Progress", percent: 78 }],
+    callout: "Highlight or insight"
+  },
+  metrics_reach: {
+    tab_key: "reach",
+    tab_label: "Geographic Reach",
+    tab_icon: "fa-map-location-dot",
+    heading: "Our Reach",
+    subheading: "Coverage data",
+    provinces: [
+      { name: "Kigali City", color: "#911313", dioceses: 1, beneficiaries: "180,000+", districts: 3 }
+    ]
+  }
 };
 
 export const SECTION_ICONS: Record<string, any> = {
@@ -479,6 +528,11 @@ export const SECTION_ICONS: Record<string, any> = {
   publications_library: BookOpen,
   news_footer: Mail,
   video_gallery: PlayCircle,
+  metrics_kpis: Activity,
+  metrics_stat_cards: PieChart,
+  metrics_overview: Presentation,
+  metrics_program: TrendingUp,
+  metrics_reach: Map,
 };
 
 export const SECTION_LABELS: Record<string, string> = {
@@ -508,4 +562,9 @@ export const SECTION_LABELS: Record<string, string> = {
   publications_library: "Publications library",
   news_footer: "News footer strip",
   video_gallery: "Video gallery (YouTube)",
+  metrics_kpis: "Metrics KPIs Strip",
+  metrics_stat_cards: "Metrics Stat Cards",
+  metrics_overview: "Metrics Overview Tab",
+  metrics_program: "Metrics Program Tab",
+  metrics_reach: "Metrics Reach Tab",
 };

@@ -13,6 +13,7 @@ type Props = {
   anchor_id?: string;
   stats?: NetStat[];
   dioceses?: DioceseCard[];
+  showFullInfo?: boolean;
 };
 
 export default function NetworkSection({
@@ -23,6 +24,7 @@ export default function NetworkSection({
   anchor_id = "network",
   stats = [],
   dioceses = [],
+  showFullInfo = false,
 }: Props) {
   if (!stats.length && !dioceses.length) return null;
   const eyebrowIc = faSolidIconClass(eyebrow_icon);
@@ -51,7 +53,9 @@ export default function NetworkSection({
           </div>
         ) : null}
 
-        {dioceses.length > 0 ? <DioceseNetworkGrid items={dioceses} /> : null}
+        {dioceses.length > 0 ? (
+          <DioceseNetworkGrid items={dioceses} showFullInfo={showFullInfo} />
+        ) : null}
       </div>
     </section>
   );
