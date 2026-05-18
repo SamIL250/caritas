@@ -8,7 +8,7 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { useDonation } from '@/context/DonationContext';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 
-type SubKey = 'about' | 'programs' | 'publications';
+type SubKey = 'about' | 'programs' | 'publications' | 'more';
 
 export default function WebsiteHeader() {
   const { openModal } = useDonation();
@@ -60,13 +60,8 @@ export default function WebsiteHeader() {
   return (
     <header className={['site-header', scrolled && 'scrolled'].filter(Boolean).join(' ')}>
       <div className={navClass}>
-        <Link
-          href="/"
-          className={['logo', scrolled && 'show-scroll-logo'].filter(Boolean).join(' ')}
-          onClick={closeNav}
-        >
-          <img src="/img/logo_caritas.png" alt="Caritas Rwanda" className="logo-default" />
-          <img src="/img/logo_bg.png" alt="" className="logo-scroll" aria-hidden />
+        <Link href="/" className="logo" onClick={closeNav}>
+          <img src="/img/logo_bg.png" alt="Caritas Rwanda" />
         </Link>
 
         <button
@@ -184,67 +179,50 @@ export default function WebsiteHeader() {
             </li>
 
             <li>
-              <Link href="/diocesan" className={isActive('/diocesan') ? 'current' : ''} onClick={closeNav}>
-                Diocesan Caritas
-              </Link>
-            </li>
-
-            <li>
               <Link href="/news" onClick={closeNav}>
                 News
               </Link>
             </li>
-            <li>
-              <Link href="/get-involved" onClick={closeNav}>
-                Get Involved
-              </Link>
-            </li>
 
-            <li className={['has-dropdown', openSub === 'publications' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
+            <li className={['has-dropdown', openSub === 'more' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
               <div className="nav-item-row">
-                <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
-                  Publications <span className="caret">▾</span>
-                </Link>
+                <a className={(isActive('/diocesan') || isActive('/metrics') || isActive('/get-involved') || isActive('/publications')) ? 'current' : ''}>
+                  More <span className="caret">▾</span>
+                </a>
                 <button
                   type="button"
                   className="nav-submenu-toggle"
-                  aria-expanded={openSub === 'publications'}
-                  aria-label="Toggle Publications submenu"
-                  onClick={() => toggleSub('publications')}
+                  aria-expanded={openSub === 'more'}
+                  aria-label="Toggle More submenu"
+                  onClick={() => toggleSub('more')}
                 >
                   <ChevronDown
                     size={18}
                     aria-hidden
-                    className={openSub === 'publications' ? 'rotate-180 transition-transform' : 'transition-transform'}
+                    className={openSub === 'more' ? 'rotate-180 transition-transform' : 'transition-transform'}
                   />
                 </button>
               </div>
               <div className="nav-dropdown">
                 <div className="nav-dropdown-inner">
-                  <Link href="/publications#strategic" onClick={closeNav}>
-                    <i className="fa-solid fa-chart-line"></i> Our Impact
+                  <Link href="/diocesan" className={isActive('/diocesan') ? 'current' : ''} onClick={closeNav}>
+                    <i className="fa-solid fa-church"></i> Diocesan Caritas
                   </Link>
-                  <Link href="/publications#success-stories" onClick={closeNav}>
-                    <i className="fa-solid fa-quote-left"></i> Stories &amp; Testimonies
+                  <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>
+                    <i className="fa-solid fa-chart-bar"></i> Our Impact
+                  </Link>
+                  <Link href="/get-involved" className={isActive('/get-involved') ? 'current' : ''} onClick={closeNav}>
+                    <i className="fa-solid fa-hand-heart"></i> Get Involved
                   </Link>
                   <div className="nav-dropdown-divider"></div>
-                  <Link href="/publications#annual-reports" onClick={closeNav}>
-                    <i className="fa-solid fa-file-lines"></i> Annual Reports
+                  <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
+                    <i className="fa-solid fa-book-open"></i> Publications
                   </Link>
-                  <Link href="/publications#newsletters" onClick={closeNav}>
-                    <i className="fa-solid fa-book-open"></i> Training Resources
-                  </Link>
-                  <Link href="/publications#latest-news" onClick={closeNav}>
-                    <i className="fa-solid fa-gavel"></i> Tenders
-                  </Link>
+                  <a href="#contact" onClick={closeNav}>
+                    <i className="fa-solid fa-envelope"></i> Contact
+                  </a>
                 </div>
               </div>
-            </li>
-
-            <li>
-              <a href="#contact" onClick={closeNav}>
-                Contact
-              </a>
             </li>
           </ul>
           <div className="nav-cta-group">
