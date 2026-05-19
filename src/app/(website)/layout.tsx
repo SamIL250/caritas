@@ -41,9 +41,9 @@ export default async function WebsiteLayout({
             rel="stylesheet" 
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
           />
-          {/* Poppins and Inter Fonts */}
+          {/* Poppins, Inter, and Playfair Display Fonts */}
           <link 
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" 
             rel="stylesheet" 
           />
           

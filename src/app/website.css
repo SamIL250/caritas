@@ -585,67 +585,10 @@
             z-index: 1;
         }
 
-        /* Home HeroSection carousel arrows (Tailwind section + these classes) */
-        .hero-carousel-btn {
-            position: absolute;
-            top: 50%;
-            z-index: 25;
-            transform: translateY(-50%);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.8rem;
-            height: 2.8rem;
-            padding: 0;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: transparent;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.2s ease, border-color 0.2s ease;
-        }
-
-        .hero-carousel-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
+        /* Hero carousel arrows — now styled inline via Tailwind in the HeroSection component */
         .hero-carousel-btn:focus-visible {
             outline: 2px solid #fff;
             outline-offset: 3px;
-        }
-
-        .hero-carousel-btn--prev {
-            left: max(1rem, env(safe-area-inset-left));
-        }
-
-        .hero-carousel-btn--next {
-            right: max(1rem, env(safe-area-inset-right));
-        }
-
-        @media (min-width: 768px) {
-            .hero-carousel-btn {
-                width: 3.35rem;
-                height: 3.35rem;
-            }
-
-            .hero-carousel-btn--prev {
-                left: max(1.75rem, env(safe-area-inset-left));
-            }
-
-            .hero-carousel-btn--next {
-                right: max(1.75rem, env(safe-area-inset-right));
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .hero-carousel-btn--prev {
-                left: max(2.25rem, env(safe-area-inset-left));
-            }
-
-            .hero-carousel-btn--next {
-                right: max(2.25rem, env(safe-area-inset-right));
-            }
         }
 
         .hero-contents-wrapper {
