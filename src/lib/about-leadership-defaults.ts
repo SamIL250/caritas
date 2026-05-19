@@ -30,7 +30,7 @@ export const LEADERSHIP_CHRONICLE_DEFAULT_CONTENT = {
           year: "1997",
           name: "H.E. Mgr. Thaddée Ntihinyurwa",
           role: "Chairperson",
-          photo_url: "",
+          photo_url: "/img/Chairperson/Myr Thaddée Ntihinyurwa.png",
         },
         {
           year: "2022",

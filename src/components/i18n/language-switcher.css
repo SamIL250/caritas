@@ -307,8 +307,9 @@
   background: #fff;
   padding: 0.35rem 0.55rem;
   max-width: min(100%, 210px);
+  border: none;
 }
 
 .lang-switch--compact .lang-switch__trigger:hover {
-  border-color: rgba(122, 21, 21, 0.22);
+  border-color: transparent;
 }

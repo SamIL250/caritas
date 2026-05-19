@@ -38,7 +38,15 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
   const wrapRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const allRows = useMemo(() => getAllTranslateSearchRows(), []);
+  const SUPPORTED_LANGUAGES = useMemo(
+    () => new Set(["rw", "fr", "es"].map((code) => canonicalTranslateLangCode(code).toLowerCase())),
+    [],
+  );
+
+  const allRows = useMemo(
+    () => getAllTranslateSearchRows().filter((row) => SUPPORTED_LANGUAGES.has(canonicalTranslateLangCode(row.code).toLowerCase())),
+    [SUPPORTED_LANGUAGES],
+  );
 
   /* eslint-disable react-hooks/set-state-in-effect -- googtrans cookie is only available after mount */
   useEffect(() => {
@@ -80,9 +88,10 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
     if (!looksLikeLangTag(raw)) return null;
     const norm = normalizeTypedLangCode(raw);
     if (!norm || norm.toLowerCase() === PAGE_LANGUAGE) return null;
+    if (!SUPPORTED_LANGUAGES.has(norm.toLowerCase())) return null;
     if (filteredRows.some((r) => codesMatch(r.code, norm))) return null;
     return norm;
-  }, [query, filteredRows]);
+  }, [query, filteredRows, SUPPORTED_LANGUAGES]);
 
   const unknownActive =
     currentCode !== PAGE_LANGUAGE && !isKnownSearchLangCode(currentCode);
