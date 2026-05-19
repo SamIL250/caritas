@@ -30,16 +30,16 @@ export default function NetworkSection({
   const eyebrowIc = faSolidIconClass(eyebrow_icon);
 
   return (
-    <section className="section-light" id={anchor_id || undefined}>
+    <section className="section-light cr-network-section" id={anchor_id || undefined}>
       <div className="container">
-        <div className="head-center">
+        <div className="net-header">
           {eyebrow ? (
             <div className="sub-section-label">
               {eyebrowIc ? <i className={eyebrowIc} aria-hidden /> : null} {eyebrow}
             </div>
           ) : null}
           {title ? <h2 className="sub-section-title">{title}</h2> : null}
-          {subtitle ? <p className="sub-section-subtitle">{subtitle}</p> : null}
+          {subtitle ? <p className="net-subtitle">{subtitle}</p> : null}
         </div>
 
         {stats.length > 0 ? (

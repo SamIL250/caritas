@@ -5,6 +5,7 @@ import "../program-tabs-section.css";
 import "../resources-impact-section.css";
 import "../cta-be-part-section.css";
 import "../video-gallery-section.css";
+import "../network-section.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

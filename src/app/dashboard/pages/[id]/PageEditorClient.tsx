@@ -108,6 +108,7 @@ import '@/app/program-tabs-section.css';
 import '@/app/resources-impact-section.css';
 import '@/app/about-page-editor-preview.css';
 import '@/app/video-gallery-section.css';
+import '@/app/network-section.css';
 import '@/app/(website)/news/news-page.css';
 import '@/app/(website)/publications/publications-page.css';
 import '@/app/diocese-map-section.css';

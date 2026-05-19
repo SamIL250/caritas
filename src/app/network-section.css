@@ -1,0 +1,123 @@
+/*
+ * Network section (homepage /diocesan `network_section`) overrides.
+ * Scoped under .cr-network-section so it does not collide with global styles.
+ *
+ * Design: flat, minimal — no gradients, no box-shadow, no translateY/scale hovers,
+ *         no glassmorphism, no ::after shimmer — matching the about/video/programs sections.
+ */
+
+/* ── Header (left-aligned, replaces .head-center) ── */
+.cr-network-section .net-header {
+  text-align: left;
+}
+.cr-network-section .net-header .sub-section-label {
+  margin-bottom: 1rem;
+}
+.cr-network-section .net-subtitle {
+  font-size: 1rem;
+  color: #5a6a7a;
+  max-width: 580px;
+  line-height: 1.75;
+  margin: 0 0 3.5rem;
+}
+
+/* ── Stats cards (flat, no shadow, no translateY) ── */
+.cr-network-section .net-stat-card {
+  background: #ffffff;
+  border: 1px solid #e8e4df;
+  border-radius: 18px;
+  padding: 1.8rem 1.2rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.cr-network-section .net-stat-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #dcd6cf;
+}
+.cr-network-section .net-stat-number {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #a5280d;
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
+}
+.cr-network-section .net-stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Diocese grid cards (flat, no shadow, no translateY, no shimmer) ── */
+.cr-network-section .diocese-card {
+  box-shadow: none !important;
+  transition: none;
+}
+.cr-network-section .diocese-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove ::after shimmer/glass effect */
+.cr-network-section .diocese-card::after {
+  display: none !important;
+}
+
+/* Remove background-image scale on hover */
+.cr-network-section .diocese-card:hover .dioc-bg {
+  transform: none;
+}
+.cr-network-section .diocese-card:hover .dioc-bg-fallback {
+  transform: none;
+}
+
+/* Flat fallback background (replace gradient) */
+.cr-network-section .dioc-bg-fallback {
+  background: #e8e4dc;
+  transition: none;
+}
+
+/* Remove overlay hover color shift (keep functional gradient) */
+.cr-network-section .diocese-card:hover .dioc-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 20, 0.82) 0%,
+    rgba(10, 10, 20, 0.38) 42%,
+    rgba(10, 10, 20, 0.06) 100%
+  );
+}
+
+/* Always show info at the bottom (no translateY lift) */
+.cr-network-section .dioc-info {
+  transform: translateY(0);
+}
+.cr-network-section .diocese-card:hover .dioc-info {
+  transform: translateY(0);
+}
+
+/* Remove text-shadow on name */
+.cr-network-section .dioc-name {
+  text-shadow: none;
+}
+
+/* Remove box-shadow on number badge */
+.cr-network-section .dioc-num {
+  box-shadow: none;
+}
+
+/* ── Full-info dc-cards (flat, no shadow/translateY hover) ── */
+.cr-network-section .dc-card {
+  transition: none;
+}
+.cr-network-section .dc-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Modal overlay (remove backdrop-filter glassmorphism) ── */
+.cr-network-section .dioc-modal-overlay {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
