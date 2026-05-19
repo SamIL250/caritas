@@ -224,11 +224,6 @@ export default function BePartOfChangeSection({
 
   return (
     <section className="featured-campaign-bpc-scope bpc-section" id={anchor_id}>
-      <div className="bpc-orb bpc-orb-1" aria-hidden />
-      <div className="bpc-orb bpc-orb-2" aria-hidden />
-      <div className="bpc-orb bpc-orb-3" aria-hidden />
-      <div className="bpc-dot-grid" aria-hidden />
-
       <div className="bpc-inner">
         <div className="bpc-header">
           {displayEyebrow ? (
