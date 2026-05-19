@@ -1,0 +1,23 @@
+/* Partners — clean flat override: no grayscale, no translateY hover, left-aligned header */
+
+/* Left-aligned header */
+.partners-header {
+  text-align: left !important;
+}
+.partners-subtitle {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 560px !important;
+}
+
+/* Remove translateY hover on partner card */
+.partner-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove grayscale filter on logo — show full color always */
+.partner-logo {
+  filter: none !important;
+  opacity: 1 !important;
+}

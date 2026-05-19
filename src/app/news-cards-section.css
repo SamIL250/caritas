@@ -1,0 +1,79 @@
+/* News Cards / Stories — clean flat override: no gradients, glass, shadows, or translateY hover */
+
+/* Remove radial gradient decorations */
+.stories::before,
+.stories::after {
+  display: none !important;
+}
+
+/* Left-aligned header */
+.stories-header {
+  text-align: left !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.stories-header .section-eyebrow {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.stories-header .section-title,
+.stories-header .section-subtitle {
+  text-align: left !important;
+}
+
+/* Solid color for highlight span instead of gradient text */
+.stories .section-title span {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #a5280d !important;
+  color: #a5280d !important;
+}
+
+/* Featured card — remove shadow and translateY hover */
+.story-featured {
+  box-shadow: none !important;
+  border: 1px solid #e5e7eb !important;
+}
+.story-featured:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+/* Remove shimmer top line */
+.story-featured::before {
+  display: none !important;
+}
+
+/* Remove backdrop-filter/glass on tag */
+.story-feat-tag {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Small cards — remove glass, shadow, translateY hover */
+.story-small {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: none !important;
+}
+.story-small:hover {
+  transform: none !important;
+  border-color: rgba(165,40,13,0.2) !important;
+  box-shadow: none !important;
+}
+/* Remove gradient overlay on small card image */
+.story-small-image::after {
+  display: none !important;
+}
+
+/* CTA — remove shadow and translateY hover */
+.stories-cta a {
+  box-shadow: none !important;
+}
+.stories-cta a:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}

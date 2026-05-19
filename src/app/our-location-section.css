@@ -1,0 +1,39 @@
+/* Our Location / G-Map — clean flat override: no gradients, glass, shadows, or translateY hover */
+
+/* Remove radial gradient decoration */
+.map-section::before {
+  display: none !important;
+}
+
+/* Left-aligned header — match map-grid max-width for x-axis alignment */
+.map-section-header {
+  text-align: left !important;
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.map-section-header p {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Map cards — remove glass, shadow, translateY hover */
+.map-card {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: none !important;
+}
+.map-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Map card icon — solid background, no shadow */
+.map-card-icon {
+  background: #a5280d !important;
+  box-shadow: none !important;
+}

@@ -6,6 +6,9 @@ import "../resources-impact-section.css";
 import "../cta-be-part-section.css";
 import "../video-gallery-section.css";
 import "../network-section.css";
+import "../news-cards-section.css";
+import "../partners-section.css";
+import "../our-location-section.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
