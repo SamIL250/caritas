@@ -594,39 +594,25 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 3rem;
-            height: 3rem;
+            width: 2.8rem;
+            height: 2.8rem;
             padding: 0;
             border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.28);
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
             color: #fff;
             cursor: pointer;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-            transition:
-                background 0.2s ease,
-                border-color 0.2s ease,
-                color 0.2s ease,
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
+            transition: background 0.2s ease, border-color 0.2s ease;
         }
 
         .hero-carousel-btn:hover {
-            background: #8c2208;
-            border-color: transparent;
-            box-shadow: 0 12px 36px rgba(140, 34, 8, 0.45);
-            transform: translateY(-50%) scale(1.06);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .hero-carousel-btn:focus-visible {
             outline: 2px solid #fff;
             outline-offset: 3px;
-        }
-
-        .hero-carousel-btn:active {
-            transform: translateY(-50%) scale(0.96);
         }
 
         .hero-carousel-btn--prev {
@@ -683,22 +669,16 @@
 
         .hero-badge {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             padding: 0.4rem 1.2rem;
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.7rem;
+            font-weight: 500;
             color: var(--white);
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-        }
-
-        .hero-content.active .hero-badge {
-            animation: fadeInDown 0.8s ease forwards;
         }
 
         @keyframes fadeInDown {
@@ -727,17 +707,10 @@
 
         .hero h1 {
             font-size: 1.75rem;
-            font-weight: 900;
+            font-weight: 700;
             line-height: 1.15;
             letter-spacing: -0.025em;
             margin-bottom: 1.1rem;
-            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            word-spacing: -0.1em;
-        }
-
-        .hero-content.active h1 {
-            animation: fadeInUp 0.8s ease forwards 0.2s;
         }
 
         @media (min-width: 640px) {
@@ -762,13 +735,8 @@
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
             line-height: 1.7;
-            opacity: 0;
             max-width: 420px;
-            color: rgba(255, 255, 255, 0.95);
-        }
-
-        .hero-content.active p {
-            animation: fadeInUp 0.8s ease forwards 0.4s;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         @media (min-width: 768px) {
@@ -801,32 +769,14 @@
             align-items: center;
             justify-content: center;
             padding: 0.8rem 2rem;
-            border-radius: 50px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             border: none;
-            transition: all 0.3s ease;
+            transition: background 0.2s ease, color 0.2s ease;
             font-size: 0.85rem;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.3s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
         }
 
         .btn-primary {
@@ -836,21 +786,17 @@
 
         .btn-primary:hover {
             background-color: #7a1d06;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(140, 34, 8, 0.4);
         }
 
         .btn-secondary {
             background-color: transparent;
             color: var(--white);
-            border: 2px solid var(--white);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
         }
 
         .btn-secondary:hover {
-            background-color: var(--white);
-            color: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .btn-dark {
@@ -860,8 +806,6 @@
 
         .btn-dark:hover {
             background-color: #002244;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 51, 102, 0.3);
         }
 
         /* ==================== SECTION STYLING ==================== */

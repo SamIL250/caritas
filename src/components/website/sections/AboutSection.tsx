@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { DEFAULT_SECTION_CONTENT } from '@/lib/constants';
 
@@ -179,15 +179,16 @@ function PillLink({ href, label, className }: { href: string; label: string; cla
 
 export default function AboutSection(props: HomeAboutSectionProps = {}) {
   const c = mergeContent(props);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const currentPillar = c.pillars[activeIndex] || c.pillars[0];
+  const tabLabels = ['Vision', 'Mission', 'Values'] as const;
+  const tabKeys = ['vision', 'mission', 'values'] as const;
 
   return (
     <section className="cr-home-about" id="about" aria-labelledby="cha-about-heading">
       <div className="about-card">
-        <div className="about-orb about-orb-1" aria-hidden />
-        <div className="about-orb about-orb-2" aria-hidden />
-        <div className="about-dot-grid" aria-hidden />
-
-        <div className="about-header about-header-split">
+        <div className="about-header-split">
+          {/* Left: Identity & History */}
           <div className="about-header-main">
             <div className="about-badge-row">
               <span className="about-est-badge">
@@ -210,55 +211,66 @@ export default function AboutSection(props: HomeAboutSectionProps = {}) {
                 dangerouslySetInnerHTML={{ __html: html }}
               />
             ))}
+            <blockquote className="about-inline-quote">
+              <p>{c.quote_text}</p>
+              <cite>{c.quote_attribution}</cite>
+            </blockquote>
             <PillLink href={c.story_cta.href} label={c.story_cta.label} />
           </div>
 
-          <div className="about-header-quote">
-            <div className="about-quote-mark" aria-hidden>
-              &ldquo;
+          {/* Right: VMC Interactive Panel */}
+          <div className="about-vmc-panel">
+            <div className="vmc-tabs" role="tablist" aria-label="Organization pillars">
+              {c.pillars.map((pillar, idx) => (
+                <button
+                  key={idx}
+                  className={`vmc-tab${activeIndex === idx ? ' active' : ''}`}
+                  onClick={() => setActiveIndex(idx)}
+                  role="tab"
+                  aria-selected={activeIndex === idx}
+                >
+                  <i className={pillar.icon || 'fa-regular fa-eye'} aria-hidden />
+                  {' '}{tabLabels[idx]}
+                </button>
+              ))}
             </div>
-            <p className="about-quote-text">{c.quote_text}</p>
-            <div className="about-quote-author">
-              <div className="about-quote-line" aria-hidden />
-              <span>{c.quote_attribution}</span>
-            </div>
-            <div className="about-milestones">
-              {c.milestones.map((line, idx) => (
-                <div key={idx} className="about-milestone">
-                  <i className="fa-solid fa-circle-check" aria-hidden />
-                  <span>{line}</span>
+            <div className="vmc-content">
+              <div className="vmc-icon-wrap">
+                <i className={currentPillar.icon || 'fa-regular fa-eye'} aria-hidden />
+              </div>
+              <h3 className="vmc-title">{currentPillar.title}</h3>
+              <p className="vmc-desc" dangerouslySetInnerHTML={{ __html: currentPillar.body }} />
+              {currentPillar.footer && (
+                <span className="vmc-tagline">{currentPillar.footer}</span>
+              )}
+              {currentPillar.chips && currentPillar.chips.length > 0 && (
+                <div className="vmc-chips">
+                  {currentPillar.chips.map((chip, ci) => (
+                    <span key={ci} className="vmc-chip">{chip}</span>
+                  ))}
                 </div>
+              )}
+              {currentPillar.cta_label && currentPillar.cta_href && (
+                <PillLink
+                  href={currentPillar.cta_href}
+                  label={currentPillar.cta_label}
+                  className="vmc-cta"
+                />
+              )}
+            </div>
+            <div className="vmc-dots" aria-hidden="true">
+              {c.pillars.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`vmc-dot${activeIndex === idx ? ' active' : ''}`}
+                  onClick={() => setActiveIndex(idx)}
+                />
               ))}
             </div>
           </div>
         </div>
 
-        <div className="about-cards">
-          {c.pillars.map((pillar, idx) => (
-            <article key={idx} className="about-feat-card">
-              <div className="feat-icon">
-                <i className={pillar.icon.trim() || 'fa-regular fa-eye'} aria-hidden />
-              </div>
-              <h3 className="feat-title">{pillar.title}</h3>
-              <div className="feat-divider" aria-hidden />
-              <div className="feat-desc" dangerouslySetInnerHTML={{ __html: pillar.body }} />
-              {pillar.footer ? <p className="feat-desc-sub">{pillar.footer}</p> : null}
-              {pillar.chips && pillar.chips.length > 0 ? (
-                <div className="feat-values-chips">
-                  {pillar.chips.map((chip, ci) => (
-                    <span key={ci} className="feat-chip">
-                      {chip}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-              {pillar.cta_label && pillar.cta_href ? (
-                <PillLink href={pillar.cta_href} label={pillar.cta_label} />
-              ) : null}
-            </article>
-          ))}
-        </div>
-
+        {/* Stats Bar */}
         <div className="about-stats-bar">
           <div className="stats-group">
             {c.stats_bar.items.map((stat, idx) => (

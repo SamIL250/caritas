@@ -5,11 +5,10 @@ import { notFound } from "next/navigation";
 // Public Sections
 import HeroSection from "@/components/website/sections/HeroSection";
 import ProgramCards from "@/components/website/sections/ProgramCards";
+import AboutSection from "@/components/website/sections/AboutSection";
 import { renderWebsiteSectionWithFeatured } from "@/lib/public-page-sections-server";
 import { enrichCtaSectionsWithFeaturedCampaigns } from "@/lib/enrich-cta-featured-campaign";
 import type { PublicSectionRow } from "@/lib/public-page-sections";
-
-import AboutSection from "@/components/website/sections/AboutSection";
 
 export default async function LandingPage() {
   const supabase = await createClient();
@@ -94,7 +93,7 @@ export default async function LandingPage() {
         options={heroProps.options}
       />
 
-      {/* CMS block or fallback defaults when no home_about row */}
+      {/* Rooted in Faith, Built for People — CMS-driven or fallback defaults */}
       {!hasHomeAboutSection ? <AboutSection /> : null}
 
       {/* Default programs block only when no program_cards row exists in CMS */}

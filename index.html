@@ -13,13 +13,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
+    <script src="//code.tidio.co/n1hzpol9stm0hlfjhiaybd2sdytgwvgb.js" async></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         :root {
             --primary-dark: #003366;
             --primary-orange: #911313;
@@ -529,6 +531,33 @@
             opacity: 0;
         }
         .lang-option.active .lang-check { opacity: 1; }
+        .lang-more-btn-wrap { border-top: 1px solid rgba(0,0,0,0.07); margin-top: 0.35rem; padding-top: 0.35rem; }
+        .lang-more-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.45rem; padding: 0.52rem; border-radius: 10px; border: none; background: none; cursor: pointer; font-size: 0.78rem; font-weight: 600; color: #911313; font-family: inherit; transition: background 0.18s; }
+        .lang-more-btn:hover { background: rgba(145,19,19,0.08); }
+        .lang-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.52); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.28s, visibility 0.28s; padding: 1rem; }
+        .lang-modal-overlay.open { opacity: 1; visibility: visible; }
+        .lang-modal { background: #fff; border-radius: 22px; width: 100%; max-width: 560px; max-height: 82vh; display: flex; flex-direction: column; box-shadow: 0 28px 80px rgba(0,0,0,0.22); transform: scale(0.93) translateY(18px); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); overflow: hidden; }
+        .lang-modal-overlay.open .lang-modal { transform: scale(1) translateY(0); }
+        .lang-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
+        .lang-modal-title { font-size: 0.97rem; font-weight: 700; color: #0d1b2a; display: flex; align-items: center; gap: 0.5rem; }
+        .lang-modal-title i { color: #911313; }
+        .lang-modal-x { width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(0,0,0,0.06); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #6b7280; transition: background 0.2s, color 0.2s; }
+        .lang-modal-x:hover { background: rgba(145,19,19,0.1); color: #911313; }
+        .lang-modal-search-row { padding: 0.9rem 1.2rem 0.5rem; flex-shrink: 0; position: relative; }
+        .lang-modal-search-row i { position: absolute; left: 2rem; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.82rem; pointer-events: none; }
+        .lang-modal-search { width: 100%; border: 1.5px solid rgba(0,0,0,0.11); border-radius: 12px; padding: 0.62rem 1rem 0.62rem 2.4rem; font-size: 0.87rem; font-family: inherit; outline: none; transition: border-color 0.2s; color: #1f2937; }
+        .lang-modal-search:focus { border-color: #911313; }
+        .lang-modal-body { overflow-y: auto; padding: 0.6rem 0.9rem 1rem; flex: 1; }
+        .lang-modal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.35rem; }
+        .lang-modal-item { display: flex; align-items: center; gap: 0.55rem; padding: 0.58rem 0.75rem; border-radius: 10px; cursor: pointer; border: 1.5px solid transparent; transition: all 0.17s ease; background: none; font-family: inherit; text-align: left; width: 100%; }
+        .lang-modal-item:hover { background: #fef2f2; border-color: rgba(145,19,19,0.14); }
+        .lang-modal-item.active { background: rgba(145,19,19,0.07); border-color: rgba(145,19,19,0.28); }
+        .lmi-flag { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; flex-shrink: 0; display: block; }
+        .lmi-text { display: flex; flex-direction: column; min-width: 0; }
+        .lmi-name { font-size: 0.8rem; font-weight: 600; color: #1f2937; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lmi-code { font-size: 0.65rem; color: #9ca3af; font-weight: 500; }
+        .lang-modal-item.active .lmi-name { color: #911313; }
+        .lang-modal-empty { padding: 2.5rem 1rem; text-align: center; color: #9ca3af; font-size: 0.86rem; } .lang-modal-section { grid-column: 1/-1; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #911313; border-bottom: 1.5px solid #f3e8e8; padding: 0.6rem 0 0.3rem; margin-top: 0.4rem; } .lang-cont-grid-wrap { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 0.7rem; padding: 0.35rem 0.1rem; } .lang-cont-card { display:flex; flex-direction:column; align-items:center; gap:0.55rem; padding:1.35rem 0.6rem 1.1rem; border-radius:18px; border:1.5px solid rgba(0,0,0,0.07); background:#f8fafc; cursor:pointer; transition:all 0.22s ease; text-align:center; width:100%; } .lang-cont-card:hover { transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,0.12); border-color:var(--primary-orange,#911313); background:#fff; } .lang-cont-icon { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.45rem; flex-shrink:0; } .lang-cont-name { font-weight:700; font-size:0.83rem; color:#1f2937; line-height:1.2; } .lang-cont-count { font-size:0.7rem; color:#9ca3af; font-weight:500; } .lang-back-btn { display:inline-flex; align-items:center; gap:0.38rem; background:none; border:none; cursor:pointer; color:#911313; font-size:0.78rem; font-weight:700; padding:0.22rem 0.55rem; border-radius:8px; margin-right:0.3rem; transition:background 0.18s; vertical-align:middle; } .lang-back-btn:hover { background:rgba(145,19,19,0.07); } .lang-cont-grid-wrap { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 0.7rem; padding: 0.35rem 0.1rem; } .lang-cont-card { display:flex; flex-direction:column; align-items:center; gap:0.55rem; padding:1.35rem 0.6rem 1.1rem; border-radius:18px; border:1.5px solid rgba(0,0,0,0.07); background:#f8fafc; cursor:pointer; transition:all 0.22s ease; text-align:center; width:100%; } .lang-cont-card:hover { transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,0.12); border-color:var(--primary-orange,#911313); background:#fff; } .lang-cont-icon { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.45rem; flex-shrink:0; } .lang-cont-name { font-weight:700; font-size:0.83rem; color:#1f2937; line-height:1.2; } .lang-cont-count { font-size:0.7rem; color:#9ca3af; font-weight:500; } .lang-back-btn { display:inline-flex; align-items:center; gap:0.38rem; background:none; border:none; cursor:pointer; color:#911313; font-size:0.78rem; font-weight:700; padding:0.22rem 0.55rem; border-radius:8px; margin-right:0.3rem; transition:background 0.18s; vertical-align:middle; } .lang-back-btn:hover { background:rgba(145,19,19,0.07); }
 
         .nav-toggle {
             display: block;
@@ -2642,10 +2671,516 @@
 
         /* ==================== CTA BANNER SECTION ==================== */
 
+        /* ==================== TRENDING VIDEOS SECTION ==================== */
+        .tvid-section {
+            background: linear-gradient(160deg,#fdf8f6 0%,#f8f2f0 50%,#f4f0f8 100%);
+            padding: 6rem 0 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        /* animated background orbs */
+        .tvid-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            animation: tvid-float 8s ease-in-out infinite;
+        }
+        .tvid-orb-1 {
+            width: 500px; height: 500px;
+            background: rgba(145,19,19,0.07);
+            top: -120px; left: -100px;
+            animation-delay: 0s;
+        }
+        .tvid-orb-2 {
+            width: 400px; height: 400px;
+            background: rgba(3,17,43,0.05);
+            bottom: -100px; right: -80px;
+            animation-delay: 4s;
+        }
+        .tvid-orb-3 {
+            width: 280px; height: 280px;
+            background: rgba(145,19,19,0.04);
+            top: 40%; left: 50%;
+            transform: translate(-50%,-50%);
+            animation-delay: 2s;
+        }
+        @keyframes tvid-float {
+            0%,100% { transform: translateY(0) scale(1); }
+            50%      { transform: translateY(-30px) scale(1.08); }
+        }
+        .tvid-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        /* header row */
+        .tvid-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .tvid-header-left { flex: 1; min-width: 260px; }
+        .tvid-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(140,34,8,0.25);
+            border: 1px solid rgba(140,34,8,0.45);
+            border-radius: 100px;
+            padding: 0.38rem 1.1rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #ff7a55;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin-bottom: 1rem;
+        }
+        .tvid-title {
+            font-size: clamp(1.8rem,4vw,2.8rem);
+            font-weight: 900;
+            color: #0d1b2a;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+        .tvid-title span {
+            background: linear-gradient(90deg,#ff6b35,#e63c1e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tvid-subtitle {
+            font-size: 0.92rem;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+        /* arrows */
+        .tvid-nav {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .tvid-view-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1.3rem;
+            border-radius: 50px;
+            border: 1.5px solid rgba(145,19,19,0.25);
+            background: #fff;
+            color: #0d1b2a;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            white-space: nowrap;
+        }
+        .tvid-view-more i { color: #ff0000; font-size: 1rem; }
+        .tvid-view-more:hover {
+            background: #911313;
+            border-color: #911313;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(145,19,19,0.25);
+        }
+        .tvid-view-more:hover i { color: #fff; }
+        .tvid-arrow {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(0,0,0,0.1);
+            background: #fff;
+            color: #0d1b2a;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .tvid-arrow:hover {
+            background: #911313;
+            border-color: #911313;
+            color: #fff;
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(145,19,19,0.3);
+        }
+        .tvid-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* slider viewport */
+        .tvid-viewport {
+            overflow: hidden;
+            position: relative;
+            /* edge fade */
+            mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+        }
+        .tvid-track {
+            display: flex;
+            gap: 1.5rem;
+            transition: transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+            will-change: transform;
+        }
+        /* video card */
+        .tvid-card {
+            flex: 0 0 370px;
+            width: 370px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        }
+        .tvid-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(145,19,19,0.25);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.14), 0 0 0 1px rgba(145,19,19,0.12);
+        }
+        /* thumbnail */
+        .tvid-thumb {
+            position: relative;
+            height: 210px;
+            overflow: hidden;
+        }
+        .tvid-thumb-bg {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .tvid-card:hover .tvid-thumb-bg { transform: scale(1.07); }
+        .tvid-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* play button */
+        .tvid-play {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            border: 2px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .tvid-play i { margin-left: 4px; }
+        .tvid-card:hover .tvid-play {
+            background: var(--primary-orange);
+            border-color: var(--primary-orange);
+            transform: scale(1.18);
+            box-shadow: 0 0 0 10px rgba(140,34,8,0.2);
+        }
+        /* badges */
+        .tvid-badge-cat {
+            position: absolute;
+            top: 1rem; left: 1rem;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 0.28rem 0.7rem;
+            border-radius: 50px;
+        }
+        .tvid-badge-dur {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-variant-numeric: tabular-nums;
+        }
+        .tvid-badge-yt {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: #ff0000;
+            color: #fff;
+            font-size: 0.8rem;
+            width: 28px; height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* ── YouTube Video Modal ── */
+        .yvid-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 200000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .yvid-overlay.is-open { opacity: 1; pointer-events: all; }
+        .yvid-modal {
+            background: #0f0f0f;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 980px;
+            overflow: hidden;
+            box-shadow: 0 50px 120px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.06);
+            transform: scale(0.88) translateY(30px);
+            transition: transform 0.42s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .yvid-overlay.is-open .yvid-modal { transform: scale(1) translateY(0); }
+        .yvid-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.85rem 1.2rem;
+            background: #181818;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .yvid-logo {
+            color: #ff0000;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .yvid-header-title {
+            flex: 1;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .yvid-open-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.9rem;
+            background: #ff0000;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .yvid-open-tab:hover { filter: brightness(1.15); }
+        .yvid-close {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .yvid-close:hover { background: #e53935; color: #fff; transform: rotate(90deg); }
+        /* iframe embed body */
+        .yvid-frame-wrap {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            overflow: hidden;
+        }
+        .yvid-iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+            z-index: 1;
+            display: block;
+        }
+        /* fallback overlay — shown when embedding is blocked */
+        .yvid-fallback {
+            position: absolute;
+            inset: 0; z-index: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 0.9rem;
+            background: #0f0f0f;
+            text-align: center; padding: 2rem;
+        }
+        .yvid-fallback-icon { font-size: 3rem; color: #ff0000; }
+        .yvid-fallback-msg { color: rgba(255,255,255,0.65); font-size: 0.88rem; line-height: 1.6; margin: 0; }
+        .yvid-fallback-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: #ff0000; color: #fff;
+            font-size: 0.88rem; font-weight: 700;
+            padding: 0.6rem 1.5rem; border-radius: 100px;
+            text-decoration: none; transition: background 0.2s;
+        }
+        .yvid-fallback-btn:hover { background: #cc0000; }
+        /* footer */
+        .yvid-footer {
+            padding: 0.8rem 1.2rem;
+            background: #181818;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            flex-wrap: wrap;
+        }
+        .yvid-footer-info {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .yvid-footer-info strong { color: rgba(255,255,255,0.7); }
+        .yvid-channel-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 1.2rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.7);
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+        .yvid-channel-btn:hover {
+            background: rgba(255,0,0,0.18);
+            border-color: rgba(255,0,0,0.45);
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .yvid-modal { border-radius: 12px; }
+            .yvid-header-title { display: none; }
+            .yvid-footer { flex-direction: column; text-align: center; }
+        }
+        /* card body */
+        .tvid-body {
+            padding: 1.2rem 1.3rem 1.4rem;
+        }
+        .tvid-card-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0d1b2a;
+            line-height: 1.45;
+            margin-bottom: 0.6rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .tvid-card:hover .tvid-card-title { color: #911313; }
+        .tvid-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+        .tvid-card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+        .tvid-card-meta .dot {
+            width: 3px; height: 3px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+        /* dot indicators */
+        .tvid-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2.5rem;
+        }
+        .tvid-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.15);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+        .tvid-dot.active {
+            background: #911313;
+            width: 28px;
+            border-radius: 4px;
+            box-shadow: 0 0 12px rgba(145,19,19,0.35);
+        }
+        /* progress bar */
+        .tvid-progress {
+            height: 3px;
+            background: rgba(0,0,0,0.08);
+            border-radius: 2px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        .tvid-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #911313, #c0392b);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        /* card entrance animation */
+        .tvid-card[data-in] {
+            animation: tvid-in 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        @keyframes tvid-in {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0)    scale(1); }
+        }
+        @media (max-width: 900px) {
+            .tvid-card { flex: 0 0 300px; width: 300px; }
+            .tvid-thumb { height: 175px; }
+        }
+        @media (max-width: 600px) {
+            .tvid-card { flex: 0 0 80vw; width: 80vw; }
+            .tvid-inner { padding: 0 1rem; }
+            .tvid-thumb { height: 200px; }
+        }
+
         /* Be Part of the Change — Clean Modern Light Section */
         .bpc-section {
             position: relative;
-            padding: 7rem 1.5rem;
+            padding: 4rem 1.5rem;
             background: linear-gradient(145deg, #ffffff 0%, #fdf4f4 55%, #f8f0f0 100%);
             overflow: hidden;
         }
@@ -2676,19 +3211,19 @@
         }
 
         /* Header */
-        .bpc-header { text-align: center; margin-bottom: 4rem; }
+        .bpc-header { text-align: center; margin-bottom: 2.5rem; }
         .bpc-eyebrow {
             display: inline-flex; align-items: center; gap: 0.5rem;
             background: rgba(145,19,19,0.09);
             border: 1px solid rgba(145,19,19,0.2);
-            color: #911313; font-size: 0.7rem; font-weight: 700;
+            color: #911313; font-size: 0.65rem; font-weight: 700;
             letter-spacing: 2px; text-transform: uppercase;
-            padding: 0.38rem 1.1rem; border-radius: 100px; margin-bottom: 1.1rem;
+            padding: 0.28rem 0.9rem; border-radius: 100px; margin-bottom: 0.8rem;
         }
         .bpc-title {
-            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-size: clamp(1.6rem, 3.5vw, 2.5rem);
             font-weight: 900; color: #1a1a2e;
-            line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1rem;
+            line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.6rem;
         }
         .bpc-title span {
             background: linear-gradient(135deg, #911313 0%, #c0392b 100%);
@@ -2696,15 +3231,15 @@
             background-clip: text;
         }
         .bpc-subtitle {
-            font-size: 1rem; color: #6b7280;
-            max-width: 560px; margin: 0 auto; line-height: 1.78;
+            font-size: 0.87rem; color: #6b7280;
+            max-width: 520px; margin: 0 auto; line-height: 1.7;
         }
 
         /* Grid */
         .bpc-grid {
             display: grid;
             grid-template-columns: 1.35fr 1fr;
-            gap: 1.4rem; align-items: start;
+            gap: 1rem; align-items: start;
         }
         @media (max-width: 900px) { .bpc-grid { grid-template-columns: 1fr; } }
 
@@ -2726,7 +3261,7 @@
         /* Featured card */
         .bpc-feat-card { padding: 0; overflow: hidden; }
         .bpc-feat-img-wrap {
-            position: relative; width: 100%; height: 380px;
+            position: relative; width: 100%; height: 230px;
             overflow: hidden; border-radius: 22px 22px 0 0;
         }
         .bpc-feat-img-wrap img {
@@ -2736,38 +3271,38 @@
         }
         .bpc-feat-card:hover .bpc-feat-img-wrap img { transform: scale(1.04); }
         .bpc-feat-badge {
-            position: absolute; top: 1rem; left: 1rem;
+            position: absolute; top: 0.75rem; left: 0.75rem;
             display: inline-flex; align-items: center; gap: 0.4rem;
             background: #911313;
-            color: #fff; font-size: 0.65rem; font-weight: 800;
+            color: #fff; font-size: 0.6rem; font-weight: 800;
             letter-spacing: 1.2px; text-transform: uppercase;
-            padding: 0.3rem 0.85rem; border-radius: 100px;
+            padding: 0.22rem 0.7rem; border-radius: 100px;
         }
-        .bpc-feat-body { padding: 1.8rem; }
+        .bpc-feat-body { padding: 1.2rem; }
         .bpc-feat-name {
-            font-size: 1.45rem; font-weight: 800; color: #1f2937;
-            margin-bottom: 0.35rem; line-height: 1.2;
+            font-size: 1.1rem; font-weight: 800; color: #1f2937;
+            margin-bottom: 0.25rem; line-height: 1.2;
         }
         .bpc-feat-location {
-            font-size: 0.78rem; color: #9ca3af;
-            margin-bottom: 1.1rem;
+            font-size: 0.72rem; color: #9ca3af;
+            margin-bottom: 0.8rem;
             display: flex; align-items: center; gap: 0.4rem;
         }
         .bpc-feat-story {
-            font-size: 0.9rem; color: #4b5563;
-            line-height: 1.78; margin-bottom: 1.5rem;
+            font-size: 0.82rem; color: #4b5563;
+            line-height: 1.65; margin-bottom: 1rem;
             border-left: 3px solid rgba(145,19,19,0.22);
-            padding-left: 1rem;
+            padding-left: 0.85rem;
         }
 
         /* Progress */
-        .bpc-progress-wrap { margin-bottom: 1.4rem; }
+        .bpc-progress-wrap { margin-bottom: 0.9rem; }
         .bpc-progress-labels {
             display: flex; justify-content: space-between;
-            align-items: baseline; margin-bottom: 0.55rem;
+            align-items: baseline; margin-bottom: 0.4rem;
         }
-        .bpc-raised { font-size: 1.05rem; font-weight: 800; color: #1f2937; }
-        .bpc-goal   { font-size: 0.78rem; color: #9ca3af; }
+        .bpc-raised { font-size: 0.88rem; font-weight: 800; color: #1f2937; }
+        .bpc-goal   { font-size: 0.72rem; color: #9ca3af; }
         .bpc-bar-track {
             width: 100%; height: 8px;
             background: #f3f4f6;
@@ -2793,12 +3328,12 @@
 
         /* Stats row */
         .bpc-stats-row {
-            display: flex; gap: 1.6rem; flex-wrap: wrap; margin-bottom: 1.8rem;
+            display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 1rem;
         }
         .bpc-stat { display: flex; flex-direction: column; gap: 0.1rem; }
-        .bpc-stat-num  { font-size: 1.2rem; font-weight: 800; color: #1f2937; line-height: 1; }
+        .bpc-stat-num  { font-size: 1rem; font-weight: 800; color: #1f2937; line-height: 1; }
         .bpc-stat-label {
-            font-size: 0.67rem; color: #9ca3af;
+            font-size: 0.62rem; color: #9ca3af;
             text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;
         }
 
@@ -2807,40 +3342,40 @@
             display: flex; align-items: center; justify-content: center; gap: 0.6rem;
             width: 100%;
             background: linear-gradient(135deg, #911313 0%, #c0392b 100%);
-            color: #fff; font-size: 0.95rem; font-weight: 700;
-            padding: 0.95rem 1.5rem; border-radius: 100px;
+            color: #fff; font-size: 0.84rem; font-weight: 700;
+            padding: 0.72rem 1.2rem; border-radius: 100px;
             border: none; cursor: pointer; font-family: inherit;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 24px rgba(145,19,19,0.3);
+            box-shadow: 0 6px 18px rgba(145,19,19,0.3);
         }
         .bpc-donate-btn:hover {
             background: linear-gradient(135deg, #7a0f0f, #911313);
             transform: translateY(-2px);
-            box-shadow: 0 14px 36px rgba(145,19,19,0.42);
+            box-shadow: 0 10px 28px rgba(145,19,19,0.42);
         }
 
         /* Right column */
-        .bpc-right-col { display: flex; flex-direction: column; gap: 1.2rem; }
+        .bpc-right-col { display: flex; flex-direction: column; gap: 0.8rem; }
 
         /* Small cards */
-        .bpc-small-card { padding: 1.3rem; display: flex; gap: 1.1rem; align-items: flex-start; }
+        .bpc-small-card { padding: 0.9rem; display: flex; gap: 0.85rem; align-items: flex-start; }
         .bpc-avatar {
-            width: 68px; height: 68px; border-radius: 16px;
+            width: 50px; height: 50px; border-radius: 12px;
             background: #f3f4f6;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem; color: #d1d5db;
+            font-size: 1.4rem; color: #d1d5db;
             flex-shrink: 0; overflow: hidden;
         }
         .bpc-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .bpc-small-info { flex: 1; min-width: 0; }
         .bpc-small-tag {
-            font-size: 0.6rem; font-weight: 800;
+            font-size: 0.58rem; font-weight: 800;
             text-transform: uppercase; letter-spacing: 1.2px;
-            color: #911313; margin-bottom: 0.28rem;
+            color: #911313; margin-bottom: 0.2rem;
             display: flex; align-items: center; gap: 0.3rem;
         }
-        .bpc-small-name  { font-size: 0.95rem; font-weight: 700; color: #1f2937; margin-bottom: 0.28rem; }
+        .bpc-small-name  { font-size: 0.85rem; font-weight: 700; color: #1f2937; margin-bottom: 0.2rem; }
         .bpc-small-desc  {
             font-size: 0.76rem; color: #6b7280;
             line-height: 1.55; margin-bottom: 0.7rem;
@@ -2877,30 +3412,30 @@
 
         /* Impact panel */
         .bpc-impact-panel {
-            padding: 1.6rem;
+            padding: 1rem;
             background: linear-gradient(135deg, #fef2f2, #fff7f7);
             border: 1.5px solid rgba(145,19,19,0.14);
             box-shadow: 0 4px 20px rgba(145,19,19,0.07);
         }
         .bpc-impact-header {
-            display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.4rem;
+            display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.9rem;
         }
         .bpc-impact-icon {
-            width: 34px; height: 34px; border-radius: 10px;
+            width: 28px; height: 28px; border-radius: 8px;
             background: rgba(145,19,19,0.12);
             display: flex; align-items: center; justify-content: center;
-            color: #911313; font-size: 0.85rem;
+            color: #911313; font-size: 0.78rem;
         }
         .bpc-impact-title {
-            font-size: 0.72rem; font-weight: 800;
+            font-size: 0.67rem; font-weight: 800;
             text-transform: uppercase; letter-spacing: 1.5px;
             color: #6b7280;
         }
-        .bpc-impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
-        .bpc-impact-item { display: flex; flex-direction: column; gap: 0.15rem; }
-        .bpc-impact-num  { font-size: 1.55rem; font-weight: 900; color: #1f2937; line-height: 1; }
+        .bpc-impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .bpc-impact-item { display: flex; flex-direction: column; gap: 0.1rem; }
+        .bpc-impact-num  { font-size: 1.2rem; font-weight: 900; color: #1f2937; line-height: 1; }
         .bpc-impact-label {
-            font-size: 0.67rem; color: #6b7280;
+            font-size: 0.62rem; color: #6b7280;
             text-transform: uppercase; letter-spacing: 0.6px;
             font-weight: 600; line-height: 1.3;
         }
@@ -2908,7 +3443,7 @@
         /* Bottom CTA row */
         .bpc-cta-row {
             display: flex; align-items: center; justify-content: center;
-            gap: 1rem; margin-top: 3.5rem; flex-wrap: wrap;
+            gap: 1rem; margin-top: 2rem; flex-wrap: wrap;
         }
         .bpc-cta-primary {
             display: inline-flex; align-items: center; gap: 0.55rem;
@@ -2943,6 +3478,163 @@
             .bpc-cta-row { flex-direction: column; }
             .bpc-cta-primary, .bpc-cta-ghost { width: 100%; justify-content: center; }
         }
+        /* ==================== IMPACT METRICS SECTION ==================== */
+        .impact-section {
+            background: #fff;
+            padding: 3rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .impact-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary-orange), #911313, transparent);
+        }
+        .impact-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e8eaed, transparent);
+        }
+        /* soft background orb */
+        .impact-orb {
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(140,34,8,0.05) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .impact-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .impact-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .impact-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(140,34,8,0.07);
+            border: 1px solid rgba(140,34,8,0.15);
+            border-radius: 100px;
+            padding: 0.4rem 1.1rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--primary-orange);
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin-bottom: 1rem;
+        }
+        .impact-title {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            font-weight: 900;
+            color: #111;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+        .impact-title span { color: var(--primary-orange); }
+        .impact-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            max-width: 460px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        /* Metrics grid — 4 columns × 2 rows */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+        /* horizontal separator between the two rows */
+        .impact-card:nth-child(-n+4) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .impact-card {
+            padding: 1.4rem 1rem;
+            text-align: center;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+        /* vertical dividers — skip every 4th card (end of row) */
+        .impact-card::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 15%; bottom: 15%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #e0e0e0, transparent);
+        }
+        .impact-card:nth-child(4n)::after,
+        .impact-card:last-child::after { display: none; }
+        .impact-card:hover { background: rgba(140,34,8,0.03); border-radius: 16px; }
+        .impact-icon {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(140,34,8,0.1), rgba(145,19,19,0.06));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.6rem;
+            font-size: 1rem;
+            color: var(--primary-orange);
+            transition: all 0.3s ease;
+        }
+        .impact-card:hover .impact-icon {
+            background: var(--primary-orange);
+            color: #fff;
+            transform: scale(1.1) rotate(-4deg);
+        }
+        .impact-value-wrap {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 0.3rem;
+        }
+        .impact-num {
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            font-weight: 900;
+            color: #111;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+        .impact-suffix {
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--primary-orange);
+            line-height: 1;
+        }
+        .impact-label {
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            line-height: 1.4;
+        }
+        /* counter animation */
+        .impact-num.counted { color: var(--primary-orange); }
+        @media (max-width: 768px) {
+            .impact-grid { grid-template-columns: repeat(2, 1fr); }
+            .impact-card:nth-child(-n+4) { border-bottom: none; }
+            .impact-card:nth-child(odd):not(:nth-child(4n)):not(:last-child) { border-bottom: 1px solid #f0f0f0; }
+            .impact-card:nth-child(2n)::after { display: none; }
+            .impact-card:nth-child(odd)::after { display: block; }
+        }
+        @media (max-width: 420px) {
+            .impact-section { padding: 3rem 0.75rem; }
+            .impact-card { padding: 1.6rem 0.6rem; }
+        }
+
         /* ==================== PARTNERS SECTION ==================== */
         .partners-section {
             background: #f8f9fb;
@@ -3003,54 +3695,30 @@
             line-height: 1.7;
         }
 
-        /* Partners slider wrapper */
-        .partners-slider-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-        .partners-arrow {
-            flex-shrink: 0;
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            border: 2px solid #e2e2e2;
-            background: #fff;
-            color: #111;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.22s ease;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            z-index: 2;
-        }
-        .partners-arrow:hover {
-            background: #111;
-            color: #fff;
-            border-color: #111;
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-        }
-        .partners-arrow:disabled {
-            opacity: 0.35;
-            cursor: default;
-            transform: none;
-        }
-
-        /* Partners marquee */
-        .partners-marquee {
+        /* Partners slider */
+        .partners-grid {
             overflow: hidden;
-            flex: 1;
-            margin: 0 1rem;
+            position: relative;
+            width: 100%;
+            padding: 1rem 0;
+            mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
         }
         .partners-track {
             display: flex;
-            gap: 1.2rem;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 1.5rem;
             width: max-content;
-            transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+            animation: partnersScroll 70s linear infinite;
+        }
+        .partners-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes partnersScroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         .partner-card {
@@ -3116,6 +3784,369 @@
 
         .partner-card:hover .partner-name {
             color: var(--primary-orange);
+        }
+
+        /* ── Partners: slider wrapper & arrows ── */
+        .partners-slider-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .partner-arrow {
+            flex-shrink: 0;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 2px solid rgba(140,34,8,0.25);
+            background: #fff;
+            color: var(--primary-orange);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .partner-arrow:hover {
+            background: var(--primary-orange);
+            color: #fff;
+            border-color: var(--primary-orange);
+            box-shadow: 0 4px 20px rgba(140,34,8,0.3);
+            transform: scale(1.08);
+        }
+
+        /* ── Partners: View All button ── */
+        .partners-footer {
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+        .partners-view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.75rem 2.2rem;
+            background: transparent;
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .partners-view-all-btn:hover {
+            background: var(--primary-orange);
+            color: #fff;
+            box-shadow: 0 6px 24px rgba(140,34,8,0.22);
+            transform: translateY(-2px);
+        }
+
+        /* ── Partners: Modal ── */
+        .partners-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .partners-modal-overlay.is-open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .partners-modal {
+            background: #fff;
+            border-radius: 22px;
+            width: 100%;
+            max-width: 880px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2.2rem;
+            transform: scale(0.9) translateY(30px);
+            transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 32px 80px rgba(0,0,0,0.22);
+        }
+        .partners-modal-overlay.is-open .partners-modal {
+            transform: scale(1) translateY(0);
+        }
+        .partners-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .partners-modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #111;
+        }
+        .partners-modal-header h3 span {
+            color: var(--primary-orange);
+        }
+        .partners-modal-close {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            background: #f3f4f6;
+            color: #555;
+            font-size: 1.05rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+        }
+        .partners-modal-close:hover {
+            background: var(--primary-orange);
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        .partners-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 1.2rem;
+        }
+        .partners-modal-grid .partner-card {
+            width: 100%;
+            min-width: unset;
+            opacity: 1 !important;
+            animation: none !important;
+        }
+        @media (max-width: 600px) {
+            .partners-modal-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .partners-modal { padding: 1.4rem; }
+        }
+
+        /* ── Partner website preview modal ── */
+        .psite-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,20,0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .psite-overlay.is-open { opacity: 1; pointer-events: all; }
+
+        .psite-modal {
+            background: #1e1e2e;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 1040px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 48px 120px rgba(0,0,0,0.55);
+            transform: scale(0.9) translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .psite-overlay.is-open .psite-modal { transform: scale(1) translateY(0); }
+
+        /* Mac-style browser chrome header */
+        .psite-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.75rem 1.1rem;
+            background: #2a2a3e;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .psite-dots {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .psite-dot {
+            width: 13px; height: 13px;
+            border-radius: 50%;
+        }
+        .psite-dot-red   { background: #ff5f57; }
+        .psite-dot-yellow{ background: #ffbd2e; }
+        .psite-dot-green { background: #28c840; }
+        .psite-dot-red:hover   { filter: brightness(0.85); cursor: pointer; }
+        .psite-logo-thumb {
+            width: 22px; height: 22px;
+            object-fit: contain;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .psite-url-bar {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 0.3rem 0.9rem;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.65);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: default;
+        }
+        .psite-url-bar i { color: #28c840; font-size: 0.72rem; flex-shrink: 0; }
+        .psite-title-small {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .psite-btn-visit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 1rem;
+            background: var(--primary-orange);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .psite-btn-visit:hover { filter: brightness(1.12); transform: translateY(-1px); }
+        .psite-btn-close {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .psite-btn-close:hover { background: #e53935; color: #fff; transform: rotate(90deg); }
+
+        /* Screenshot body */
+        .psite-body {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            background: #f5f5f5;
+            min-height: 0;
+        }
+        .psite-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            background: #f8f9fb;
+            z-index: 2;
+            transition: opacity 0.4s ease;
+        }
+        .psite-loader.hidden { opacity: 0; pointer-events: none; }
+        .psite-spinner {
+            width: 48px; height: 48px;
+            border: 4px solid #e0e0e0;
+            border-top-color: var(--primary-orange);
+            border-radius: 50%;
+            animation: psite-spin 0.75s linear infinite;
+        }
+        @keyframes psite-spin { to { transform: rotate(360deg); } }
+        .psite-loader p { font-size: 0.88rem; color: #999; }
+        .psite-loader small { font-size: 0.75rem; color: #bbb; }
+
+        .psite-screenshot {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        /* Footer CTA bar */
+        .psite-footer {
+            background: #2a2a3e;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 0.9rem 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .psite-footer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .psite-footer-info img {
+            width: 28px; height: 28px;
+            object-fit: contain;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #fff;
+            padding: 2px;
+        }
+        .psite-footer-info span {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.6);
+        }
+        .psite-footer-info strong {
+            color: #fff;
+            font-weight: 700;
+        }
+        .psite-footer-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.8rem;
+            background: var(--primary-orange);
+            color: #fff;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(140,34,8,0.4);
+        }
+        .psite-footer-cta:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(140,34,8,0.5);
+        }
+        @media (max-width: 600px) {
+            .psite-url-bar, .psite-title-small { display: none; }
+            .psite-modal { max-height: 93vh; border-radius: 12px; }
+            .psite-footer { flex-direction: column; text-align: center; }
         }
 
         /* ==================== CONTACT SECTION ==================== */
@@ -4214,12 +5245,11 @@
         }
         .ft-chip-icon {
             width: 38px; height: 38px;
-            background: rgba(165,40,13,0.18);
-            border: 1px solid rgba(165,40,13,0.3);
-            border-radius: 10px;
+            background: none;
+            border: none;
             display: flex; align-items: center; justify-content: center;
-            color: #e05c3a;
-            font-size: 0.9rem;
+            color: #ffffff;
+            font-size: 1.1rem;
             flex-shrink: 0;
         }
         .ft-chip-label {
@@ -4313,17 +5343,18 @@
                         </div>
                     </li>
                     <li class="has-dropdown">
-                        <a href="#programs" data-spy="programs">Programs <span class="caret">▾</span></a>
+                        <a href="programs.html" data-spy="programs">Programs <span class="caret">▾</span></a>
                         <div class="nav-dropdown">
                             <div class="nav-dropdown-inner nav-dropdown-cards">
-                                <a href="#programs"><i class="fa-solid fa-seedling"></i> Development</a>
-                                <a href="#programs"><i class="fa-solid fa-heart-pulse"></i> Health</a>
-                                <a href="#programs"><i class="fa-solid fa-people-roof"></i> Social Welfare</a>
+                                <a href="programs.html#dev"><i class="fa-solid fa-seedling"></i> Development</a>
+                                <a href="programs.html#health"><i class="fa-solid fa-heart-pulse"></i> Health</a>
+                                <a href="programs.html#sw"><i class="fa-solid fa-people-roof"></i> Social Welfare</a>
+                                <a href="programs.html#admin"><i class="fa-solid fa-coins"></i> Finance &amp; Admin</a>
                             </div>
                         </div>
                     </li>
                     <li class="has-dropdown">
-                        <a href="#impact" data-spy="impact">Diocesan Caritas <span class="caret">▾</span></a>
+                        <a href="diocesan.html" data-spy="impact">Diocesan Caritas <span class="caret">▾</span></a>
                         <div class="nav-dropdown">
                             <div class="nav-dropdown-inner">
                                 <a href="diocesan.html#kigali"><i class="fa-solid fa-church"></i> Kigali</a>
@@ -4338,17 +5369,17 @@
                     </li>
                     <li><a href="news.html" data-spy="stories">News &amp; Updates</a></li>
                     <li class="has-dropdown">
-                        <a href="#get-involved" data-spy="get-involved">Publications &amp; Documents <span class="caret">▾</span></a>
+                        <a href="publications.html" data-spy="get-involved">Publications <span class="caret">▾</span></a>
                         <div class="nav-dropdown">
                             <div class="nav-dropdown-inner">
                                 <a href="publications.html#annual-reports"><i class="fa-solid fa-chart-bar"></i> Annual Reports</a>
                                 <a href="publications.html#newsletters"><i class="fa-solid fa-newspaper"></i> Newsletters</a>
                                 <div class="nav-dropdown-divider"></div>
                                 <a href="publications.html#strategic"><i class="fa-solid fa-map"></i> Strategic Plan</a>
-                                <a href="publications.html#success-stories"><i class="fa-solid fa-star"></i> Success Stories</a>
-                            </div>
+</div>
                         </div>
                     </li>
+                    <li><a href="metrics.html">Impact Metrics</a></li>
                     <li><a href="contact.html" data-spy="contact">Contact Us</a></li>
                 </ul>
                 <div class="lang-wrap" id="langWrap">
@@ -4375,6 +5406,17 @@
                             <span class="lang-name"><strong>Kinyarwanda</strong><span>RW</span></span>
                             <i class="fa-solid fa-check lang-check"></i>
                         </button>
+                        <button class="lang-option" data-lang="it">
+                            <img class="lang-flag" src="https://flagcdn.com/w40/it.png" alt="Italiano" width="24" height="16">
+                            <span class="lang-name"><strong>Italiano</strong><span>IT</span></span>
+                            <i class="fa-solid fa-check lang-check"></i>
+                        </button>
+                        <button class="lang-option" data-lang="sw">
+                            <img class="lang-flag" src="https://flagcdn.com/w40/tz.png" alt="Kiswahili" width="24" height="16">
+                            <span class="lang-name"><strong>Kiswahili</strong><span>SW</span></span>
+                            <i class="fa-solid fa-check lang-check"></i>
+                        </button>
+                        <div class="lang-more-btn-wrap"><button class="lang-more-btn" id="langMoreBtn"><i class="fa-solid fa-globe"></i> More languages</button></div>
                     </div>
                 </div>
                 <a href="#" class="btn btn-donate nav-donate">Donate</a>
@@ -4507,7 +5549,6 @@
         </section>
         <section class="prog-tabs" id="programs" aria-label="Our Programs">
             <div class="prog-tabs-header">
-                <div class="prog-tabs-eyebrow"><i class="fa-solid fa-grid-2"></i> What We Do</div>
                 <h2 class="prog-tabs-title">Our Program</h2>
                 <p class="prog-tabs-subtitle">Making a lasting difference through targeted, community-focused initiatives across Rwanda</p>
             </div>
@@ -4560,7 +5601,7 @@
                                 <li><i class="fa-solid fa-circle-check"></i> Emergency humanitarian response</li>
                                 <li><i class="fa-solid fa-circle-check"></i> Social advocacy &amp; inclusion programs</li>
                             </ul>
-                            <a href="#" class="prog-learn-btn">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="programs.html" class="prog-learn-btn">Learn more <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
 
@@ -4603,9 +5644,6 @@
         <section class="stories" id="stories">
             <!-- Header -->
             <div class="stories-header">
-                <div class="section-eyebrow">
-                    <i class="fa-solid fa-newspaper"></i> Latest from Caritas Rwanda
-                </div>
                 <h2 class="section-title">News </span></h2>
                 <p class="section-subtitle">Inspiring stories from the communities we serve</p>
             </div>
@@ -4704,6 +5742,216 @@
             </div>
         </section>
 
+        <!-- TRENDING VIDEOS SECTION -->
+        <section class="tvid-section" id="videos">
+            <div class="tvid-orb tvid-orb-1"></div>
+            <div class="tvid-orb tvid-orb-2"></div>
+            <div class="tvid-orb tvid-orb-3"></div>
+
+            <div class="tvid-inner">
+                <!-- Header -->
+                <div class="tvid-header">
+                    <div class="tvid-header-left">
+                        <h2 class="tvid-title">Stories in <span>Motion</span></h2>
+                        <p class="tvid-subtitle">Watch our latest videos on programs, impact stories and community transformations across Rwanda.</p>
+                    </div>
+                    <div class="tvid-nav">
+                        <a href="https://www.youtube.com/@caritasrwanda5681" target="_blank" rel="noopener" class="tvid-view-more">
+                            <span>View More</span>
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <button class="tvid-arrow" id="tvidPrev" aria-label="Previous">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button class="tvid-arrow" id="tvidNext" aria-label="Next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Slider -->
+                <div class="tvid-viewport" id="tvidViewport">
+                    <div class="tvid-track" id="tvidTrack">
+
+                        <!-- Card 1 — 66 ans anniversary -->
+                        <div class="tvid-card" data-video-id="C8NOogys2q4" data-title="66 ans de contribution dans le développement socio économique de la population rwandaise" data-delay="0">
+                            <div class="tvid-thumb">
+                                <img class="tvid-thumb-bg" src="https://img.youtube.com/vi/C8NOogys2q4/hqdefault.jpg" alt="Caritas Rwanda 66 ans" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#8C2208,#3D0C02)'">
+                                <div class="tvid-thumb-overlay">
+                                    <div class="tvid-play"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <span class="tvid-badge-cat"><i class="fa-solid fa-star"></i> Featured</span>
+                                <span class="tvid-badge-yt"><i class="fa-brands fa-youtube"></i></span>
+                            </div>
+                            <div class="tvid-body">
+                                <h3 class="tvid-card-title">66 ans de contribution dans le développement socio-économique de la population rwandaise</h3>
+                                <div class="tvid-card-meta">
+                                    <span><i class="fa-solid fa-circle-play"></i> Caritas Rwanda</span>
+                                    <span class="dot"></span>
+                                    <span><i class="fa-brands fa-youtube"></i> Watch now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 — Ikiganiro / Programs discussion -->
+                        <div class="tvid-card" data-video-id="SVb9etwk6Vs" data-title="Ikiganiro cya Caritas Rwanda: Ibigo by'Abihayimana n'Amaparuwasi mu Kwita ku Batishoboye" data-delay="80">
+                            <div class="tvid-thumb">
+                                <img class="tvid-thumb-bg" src="https://img.youtube.com/vi/SVb9etwk6Vs/hqdefault.jpg" alt="Ikiganiro cya Caritas Rwanda" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0d5c8c,#062e4f)'">
+                                <div class="tvid-thumb-overlay">
+                                    <div class="tvid-play"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <span class="tvid-badge-cat"><i class="fa-solid fa-microphone"></i> Discussion</span>
+                                <span class="tvid-badge-yt"><i class="fa-brands fa-youtube"></i></span>
+                            </div>
+                            <div class="tvid-body">
+                                <h3 class="tvid-card-title">Ikiganiro cya Caritas Rwanda: Ibigo by'Abihayimana n'Amaparuwasi mu Kwita ku Batishoboye</h3>
+                                <div class="tvid-card-meta">
+                                    <span><i class="fa-solid fa-circle-play"></i> Caritas Rwanda</span>
+                                    <span class="dot"></span>
+                                    <span><i class="fa-brands fa-youtube"></i> Watch now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 — Partners Forum 2024 -->
+                        <div class="tvid-card" data-video-id="QOZjvLeAj2M" data-title="Caritas Rwanda Partners Forum — November 27, 2024" data-delay="160">
+                            <div class="tvid-thumb">
+                                <img class="tvid-thumb-bg" src="https://img.youtube.com/vi/QOZjvLeAj2M/hqdefault.jpg" alt="Caritas Rwanda Partners Forum 2024" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#03112b,#1a3a5c)'">
+                                <div class="tvid-thumb-overlay">
+                                    <div class="tvid-play"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <span class="tvid-badge-cat"><i class="fa-solid fa-handshake"></i> Partners</span>
+                                <span class="tvid-badge-yt"><i class="fa-brands fa-youtube"></i></span>
+                            </div>
+                            <div class="tvid-body">
+                                <h3 class="tvid-card-title">Caritas Rwanda Partners Forum — November 27, 2024</h3>
+                                <div class="tvid-card-meta">
+                                    <span><i class="fa-solid fa-circle-play"></i> Caritas Rwanda</span>
+                                    <span class="dot"></span>
+                                    <span><i class="fa-brands fa-youtube"></i> Watch now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 — Early Childhood Development -->
+                        <div class="tvid-card" data-video-id="lD9vqlvpSSw" data-title="Early Childhood Development (ECD) Centres: Nurturing Children's Growth, Learning and Bright Futures" data-delay="240">
+                            <div class="tvid-thumb">
+                                <img class="tvid-thumb-bg" src="https://img.youtube.com/vi/lD9vqlvpSSw/hqdefault.jpg" alt="Early Childhood Development Rwanda" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#0d6b2a,#053014)'">
+                                <div class="tvid-thumb-overlay">
+                                    <div class="tvid-play"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <span class="tvid-badge-cat"><i class="fa-solid fa-child"></i> Children</span>
+                                <span class="tvid-badge-yt"><i class="fa-brands fa-youtube"></i></span>
+                            </div>
+                            <div class="tvid-body">
+                                <h3 class="tvid-card-title">Early Childhood Development Centres: Nurturing Children's Growth &amp; Bright Futures</h3>
+                                <div class="tvid-card-meta">
+                                    <span><i class="fa-solid fa-circle-play"></i> Caritas Rwanda</span>
+                                    <span class="dot"></span>
+                                    <span><i class="fa-brands fa-youtube"></i> Watch now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 — HepB Health Advocacy -->
+                        <div class="tvid-card" data-video-id="Wm4U-qyf9E4" data-title="Caritas Rwanda: Hepatitis B Advocacy Radio Announcement" data-delay="320">
+                            <div class="tvid-thumb">
+                                <img class="tvid-thumb-bg" src="https://img.youtube.com/vi/Wm4U-qyf9E4/hqdefault.jpg" alt="Caritas Rwanda Health Advocacy" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#8c0d4a,#4a062e)'">
+                                <div class="tvid-thumb-overlay">
+                                    <div class="tvid-play"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <span class="tvid-badge-cat"><i class="fa-solid fa-heart-pulse"></i> Health</span>
+                                <span class="tvid-badge-yt"><i class="fa-brands fa-youtube"></i></span>
+                            </div>
+                            <div class="tvid-body">
+                                <h3 class="tvid-card-title">Caritas Rwanda: Hepatitis B Awareness &amp; Advocacy Campaign</h3>
+                                <div class="tvid-card-meta">
+                                    <span><i class="fa-solid fa-circle-play"></i> Caritas Rwanda</span>
+                                    <span class="dot"></span>
+                                    <span><i class="fa-brands fa-youtube"></i> Watch now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 6 — Kitchen Gardens / Nutrition -->
+                        <div class="tvid-card" data-video-id="cM3cZNdlaJg" data-title="Kitchen Gardens: Fighting Malnutrition in Rwanda" data-delay="400">
+                            <div class="tvid-thumb">
+                                <img class="tvid-thumb-bg" src="https://img.youtube.com/vi/cM3cZNdlaJg/hqdefault.jpg" alt="Kitchen Gardens Rwanda Nutrition" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#4a7c0d,#253d06)'">
+                                <div class="tvid-thumb-overlay">
+                                    <div class="tvid-play"><i class="fa-solid fa-play"></i></div>
+                                </div>
+                                <span class="tvid-badge-cat"><i class="fa-solid fa-seedling"></i> Development</span>
+                                <span class="tvid-badge-yt"><i class="fa-brands fa-youtube"></i></span>
+                            </div>
+                            <div class="tvid-body">
+                                <h3 class="tvid-card-title">Kitchen Gardens: A Solution to Malnutrition in Rwanda's Communities</h3>
+                                <div class="tvid-card-meta">
+                                    <span><i class="fa-solid fa-circle-play"></i> Caritas Rwanda</span>
+                                    <span class="dot"></span>
+                                    <span><i class="fa-brands fa-youtube"></i> Watch now</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Progress bar + dots -->
+                <div class="tvid-progress"><div class="tvid-progress-bar" id="tvidBar"></div></div>
+                <div class="tvid-dots" id="tvidDots"></div>
+            </div>
+        </section>
+
+        <!-- YouTube Video Modal (embedded iframe) -->
+        <div class="yvid-overlay" id="yvidOverlay" role="dialog" aria-modal="true" aria-label="Video Player">
+            <div class="yvid-modal">
+
+                <div class="yvid-header">
+                    <i class="fa-brands fa-youtube yvid-logo"></i>
+                    <span class="yvid-header-title" id="yvidTitle"></span>
+                    <a href="#" target="_blank" rel="noopener" class="yvid-open-tab" id="yvidOpenTab">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in YouTube
+                    </a>
+                    <button class="yvid-close" id="yvidClose" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- embedded player -->
+                <div class="yvid-frame-wrap">
+                    <iframe
+                        class="yvid-iframe"
+                        id="yvidFrame"
+                        src=""
+                        title="Caritas Rwanda Video"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                    <!-- Fallback shown if embedding is blocked (Error 153 / disabled embeds) -->
+                    <div class="yvid-fallback" id="yvidFallback">
+                        <i class="fa-brands fa-youtube yvid-fallback-icon"></i>
+                        <p class="yvid-fallback-msg">This video cannot be played here.<br>The channel owner may have disabled embedding.</p>
+                        <a href="#" target="_blank" rel="noopener" id="yvidFallbackLink" class="yvid-fallback-btn">
+                            <i class="fa-brands fa-youtube"></i> Watch on YouTube
+                        </a>
+                    </div>
+                </div>
+
+                <div class="yvid-footer">
+                    <div class="yvid-footer-info">
+                        <i class="fa-brands fa-youtube" style="color:#ff0000"></i>
+                        <span>Caritas Rwanda — <strong>Official Channel</strong></span>
+                    </div>
+                    <a href="https://www.youtube.com/@caritasrwanda5681" target="_blank" rel="noopener" class="yvid-channel-btn">
+                        <i class="fa-brands fa-youtube"></i> Visit Channel
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
         <!-- CTA / BE PART OF THE CHANGE -->
         <section class="bpc-section" id="get-involved">
 
@@ -4716,7 +5964,6 @@
 
                 <!-- Header -->
                 <div class="bpc-header">
-                    <div class="bpc-eyebrow"><i class="fa-solid fa-heart"></i>&nbsp; Make a Difference</div>
                     <h2 class="bpc-title">Be Part of<br><span>the Change</span></h2>
                     <p class="bpc-subtitle">Your support enables us to continue transforming lives and building sustainable communities across all nine dioceses of Rwanda.</p>
                 </div>
@@ -4847,74 +6094,263 @@
 
             </div>
         </section>
+
+        <!-- IMPACT METRICS SECTION -->
+        <section class="impact-section" id="impact">
+            <div class="impact-orb"></div>
+            <div class="impact-inner">
+
+                <div class="impact-header">
+                    <h2 class="impact-title">Transforming Lives <span>Across Rwanda</span></h2>
+                    <p class="impact-subtitle">Over six decades of compassionate service — measured in lives changed, communities strengthened, and hope restored.</p>
+                </div>
+
+                <div class="impact-grid">
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="500" data-suffix="K+">0</span>
+                            <span class="impact-suffix">K+</span>
+                        </div>
+                        <div class="impact-label">Beneficiaries<br>Reached Annually</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="60">0</span>
+                            <span class="impact-suffix">+</span>
+                        </div>
+                        <div class="impact-label">Years of<br>Service</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-church"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="9">0</span>
+                            <span class="impact-suffix"></span>
+                        </div>
+                        <div class="impact-label">Diocesan<br>Chapters</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="30">0</span>
+                            <span class="impact-suffix">+</span>
+                        </div>
+                        <div class="impact-label">Districts<br>Covered</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="50">0</span>
+                            <span class="impact-suffix">+</span>
+                        </div>
+                        <div class="impact-label">Active<br>Programs</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-handshake"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="12">0</span>
+                            <span class="impact-suffix">+</span>
+                        </div>
+                        <div class="impact-label">Global<br>Partners</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-people-roof"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="120">0</span>
+                            <span class="impact-suffix">K+</span>
+                        </div>
+                        <div class="impact-label">Families<br>Supported</div>
+                    </div>
+
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                        <div class="impact-value-wrap">
+                            <span class="impact-num" data-target="1200">0</span>
+                            <span class="impact-suffix">+</span>
+                        </div>
+                        <div class="impact-label">Community<br>Volunteers</div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
                 <!-- PARTNERS SECTION -->
         <section class="partners-section">
             <div class="partners-inner">
                 <div class="partners-header">
-                    <div class="partners-eyebrow"><i class="fa-solid fa-handshake"></i> Collaboration</div>
                     <h2 class="partners-title">Our Partners</h2>
                     <p class="partners-subtitle">Working together with trusted global and local organizations to deliver lasting impactful initiatives across Rwanda.</p>
                 </div>
 
+                <!-- Slider with arrow buttons -->
                 <div class="partners-slider-wrap">
-                    <button class="partners-arrow" id="partnersPrev" aria-label="Previous partners"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="partners-marquee">
-                    <div class="partners-track" id="partnersTrack">
-                        <a href="https://www.secours-catholique.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2024/06/Secours-Catholique-France-Logo-OK.png" alt="Secours Catholique France" class="partner-logo">
-                            <span class="partner-name">Secours Catholique France</span>
-                        </a>
-                        <a href="https://plan-international.org/rwanda/" target="_blank" rel="noopener" class="partner-card">
-                            <img src="img/Plan logo NEW.jpg.jpeg" alt="Plan International" class="partner-logo">
-                            <span class="partner-name">Plan International</span>
-                        </a>                        
-                        <a href="https://www.unhcr.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2022/09/UNHCR.png" alt="UNHCR" class="partner-logo">
-                            <span class="partner-name">UNHCR</span>
-                        </a>
-                        <a href="https://www.moh.gov.rw" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2022/09/Ministry-of-Health-of-rwanda.jpg" alt="Ministry of Health Rwanda" class="partner-logo">
-                            <span class="partner-name">Ministry of Health Rwanda</span>
-                        </a>
-                        <a href="https://www.wvi.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="img/WV Rwanda primary logo_2025.png" alt="World Vision" class="partner-logo">
-                            <span class="partner-name">World Vision</span>
-                        </a>   
-                        
-                         <a href="https://www.wvi.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="img/Bridges-Outcomes-Partnerships_logo.png" alt="World Vision" class="partner-logo">
-                            <span class="partner-name">Bridges Outcomes </span>
-                        </a>  
-                        <a href="https://www.wvi.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="img/eiei.jpeg" alt="World Vision" class="partner-logo">
-                            <span class="partner-name"> EUROPEAN </span>
-                        </a>   
-                        <a href="https://www.wvi.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="img/Slovenia Aid and Partnership logo.png" alt="World Vision" class="partner-logo">
-                            <span class="partner-name"> SOLVANIA </span>
-                        </a>       
-                        <a href="https://rw.usembassy.gov" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2022/09/PEPFAR-LOGO-OK.jpg" alt="PEPFAR" class="partner-logo">
-                            <span class="partner-name">PEPFAR</span>
-                        </a>
-                        <a href="https://www.caritas.eu/caritas-slovenia/" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2022/08/caritas_slovenia.png" alt="Caritas Slovenia" class="partner-logo">
-                            <span class="partner-name">Caritas Slovenia</span>
-                        </a>
-                        <a href="https://www.crs.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2022/08/inter_crs-1.jpg" alt="Catholic Relief Services" class="partner-logo">
-                            <span class="partner-name">Catholic Relief Services</span>
-                        </a>
-                        <a href="https://www.caritas.org" target="_blank" rel="noopener" class="partner-card">
-                            <img src="https://caritasrwanda.org/wp-content/uploads/2022/08/inter_caritas_internationale-1.jpg" alt="Caritas Internationalis" class="partner-logo">
-                            <span class="partner-name">Caritas Internationalis</span>
-                        </a>
+                    <button class="partner-arrow" id="partnerPrev" aria-label="Previous">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <div class="partners-grid">
+                        <div class="partners-track" id="partnersTrack">
+                            <a href="https://www.secours-catholique.org" data-url="https://www.secours-catholique.org" data-name="Secours Catholique France" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2024/06/Secours-Catholique-France-Logo-OK.png" alt="Secours Catholique France" class="partner-logo">
+                                <span class="partner-name">Secours Catholique France</span>
+                            </a>
+                            <a href="https://plan-international.org/rwanda/" data-url="https://plan-international.org/rwanda/" data-name="Plan International" class="partner-card">
+                                <img src="img/Plan logo NEW.jpg.jpeg" alt="Plan International" class="partner-logo">
+                                <span class="partner-name">Plan International</span>
+                            </a>
+                            <a href="https://www.unhcr.org" data-url="https://www.unhcr.org" data-name="UNHCR" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2022/09/UNHCR.png" alt="UNHCR" class="partner-logo">
+                                <span class="partner-name">UNHCR</span>
+                            </a>
+                            <a href="https://www.moh.gov.rw" data-url="https://www.moh.gov.rw" data-name="Ministry of Health Rwanda" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2022/09/Ministry-of-Health-of-rwanda.jpg" alt="Ministry of Health Rwanda" class="partner-logo">
+                                <span class="partner-name">Ministry of Health Rwanda</span>
+                            </a>
+                            <a href="https://www.wvi.org" data-url="https://www.wvi.org" data-name="World Vision" class="partner-card">
+                                <img src="img/WV Rwanda primary logo_2025.png" alt="World Vision" class="partner-logo">
+                                <span class="partner-name">World Vision</span>
+                            </a>
+                            <a href="https://www.bridges-outcomes.com" data-url="https://www.bridges-outcomes.com" data-name="Bridges Outcomes" class="partner-card">
+                                <img src="img/Bridges-Outcomes-Partnerships_logo.png" alt="Bridges Outcomes" class="partner-logo">
+                                <span class="partner-name">Bridges Outcomes</span>
+                            </a>
+                            <a href="https://www.ec.europa.eu" data-url="https://www.ec.europa.eu" data-name="European Commission" class="partner-card">
+                                <img src="img/eiei.jpeg" alt="European" class="partner-logo">
+                                <span class="partner-name">European</span>
+                            </a>
+                            <a href="https://www.sloveniaaid.si" data-url="https://www.sloveniaaid.si" data-name="Slovenia Aid" class="partner-card">
+                                <img src="img/Slovenia Aid and Partnership logo.png" alt="Slovenia Aid" class="partner-logo">
+                                <span class="partner-name">Slovenia Aid</span>
+                            </a>
+                            <a href="https://www.pepfar.gov" data-url="https://www.pepfar.gov" data-name="PEPFAR" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2022/09/PEPFAR-LOGO-OK.jpg" alt="PEPFAR" class="partner-logo">
+                                <span class="partner-name">PEPFAR</span>
+                            </a>
+                            <a href="https://www.caritas.eu/caritas-slovenia/" data-url="https://www.caritas.eu/caritas-slovenia/" data-name="Caritas Slovenia" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2022/08/caritas_slovenia.png" alt="Caritas Slovenia" class="partner-logo">
+                                <span class="partner-name">Caritas Slovenia</span>
+                            </a>
+                            <a href="https://www.crs.org" data-url="https://www.crs.org" data-name="Catholic Relief Services" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2022/08/inter_crs-1.jpg" alt="Catholic Relief Services" class="partner-logo">
+                                <span class="partner-name">Catholic Relief Services</span>
+                            </a>
+                            <a href="https://www.caritas.org" data-url="https://www.caritas.org" data-name="Caritas Internationalis" class="partner-card">
+                                <img src="https://caritasrwanda.org/wp-content/uploads/2022/08/inter_caritas_internationale-1.jpg" alt="Caritas Internationalis" class="partner-logo">
+                                <span class="partner-name">Caritas Internationalis</span>
+                            </a>
+                            <a href="https://www.rbc.gov.rw" data-url="https://www.rbc.gov.rw" data-name="Rwanda Biomedical Centre" class="partner-card">
+                                <img src="img/new_partners/RBC logo.png" alt="Rwanda Biomedical Centre" class="partner-logo">
+                                <span class="partner-name">Rwanda Biomedical Centre</span>
+                            </a>
+                            <a href="https://www.jhpiego.org" data-url="https://www.jhpiego.org" data-name="JHPIEGO" class="partner-card">
+                                <img src="img/new_partners/JHPIEGO.png" alt="JHPIEGO" class="partner-logo">
+                                <span class="partner-name">JHPIEGO</span>
+                            </a>
+                            <a href="https://um.dk/en/danida" data-url="https://um.dk/en/danida" data-name="Denmark — Danida" class="partner-card">
+                                <img src="img/new_partners/Denmark.png" alt="Denmark — Danida" class="partner-logo">
+                                <span class="partner-name">Denmark — Danida</span>
+                            </a>
+                            <a href="https://educationoutcomesfund.org" data-url="https://educationoutcomesfund.org" data-name="Education Outcomes Fund" class="partner-card">
+                                <img src="img/new_partners/EOF logo.png" alt="Education Outcomes Fund" class="partner-logo">
+                                <span class="partner-name">Education Outcomes Fund</span>
+                            </a>
+                            <a href="https://www.bufmar.rw" data-url="https://www.bufmar.rw" data-name="BUFMAR" class="partner-card">
+                                <img src="img/new_partners/BUFMAR-Circle-logo.png" alt="BUFMAR" class="partner-logo">
+                                <span class="partner-name">BUFMAR</span>
+                            </a>
+                            <a href="https://www.coalitionforhepatitis.org" data-url="https://www.coalitionforhepatitis.org" data-name="Coalition for Global Hepatitis Elimination" class="partner-card">
+                                <img src="img/new_partners/Coalition for Global Hepatitis Elimination.png" alt="Coalition for Global Hepatitis Elimination" class="partner-logo">
+                                <span class="partner-name">Coalition for Hepatitis Elimination</span>
+                            </a>
+                            <a href="https://eaid.org" data-url="https://eaid.org" data-name="EAiD — Ethical AI for Human Development" class="partner-card">
+                                <img src="img/new_partners/Ethical Artificial Intelligence for Human Development  EAiD.png" alt="EAiD" class="partner-logo">
+                                <span class="partner-name">EAiD</span>
+                            </a>
+                        </div>
                     </div>
-                    </div>
-                    <button class="partners-arrow" id="partnersNext" aria-label="Next partners"><i class="fa-solid fa-chevron-right"></i></button>
+
+                    <button class="partner-arrow" id="partnerNext" aria-label="Next">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- View All button -->
+                <div class="partners-footer">
+                    <button class="partners-view-all-btn" id="partnersViewAll">
+                        <i class="fa-solid fa-grip"></i> View All Partners
+                    </button>
                 </div>
             </div>
         </section>
+
+        <!-- Partners Modal -->
+        <div class="partners-modal-overlay" id="partnersModalOverlay" role="dialog" aria-modal="true" aria-label="All Partners">
+            <div class="partners-modal">
+                <div class="partners-modal-header">
+                    <h3>All Our <span>Partners</span></h3>
+                    <button class="partners-modal-close" id="partnersModalClose" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="partners-modal-grid" id="partnersModalGrid"></div>
+            </div>
+        </div>
+
+        <!-- Partner Website Preview Modal -->
+        <div class="psite-overlay" id="psiteOverlay" role="dialog" aria-modal="true">
+            <div class="psite-modal">
+                <!-- Browser chrome header -->
+                <div class="psite-header">
+                    <div class="psite-dots">
+                        <div class="psite-dot psite-dot-red"    id="psiteClose"  title="Close"></div>
+                        <div class="psite-dot psite-dot-yellow"></div>
+                        <div class="psite-dot psite-dot-green"></div>
+                    </div>
+                    <img src="" alt="" class="psite-logo-thumb" id="psiteLogoThumb">
+                    <div class="psite-url-bar">
+                        <i class="fa-solid fa-lock"></i>
+                        <span id="psiteUrlText"></span>
+                    </div>
+                    <span class="psite-title-small" id="psiteTitle"></span>
+                    <a href="#" target="_blank" rel="noopener" class="psite-btn-visit" id="psiteOpenTab">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site
+                    </a>
+                    <button class="psite-btn-close" id="psiteCloseBtn" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Screenshot body -->
+                <div class="psite-body">
+                    <div class="psite-loader" id="psiteLoader">
+                        <div class="psite-spinner"></div>
+                        <p>Capturing website preview…</p>
+                        <small>Please wait a moment</small>
+                    </div>
+                    <img class="psite-screenshot" id="psiteScreenshot" src="" alt="Website preview">
+                </div>
+
+                <!-- Footer CTA -->
+                <div class="psite-footer">
+                    <div class="psite-footer-info">
+                        <img src="" alt="" id="psiteFooterLogo">
+                        <span>Preview of <strong id="psiteFooterName"></strong></span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener" class="psite-footer-cta" id="psiteFooterCta">
+                        <i class="fa-solid fa-globe"></i> Open Official Website
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <!-- CONTACT SECTION -->
         <section class="contact-section" id="contact">
@@ -5024,9 +6460,6 @@
         <!-- OUR LOCATION MAP SECTION -->
         <section class="map-section" id="our-location">
             <div class="map-section-header">
-                <div class="map-eyebrow">
-                    <i class="fa-solid fa-location-dot"></i> Find Us
-                </div>
                 <h2>Our Location on <span>G-Map</span></h2>
                 <p>Visit us at the Caritas Rwanda offices in Kigali — we'd love to welcome you.</p>
             </div>
@@ -5358,73 +6791,6 @@
             });
         })();
 
-        // Partners slider
-        (function () {
-            var track    = document.getElementById('partnersTrack');
-            var prevBtn  = document.getElementById('partnersPrev');
-            var nextBtn  = document.getElementById('partnersNext');
-            if (!track || !prevBtn || !nextBtn) return;
-
-            var cards     = track.querySelectorAll('.partner-card');
-            var cardW     = 0;
-            var gap       = 19;
-            var offset    = 0;
-            var maxOffset = 0;
-            var autoTimer = null;
-
-            function calcSizes() {
-                if (cards.length === 0) return;
-                cardW     = cards[0].offsetWidth + gap;
-                maxOffset = Math.max(0, track.scrollWidth - track.parentElement.clientWidth);
-                clamp();
-            }
-
-            function clamp() {
-                offset = Math.max(0, Math.min(offset, maxOffset));
-                track.style.transform = 'translateX(-' + offset + 'px)';
-                prevBtn.disabled = offset <= 0;
-                nextBtn.disabled = offset >= maxOffset;
-            }
-
-            function slideNext() {
-                if (offset >= maxOffset) {
-                    offset = 0; // loop back to start
-                } else {
-                    offset += cardW * 2;
-                }
-                clamp();
-            }
-
-            function slidePrev() {
-                offset -= cardW * 2;
-                clamp();
-            }
-
-            function startAuto() {
-                stopAuto();
-                autoTimer = setInterval(slideNext, 3000);
-            }
-
-            function stopAuto() {
-                if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
-            }
-
-            nextBtn.addEventListener('click', function () {
-                stopAuto(); slideNext(); startAuto();
-            });
-
-            prevBtn.addEventListener('click', function () {
-                stopAuto(); slidePrev(); startAuto();
-            });
-
-            // Pause on hover
-            track.parentElement.addEventListener('mouseenter', stopAuto);
-            track.parentElement.addEventListener('mouseleave', startAuto);
-
-            calcSizes();
-            window.addEventListener('resize', calcSizes);
-            startAuto();
-        })();
 
         // Scroll spy — highlight active nav link based on current section
         (function () {
@@ -5742,50 +7108,7 @@
             observer.observe(impactSection);
         }
 
-        // ── Active nav link via Intersection Observer ──
-        (function () {
-            const navLinks = document.querySelectorAll('nav ul a[href^="#"]');
-
-            const sectionIds = Array.from(navLinks)
-                .map(a => a.getAttribute('href').slice(1))
-                .filter(id => id && id !== 'home' && document.getElementById(id));
-
-            const sections = sectionIds.map(id => document.getElementById(id));
-
-            function setActive(id) {
-                navLinks.forEach(a => {
-                    const matches = a.getAttribute('href') === '#' + id;
-                    a.classList.toggle('nav-active', matches);
-                });
-            }
-
-            function clearActive() {
-                navLinks.forEach(a => a.classList.remove('nav-active'));
-            }
-
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setActive(entry.target.id);
-                    }
-                });
-            }, {
-                rootMargin: '-30% 0px -60% 0px',
-                threshold: 0
-            });
-
-            sections.forEach(s => observer.observe(s));
-
-            // Clear active when back at the top (hero)
-            const heroObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) clearActive();
-                });
-            }, { rootMargin: '0px 0px -20% 0px', threshold: 0.1 });
-
-            const hero = document.getElementById('home');
-            if (hero) heroObserver.observe(hero);
-        })();
+        // Scroll-spy active highlighting handled by data-spy observer above
 
         // Contact form — pill selector
         function selectPill(el) {
@@ -6497,8 +7820,7 @@
             ['.bpc-impact-panel',               'zoom-in',    0,    0],
 
             /* ── Partners ── */
-            ['.partners-section .section-header','fade-up',   0,    0],
-            ['.partner-card',                   'zoom-in',    0,   55],
+            ['.partners-section .partners-header','fade-up',  0,    0],
 
             /* ── Contact ── */
             ['.contact-info-panel',             'fade-left',  0,    0],
@@ -6530,6 +7852,481 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('[data-animate]').forEach(function (el) {
+            observer.observe(el);
+        });
+    })();
+    </script>
+
+    <!-- Partners: auto-scroll + arrow nav + View All modal + iFrame site modal -->
+    <script>
+    (function () {
+        /* ════════════════════════════════════════════
+           DOM refs
+        ════════════════════════════════════════════ */
+        var track          = document.getElementById('partnersTrack');
+        var prevBtn        = document.getElementById('partnerPrev');
+        var nextBtn        = document.getElementById('partnerNext');
+        var viewAllBtn     = document.getElementById('partnersViewAll');
+        var modalOverlay   = document.getElementById('partnersModalOverlay');
+        var modalClose     = document.getElementById('partnersModalClose');
+        var modalGrid      = document.getElementById('partnersModalGrid');
+
+        /* screenshot modal refs are declared inside section 8 below */
+
+        if (!track) return;
+
+        /* ════════════════════════════════════════════
+           1. Clean up scroll-animation attributes
+        ════════════════════════════════════════════ */
+        track.querySelectorAll('[data-animate]').forEach(function (el) {
+            el.removeAttribute('data-animate');
+            el.classList.add('is-visible');
+        });
+
+        /* ════════════════════════════════════════════
+           2. Save original cards (for modals)
+        ════════════════════════════════════════════ */
+        var originalCards = Array.from(track.querySelectorAll('.partner-card'));
+
+        /* ════════════════════════════════════════════
+           3. Duplicate track for seamless loop
+        ════════════════════════════════════════════ */
+        var originalHTML = track.innerHTML;
+        track.innerHTML  = originalHTML + originalHTML;
+        track.querySelectorAll('.partner-card').forEach(function (el) {
+            el.style.opacity = '1';
+            el.removeAttribute('data-animate');
+            el.classList.add('is-visible');
+        });
+
+        /* ════════════════════════════════════════════
+           4. rAF auto-scroll (replaces CSS animation)
+        ════════════════════════════════════════════ */
+        track.style.animation = 'none';
+        var pos         = 0;
+        var speed       = 0.6;
+        var paused      = false;
+        var resumeTimer = null;
+
+        function halfWidth() { return track.scrollWidth / 2; }
+
+        (function tick() {
+            if (!paused) {
+                pos += speed;
+                if (pos >= halfWidth()) pos = 0;
+                track.style.transform = 'translateX(-' + pos + 'px)';
+            }
+            requestAnimationFrame(tick);
+        })();
+
+        /* ════════════════════════════════════════════
+           5. Pause on hover
+        ════════════════════════════════════════════ */
+        var grid = track.closest('.partners-grid');
+        if (grid) {
+            grid.addEventListener('mouseenter', function () { paused = true; });
+            grid.addEventListener('mouseleave', function () { paused = false; });
+        }
+
+        /* ════════════════════════════════════════════
+           6. Arrow buttons
+        ════════════════════════════════════════════ */
+        function manualScroll(dir) {
+            paused = true;
+            track.style.transition = 'transform 0.45s ease';
+            pos += dir * 220;
+            if (pos < 0)            pos = halfWidth() + pos;
+            if (pos >= halfWidth()) pos = pos - halfWidth();
+            track.style.transform = 'translateX(-' + pos + 'px)';
+            clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(function () {
+                track.style.transition = '';
+                paused = false;
+            }, 2200);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', function () { manualScroll(-1); });
+        if (nextBtn) nextBtn.addEventListener('click', function () { manualScroll(1); });
+
+        /* ════════════════════════════════════════════
+           7. "View All" modal
+        ════════════════════════════════════════════ */
+        function openViewAll() {
+            if (!modalGrid) return;
+            modalGrid.innerHTML = '';
+            originalCards.forEach(function (card) {
+                var clone = card.cloneNode(true);
+                clone.style.opacity = '1';
+                clone.removeAttribute('data-animate');
+                clone.classList.add('is-visible');
+                /* Wire iframe-open on cloned cards too */
+                clone.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    closeViewAll();
+                    openSiteModal(clone);
+                });
+                modalGrid.appendChild(clone);
+            });
+            modalOverlay.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+            paused = true;
+        }
+
+        function closeViewAll() {
+            modalOverlay.classList.remove('is-open');
+            document.body.style.overflow = '';
+            paused = false;
+        }
+
+        if (viewAllBtn)   viewAllBtn.addEventListener('click', openViewAll);
+        if (modalClose)   modalClose.addEventListener('click', closeViewAll);
+        if (modalOverlay) modalOverlay.addEventListener('click', function (e) {
+            if (e.target === modalOverlay) closeViewAll();
+        });
+
+        /* ════════════════════════════════════════════
+           8. Partner website SCREENSHOT preview modal
+           Uses thum.io (free, no API key needed) to
+           capture a live screenshot of every partner
+           site — no iframe blocking ever occurs.
+        ════════════════════════════════════════════ */
+        var psiteOverlay    = document.getElementById('psiteOverlay');
+        var psiteClose      = document.getElementById('psiteClose');
+        var psiteCloseBtn   = document.getElementById('psiteCloseBtn');
+        var psiteLoader     = document.getElementById('psiteLoader');
+        var psiteScreenshot = document.getElementById('psiteScreenshot');
+        var psiteTitle      = document.getElementById('psiteTitle');
+        var psiteUrlText    = document.getElementById('psiteUrlText');
+        var psiteOpenTab    = document.getElementById('psiteOpenTab');
+        var psiteLogoThumb  = document.getElementById('psiteLogoThumb');
+        var psiteFooterLogo = document.getElementById('psiteFooterLogo');
+        var psiteFooterName = document.getElementById('psiteFooterName');
+        var psiteFooterCta  = document.getElementById('psiteFooterCta');
+
+        /* Build screenshot URL via thum.io (free, no login) */
+        function screenshotUrl(url) {
+            return 'https://image.thum.io/get/width/1200/crop/800/noanimate/' + url;
+        }
+
+        function openSiteModal(card) {
+            var url  = card.getAttribute('data-url')  || card.getAttribute('href') || '#';
+            var name = card.getAttribute('data-name') || 'Partner Website';
+            var logo = card.querySelector('.partner-logo');
+            var logoSrc = logo ? logo.src : '';
+
+            /* header */
+            if (psiteTitle)      psiteTitle.textContent   = name;
+            if (psiteUrlText)    psiteUrlText.textContent = url.replace(/^https?:\/\//, '');
+            if (psiteOpenTab)    psiteOpenTab.href         = url;
+            if (psiteLogoThumb)  { psiteLogoThumb.src = logoSrc; psiteLogoThumb.alt = name; }
+
+            /* footer */
+            if (psiteFooterLogo) { psiteFooterLogo.src = logoSrc; psiteFooterLogo.alt = name; }
+            if (psiteFooterName) psiteFooterName.textContent = name;
+            if (psiteFooterCta)  psiteFooterCta.href = url;
+
+            /* reset */
+            if (psiteLoader)     psiteLoader.classList.remove('hidden');
+            if (psiteScreenshot) psiteScreenshot.style.display = 'none';
+
+            /* open overlay */
+            psiteOverlay.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+            paused = true;
+
+            /* load screenshot */
+            if (psiteScreenshot) {
+                psiteScreenshot.onload = function () {
+                    if (psiteLoader) psiteLoader.classList.add('hidden');
+                    psiteScreenshot.style.display = 'block';
+                };
+                psiteScreenshot.onerror = function () {
+                    if (psiteLoader) psiteLoader.classList.add('hidden');
+                    /* show a simple fallback placeholder */
+                    psiteScreenshot.style.display = 'block';
+                    psiteScreenshot.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="1200" height="600" fill="%23f5f5f5"/><text x="600" y="280" text-anchor="middle" font-size="32" fill="%23bbb" font-family="sans-serif">Preview not available</text><text x="600" y="330" text-anchor="middle" font-size="18" fill="%23ccc" font-family="sans-serif">Click "Open Official Website" below to visit</text></svg>';
+                };
+                psiteScreenshot.src = screenshotUrl(url);
+            }
+        }
+
+        function closeSiteModal() {
+            if (!psiteOverlay) return;
+            psiteOverlay.classList.remove('is-open');
+            document.body.style.overflow = '';
+            paused = false;
+            /* clear src after transition */
+            setTimeout(function () {
+                if (psiteScreenshot) { psiteScreenshot.src = ''; psiteScreenshot.style.display = 'none'; }
+            }, 400);
+        }
+
+        /* close triggers */
+        if (psiteClose)    psiteClose.addEventListener('click', closeSiteModal);
+        if (psiteCloseBtn) psiteCloseBtn.addEventListener('click', closeSiteModal);
+        if (psiteOverlay)  psiteOverlay.addEventListener('click', function (e) {
+            if (e.target === psiteOverlay) closeSiteModal();
+        });
+
+        /* Escape key */
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            if (psiteOverlay && psiteOverlay.classList.contains('is-open'))  closeSiteModal();
+            if (modalOverlay && modalOverlay.classList.contains('is-open'))  closeViewAll();
+        });
+
+        /* ════════════════════════════════════════════
+           9. Wire click on every partner card
+              (slider + duplicates, via delegation)
+        ════════════════════════════════════════════ */
+        track.addEventListener('click', function (e) {
+            var card = e.target.closest('.partner-card');
+            if (!card) return;
+            e.preventDefault();
+            openSiteModal(card);
+        });
+
+    })();
+    </script>
+
+    <!-- Trending Videos slider -->
+    <script>
+    (function () {
+        var track    = document.getElementById('tvidTrack');
+        var viewport = document.getElementById('tvidViewport');
+        var prevBtn  = document.getElementById('tvidPrev');
+        var nextBtn  = document.getElementById('tvidNext');
+        var dotsWrap = document.getElementById('tvidDots');
+        var bar      = document.getElementById('tvidBar');
+        if (!track) return;
+
+        var cards      = Array.from(track.querySelectorAll('.tvid-card'));
+        var current    = 0;
+        var autoTimer  = null;
+        var barTimer   = null;
+        var AUTO_MS    = 5000;
+        var paused     = false;
+
+        /* ── cards per view ── */
+        function perView() {
+            var w = window.innerWidth;
+            return w <= 600 ? 1 : w <= 900 ? 2 : 3;
+        }
+
+        /* ── max slide index ── */
+        function maxIdx() { return Math.max(0, cards.length - perView()); }
+
+        /* ── card width including gap ── */
+        function stepPx() {
+            var gap = parseInt(getComputedStyle(track).gap) || 24;
+            return cards[0].offsetWidth + gap;
+        }
+
+        /* ── build dots ── */
+        function buildDots() {
+            dotsWrap.innerHTML = '';
+            var total = maxIdx() + 1;
+            for (var i = 0; i < total; i++) {
+                var d = document.createElement('button');
+                d.className = 'tvid-dot' + (i === current ? ' active' : '');
+                d.setAttribute('aria-label', 'Slide ' + (i + 1));
+                (function (idx) { d.addEventListener('click', function () { goTo(idx); restartAuto(); }); })(i);
+                dotsWrap.appendChild(d);
+            }
+        }
+
+        /* ── update dots ── */
+        function updateDots() {
+            Array.from(dotsWrap.querySelectorAll('.tvid-dot')).forEach(function (d, i) {
+                d.classList.toggle('active', i === current);
+            });
+        }
+
+        /* ── go to slide ── */
+        function goTo(idx) {
+            current = Math.max(0, Math.min(idx, maxIdx()));
+            track.style.transform = 'translateX(-' + (current * stepPx()) + 'px)';
+            updateDots();
+            prevBtn.disabled = current === 0;
+            nextBtn.disabled = current === maxIdx();
+        }
+
+        /* ── progress bar ── */
+        function startBar() {
+            clearInterval(barTimer);
+            if (bar) { bar.style.transition = 'none'; bar.style.width = '0%'; }
+            setTimeout(function () {
+                if (bar) { bar.style.transition = 'width ' + AUTO_MS + 'ms linear'; bar.style.width = '100%'; }
+            }, 30);
+        }
+
+        /* ── auto-advance ── */
+        function startAuto() {
+            clearInterval(autoTimer);
+            startBar();
+            autoTimer = setInterval(function () {
+                if (!paused) {
+                    var next = current < maxIdx() ? current + 1 : 0;
+                    goTo(next);
+                    startBar();
+                }
+            }, AUTO_MS);
+        }
+
+        function restartAuto() { startBar(); startAuto(); }
+
+        /* ── entrance animation when section scrolls in ── */
+        var sectionObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                cards.forEach(function (card, i) {
+                    setTimeout(function () {
+                        card.setAttribute('data-in', '1');
+                    }, i * 90);
+                });
+                sectionObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.15 });
+
+        var section = document.getElementById('videos');
+        if (section) sectionObserver.observe(section);
+
+        /* ── arrow buttons ── */
+        prevBtn.addEventListener('click', function () { goTo(current - 1); restartAuto(); });
+        nextBtn.addEventListener('click', function () { goTo(current + 1); restartAuto(); });
+
+        /* ── pause on hover ── */
+        viewport.addEventListener('mouseenter', function () { paused = true; });
+        viewport.addEventListener('mouseleave', function () { paused = false; });
+
+        /* ── touch / swipe ── */
+        var touchX = 0;
+        var touchMoved = false;
+        viewport.addEventListener('touchstart', function (e) {
+            touchX = e.touches[0].clientX;
+            touchMoved = false;
+        }, { passive: true });
+        viewport.addEventListener('touchmove', function () { touchMoved = true; }, { passive: true });
+        viewport.addEventListener('touchend', function (e) {
+            var diff = touchX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { goTo(diff > 0 ? current + 1 : current - 1); restartAuto(); }
+        });
+
+        /* ── resize ── */
+        window.addEventListener('resize', function () { buildDots(); goTo(current); });
+
+        /* ════════════════════════════════
+           YouTube video modal
+        ════════════════════════════════ */
+        var yvidOverlay = document.getElementById('yvidOverlay');
+        var yvidClose   = document.getElementById('yvidClose');
+        var yvidTitle   = document.getElementById('yvidTitle');
+        var yvidFrame   = document.getElementById('yvidFrame');
+        var yvidOpenTab = document.getElementById('yvidOpenTab');
+
+        function openVideo(videoId, title) {
+            if (!yvidOverlay || !videoId) return;
+            var ytWatch = 'https://www.youtube.com/watch?v=' + videoId;
+            var origin  = window.location.origin || 'https://caritasrwanda.org';
+            /* Correct embed format — /embed/ID not /watch?v=ID */
+            var ytEmbed = 'https://www.youtube.com/embed/' + videoId
+                        + '?autoplay=1'
+                        + '&rel=0'
+                        + '&modestbranding=1'
+                        + '&playsinline=1'
+                        + '&enablejsapi=1'
+                        + '&origin=' + encodeURIComponent(origin);
+
+            if (yvidTitle)   yvidTitle.textContent = title || 'Caritas Rwanda';
+            if (yvidOpenTab) yvidOpenTab.href       = ytWatch;
+            /* update fallback watch link */
+            var fallbackLink = document.getElementById('yvidFallbackLink');
+            if (fallbackLink) fallbackLink.href = ytWatch;
+            if (yvidFrame)   yvidFrame.src          = ytEmbed;
+
+            yvidOverlay.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+            paused = true;
+        }
+
+        function closeVideo() {
+            if (!yvidOverlay) return;
+            yvidOverlay.classList.remove('is-open');
+            document.body.style.overflow = '';
+            /* stop video fully by clearing src after close animation */
+            setTimeout(function () {
+                if (yvidFrame) yvidFrame.src = '';
+            }, 380);
+            paused = false;
+        }
+
+        /* card click — use delegation on the whole section */
+        var tvSection = document.getElementById('videos');
+        if (tvSection) {
+            tvSection.addEventListener('click', function (e) {
+                /* ignore if user was swiping */
+                if (touchMoved) { touchMoved = false; return; }
+                var card = e.target.closest('.tvid-card');
+                if (!card) return;
+                e.preventDefault();
+                var vid   = card.getAttribute('data-video-id');
+                var title = card.getAttribute('data-title');
+                if (vid) {
+                    openVideo(vid, title);
+                } else {
+                    window.open('https://www.youtube.com/@caritasrwanda5681', '_blank');
+                }
+            });
+        }
+
+        if (yvidClose)   yvidClose.addEventListener('click', closeVideo);
+        if (yvidOverlay) yvidOverlay.addEventListener('click', function (e) {
+            if (e.target === yvidOverlay) closeVideo();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && yvidOverlay && yvidOverlay.classList.contains('is-open')) closeVideo();
+        });
+
+        /* ── init ── */
+        buildDots();
+        goTo(0);
+        startAuto();
+    })();
+    </script>
+
+    <!-- Impact metrics: animated counter -->
+    <script>
+    (function () {
+        function animateCounter(el, target, duration) {
+            var start     = 0;
+            var startTime = null;
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                /* ease-out cubic */
+                var eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * target);
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.textContent = target;
+                    el.classList.add('counted');
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                var el     = entry.target;
+                var target = parseInt(el.getAttribute('data-target'), 10);
+                animateCounter(el, target, 1800);
+                observer.unobserve(el);
+            });
+        }, { threshold: 0.4 });
+
+        document.querySelectorAll('.impact-num[data-target]').forEach(function (el) {
             observer.observe(el);
         });
     })();
@@ -6639,6 +8436,162 @@
         });
     })();
     </script>
+    <!-- Language Modal -->
+    <div class="lang-modal-overlay" id="langModalOverlay">
+        <div class="lang-modal" role="dialog" aria-modal="true">
+            <div class="lang-modal-head">
+                <span class="lang-modal-title" id="langModalTitle"><i class="fa-solid fa-globe"></i> Select Language</span>
+                <button class="lang-modal-x" id="langModalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="lang-modal-search-row">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input class="lang-modal-search" id="langModalSearch" type="text" placeholder="Search language..." autocomplete="off" spellcheck="false">
+            </div>
+            <div class="lang-modal-body">
+                <div class="lang-modal-grid" id="langModalGrid"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+    (function(){
+  var ov=document.getElementById('langModalOverlay'),xb=document.getElementById('langModalClose'),
+      si=document.getElementById('langModalSearch'),gr=document.getElementById('langModalGrid'),
+      mb=document.getElementById('langMoreBtn'),dd=document.getElementById('langDropdown'),
+      tg=document.getElementById('langToggle'),ht=document.getElementById('langModalTitle');
+  if(!ov||!mb)return;
+  var act='en',selCont=null;
+  var L=[{c:'rw',n:'Kinyarwanda',f:'rw',g:'africa'},{c:'sw',n:'Kiswahili',f:'tz',g:'africa'},{c:'am',n:'Amharic',f:'et',g:'africa'},{c:'lg',n:'Luganda',f:'ug',g:'africa'},{c:'ln',n:'Lingala',f:'cd',g:'africa'},{c:'so',n:'Soomaali',f:'so',g:'africa'},{c:'ha',n:'Hausa',f:'ng',g:'africa'},{c:'zu',n:'isiZulu',f:'za',g:'africa'},{c:'af',n:'Afrikaans',f:'za',g:'africa'},{c:'ti',n:'Tigrinya',f:'er',g:'africa'},{c:'om',n:'Afaan Oromoo',f:'et',g:'africa'},{c:'wo',n:'Wolof',f:'sn',g:'africa'},{c:'yo',n:'Yoruba',f:'ng',g:'africa'},{c:'ig',n:'Igbo',f:'ng',g:'africa'},{c:'tw',n:'Twi',f:'gh',g:'africa'},{c:'xh',n:'isiXhosa',f:'za',g:'africa'},{c:'sn',n:'chiShona',f:'zw',g:'africa'},{c:'ny',n:'Chichewa',f:'mw',g:'africa'},{c:'tn',n:'Setswana',f:'bw',g:'africa'},{c:'st',n:'Sesotho',f:'ls',g:'africa'},{c:'en',n:'English',f:'us',g:'americas'},{c:'es',n:'Espanol',f:'mx',g:'americas'},{c:'pt',n:'Portugues',f:'br',g:'americas'},{c:'ar',n:'Arabic',f:'sa',g:'middleeast'},{c:'he',n:'Hebrew',f:'il',g:'middleeast'},{c:'fa',n:'Persian',f:'ir',g:'middleeast'},{c:'zh',n:'Chinese',f:'cn',g:'asia'},{c:'ja',n:'Japanese',f:'jp',g:'asia'},{c:'ko',n:'Korean',f:'kr',g:'asia'},{c:'hi',n:'Hindi',f:'in',g:'asia'},{c:'ur',n:'Urdu',f:'pk',g:'asia'},{c:'bn',n:'Bengali',f:'bd',g:'asia'},{c:'ta',n:'Tamil',f:'lk',g:'asia'},{c:'te',n:'Telugu',f:'in',g:'asia'},{c:'mr',n:'Marathi',f:'in',g:'asia'},{c:'gu',n:'Gujarati',f:'in',g:'asia'},{c:'pa',n:'Punjabi',f:'in',g:'asia'},{c:'my',n:'Burmese',f:'mm',g:'asia'},{c:'km',n:'Khmer',f:'kh',g:'asia'},{c:'lo',n:'Lao',f:'la',g:'asia'},{c:'tl',n:'Filipino',f:'ph',g:'asia'},{c:'si',n:'Sinhala',f:'lk',g:'asia'},{c:'ne',n:'Nepali',f:'np',g:'asia'},{c:'mn',n:'Mongolian',f:'mn',g:'asia'},{c:'ka',n:'Georgian',f:'ge',g:'asia'},{c:'hy',n:'Armenian',f:'am',g:'asia'},{c:'az',n:'Azerbaijani',f:'az',g:'asia'},{c:'kk',n:'Kazakh',f:'kz',g:'asia'},{c:'uz',n:'Uzbek',f:'uz',g:'asia'},{c:'tg',n:'Tajik',f:'tj',g:'asia'},{c:'ky',n:'Kyrgyz',f:'kg',g:'asia'},{c:'tk',n:'Turkmen',f:'tm',g:'asia'},{c:'ps',n:'Pashto',f:'af',g:'asia'},{c:'vi',n:'Vietnamese',f:'vn',g:'asia'},{c:'id',n:'Indonesian',f:'id',g:'asia'},{c:'ms',n:'Malay',f:'my',g:'asia'},{c:'th',n:'Thai',f:'th',g:'asia'},{c:'fr',n:'Francais',f:'fr',g:'europe'},{c:'it',n:'Italiano',f:'it',g:'europe'},{c:'de',n:'Deutsch',f:'de',g:'europe'},{c:'nl',n:'Nederlands',f:'nl',g:'europe'},{c:'ru',n:'Russian',f:'ru',g:'europe'},{c:'pl',n:'Polski',f:'pl',g:'europe'},{c:'tr',n:'Turkce',f:'tr',g:'europe'},{c:'uk',n:'Ukrainian',f:'ua',g:'europe'},{c:'ro',n:'Romana',f:'ro',g:'europe'},{c:'cs',n:'Cestina',f:'cz',g:'europe'},{c:'hu',n:'Magyar',f:'hu',g:'europe'},{c:'sv',n:'Svenska',f:'se',g:'europe'},{c:'no',n:'Norsk',f:'no',g:'europe'},{c:'da',n:'Dansk',f:'dk',g:'europe'},{c:'fi',n:'Suomi',f:'fi',g:'europe'},{c:'el',n:'Greek',f:'gr',g:'europe'},{c:'sr',n:'Serbian',f:'rs',g:'europe'},{c:'hr',n:'Croatian',f:'hr',g:'europe'},{c:'bs',n:'Bosnian',f:'ba',g:'europe'},{c:'sl',n:'Slovenian',f:'si',g:'europe'},{c:'sk',n:'Slovak',f:'sk',g:'europe'},{c:'bg',n:'Bulgarian',f:'bg',g:'europe'},{c:'mk',n:'Macedonian',f:'mk',g:'europe'},{c:'lv',n:'Latvian',f:'lv',g:'europe'},{c:'lt',n:'Lithuanian',f:'lt',g:'europe'},{c:'et',n:'Estonian',f:'ee',g:'europe'},{c:'is',n:'Icelandic',f:'is',g:'europe'},{c:'ga',n:'Irish',f:'ie',g:'europe'},{c:'cy',n:'Welsh',f:'gb',g:'europe'},{c:'mt',n:'Maltese',f:'mt',g:'europe'},{c:'lb',n:'Luxembourgish',f:'lu',g:'europe'},{c:'be',n:'Belarusian',f:'by',g:'europe'},{c:'sq',n:'Albanian',f:'al',g:'europe'}];
+  var C=[
+    {k:'africa',    n:'Africa',        i:'fa-solid fa-earth-africa',   col:'#16a34a',bg:'rgba(22,163,74,0.13)'},
+    {k:'americas',  n:'Americas',       i:'fa-solid fa-earth-americas', col:'#2563eb',bg:'rgba(37,99,235,0.13)'},
+    {k:'middleeast',n:'Middle East',    i:'fa-solid fa-mosque',         col:'#d97706',bg:'rgba(217,119,6,0.13)'},
+    {k:'asia',      n:'Asia & Pacific', i:'fa-solid fa-earth-asia',     col:'#7c3aed',bg:'rgba(124,58,237,0.13)'},
+    {k:'europe',    n:'Europe',         i:'fa-solid fa-earth-europe',   col:'#0891b2',bg:'rgba(8,145,178,0.13)'}
+  ];
+  function btn(l){
+    return '<button class="lang-modal-item'+(l.c===act?' active':'')+'" data-code="'+l.c+'">'+
+      '<img class="lmi-flag" src="https://flagcdn.com/w40/'+l.f+'.png" alt="'+l.n+'" width="22" height="15">'+
+      '<span class="lmi-text"><span class="lmi-name">'+l.n+'</span><span class="lmi-code">'+l.c.toUpperCase()+'</span></span>'+
+      '</button>';
+  }
+  function attachLangClicks(){
+    gr.querySelectorAll('.lang-modal-item').forEach(function(item){
+      item.addEventListener('click',function(){
+        act=item.dataset.code;
+        if(dd){dd.querySelectorAll('.lang-option').forEach(function(o){o.classList.remove('active');if(o.dataset.lang===act)o.classList.add('active');});}
+        close();
+      });
+    });
+  }
+  function showContinents(){
+    selCont=null;
+    if(ht)ht.innerHTML='<i class="fa-solid fa-globe"></i> Select Language';
+    gr.className='lang-modal-grid lang-cont-grid-wrap';
+    gr.innerHTML=C.map(function(c){
+      var cnt=L.filter(function(l){return l.g===c.k;}).length;
+      return '<button class="lang-cont-card" data-k="'+c.k+'">'+
+        '<div class="lang-cont-icon" style="background:'+c.bg+';color:'+c.col+'"><i class="'+c.i+'"></i></div>'+
+        '<div class="lang-cont-name">'+c.n+'</div>'+
+        '<div class="lang-cont-count">'+cnt+' languages</div>'+
+        '</button>';
+    }).join('');
+    gr.querySelectorAll('.lang-cont-card').forEach(function(card){
+      card.addEventListener('click',function(){selCont=card.dataset.k;showLangs(selCont,'');});
+    });
+  }
+  function showLangs(k,q){
+    var cf=C.filter(function(c){return c.k===k;})[0];
+    var list=L.filter(function(l){return l.g===k;});
+    if(q)list=list.filter(function(l){return l.n.toLowerCase().indexOf(q.toLowerCase())>-1||l.c.toLowerCase().indexOf(q.toLowerCase())>-1;});
+    if(ht)ht.innerHTML='<button class="lang-back-btn" id="langBackBtn"><i class="fa-solid fa-arrow-left"></i></button>'+
+      '<i class="'+cf.i+'" style="color:'+cf.col+'"></i> '+cf.n;
+    var bb=document.getElementById('langBackBtn');
+    if(bb)bb.addEventListener('click',function(){si.value='';showContinents();});
+    gr.className='lang-modal-grid';
+    if(!list.length){gr.innerHTML='<div class="lang-modal-empty">No language found</div>';return;}
+    gr.innerHTML=list.map(btn).join('');
+    attachLangClicks();
+  }
+  function globalSearch(q){
+    var list=L.filter(function(l){return l.n.toLowerCase().indexOf(q.toLowerCase())>-1||l.c.toLowerCase().indexOf(q.toLowerCase())>-1;});
+    if(ht)ht.innerHTML='<i class="fa-solid fa-magnifying-glass"></i> Search results';
+    gr.className='lang-modal-grid';
+    if(!list.length){gr.innerHTML='<div class="lang-modal-empty">No language found</div>';return;}
+    gr.innerHTML=list.map(btn).join('');
+    attachLangClicks();
+  }
+  function open(){
+    if(tg)tg.classList.remove('open');
+    if(dd)dd.classList.remove('open');
+    act=(dd&&dd.querySelector('.lang-option.active'))?dd.querySelector('.lang-option.active').dataset.lang:'en';
+    si.value='';showContinents();
+    ov.classList.add('open');document.body.style.overflow='hidden';
+    setTimeout(function(){si.focus();},100);
+  }
+  function close(){ov.classList.remove('open');document.body.style.overflow='';}
+  mb.addEventListener('click',function(e){e.stopPropagation();open();});
+  xb.addEventListener('click',close);
+  ov.addEventListener('click',function(e){if(e.target===ov)close();});
+  si.addEventListener('input',function(){
+    var q=si.value.trim();
+    if(q){globalSearch(q);}
+    else if(selCont){showLangs(selCont,'');}
+    else{showContinents();}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))close();});
+})()
+    </script>
+
+<!-- ===== Google Translate Engine ===== -->
+<style>
+  /* Suppress Google Translate top banner so layout is not shifted */
+  .goog-te-banner-frame { display: none !important; }
+  body { top: 0 !important; }
+  #goog-gt-tt { display: none !important; }
+  /* Widget element is off-screen (must stay rendered so it initialises) */
+  #google_translate_element { position: fixed; top: -9999px; left: -9999px; }
+</style>
+<div id="google_translate_element"></div>
+<script>
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+      { pageLanguage: "en", autoDisplay: false },
+      "google_translate_element"
+    );
+  }
+
+  /* Map our codes to Google Translate codes where they differ */
+  var _GTMAP = { zh: "zh-CN" };
+
+  window.carTranslate = function (lang) {
+    if (!lang) return;
+    var gc = _GTMAP[lang] || lang;
+    var exp = "expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
+
+    if (lang === "en") {
+      /* Reset: clear the cookie and reload */
+      document.cookie = "googtrans=; " + exp;
+      document.cookie = "googtrans=; " + exp + "; domain=." + location.hostname;
+      location.reload();
+      return;
+    }
+
+    /* Set cookie then reload — widget reads it and auto-translates */
+    document.cookie = "googtrans=/en/" + gc + "; path=/";
+    document.cookie = "googtrans=/en/" + gc + "; path=/; domain=." + location.hostname;
+    location.reload();
+  };
+
+  /* Intercept clicks on globe dropdown AND the full modal grid */
+  document.addEventListener("click", function (e) {
+    var opt = e.target.closest(".lang-option");
+    if (opt && opt.dataset.lang) { window.carTranslate(opt.dataset.lang); return; }
+    var mi = e.target.closest(".lang-modal-item");
+    if (mi && mi.dataset.code) { window.carTranslate(mi.dataset.code); }
+  });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- ===== End Google Translate ===== -->
 </body>
 
 </html>
