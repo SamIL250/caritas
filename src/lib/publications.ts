@@ -157,6 +157,10 @@ export function publicationPrimaryHref(row: Pick<PublicationRow, "file_url" | "e
   return "#";
 }
 
+export function publicationDetailHref(row: Pick<PublicationRow, "slug">): string {
+  return `/publications/${encodeURIComponent(row.slug)}`;
+}
+
 export function publicationHasPdf(row: Pick<PublicationRow, "file_url">): boolean {
   return Boolean(row.file_url?.trim());
 }

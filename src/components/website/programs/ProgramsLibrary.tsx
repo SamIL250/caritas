@@ -9,12 +9,18 @@ import {
   type ProgramCategoryRow,
   type ProgramRow,
 } from "@/lib/programs";
+import {
+  publicationDetailHref,
+  publicationPrimaryHref,
+  type PublicationRow,
+} from "@/lib/publications";
 
 type FilterKey = "all" | string;
 
 type Props = {
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
+  successStories: PublicationRow[];
 };
 
 function pillarSlugFromHash(): string {
@@ -22,7 +28,7 @@ function pillarSlugFromHash(): string {
   return window.location.hash.replace(/^#/, "").trim();
 }
 
-export default function ProgramsLibrary({ programs, categories }: Props) {
+export default function ProgramsLibrary({ programs, categories, successStories }: Props) {
   const [filter, setFilter] = useState<FilterKey>("all");
 
   const sortedCategories = useMemo(
@@ -54,6 +60,15 @@ export default function ProgramsLibrary({ programs, categories }: Props) {
   }, [programs]);
 
   const featured = useMemo(() => programs.find((p) => p.featured) ?? null, [programs]);
+
+  const storiesByDepartment = useMemo(() => {
+    return successStories.reduce<Record<string, PublicationRow[]>>((memo, story) => {
+      if (!story.department_id) return memo;
+      const key = story.department_id;
+      memo[key] = [...(memo[key] ?? []), story];
+      return memo;
+    }, {});
+  }, [successStories]);
 
   const showSection = (slug: string) => filter === "all" || filter === slug;
   const totalCount = programs.length;
@@ -96,9 +111,10 @@ export default function ProgramsLibrary({ programs, categories }: Props) {
           const items = programs
             .filter((p) => p.category === cat.slug)
             .filter((p) => !(featured && filter === "all" && p.id === featured.id));
+          const stories = storiesByDepartment[cat.id] ?? [];
           const visible = showSection(cat.slug);
           if (!visible) return null;
-          if (!items.length) {
+          if (!items.length && !stories.length) {
             if (filter === "all") return null;
             return (
               <section className="prog-section" id={cat.slug} key={cat.id}>
@@ -112,11 +128,26 @@ export default function ProgramsLibrary({ programs, categories }: Props) {
           return (
             <section className="prog-section" id={cat.slug} key={cat.id}>
               <CategoryHead cat={cat} />
-              <div className="prog-article-grid">
-                {items.map((p) => (
-                  <ProgramCard key={p.id} row={p} cat={cat} />
-                ))}
-              </div>
+              {items.length ? (
+                <div className="prog-article-grid">
+                  {items.map((p) => (
+                    <ProgramCard key={p.id} row={p} cat={cat} />
+                  ))}
+                </div>
+              ) : null}
+              {stories.length ? (
+                <div className="prog-publication-grid">
+                  <div className="prog-section-subhead">
+                    <h3>Success stories</h3>
+                    <p>Impact narratives tied to this pillar.</p>
+                  </div>
+                  <div className="prog-article-grid">
+                    {stories.map((story) => (
+                      <PublicationCard key={story.id} row={story} />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </section>
           );
         })}
@@ -222,6 +253,38 @@ function ProgramCard({ row, cat }: { row: ProgramRow; cat: ProgramCategoryRow })
         </div>
         <div className="prog-article-title">{row.title}</div>
         {row.excerpt ? <p className="prog-article-excerpt">{row.excerpt}</p> : null}
+        <div className="prog-article-link">
+          Read more <i className="fa-solid fa-arrow-right" aria-hidden />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function PublicationCard({ row }: { row: PublicationRow }) {
+  const thumb = row.cover_image_url?.trim() ?? "";
+  const title = row.title;
+  const excerpt = row.excerpt?.trim() ?? "";
+  const published = formatProgramDate(row.published_at);
+
+  return (
+    <Link href={publicationDetailHref(row)} className="prog-article-card">
+      <div className="prog-article-img">
+        {thumb ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={encodeProgramAssetUrl(thumb)} alt={row.cover_image_alt || title} />
+        ) : null}
+        <div className="prog-article-tag">
+          <i className="fa-solid fa-star" aria-hidden /> Success story
+        </div>
+      </div>
+      <div className="prog-article-body">
+        <div className="prog-article-meta">
+          <i className="fa-solid fa-calendar" aria-hidden />
+          {published || "Recently"}
+        </div>
+        <div className="prog-article-title">{title}</div>
+        {excerpt ? <p className="prog-article-excerpt">{excerpt}</p> : null}
         <div className="prog-article-link">
           Read more <i className="fa-solid fa-arrow-right" aria-hidden />
         </div>

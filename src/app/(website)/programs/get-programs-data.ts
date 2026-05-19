@@ -4,6 +4,7 @@ import type {
   ProgramCategoryRow,
   ProgramRow,
 } from "@/lib/programs";
+import type { PublicationRow } from "@/lib/publications";
 
 export type ProgramsPageChrome = {
   eyebrow: string;
@@ -75,12 +76,24 @@ export async function fetchProgramCategories(): Promise<ProgramCategoryRow[]> {
   return (data ?? []) as ProgramCategoryRow[];
 }
 
+export async function fetchPublishedSuccessStories(): Promise<PublicationRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("publications")
+    .select("*")
+    .eq("status", "published")
+    .eq("category", "success_story")
+    .order("published_at", { ascending: false });
+  return (data ?? []) as PublicationRow[];
+}
+
 export async function resolveProgramsPublicPagePayload(): Promise<{
   seoTitle: string;
   seoDescription: string;
   chrome: ProgramsPageChrome;
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
+  successStories: PublicationRow[];
 }> {
   const supabase = await createClient();
 
@@ -91,12 +104,13 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
     .maybeSingle();
   const page = pageRow as { id: string; meta: Json | null } | null;
 
-  const [heroRes, programs, categories] = await Promise.all([
+  const [heroRes, programs, categories, successStories] = await Promise.all([
     page?.id
       ? supabase.from("hero_content").select("*").eq("page_id", page.id).maybeSingle()
       : Promise.resolve({ data: null }),
     fetchPublishedPrograms(),
     fetchProgramCategories(),
+    fetchPublishedSuccessStories(),
   ]);
 
   const heroRow = (heroRes?.data ?? null) as Record<string, unknown> | null;
@@ -111,6 +125,8 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
     chrome,
     programs,
     categories,
+    successStories,
+    // success stories are surfaced via department-related content on program pages.
   };
 }
 

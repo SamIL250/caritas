@@ -228,6 +228,35 @@
   gap: 2rem 1.75rem;
 }
 
+.prog-publication-grid {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(13, 27, 42, 0.08);
+}
+
+.prog-section-subhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.prog-section-subhead h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+  color: #0d1b2a;
+}
+
+.prog-section-subhead p {
+  margin: 0;
+  color: #5a6a7a;
+  font-size: 0.92rem;
+  max-width: 720px;
+}
+
 .prog-article-card {
   background: transparent;
   border: 1px solid transparent;

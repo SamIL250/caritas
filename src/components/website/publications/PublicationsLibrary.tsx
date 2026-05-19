@@ -49,7 +49,7 @@ export default function PublicationsLibrary({ publications, categories }: Props)
   const sortedCategories = useMemo(
     () =>
       [...categories]
-        .filter((c) => c.slug !== "strategic_plan")
+        .filter((c) => c.slug !== "strategic_plan" && c.slug !== "success_story")
         .sort((a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label)),
     [categories],
   );
@@ -71,7 +71,7 @@ export default function PublicationsLibrary({ publications, categories }: Props)
     return strat.find((p) => p.featured) ?? strat[0] ?? null;
   }, [publications]);
 
-  const totalCount = publications.length;
+  const totalCount = publications.filter((p) => p.category !== "success_story").length;
   const showSection = (slug: string) => filter === "all" || filter === slug;
 
   return (
