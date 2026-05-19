@@ -166,7 +166,7 @@ export default function HeroSection({
             >
               {/* Hero Badge */}
               {slide.badge_text && (
-                <div className="inline-block px-10 py-3.5 rounded border border-white/20 text-[11px] md:text-[12px] font-medium text-white uppercase tracking-[0.2em] mb-8">
+                <div className="inline-block px-14 py-4 rounded border border-white/20 text-[12px] md:text-[13px] font-medium text-white uppercase tracking-[0.22em] mb-8">
                   {slide.badge_text}
                 </div>
               )}
@@ -190,7 +190,7 @@ export default function HeroSection({
                   slide.cta_url === '#donate' ? (
                     <button 
                       onClick={() => openModal()}
-                      className="inline-flex items-center gap-3 px-12 py-5 bg-primary-orange text-white text-[0.88rem] font-medium tracking-wide rounded-lg hover:bg-primary-orange-hover transition-colors"
+                      className="inline-flex items-center gap-3 px-16 py-6 bg-primary-orange text-white text-[0.9rem] font-medium tracking-wide rounded-lg hover:bg-primary-orange-hover transition-colors"
                     >
                       {slide.cta_text}
                       <span className="text-sm">→</span>
@@ -198,7 +198,7 @@ export default function HeroSection({
                   ) : (
                     <Link 
                       href={slide.cta_url}
-                      className="inline-flex items-center gap-3 px-12 py-5 bg-primary-orange text-white text-[0.88rem] font-medium tracking-wide rounded-lg hover:bg-primary-orange-hover transition-colors"
+                      className="inline-flex items-center gap-3 px-16 py-6 bg-primary-orange text-white text-[0.9rem] font-medium tracking-wide rounded-lg hover:bg-primary-orange-hover transition-colors"
                     >
                       {slide.cta_text}
                       <span className="text-sm">→</span>
@@ -210,14 +210,14 @@ export default function HeroSection({
                   slide.secondary_cta_url === '#donate' ? (
                     <button 
                       onClick={() => openModal()}
-                      className="inline-flex items-center gap-3 px-12 py-5 bg-transparent border border-white/25 text-white text-[0.88rem] font-medium tracking-wide rounded-lg hover:bg-white/10 transition-colors"
+                      className="inline-flex items-center gap-3 px-16 py-6 bg-transparent border border-white/25 text-white text-[0.9rem] font-medium tracking-wide rounded-lg hover:bg-white/10 transition-colors"
                     >
                       {slide.secondary_cta_text}
                     </button>
                   ) : (
                     <Link 
                       href={slide.secondary_cta_url || '#'}
-                      className="inline-flex items-center gap-3 px-12 py-5 bg-transparent border border-white/25 text-white text-[0.88rem] font-medium tracking-wide rounded-lg hover:bg-white/10 transition-colors"
+                      className="inline-flex items-center gap-3 px-16 py-6 bg-transparent border border-white/25 text-white text-[0.9rem] font-medium tracking-wide rounded-lg hover:bg-white/10 transition-colors"
                     >
                       {slide.secondary_cta_text}
                     </Link>

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { faSolidIconClass } from "@/lib/fontawesome";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { faSolidIconClass } from "@/lib/fontawesome";
 import {
   parseYouTubeId,
   youTubeEmbedUrl,
@@ -140,54 +140,43 @@ function VideoThumb({
 export default function VideoGallerySection({
   anchor_id = "videos",
   eyebrow,
-  eyebrow_icon = "fa-circle-play",
+  eyebrow_icon,
   heading_lead,
   heading_accent,
   subtitle,
   layout = "spotlight",
-  show_categories = true,
-  all_label = "All videos",
+  show_categories,
+  all_label,
   cta_label,
   cta_url,
   videos,
 }: VideoGallerySectionProps) {
   const items = useMemo(() => normalize(videos), [videos]);
-
-  const categories = useMemo(() => {
-    const seen = new Set<string>();
-    const out: string[] = [];
-    for (const v of items) {
-      if (!v.category) continue;
-      const key = v.category.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(v.category);
-    }
-    return out;
-  }, [items]);
-
-  const [activeCategory, setActiveCategory] = useState<string>("__all__");
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
+  const eyebrowIc = faSolidIconClass(eyebrow_icon);
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    items.forEach((v) => { if (v.category) set.add(v.category); });
+    return Array.from(set).sort();
+  }, [items]);
+
   const filtered = useMemo(() => {
-    if (activeCategory === "__all__") return items;
-    return items.filter(
-      (v) => v.category.toLowerCase() === activeCategory.toLowerCase(),
-    );
+    if (!activeCategory) return items;
+    return items.filter((v) => v.category === activeCategory);
   }, [items, activeCategory]);
 
-  // Spotlight layout uses the first filtered video as featured.
-  const featured = filtered[0] ?? items[0] ?? null;
+  const featured = filtered[0] ?? null;
   const queue = filtered.slice(1);
 
   useEffect(() => {
     setPlayingId(null);
-  }, [activeCategory, layout]);
+  }, [layout]);
 
   if (!items.length) return null;
-
-  const eyebrowIc = faSolidIconClass(eyebrow_icon);
 
   const scrollCarousel = (dir: "prev" | "next") => {
     const el = carouselRef.current;
@@ -201,53 +190,49 @@ export default function VideoGallerySection({
     <section
       className={`vg-section vg-section--${layout}`}
       id={anchor_id || undefined}
-      aria-labelledby="vg-section-title"
+
     >
       <div className="vg-shell">
-        <header className="vg-header">
-          {eyebrow ? (
-            <div className="vg-eyebrow">
-              {eyebrowIc ? <i className={eyebrowIc} aria-hidden /> : null}
-              <span>{eyebrow}</span>
-            </div>
-          ) : null}
-          {(heading_lead || heading_accent) && (
-            <h2 className="vg-title" id="vg-section-title">
-              {heading_lead ? <span>{heading_lead} </span> : null}
-              {heading_accent ? <span className="vg-title-accent">{heading_accent}</span> : null}
-            </h2>
-          )}
-          {subtitle ? <p className="vg-subtitle">{subtitle}</p> : null}
+        {/* ── Header block (left-aligned) ── */}
+        {(eyebrow || heading_lead || heading_accent || subtitle) && (
+          <header className="vg-header">
+            {eyebrow && (
+              <div className="vg-eyebrow">
+                {eyebrowIc ? <i className={eyebrowIc} aria-hidden /> : null}
+                <span>{eyebrow}</span>
+              </div>
+            )}
+            {(heading_lead || heading_accent) && (
+              <h2 className="vg-title">
+                {heading_lead && <span className="vg-title--lead">{heading_lead}</span>}
+                {heading_accent && <span className="vg-title--accent">{heading_accent}</span>}
+              </h2>
+            )}
+            {subtitle && <p className="vg-subtitle">{subtitle}</p>}
 
-          {show_categories && categories.length > 0 ? (
-            <div className="vg-chips" role="tablist" aria-label="Filter videos by category">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeCategory === "__all__"}
-                className={`vg-chip${activeCategory === "__all__" ? " is-active" : ""}`}
-                onClick={() => setActiveCategory("__all__")}
-              >
-                {all_label}
-              </button>
-              {categories.map((cat) => {
-                const isActive = activeCategory.toLowerCase() === cat.toLowerCase();
-                return (
+            {show_categories && categories.length > 0 && (
+              <div className="vg-categories">
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory(null)}
+                  className={`vg-cat-chip${activeCategory === null ? " is-active" : ""}`}
+                >
+                  {all_label || "All"}
+                </button>
+                {categories.map((cat) => (
                   <button
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
                     key={cat}
-                    className={`vg-chip${isActive ? " is-active" : ""}`}
+                    type="button"
                     onClick={() => setActiveCategory(cat)}
+                    className={`vg-cat-chip${activeCategory === cat ? " is-active" : ""}`}
                   >
                     {cat}
                   </button>
-                );
-              })}
-            </div>
-          ) : null}
-        </header>
+                ))}
+              </div>
+            )}
+          </header>
+        )}
 
         {/* ─── SPOTLIGHT ─────────────────────────────────────────── */}
         {layout === "spotlight" && featured ? (
