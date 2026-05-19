@@ -12,7 +12,6 @@ type SubKey = 'about' | 'programs' | 'publications' | 'more';
 
 export default function WebsiteHeader() {
   const { openModal } = useDonation();
-  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState<SubKey | null>(null);
   const pathname = usePathname();
@@ -20,14 +19,6 @@ export default function WebsiteHeader() {
   const closeNav = useCallback(() => {
     setMobileMenuOpen(false);
     setOpenSub(null);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -55,10 +46,10 @@ export default function WebsiteHeader() {
     setOpenSub((s) => (s === key ? null : key));
   };
 
-  const navClass = ['navbar-container', scrolled && 'scrolled'].filter(Boolean).join(' ');
+  const navClass = 'navbar-container';
 
   return (
-    <header className={['site-header', scrolled && 'scrolled'].filter(Boolean).join(' ')}>
+    <header className="site-header">
       <div className={navClass}>
         <Link href="/" className="logo" onClick={closeNav}>
           <img src="/img/logo_bg.png" alt="Caritas Rwanda" />

@@ -179,9 +179,9 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
               <div>
                 &copy; {new Date().getFullYear()} {s.bottom.orgName}. All rights reserved.
               </div>
-              {s.bottom.showDeveloperCredit && s.bottom.developerCredit.trim() ? (
+              {s.bottom.showDeveloperCredit ? (
                 <div className="ft-developer">
-                  Designed & developed by <strong>{s.bottom.developerCredit}</strong>
+                  <a href="https://lerony.com" target="_blank" rel="noopener noreferrer">Lerony</a>
                 </div>
               ) : null}
             </div>
