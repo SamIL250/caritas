@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ImagePlus, Loader2 } from "lucide-react";
+import { ArrowLeft, ImagePlus, Loader2, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -37,6 +37,19 @@ export function CommunityCampaignForm({ mode, categories, campaign }: Props) {
   const bodyRef = useRef<NewsRichTextEditorHandle>(null);
   const [featuredPickerOpen, setFeaturedPickerOpen] = useState(false);
   const [featuredUrl, setFeaturedUrl] = useState(campaign?.featured_image_url ?? "");
+  const [galleryPickerOpen, setGalleryPickerOpen] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<{ url: string; alt?: string }[]>(
+    () => {
+      if (!campaign?.gallery_images) return [];
+      const raw = campaign.gallery_images;
+      if (!Array.isArray(raw)) return [];
+      return raw
+        .filter((x: unknown): x is { url: string; alt?: string } =>
+          Boolean(x) && typeof (x as { url: string }).url === "string",
+        )
+        .map((x) => ({ url: x.url, alt: x.alt }));
+    },
+  );
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [title, setTitle] = useState(campaign?.title ?? "");
@@ -121,10 +134,11 @@ export function CommunityCampaignForm({ mode, categories, campaign }: Props) {
     const donation_modal_description_html =
       String(fd.get("donation_modal_description_html") || "").trim() || null;
 
-    const gallery_images =
-      campaign?.gallery_images && typeof campaign.gallery_images === "object"
-        ? campaign.gallery_images
-        : [];
+    const gallery_images = galleryItems.map((g, i) => ({
+      url: g.url,
+      alt: g.alt || null,
+      sort_order: i,
+    }));
 
     const row = {
       slug: slugClean,
@@ -330,6 +344,95 @@ export function CommunityCampaignForm({ mode, categories, campaign }: Props) {
             Featured image alt text
           </label>
           <Input id="cc-alt" name="image_alt" defaultValue={campaign?.image_alt ?? ""} />
+        </div>
+
+        {/* ── Gallery images ───────────────────────────────────────── */}
+        <div className="space-y-2">
+          <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+            Gallery images (optional)
+          </span>
+          <p className="text-[11px] leading-snug text-stone-500">
+            Multiple images displayed in the donation modal left panel. Drag to reorder.
+          </p>
+
+          {galleryItems.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {galleryItems.map((item, index) => (
+                <div
+                  key={`${item.url}-${index}`}
+                  className="group relative overflow-hidden rounded-xl border border-stone-200 bg-stone-50"
+                >
+                  <div className="aspect-[4/3] w-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.url}
+                      alt={item.alt || ""}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="flex gap-1">
+                      {index > 0 ? (
+                        <button
+                          type="button"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-white/90 text-stone-700 shadow-sm hover:bg-white"
+                          onClick={() => {
+                            const next = [...galleryItems];
+                            [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                            setGalleryItems(next);
+                          }}
+                          aria-label="Move image up"
+                        >
+                          <ChevronUp size={14} />
+                        </button>
+                      ) : null}
+                      {index < galleryItems.length - 1 ? (
+                        <button
+                          type="button"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-white/90 text-stone-700 shadow-sm hover:bg-white"
+                          onClick={() => {
+                            const next = [...galleryItems];
+                            [next[index], next[index + 1]] = [next[index + 1], next[index]];
+                            setGalleryItems(next);
+                          }}
+                          aria-label="Move image down"
+                        >
+                          <ChevronDown size={14} />
+                        </button>
+                      ) : null}
+                    </div>
+                    <button
+                      type="button"
+                      className="flex h-7 w-7 items-center justify-center rounded-md bg-white/90 text-red-600 shadow-sm hover:bg-white"
+                      onClick={() => {
+                        setGalleryItems((prev) => prev.filter((_, i) => i !== index));
+                      }}
+                      aria-label="Remove image"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <span className="absolute left-2 top-2 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-bold text-white">
+                    {index + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-stone-200 bg-stone-50/50 px-4 py-10">
+              <p className="text-sm text-stone-400">No gallery images yet. Add images to appear in the donation modal.</p>
+            </div>
+          )}
+
+          <Button
+            type="button"
+            variant="secondary"
+            className="h-9 w-fit text-xs"
+            onClick={() => setGalleryPickerOpen(true)}
+          >
+            <ImagePlus size={16} className="mr-1.5" />
+            {galleryItems.length > 0 ? "Add more images" : "Add images from library…"}
+          </Button>
         </div>
 
         <div className="space-y-1">
@@ -575,6 +678,21 @@ export function CommunityCampaignForm({ mode, categories, campaign }: Props) {
         onSelect={(m) => {
           const url = Array.isArray(m) ? m[0]?.url : m.url;
           if (url) setFeaturedUrl(url);
+        }}
+      />
+
+      <MediaPicker
+        isOpen={galleryPickerOpen}
+        onClose={() => setGalleryPickerOpen(false)}
+        multi
+        onSelect={(m) => {
+          const items = Array.isArray(m) ? m : [m];
+          const newItems = items
+            .filter((i) => Boolean(i?.url))
+            .map((i) => ({ url: i.url, alt: i.filename || "" }));
+          if (newItems.length > 0) {
+            setGalleryItems((prev) => [...prev, ...newItems]);
+          }
         }}
       />
     </form>

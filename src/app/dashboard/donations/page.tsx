@@ -20,10 +20,15 @@ import {
   DollarSign,
   ImagePlus,
   BarChart2,
+  ChevronUp,
+  ChevronDown,
+  Trash2,
+  Images,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { createDonationSession } from "@/app/actions/stripe";
 import { recordManualDonation } from "@/app/actions/donations";
+import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import {
   PAYMENT_METHOD_LABELS,
   type DonationPaymentMethod,
@@ -111,6 +116,12 @@ export default function DonationsPage() {
   });
 
   const [showLegacyDonationRows, setShowLegacyDonationRows] = useState(false);
+
+  /* ── Gallery editor state ───────────────────────────────── */
+  const [galleryCampaign, setGalleryCampaign] = useState<any | null>(null);
+  const [galleryItems, setGalleryItems] = useState<{ url: string; alt?: string }[]>([]);
+  const [galleryPickerOpen, setGalleryPickerOpen] = useState(false);
+  const [gallerySaving, setGallerySaving] = useState(false);
 
   useEffect(() => {
     void loadData();
@@ -223,6 +234,64 @@ export default function DonationsPage() {
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : String(err));
       setIsSubmitting(false);
+    }
+  }
+
+  /* ── Gallery editor ───────────────────────────────────────── */
+  function openGalleryEditor(campaign: any) {
+    const raw = campaign.gallery_images;
+    const items: { url: string; alt?: string }[] = [];
+    if (Array.isArray(raw)) {
+      for (const x of raw) {
+        if (x && typeof x.url === "string") {
+          items.push({ url: x.url, alt: x.alt });
+        }
+      }
+    }
+    setGalleryItems(items);
+    setGalleryCampaign(campaign);
+  }
+
+  async function saveGallery() {
+    if (!galleryCampaign) return;
+    setGallerySaving(true);
+    try {
+      const gallery_images = galleryItems.map((g, i) => ({
+        url: g.url,
+        alt: g.alt || null,
+        sort_order: i,
+      }));
+      const { error } = await supabase
+        .from("community_campaigns")
+        .update({ gallery_images })
+        .eq("id", galleryCampaign.id);
+
+      if (error) {
+        setConfirmConfig({
+          title: "Error saving gallery",
+          description: error.message,
+          onConfirm: () => setConfirmOpen(false),
+        });
+        setConfirmOpen(true);
+      } else {
+        setCampaigns((prev) =>
+          prev.map((c) =>
+            c.id === galleryCampaign.id ? { ...c, gallery_images } : c,
+          ),
+        );
+        setGalleryCampaign(null);
+        setGalleryItems([]);
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setConfirmConfig({
+        title: "Error",
+        description: msg,
+        onConfirm: () => setConfirmOpen(false),
+      });
+      setConfirmOpen(true);
+    } finally {
+      setGallerySaving(false);
     }
   }
 
@@ -412,12 +481,22 @@ export default function DonationsPage() {
                             {(campaign.excerpt || "").trim() || "No short excerpt yet."}
                           </p>
                         </div>
-                        <Link
-                          href={`/dashboard/community-campaigns/${campaign.id}`}
-                          className="shrink-0 rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-primary)] hover:bg-stone-50"
-                        >
-                          Edit
-                        </Link>
+                        <div className="flex shrink-0 gap-1">
+                          <button
+                            type="button"
+                            onClick={() => openGalleryEditor(campaign)}
+                            className="rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 hover:bg-stone-50"
+                          >
+                            <Images size={14} className="inline-block align-text-top mr-1" />
+                            Gallery
+                          </button>
+                          <Link
+                            href={`/dashboard/community-campaigns/${campaign.id}`}
+                            className="rounded-md px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-primary)] hover:bg-stone-50"
+                          >
+                            Edit
+                          </Link>
+                        </div>
                       </div>
                     </div>
 
@@ -705,6 +784,142 @@ export default function DonationsPage() {
           </div>
         </div>
       </Modal>
+
+      {/* ── Gallery editor modal ───────────────────────────────── */}
+      <Modal
+        isOpen={Boolean(galleryCampaign)}
+        onClose={() => !gallerySaving && setGalleryCampaign(null)}
+        title={galleryCampaign ? `Gallery: ${galleryCampaign.title}` : "Gallery"}
+      >
+        <div className="space-y-6">
+          <p className="text-sm text-stone-500">
+            Manage images displayed in the donation modal left panel. Drag to reorder.
+          </p>
+
+          {galleryItems.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {galleryItems.map((item, index) => (
+                <div
+                  key={`${item.url}-${index}`}
+                  className="group relative overflow-hidden rounded-xl border border-stone-200 bg-stone-50"
+                >
+                  <div className="aspect-[4/3] w-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.url}
+                      alt={item.alt || ""}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="flex gap-1">
+                      {index > 0 ? (
+                        <button
+                          type="button"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-white/90 text-stone-700 shadow-sm hover:bg-white"
+                          onClick={() => {
+                            const next = [...galleryItems];
+                            [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                            setGalleryItems(next);
+                          }}
+                          aria-label="Move image up"
+                        >
+                          <ChevronUp size={14} />
+                        </button>
+                      ) : null}
+                      {index < galleryItems.length - 1 ? (
+                        <button
+                          type="button"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-white/90 text-stone-700 shadow-sm hover:bg-white"
+                          onClick={() => {
+                            const next = [...galleryItems];
+                            [next[index], next[index + 1]] = [next[index + 1], next[index]];
+                            setGalleryItems(next);
+                          }}
+                          aria-label="Move image down"
+                        >
+                          <ChevronDown size={14} />
+                        </button>
+                      ) : null}
+                    </div>
+                    <button
+                      type="button"
+                      className="flex h-7 w-7 items-center justify-center rounded-md bg-white/90 text-red-600 shadow-sm hover:bg-white"
+                      onClick={() => {
+                        setGalleryItems((prev) => prev.filter((_, i) => i !== index));
+                      }}
+                      aria-label="Remove image"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <span className="absolute left-2 top-2 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-bold text-white">
+                    {index + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-stone-200 bg-stone-50/50 px-4 py-10">
+              <p className="text-sm text-stone-400">
+                No gallery images yet. Add images to appear in the donation modal.
+              </p>
+            </div>
+          )}
+
+          <div className="flex justify-center">
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-9 text-xs"
+              onClick={() => setGalleryPickerOpen(true)}
+              disabled={gallerySaving}
+            >
+              <ImagePlus size={16} className="mr-1.5" />
+              {galleryItems.length > 0 ? "Add more images" : "Add images from library…"}
+            </Button>
+          </div>
+
+          <div className="flex justify-end gap-3 border-t border-stone-100 pt-6">
+            <Button
+              variant="secondary"
+              type="button"
+              disabled={gallerySaving}
+              onClick={() => {
+                setGalleryCampaign(null);
+                setGalleryItems([]);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              type="button"
+              disabled={gallerySaving}
+              onClick={() => void saveGallery()}
+            >
+              {gallerySaving ? <Loader2 className="animate-spin" size={16} /> : null}
+              {gallerySaving ? "Saving…" : "Save gallery"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* ── Gallery MediaPicker ──────────────────────────────── */}
+      <MediaPicker
+        isOpen={galleryPickerOpen}
+        onClose={() => setGalleryPickerOpen(false)}
+        multi
+        onSelect={(m) => {
+          const items = Array.isArray(m) ? m : [m];
+          const newItems = items
+            .filter((i) => Boolean(i?.url))
+            .map((i) => ({ url: i.url, alt: i.filename || "" }));
+          if (newItems.length > 0) {
+            setGalleryItems((prev) => [...prev, ...newItems]);
+          }
+        }}
+      />
 
       <Modal
         isOpen={showAmountModal}

@@ -20,6 +20,12 @@ import type { Database } from "@/types/database.types";
 
 import type { EnrichedModerationComment } from "@/lib/community-campaign-moderation-data";
 
+/* ── Helper ───────────────────────────────────────────── */
+function galleryThumbs(raw: unknown): { url: string }[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((x): x is { url: string } => Boolean(x) && typeof (x as { url: string }).url === "string");
+}
+
 type CampaignRow = Database["public"]["Tables"]["community_campaigns"]["Row"];
 type CategoryRow = Database["public"]["Tables"]["community_campaign_categories"]["Row"];
 
@@ -245,6 +251,32 @@ function CampaignsTab({
                     <td className="px-4 py-3">
                       <div className="font-semibold text-stone-900">{c.title}</div>
                       <div className="mt-0.5 font-mono text-[11px] text-stone-500">/campaigns/{c.slug}</div>
+                      {(() => {
+                        const thumbs = galleryThumbs(c.gallery_images);
+                        if (thumbs.length === 0) return null;
+                        const show = thumbs.slice(0, 3);
+                        const remaining = thumbs.length - 3;
+                        return (
+                          <div className="mt-2 flex items-center gap-1">
+                            {show.map((t, i) => (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                key={i}
+                                src={t.url}
+                                alt=""
+                                className="h-7 w-7 rounded-md border border-stone-200 object-cover"
+                                title={`Gallery image ${i + 1}`}
+                              />
+                            ))}
+                            {remaining > 0 ? (
+                              <span className="flex h-7 w-7 items-center justify-center rounded-md border border-stone-200 bg-stone-50 text-[10px] font-bold text-stone-400">
+                                +{remaining}
+                              </span>
+                            ) : null}
+                            <span className="ml-1 text-[10px] text-stone-400">{thumbs.length} image{thumbs.length > 1 ? 's' : ''}</span>
+                          </div>
+                        );
+                      })()}
                     </td>
                     <td className="px-4 py-3">
                       <Badge variant={published ? "success" : "warning"}>{c.status}</Badge>
