@@ -11,7 +11,7 @@ import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 type SubKey = 'about' | 'programs' | 'publications' | 'more';
 
 export default function WebsiteHeader() {
-  const { openModal } = useDonation();
+  const { isModalOpen, openModal, closeModal } = useDonation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState<SubKey | null>(null);
   const pathname = usePathname();
@@ -51,7 +51,7 @@ export default function WebsiteHeader() {
   return (
     <header className="site-header">
       <div className={navClass}>
-        <Link href="/" className="logo" onClick={closeNav}>
+        <Link href="/" className="logo" onClick={() => { closeNav(); closeModal(); }}>
           <img src="/img/logo_bg.png" alt="Caritas Rwanda" />
         </Link>
 
@@ -79,7 +79,7 @@ export default function WebsiteHeader() {
         <nav id="site-primary-nav" className={mobileMenuOpen ? 'nav--open' : undefined} aria-label="Primary">
           <ul>
             <li>
-              <Link href="/" className={isActive('/') ? 'current' : ''} onClick={closeNav}>
+              <Link href="/" className={isActive('/') ? 'current' : ''} onClick={() => { closeNav(); closeModal(); }}>
                 Home
               </Link>
             </li>
@@ -222,7 +222,11 @@ export default function WebsiteHeader() {
               type="button"
               onClick={() => {
                 closeNav();
-                openModal();
+                if (isModalOpen) {
+                  closeModal();
+                } else {
+                  openModal();
+                }
               }}
               className="btn btn-donate nav-donate"
             >

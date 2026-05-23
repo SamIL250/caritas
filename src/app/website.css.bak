@@ -305,75 +305,27 @@
             flex-shrink: 0;
         }
 
-        @keyframes rotatingGradient {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .btn-donate {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.55rem 1.5rem;
+            background: #8c2208;
+            color: #ffffff;
+            padding: 0.45rem 1.2rem;
             font-size: 0.82rem;
-            border-radius: 50px;
+            border-radius: 999px;
             font-weight: 600;
             border: none;
             min-width: 0;
             cursor: pointer;
-            font-family: 'Poppins', sans-serif;
+            transition: background 0.2s ease;
             letter-spacing: 0.3px;
             flex-shrink: 0;
-            color: #ffffff;
-            z-index: 1;
-            overflow: hidden;
-            background: transparent;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-            transform: translateY(0);
-        }
-
-        /* Animated gradient border ring — cycles through vibrant warm tones */
-        .btn-donate::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: inherit;
-            background: conic-gradient(from 0deg, #8c2208, #d66b3d, #f0c070, #f5dcaa, #f0c070, #d66b3d, #8c2208);
-            z-index: -2;
-            animation: rotatingGradient 3s linear infinite;
-        }
-
-        /* Inner solid fill — creates the 3px border gap */
-        .btn-donate::after {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            border-radius: inherit;
-            background: #8c2208;
-            z-index: -1;
-            transition: background 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
         .btn-donate:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(140, 34, 8, 0.4);
-        }
-
-        .btn-donate:hover::before {
-            animation-duration: 1.5s;
-        }
-
-        .btn-donate:hover::after {
-            background: #701a05;
+            background: #6f1a06;
         }
 
         .btn-donate:active {
-            transform: translateY(0);
-            box-shadow: none;
-        }
-
-        .btn-donate:active::after {
             background: #5a1505;
         }
 
@@ -6243,13 +6195,13 @@
         ══════════════════════════════════════════ */
         .donation-modal-overlay {
             position: fixed;
-            top: 68px;
+            top: 0;
             left: 0;
             width: 100%;
-            height: calc(100% - 68px);
+            height: 100%;
             background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(20px);
-            z-index: 2500;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -6306,121 +6258,7 @@
             overflow: hidden;
         }
 
-        /* Image Panel (Left 60%) */
-        .donation-modal-image-panel {
-            width: 60%;
-            min-width: 0;
-            min-height: 0;
-            position: relative;
-            overflow: hidden;
-            background: #f8f4f2;
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .dimg-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 90px;
-            gap: 8px;
-            padding: 8px;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            inset: 0;
-        }
-
-        .dimg {
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .dimg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .dimg:hover img {
-            transform: scale(1.08);
-        }
-
-        .dimg-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #e8ddd6, #d6c8bf);
-        }
-
-        .dimg-sm {
-            grid-column: span 1;
-            grid-row: span 1;
-        }
-
-        .dimg-tall {
-            grid-column: span 1;
-            grid-row: span 2;
-        }
-
-        .dimg-wide {
-            grid-column: span 2;
-            grid-row: span 1;
-        }
-
-        .dimg-lg {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        .dimg-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(248,244,242,0.35) 0%, transparent 50%, rgba(248,244,242,0.1) 100%);
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .dimg-quote {
-            position: absolute;
-            bottom: 2rem;
-            left: 2rem;
-            right: 2rem;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .dimg-quote-icon {
-            font-size: 2.5rem;
-            line-height: 1;
-            color: #c4a998;
-            display: block;
-            font-family: Georgia, serif;
-        }
-
-        .dimg-quote p {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #6b5a4e;
-            line-height: 1.5;
-            margin: 0;
-            max-width: 80%;
-            text-shadow: 0 1px 3px rgba(255,255,255,0.8);
-        }
-
-        @media (max-width: 900px) {
-            .donation-modal-image-panel {
-                display: none;
-            }
-            .donation-modal-form-area {
-                width: 100% !important;
-                max-width: 500px;
-                margin: 0 auto;
-            }
-        }
-
-        /* Legacy sidebar (hidden) */
+        /* Sidebar */
         .donation-modal-sidebar {
             width: 38%;
             background: linear-gradient(rgba(122, 21, 21, 0.92), rgba(26, 0, 0, 0.98)), url('/img/hero_bg.jpg') center/cover no-repeat;
@@ -6495,12 +6333,12 @@
             flex-shrink: 0;
         }
 
-        /* Form Area (Right 40%) */
+        /* Form Area */
         .donation-modal-form-area {
-            width: 40%;
+            flex: 1 1 auto;
             min-width: 0;
             min-height: 0;
-            padding: 4rem 3rem;
+            padding: 4rem 3.5rem;
             padding-top: max(4rem, env(safe-area-inset-top, 0px) + 2.5rem);
             overflow-y: auto;
             overflow-x: hidden;
@@ -6514,8 +6352,8 @@
         .form-steps-indicator {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
+            gap: 1.25rem;
+            margin-bottom: 3rem;
         }
 
         .step-dot {
@@ -6545,11 +6383,11 @@
         }
 
         .step-title {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 900;
             color: #1a1a1a;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.03em;
         }
 
         .step-title span {
@@ -6557,26 +6395,26 @@
         }
 
         .step-description {
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 1rem;
-            line-height: 1.4;
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
         }
 
         /* Campaign Selection */
         .campaign-selection {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
         }
 
         .campaign-card {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.8rem;
-            border-radius: 10px;
+            gap: 1.25rem;
+            padding: 1.25rem;
+            border-radius: 16px;
             border: 2px solid #f1f3f5;
             background: #ffffff;
             cursor: pointer;
@@ -6598,9 +6436,9 @@
         }
 
         .campaign-card .card-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             background: #f8f9fa;
             display: flex;
             align-items: center;
@@ -6615,22 +6453,22 @@
         }
 
         .campaign-card .card-text h4 {
-            font-size: 0.9rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: #1a1a1a;
-            margin-bottom: 0.1rem;
+            margin-bottom: 0.15rem;
         }
 
         .campaign-card .card-text p {
-            font-size: 0.75rem;
-            color: #888;
-            line-height: 1.35;
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.4;
         }
 
         .card-check {
             position: absolute;
-            top: 0.65rem;
-            right: 0.65rem;
+            top: 1rem;
+            right: 1rem;
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -6649,16 +6487,16 @@
         .presets-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
         .preset-btn {
-            padding: 0.75rem;
-            border-radius: 10px;
+            padding: 1.25rem;
+            border-radius: 14px;
             border: 2px solid #f1f3f5;
             background: #ffffff;
-            font-size: 0.85rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: #1a1a1a;
             cursor: pointer;
@@ -6686,12 +6524,12 @@
 
         .custom-amount-input {
             position: relative;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .custom-amount-input .input-prefix {
             position: absolute;
-            left: 1rem;
+            left: 1.25rem;
             top: 50%;
             transform: translateY(-50%);
             font-size: 0.9rem;
@@ -6701,10 +6539,10 @@
 
         .custom-amount-input input {
             width: 100%;
-            padding: 0.8rem 0.8rem 0.8rem 3rem;
-            border-radius: 10px;
+            padding: 1.25rem 1.25rem 1.25rem 4rem;
+            border-radius: 14px;
             border: 2px solid #f1f3f5;
-            font-size: 0.85rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #1a1a1a;
             outline: none;
@@ -6719,9 +6557,9 @@
         /* Actions */
         .btn-donation-next, .btn-donation-pay {
             width: 100%;
-            padding: 0.9rem;
+            padding: 1.25rem;
             border-radius: 100px;
-            font-size: 0.85rem;
+            font-size: 1.05rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -7115,14 +6953,11 @@
 
         /* Clean donation page-style overrides */
         .donation-modal-overlay {
-            top: 68px !important;
-            height: calc(100% - 68px) !important;
             background: #ffffff !important;
             backdrop-filter: none !important;
             padding: 0 !important;
             align-items: stretch !important;
             justify-content: stretch !important;
-            z-index: 2500 !important;
         }
 
         .donation-modal-container {
@@ -7169,32 +7004,27 @@
         }
 
         .donation-modal-content {
-            display: flex;
+            display: block;
             max-height: none;
             overflow: auto;
         }
 
-        .donation-modal-image-panel {
-            width: 60%;
-            min-width: 0;
-            min-height: 0;
-            position: relative;
-            overflow: hidden;
-            background: #f8f4f2;
-            display: flex;
-            align-items: flex-end;
+        .donation-modal-sidebar {
+            display: none;
         }
 
         .donation-modal-form-area {
-            width: 40%;
-            padding: 2.5rem 2rem 3rem;
+            max-width: 880px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 3rem;
             background: #ffffff;
         }
 
         .form-step {
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
 
         .form-steps-indicator {
@@ -7356,25 +7186,17 @@
             }
 
             .donation-modal-form-area {
-                width: 100% !important;
-                padding: 1.5rem 1.25rem 2rem;
-            }
-
-            .donation-modal-image-panel {
-                display: none;
+                padding: 1.25rem 1rem 2rem;
             }
         }
 
         /* Clean donation flow (full-page light UI; hides legacy sidebar) — aligns with redesigned modal */
         .donation-modal-overlay {
-            top: 68px !important;
-            height: calc(100% - 68px) !important;
             background: #ffffff !important;
             backdrop-filter: none !important;
             padding: 0 !important;
             align-items: stretch !important;
             justify-content: stretch !important;
-            z-index: 2500 !important;
         }
 
         .donation-modal-container {
@@ -7421,32 +7243,27 @@
         }
 
         .donation-modal-content {
-            display: flex;
+            display: block;
             max-height: none;
             overflow: auto;
         }
 
-        .donation-modal-image-panel {
-            width: 60%;
-            min-width: 0;
-            min-height: 0;
-            position: relative;
-            overflow: hidden;
-            background: #f8f4f2;
-            display: flex;
-            align-items: flex-end;
+        .donation-modal-sidebar {
+            display: none;
         }
 
         .donation-modal-form-area {
-            width: 40%;
-            padding: 2.5rem 2rem 3rem;
+            max-width: 880px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 3rem;
             background: #ffffff;
         }
 
         .form-step {
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
 
         .form-steps-indicator {
@@ -7608,12 +7425,7 @@
             }
 
             .donation-modal-form-area {
-                width: 100% !important;
-                padding: 1.5rem 1.25rem 2rem;
-            }
-
-            .donation-modal-image-panel {
-                display: none;
+                padding: 1.25rem 1rem 2rem;
             }
         }
 

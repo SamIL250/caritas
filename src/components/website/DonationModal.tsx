@@ -137,6 +137,31 @@ export default function DonationModal({
     [selectedCampaign]
   );
 
+  /** Collect ALL gallery images from every campaign for the left image panel */
+  const allCampaignImages = useMemo(() => {
+    const images: { url: string; alt: string; id: string }[] = [];
+    for (const c of campaigns) {
+      const g = parseGallery(c.gallery_images);
+      const name = String(c.name || '');
+      for (const img of g) {
+        if (img.url) {
+          images.push({ url: img.url, alt: img.alt || name, id: `${String(c.id)}-${images.length}` });
+        }
+      }
+    }
+    if (images.length === 0 && !loading) {
+      /* Placeholder gradient tiles when no campaigns have images */
+      for (let i = 0; i < 6; i++) {
+        images.push({
+          url: '',
+          alt: 'Support our mission',
+          id: `placeholder-${i}`,
+        });
+      }
+    }
+    return images;
+  }, [campaigns, loading]);
+
   const freqChoices = useMemo(() => {
     if (!selectedCampaign?.id) {
       return frequencyChoicesForCampaign(null);
@@ -169,10 +194,23 @@ export default function DonationModal({
   const mtnText = useMemo(() => getMtnInstructions(), []);
   const airtelText = useMemo(() => getAirtelInstructions(), []);
 
+  /** Helper: lock body scroll while preserving scrollbar width to prevent layout shift */
+  function lockBodyScroll() {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+  }
+  function unlockBodyScroll() {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  }
+
   /* eslint-disable react-hooks/set-state-in-effect -- sync reset when sheet opens; fetches campaigns */
   useEffect(() => {
     if (!isOpen) {
-      document.body.style.overflow = "unset";
+      unlockBodyScroll();
       const t = setTimeout(() => {
         setPhase("pick");
         setAmount("");
@@ -193,7 +231,7 @@ export default function DonationModal({
       return () => clearTimeout(t);
     }
 
-    document.body.style.overflow = "hidden";
+    lockBodyScroll();
     setPhase("pick");
     setAmount("");
     setDonorName("");
@@ -280,6 +318,13 @@ export default function DonationModal({
     }
     if (phase === "detail") {
       setPhase("pick");
+    }
+  }
+
+  function goToStep(target: FlowStep) {
+    setError(null);
+    if (flowSteps.indexOf(target) < flowSteps.indexOf(phase)) {
+      setPhase(target);
     }
   }
 
@@ -395,6 +440,17 @@ export default function DonationModal({
   const plainFallback =
     typeof selectedCampaign?.description === "string" ? selectedCampaign.description : "";
 
+  /** Return a CSS class that gives each grid image a different block size */
+  function imgSizeClass(index: number): string {
+    const mod = index % 9;
+    if (mod === 0 || mod === 5) return 'dimg dimg-tall';
+    if (mod === 1 || mod === 6) return 'dimg dimg-wide';
+    if (mod === 2 || mod === 7) return 'dimg dimg-lg';
+    return 'dimg dimg-sm';
+  }
+
+  const displayImages = allCampaignImages.slice(0, 12);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -405,30 +461,59 @@ export default function DonationModal({
           exit={{ opacity: 0 }}
         >
           <div className="donation-modal-container">
-            <div className="donation-modal-topbar">
-              <button
-                type="button"
-                className="donation-modal-top-back"
-                onClick={onClose}
-                disabled={submitting}
-                aria-label="Close donation form"
-              >
-                <ChevronLeft size={18} />
-                Back
-              </button>
-            </div>
-
             <div className="donation-modal-content">
-              <div className="donation-modal-form-area">
-                <div className="form-steps-indicator donation-form-steps-wide">
-                  {Array.from({ length: stepDisplayTotal }, (_, i) => (
-                    <div key={i} className="donation-step-track">
-                      <div className={`step-dot ${stepDisplayIndex >= i + 1 ? "active" : ""}`}>
-                        {i + 1}
-                      </div>
-                      {i < stepDisplayTotal - 1 ? <div className="step-line" /> : null}
+              {/* ─── Image Panel (Left 60%) ─── */}
+              <div className="donation-modal-image-panel">
+                <div className="dimg-grid">
+                  {displayImages.map((img, i) => (
+                    <div key={img.id} className={imgSizeClass(i)}>
+                      {img.url ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={img.url} alt={img.alt} />
+                      ) : (
+                        <div className="dimg-placeholder" />
+                      )}
                     </div>
                   ))}
+                </div>
+                <div className="dimg-overlay" />
+                <div className="dimg-quote">
+                  <span className="dimg-quote-icon">"</span>
+                  <p>Your generosity transforms lives every day.</p>
+                </div>
+              </div>
+
+              {/* ─── Form Area (Right 40%) ─── */}
+              <div className="donation-modal-form-area">
+                <div className="form-steps-indicator donation-form-steps-wide">
+                  {Array.from({ length: stepDisplayTotal }, (_, i) => {
+                    const canClick = i < stepDisplayIndex - 1;
+                    return (
+                      <div
+                        key={i}
+                        className={`donation-step-track${canClick ? " is-clickable" : ""}`}
+                        onClick={canClick ? () => goToStep(flowSteps[i]) : undefined}
+                        role={canClick ? "button" : undefined}
+                        tabIndex={canClick ? 0 : undefined}
+                        onKeyDown={
+                          canClick
+                            ? (e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  goToStep(flowSteps[i]);
+                                }
+                              }
+                            : undefined
+                        }
+                        aria-label={canClick ? `Go back to step ${i + 1}` : undefined}
+                      >
+                        <div className={`step-dot ${stepDisplayIndex >= i + 1 ? "active" : ""}`}>
+                          {i + 1}
+                        </div>
+                        {i < stepDisplayTotal - 1 ? <div className="step-line" /> : null}
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {phase === "pick" && (
