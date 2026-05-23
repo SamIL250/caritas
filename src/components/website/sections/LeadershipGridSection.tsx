@@ -149,6 +149,11 @@ export default function LeadershipGridSection({
   watermark_text = "SINCE 1959",
   groups = [],
 }: Props) {
+  const wm =
+    typeof watermark_text === "string" && watermark_text.trim() !== ""
+      ? watermark_text.trim()
+      : "SINCE 1959";
+
   // If no dynamic groups are provided, render the original static markup
   // taken from the legacy `original-website/about.html` so the design
   // matches the source exactly.
@@ -352,10 +357,6 @@ export default function LeadershipGridSection({
   }
 
   const eyebrowIc = faSolidIconClass(eyebrow_icon);
-  const wm =
-    typeof watermark_text === "string" && watermark_text.trim() !== ""
-      ? watermark_text.trim()
-      : "SINCE 1959";
 
   return (
     <section
