@@ -68,6 +68,7 @@ export default function PageHeroSection({
         } as React.CSSProperties
       }
     >
+      <div className="page-hero-container">
       <div className="page-hero-inner">
         {eyebrow ? (
           <div className="hero-eyebrow">
@@ -102,6 +103,7 @@ export default function PageHeroSection({
             })}
           </nav>
         ) : null}
+      </div>
       </div>
     </section>
   );

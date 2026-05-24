@@ -30,7 +30,7 @@ export const LEADERSHIP_CHRONICLE_DEFAULT_CONTENT = {
           year: "1997",
           name: "H.E. Mgr. Thaddée Ntihinyurwa",
           role: "Chairperson",
-          photo_url: "/img/Chairperson/Myr Thaddée Ntihinyurwa.png",
+          photo_url: "",
         },
         {
           year: "2022",
@@ -52,7 +52,6 @@ export const LEADERSHIP_CHRONICLE_DEFAULT_CONTENT = {
           role: "Secretary General",
           photo_url: "/img/Secretary Generals/Arthur Dejemeppe.jpg",
         },
-        { era_gap: true, era_label: "Founding\nEra" },
         {
           year: "1972",
           name: "Father Roger Pien",
@@ -77,7 +76,6 @@ export const LEADERSHIP_CHRONICLE_DEFAULT_CONTENT = {
           role: "Secretary General",
           photo_url: "/img/Secretary Generals/Descombers.jpg",
         },
-        { era_gap: true, era_label: "Modern\nEra" },
         {
           year: "1995",
           name: "Father Callixte Twagirayezu",

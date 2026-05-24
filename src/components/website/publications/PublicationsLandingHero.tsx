@@ -16,6 +16,7 @@ export default function PublicationsLandingHero({
 }: PublicationsLandingHeroProps) {
   return (
     <section className="pub-hero">
+      <div className="pub-hero-container">
       <div className="pub-hero-inner">
         <div className="pub-hero-eyebrow">
           <i className="fa-solid fa-book-open" aria-hidden />
@@ -31,6 +32,7 @@ export default function PublicationsLandingHero({
           <span aria-hidden>›</span>
           <span>Publications</span>
         </nav>
+      </div>
       </div>
     </section>
   );

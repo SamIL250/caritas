@@ -3535,7 +3535,7 @@ function SectionForm({
           </p>
           {renderField('Eyebrow', 'eyebrow', 'text')}
           {renderField('Title (before accent)', 'heading', 'text')}
-          {renderField('Title accent (e.g. G-Map)', 'heading_accent', 'text')}
+          {renderField('Title accent (e.g. The Map)', 'heading_accent', 'text')}
           {renderField('Intro line', 'subtext', 'textarea', { rows: 3 })}
           <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Left map (street view)</p>
           {renderField('Card title', 'map_a_title', 'text')}

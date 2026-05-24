@@ -116,7 +116,7 @@ export default function DioceseMapSectionClient(raw: Props) {
     const pt = map.latLngToContainerPoint(marker.getLatLng());
     const mw = shell.offsetWidth;
     const mh = shell.offsetHeight;
-    const cw = 300;
+    const cw = 340;
     const ch = 370;
     const gap = 16;
     const showAbove = pt.y - ch - gap >= 8;

@@ -3,7 +3,7 @@ import React from "react";
 const DEFAULTS = {
   eyebrow: "Find Us",
   heading: "Our Location on",
-  heading_accent: "G-Map",
+  heading_accent: "The Map",
   subtext:
     "Visit us at the Caritas Rwanda offices in Kigali — we'd love to welcome you.",
   map_a_title: "Street View",

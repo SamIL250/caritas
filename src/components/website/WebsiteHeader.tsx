@@ -209,9 +209,9 @@ export default function WebsiteHeader() {
                   <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
                     <i className="fa-solid fa-book-open"></i> Publications
                   </Link>
-                  <a href="#contact" onClick={closeNav}>
+                  <Link href="/contact" onClick={closeNav}>
                     <i className="fa-solid fa-envelope"></i> Contact
-                  </a>
+                  </Link>
                 </div>
               </div>
             </li>

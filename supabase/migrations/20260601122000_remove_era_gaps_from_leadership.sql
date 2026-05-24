@@ -1,4 +1,5 @@
--- Horizontal leadership chronicle (Chairpersons + Secretary Generals) — matches original-web/about.html.
+-- Remove era gaps from Secretary Generals timeline (Founding Era / Modern Era)
+-- and ensure Thaddée Ntihinyurwa has no photo (matching about.html reference).
 
 UPDATE public.sections s
 SET

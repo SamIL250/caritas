@@ -16,6 +16,7 @@ export default function ProgramsLandingHero({
 }: ProgramsLandingHeroProps) {
   return (
     <section className="prog-hero">
+      <div className="prog-hero-container">
       <div className="prog-hero-inner">
         <div className="prog-hero-eyebrow">
           <i className="fa-solid fa-grid-2" aria-hidden />
@@ -31,6 +32,7 @@ export default function ProgramsLandingHero({
           <span aria-hidden>›</span>
           <span>Programs</span>
         </nav>
+      </div>
       </div>
     </section>
   );

@@ -40,12 +40,19 @@
   right: -60px;
 }
 
+.pub-hero-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
 .pub-hero-inner {
   position: relative;
   z-index: 2;
-  max-width: 1160px;
-  margin: 0 auto;
-  padding: 3.25rem 2rem;
+  max-width: 760px;
+  margin: 0;
+  padding: 3.25rem 0;
 }
 
 .pub-hero-eyebrow {

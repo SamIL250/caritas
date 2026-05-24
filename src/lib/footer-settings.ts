@@ -67,7 +67,7 @@ export const FOOTER_DEFAULTS: FooterSettings = {
     accent: "Faith, Hope",
     lineAfter: " & Love.",
     ctaLabel: "Get In Touch",
-    ctaHref: "#contact",
+    ctaHref: "/contact",
   },
   brand: {
     mission:
@@ -89,6 +89,7 @@ export const FOOTER_DEFAULTS: FooterSettings = {
     { label: "Support our Mission", href: "#", behavior: "donate" },
     { label: "Annual Reports", href: "/reports", behavior: "nav" },
     { label: "Careers", href: "/careers", behavior: "nav" },
+    { label: "Contact Us", href: "/contact", behavior: "nav" },
   ],
   programColumn: {
     heading: "Our Programs",

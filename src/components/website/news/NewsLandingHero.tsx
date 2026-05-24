@@ -30,6 +30,7 @@ export default function NewsLandingHero({
           : undefined
       }
     >
+      <div className="news-hero-container">
       <div className="news-hero-inner">
         <div className="hero-eyebrow">
           <i className="fa-solid fa-newspaper" aria-hidden />
@@ -43,6 +44,7 @@ export default function NewsLandingHero({
         </h1>
         <p className="news-hero-intro">{intro}</p>
         {children}
+      </div>
       </div>
     </section>
   );

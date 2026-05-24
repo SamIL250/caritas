@@ -198,7 +198,7 @@ export default function LeadershipGridSection({
 
                   <div className="ldr-node">
                     <div className="ldr-photo">
-                      <img src={encodePublicSrc("img/Chairperson/Myr%20Thadd%C3%A9e%20Ntihinyurwa.png")} alt="H.E. Mgr. Thaddée Ntihinyurwa" style={{objectPosition: 'center top'}} />
+                      <div className="ldr-photo-placeholder"><i className="fa-solid fa-user-tie" aria-hidden /></div>
                     </div>
                     <div className="ldr-connector" />
                     <div className="ldr-dot" />
