@@ -126,7 +126,7 @@ export default function HeroSection({
   const { openModal } = useDonation();
   
   return (
-    <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-stone-900 font-poppins">
+    <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-stone-900 font-poppins px-0">
       {/* overflow-hidden clips sliding layers so nothing flashes the fallback bg between slides */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="sync" initial={false} custom={slideDir}>
@@ -154,7 +154,7 @@ export default function HeroSection({
       {/* Radial Glow (Matches original .hero::before) */}
       <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_20%_50%,rgba(140,34,8,0.15)_0%,transparent_50%)] pointer-events-none" />
       
-      <div className="container relative z-10 mx-auto px-6 md:px-12">
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div className={`flex flex-col max-w-4xl ${alignmentClass}`}>
           <AnimatePresence mode="wait" initial={false} custom={slideDir}>
             <motion.div
@@ -167,15 +167,18 @@ export default function HeroSection({
               transition={heroSlideTransition}
               className={`flex flex-col ${alignmentClass}`}
             >
-              {/* Hero Badge */}
+              {/* Hero Badge — clean, professional, no flashy glass */}
               {slide.badge_text && (
-                <div className="inline-block px-6 py-2 rounded-full !bg-white/10 !border !border-white/20 !backdrop-blur-xl !text-[10px] md:!text-[11px] !font-black !text-white !uppercase !tracking-[0.3em] !mb-8 !shadow-xl !shadow-black/20">
-                  {slide.badge_text}
+                <div className="flex items-center gap-2.5 !mb-6 sm:!mb-8">
+                  <span className="w-1.5 h-1.5 !bg-primary-orange !rounded-full !flex-shrink-0" />
+                  <span className="!text-[9px] sm:!text-[10px] md:!text-[11px] !font-semibold !text-white/70 !uppercase !tracking-[0.15em] sm:!tracking-[0.25em]">
+                    {slide.badge_text}
+                  </span>
                 </div>
               )}
 
               <h1 
-                className="!text-[1.5rem] sm:!text-4xl md:!text-5xl lg:!text-6xl !font-black !leading-[1] !mb-8 !tracking-[-0.03em]"
+                className="!text-[1.2rem] sm:!text-4xl md:!text-5xl lg:!text-6xl !font-black !leading-[1] !mb-6 sm:!mb-8 !tracking-[-0.03em]"
                 style={{ 
                   color: displayTextColor,
                   textShadow: '0 10px 40px rgba(0,0,0,0.5)',
@@ -186,7 +189,7 @@ export default function HeroSection({
               </h1>
               
               <p 
-                className="!text-[1.1rem] md:!text-l !leading-[1.6] !mb-12 !max-w-2xl !opacity-90 !font-medium"
+                className="!text-[0.9rem] sm:!text-[1.1rem] md:!text-l !leading-[1.6] !mb-10 sm:!mb-12 !max-w-2xl !opacity-90 !font-medium"
                 style={{ 
                   color: displayTextColor,
                   textShadow: '0 2px 10px rgba(0,0,0,0.3)'
