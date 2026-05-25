@@ -179,6 +179,14 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
               <div>
                 &copy; {new Date().getFullYear()} {s.bottom.orgName}. All rights reserved.
               </div>
+              <a
+                href="https://caritas-rwanda.vercel.app/dashboard"
+                className="ml-2 text-[10px] tracking-wider opacity-20 transition-opacity hover:opacity-70"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Dashboard
+              </a>
               {s.bottom.showDeveloperCredit ? (
                 <div className="ft-developer">
                   <a href="https://lerony.com" target="_blank" rel="noopener noreferrer">Lerony</a>
