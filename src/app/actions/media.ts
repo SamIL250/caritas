@@ -3,12 +3,23 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { MEDIA_QUOTA_BYTES } from "@/lib/media-quota";
+import { uploadToCloudinary, destroyFromCloudinary, getCloudinaryUsage } from "@/lib/cloudinary";
 import type { Database } from "@/types/database.types";
 
 export type MediaRow = Database["public"]["Tables"]["media"]["Row"];
 export type MediaFolderRow = Database["public"]["Tables"]["media_folders"]["Row"];
 
 export async function getMediaUsage(): Promise<{ usedBytes: number; maxBytes: number }> {
+  // Try to get real usage from Cloudinary first.
+  const cloudUsage = await getCloudinaryUsage();
+  if (cloudUsage?.storage) {
+    return {
+      usedBytes: cloudUsage.storage.usage,
+      maxBytes: cloudUsage.storage.limit,
+    };
+  }
+
+  // Fallback: sum size_bytes from the local media table.
   const supabase = await createClient();
   const { data, error } = await supabase.from("media").select("size_bytes").is("deleted_at", null);
 
@@ -75,16 +86,10 @@ export async function uploadMedia(formData: FormData) {
     typeof folderRaw === "string" && folderRaw.length > 0 ? folderRaw : null;
 
   const filename = file.name;
-  const fileExt = filename.split(".").pop();
-  const filePath = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-
-  const { error: uploadError } = await supabase.storage.from("public_media").upload(filePath, file);
-
-  if (uploadError) throw new Error(uploadError.message);
-
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("public_media").getPublicUrl(filePath);
+  const cloudResult = await uploadToCloudinary(file);
+  const filePath = cloudResult.publicId;
+  const publicUrl = cloudResult.url;
+  const actualSize = cloudResult.bytes;
 
   const {
     data: { user },
@@ -94,7 +99,7 @@ export async function uploadMedia(formData: FormData) {
     filename,
     storage_path: filePath,
     url: publicUrl,
-    size_bytes: file.size,
+    size_bytes: actualSize,
     mime_type: file.type,
     uploaded_by: user?.id ?? null,
     folder_id,
@@ -193,9 +198,7 @@ export async function purgeMedia(mediaId: string) {
   if (fetchErr) throw new Error(fetchErr.message);
   if (!row?.storage_path) throw new Error("Media not found.");
 
-  const { error: storageErr } = await supabase.storage.from("public_media").remove([row.storage_path]);
-
-  if (storageErr) throw new Error(storageErr.message);
+  await destroyFromCloudinary(row.storage_path);
 
   const { error: delErr } = await supabase.from("media").delete().eq("id", mediaId);
 

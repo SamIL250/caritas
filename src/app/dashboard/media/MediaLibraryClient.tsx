@@ -32,6 +32,7 @@ import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { formatBytes } from "@/lib/media-quota";
+import { cloudinaryUrl } from "@/lib/cloudinary-url";
 import type { MediaFolderRow, MediaRow } from "@/app/actions/media";
 import {
   createMediaFolder,
@@ -83,10 +84,10 @@ function DroppableFolderShell({
         e.preventDefault();
         onFolderContextMenu?.(e);
       }}
-      className={`relative flex flex-col items-start gap-2 overflow-hidden rounded-xl border bg-white p-4 text-left shadow-sm transition-all duration-200 ease-out hover:border-[var(--color-primary)]/40 active:scale-[0.99] ${
+      className={`relative flex flex-col items-start gap-2 overflow-hidden rounded-xl border bg-white p-4 text-left transition-all duration-200 ease-out hover:border-[var(--color-primary)]/40 active:scale-[0.99] ${
         isOver
-          ? "scale-[1.03] border-[var(--color-primary)] ring-4 ring-[var(--color-primary)]/30 shadow-lg shadow-[var(--color-primary)]/10"
-          : "border-stone-200"
+          ? "scale-[1.03] border-[var(--color-primary)] ring-4 ring-[var(--color-primary)]/30"
+          : "border-stone-100"
       }`}
     >
       {isOver ? (
@@ -136,10 +137,10 @@ function DraggableFileCard({
       className={`group touch-none ${trashMode ? "" : "cursor-grab active:cursor-grabbing"}`}
       onContextMenu={(e) => onCtx(e, item)}
     >
-      <div className="relative overflow-hidden rounded-2xl border border-stone-200/80 bg-white p-2 shadow-sm transition-all hover:border-[var(--color-primary)]/35">
+      <div className="relative overflow-hidden rounded-2xl border border-stone-100 bg-white p-2 transition-all hover:border-[var(--color-primary)]/40">
       <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-xl bg-stone-50">
         {/* eslint-disable-next-line @next/next/no-img-element -- library thumbnails */}
-        <img src={item.url} alt={item.filename} className="h-full w-full object-cover" />
+        <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt={item.filename} className="h-full w-full object-cover" />
 
         <div className="pointer-events-none absolute inset-0 bg-black/55 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
           <div className="flex h-full items-center justify-center gap-2">
@@ -149,7 +150,7 @@ function DraggableFileCard({
                 e.stopPropagation();
                 onCopy();
               }}
-              className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-700 shadow-lg hover:text-[var(--color-primary)]"
+              className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-700 hover:text-[var(--color-primary)]"
               title="Copy URL"
             >
               {copiedId === item.id ? <Check size={18} className="text-emerald-600" /> : <Copy size={18} />}
@@ -160,7 +161,7 @@ function DraggableFileCard({
                 e.stopPropagation();
                 onCtx(e, item);
               }}
-              className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-700 shadow-lg hover:text-[var(--color-primary)]"
+              className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-700 hover:text-[var(--color-primary)]"
               title="More"
             >
               <MoreHorizontal size={18} />
@@ -198,7 +199,7 @@ function DroppableRootZone({
       ref={setNodeRef}
       className={`min-h-[280px] rounded-2xl transition-all duration-200 ease-out ${
         isOver
-          ? "bg-[var(--color-primary)]/[0.07] ring-4 ring-dashed ring-[var(--color-primary)]/35 shadow-inner"
+          ? "bg-[var(--color-primary)]/[0.07] ring-4 ring-dashed ring-[var(--color-primary)]/35"
           : ""
       }`}
     >
@@ -416,10 +417,6 @@ export default function MediaLibraryClient({
     }
   }
 
-  const usagePct = Math.min(100, (usage.usedBytes / usage.maxBytes) * 100);
-  const usageTone =
-    usagePct > 92 ? "bg-red-600" : usagePct > 78 ? "bg-amber-500" : "bg-emerald-600";
-
   const uploadTrigger = (
     <label className="cursor-pointer">
       <input type="file" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading || trashMode} />
@@ -466,27 +463,6 @@ export default function MediaLibraryClient({
           </div>
         }
       />
-
-      <Card className="mb-6 flex flex-col gap-3 border-stone-200/90 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500">
-              Storage usage (team budget)
-            </span>
-            <span className="text-xs font-semibold text-stone-700">
-              {formatBytes(usage.usedBytes)}{" "}
-              <span className="font-normal text-stone-400">/</span> {formatBytes(usage.maxBytes)}
-            </span>
-          </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-stone-200">
-            <div className={`h-full rounded-full transition-all ${usageTone}`} style={{ width: `${usagePct}%` }} />
-          </div>
-          <p className="mt-2 text-[11px] leading-snug text-stone-500">
-            Budget set to <strong>800 MB</strong> so you stay under typical hosted limits. Delete or purge unused assets
-            early.
-          </p>
-        </div>
-      </Card>
 
       {error ? (
         <p role="alert" className="mb-4 text-sm text-red-600">
@@ -536,10 +512,10 @@ export default function MediaLibraryClient({
             ) : (
               <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {items.map((item) => (
-                  <Card key={item.id} className="relative bg-white p-2 shadow-sm">
+                  <Card key={item.id} className="relative bg-white p-2">
                     <div className="relative mb-3 aspect-square overflow-hidden rounded-xl bg-stone-50">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.url} alt="" className="h-full w-full object-cover opacity-70" />
+                      <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt="" className="h-full w-full object-cover opacity-70" />
                     </div>
                     <p className="truncate px-1 text-xs font-bold text-stone-700">{item.filename}</p>
                     <div className="mt-3 flex flex-wrap gap-2 px-1">
@@ -624,10 +600,17 @@ export default function MediaLibraryClient({
         </DroppableRootZone>
       </DndContext>
 
+      {/* Subtle storage indicator */}
+      <div className="mt-8 flex items-center gap-2 border-t border-stone-100 pt-4">
+        <span className="text-[11px] text-stone-400">
+          {formatBytes(usage.usedBytes)} / {formatBytes(usage.maxBytes)} used
+        </span>
+      </div>
+
       {ctxMenu ? (
         <div
           ref={ctxMenuRef}
-          className="fixed z-[400] min-w-[200px] overflow-hidden rounded-xl border border-stone-200 bg-white py-1 shadow-xl"
+          className="fixed z-[400] min-w-[200px] overflow-hidden rounded-xl border border-stone-100 bg-white py-1"
           style={{
             left: Math.min(ctxMenu.x, typeof window !== "undefined" ? window.innerWidth - 220 : ctxMenu.x),
             top: Math.min(ctxMenu.y, typeof window !== "undefined" ? window.innerHeight - 240 : ctxMenu.y),

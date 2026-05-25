@@ -5,6 +5,7 @@ import { X, Upload, Search, Check, Loader2, ChevronRight, Folder as FolderIcon }
 import { Button } from "@/components/ui/Button";
 import { getMedia, uploadMedia, listMediaFolders } from "@/app/actions/media";
 import type { MediaFolderRow } from "@/app/actions/media";
+import { cloudinaryUrl } from "@/lib/cloudinary-url";
 
 interface MediaItem {
   id: string;
@@ -253,7 +254,7 @@ export function MediaPicker({
                     }`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={item.url} alt="" className="h-full w-full object-cover" />
+                    <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt="" className="h-full w-full object-cover" />
                     {selectedIds.includes(item.id) ? (
                       <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#7A1515] text-white">
                         <Check size={14} aria-hidden />
