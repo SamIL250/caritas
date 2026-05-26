@@ -129,10 +129,9 @@ export default function NewsArticlesFeed({
       <div className="news-wrap">
         {featuredVisible && featuredArticle && (
           <a
-            href={featuredArticle.external_url || `#story-${featuredArticle.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            id={`story-${featuredArticle.slug}`}
+            href={featuredArticle.external_url || `/news/${featuredArticle.slug}`}
+            target={featuredArticle.external_url ? "_blank" : undefined}
+            rel={featuredArticle.external_url ? "noopener noreferrer" : undefined}
             className="block text-inherit no-underline"
           >
             <article className="news-featured">
@@ -182,10 +181,9 @@ export default function NewsArticlesFeed({
               {filteredGrid.map((a) => (
                 <a
                   key={a.id}
-                  href={a.external_url || `#story-${a.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  id={`story-${a.slug}`}
+                  href={a.external_url || `/news/${a.slug}`}
+                  target={a.external_url ? "_blank" : undefined}
+                  rel={a.external_url ? "noopener noreferrer" : undefined}
                   className="news-card text-inherit no-underline"
                 >
                   <div className="news-card-img">

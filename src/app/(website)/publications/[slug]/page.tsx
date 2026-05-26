@@ -14,7 +14,7 @@ import {
 import type { ProgramCategoryRow } from "@/lib/programs";
 import "../publications-page.css";
 
-type PageProps = { params: { slug: string } };
+type PageProps = { params: Promise<{ slug: string }> };
 
 async function fetchPublicationBySlug(
   slug: string,
@@ -58,7 +58,8 @@ async function fetchPublicationBySlug(
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const row = await fetchPublicationBySlug(params.slug);
+  const { slug } = await params;
+  const row = await fetchPublicationBySlug(slug);
   if (!row) {
     return { title: "Publication not found — Caritas Rwanda" };
   }
@@ -69,7 +70,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PublicationDetailPage({ params }: PageProps) {
-  const data = await fetchPublicationBySlug(params.slug);
+  const { slug } = await params;
+  const data = await fetchPublicationBySlug(slug);
   if (!data) notFound();
 
   const { publication, category, department } = data;

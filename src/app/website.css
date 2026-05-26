@@ -2786,75 +2786,6 @@
             position: relative;
         }
 
-        /* ── Top banner strip ── */
-        .footer-banner {
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 2.5rem 2rem;
-        }
-
-        .footer-banner-inner {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        @media (min-width: 768px) {
-            .footer-banner-inner {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-        }
-
-        .footer-banner-tagline {
-            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-            font-weight: 500;
-            color: #ffffff;
-            letter-spacing: -0.01em;
-            line-height: 1.35;
-        }
-
-        .footer-banner-tagline span {
-            color: #f97316;
-        }
-
-        .footer-banner-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.65rem 1.5rem;
-            border-radius: 6px;
-            font-size: 0.82rem;
-            font-weight: 400;
-            text-decoration: none;
-            white-space: nowrap;
-            flex-shrink: 0;
-            transition: border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .footer-banner-cta:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.35);
-        }
-
-        .footer-banner-cta i {
-            color: #ffffff;
-            font-size: 0.75rem;
-        }
-
-        .footer-banner-cta:hover {
-            background: #e2e8f0;
-        }
-
-        .footer-banner-cta i {
-            color: #0f172a;
-        }
 
         /* ── Main grid ── */
         .footer-grid {
@@ -7570,55 +7501,6 @@
             padding: 0;
             position: relative;
             overflow: hidden;
-        }
-
-        .website-footer .footer-banner {
-            background: #03112b;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3rem 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .website-footer .footer-banner-inner {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .website-footer .footer-banner-tagline {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-        }
-
-        .website-footer .footer-banner-tagline span {
-            color: var(--primary-orange);
-        }
-
-        .website-footer .footer-banner-cta {
-            background: #ffffff;
-            color: #8c2208;
-            padding: 1rem 2rem;
-            border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .website-footer .footer-banner-cta:hover {
-            background: #f8f9fa;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
         }
 
         .website-footer .footer-grid {

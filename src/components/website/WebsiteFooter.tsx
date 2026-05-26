@@ -55,20 +55,6 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
 
   return (
     <footer className="website-footer">
-      <div className="footer-banner">
-        <div className="footer-banner-inner">
-          <div className="footer-banner-tagline">
-            {s.banner.lineBefore}
-            <span>{s.banner.accent}</span>
-            {s.banner.lineAfter}
-          </div>
-          <Link href={s.banner.ctaHref} className="footer-banner-cta">
-            <i className="fa-solid fa-envelope" aria-hidden />
-            {s.banner.ctaLabel}
-          </Link>
-        </div>
-      </div>
-
       <div className="container-wide">
         <div className="footer-grid">
           <div className="footer-col">

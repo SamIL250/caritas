@@ -15,21 +15,27 @@ export type DepartmentRelatedRow = {
   meta_label: string | null;
 };
 
-/** Prefer external URL when present; otherwise internal paths (programs slug, publications anchor hash, news anchor). */
+/** Prefer external URL when present; otherwise internal detail-page paths. */
 export function resolveDepartmentRelatedHref(row: DepartmentRelatedRow): string {
   const ext = row.link_external?.trim();
   if (ext) return ext;
+
   if (row.source_kind === "news") {
-    const anchor = row.link_anchor?.trim();
-    if (anchor) return `/news#story-${anchor}`;
+    if (row.slug) return `/news/${encodeURIComponent(row.slug)}`;
     return "/news";
   }
-  if (row.source_kind === "program" && row.link_path?.trim()) return row.link_path.trim();
-  if (row.source_kind === "publication") {
-    const base = row.link_path?.trim() || "/publications";
-    const anchor = row.link_anchor?.trim();
-    return anchor ? `${base}#${anchor}` : base;
+
+  if (row.source_kind === "program") {
+    if (row.link_path?.trim()) return row.link_path.trim();
+    if (row.slug) return `/programs/${encodeURIComponent(row.slug)}`;
+    return "/programs";
   }
+
+  if (row.source_kind === "publication") {
+    if (row.slug) return `/publications/${encodeURIComponent(row.slug)}`;
+    return "/publications";
+  }
+
   return row.link_path?.trim() || "/news";
 }
 
