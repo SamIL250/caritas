@@ -35,27 +35,53 @@
         }
 
         /* ==================== NAVIGATION ==================== */
-        /* Clean, premium navbar — no shadows, gradients, or glass effects */
         header.site-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 3000;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            transition: border-color 0.3s ease;
+            padding: 1.2rem 1.5rem;
+            transition: padding 0.4s ease;
+        }
+
+        header.site-header.scrolled {
+            padding: 0;
         }
 
         .navbar-container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 100px;
+            padding: 0.85rem 1.8rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 1.5rem;
-            height: 68px;
+            gap: 1.2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .navbar-container:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .navbar-container.scrolled {
+            max-width: 100%;
+            border-radius: 0;
+            background: #ffffff;
+            border: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-container.scrolled:hover {
+            background: #fafafa;
         }
 
         .logo {
@@ -64,6 +90,7 @@
             flex-shrink: 0;
             display: flex;
             align-items: center;
+            transition: transform 0.3s ease;
         }
 
         .logo img {
@@ -72,7 +99,23 @@
             display: block;
         }
 
-        /* Logo always shows /img/logo_bg.png — no scroll swap needed */
+        .logo img.logo-default {
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo img.logo-scroll {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo.show-scroll-logo .logo-default {
+            display: none;
+        }
+
+        .logo.show-scroll-logo .logo-scroll {
+            display: block;
+        }
 
         nav {
             display: none;
@@ -123,7 +166,7 @@
 
         nav a,
         nav > ul > li > a {
-            color: #374151;
+            color: #ffffff;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
@@ -135,7 +178,7 @@
         }
 
         nav a:hover {
-            color: #8c2208;
+            color: #ffffff;
         }
 
         nav a::after {
@@ -145,7 +188,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: #8c2208;
+            background: #ffffff;
             transition: width 0.25s ease;
         }
 
@@ -153,11 +196,36 @@
             width: 100%;
         }
 
+        /* Scrolled state: dark links on white navbar */
+        .navbar-container.scrolled nav a,
+        .navbar-container.scrolled nav > ul > li > a {
+            color: #374151;
+        }
+
+        .navbar-container.scrolled nav a:hover {
+            color: #8c2208;
+        }
+
+        .navbar-container.scrolled nav a::after {
+            background: #8c2208;
+        }
+
+        .navbar-container.scrolled nav > ul > li > a:not(.nav-home):hover {
+            color: #7a0f0f;
+            background: rgba(140, 34, 8, 0.07);
+        }
+
         /* ── Active link (current page) ── */
         nav a.current,
         nav > ul > li > a.current {
-            color: #8c2208 !important;
             font-weight: 600;
+        }
+        nav a.current {
+            color: #ffffff !important;
+        }
+        .navbar-container.scrolled nav a.current,
+        .navbar-container.scrolled nav > ul > li > a.current {
+            color: #8c2208 !important;
         }
 
         nav a.current::after {
@@ -305,11 +373,6 @@
             flex-shrink: 0;
         }
 
-        @keyframes rotatingGradient {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .btn-donate {
             position: relative;
             display: inline-flex;
@@ -328,53 +391,33 @@
             color: #ffffff;
             z-index: 1;
             overflow: hidden;
-            background: transparent;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            background: #7a0f0f;
+            transition: box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease;
             transform: translateY(0);
-        }
-
-        /* Animated gradient border ring — cycles through vibrant warm tones */
-        .btn-donate::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: inherit;
-            background: conic-gradient(from 0deg, #8c2208, #d66b3d, #f0c070, #f5dcaa, #f0c070, #d66b3d, #8c2208);
-            z-index: -2;
-            animation: rotatingGradient 3s linear infinite;
-        }
-
-        /* Inner solid fill — creates the 3px border gap */
-        .btn-donate::after {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            border-radius: inherit;
-            background: #8c2208;
-            z-index: -1;
-            transition: background 0.3s ease;
         }
 
         .btn-donate:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(140, 34, 8, 0.4);
-        }
-
-        .btn-donate:hover::before {
-            animation-duration: 1.5s;
-        }
-
-        .btn-donate:hover::after {
-            background: #701a05;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(140, 34, 8, 0.5);
         }
 
         .btn-donate:active {
-            transform: translateY(0);
-            box-shadow: none;
+            transform: translateY(0) scale(1.02);
         }
 
-        .btn-donate:active::after {
-            background: #5a1505;
+        .navbar-container.scrolled .btn-donate {
+            background: #7a0f0f;
+            box-shadow: 0 4px 12px rgba(122, 29, 6, 0.3);
+        }
+
+        .navbar-container.scrolled .btn-donate:hover {
+            background: #6d0e0e;
+            box-shadow: 0 8px 18px rgba(122, 29, 6, 0.4);
+        }
+
+        @keyframes rotatingGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .nav-toggle {
@@ -383,12 +426,17 @@
             justify-content: center;
             background: none;
             border: none;
-            color: #374151;
+            color: #ffffff;
             font-size: 1.5rem;
             cursor: pointer;
             z-index: 2010;
             position: relative;
             padding: 0.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-container.scrolled .nav-toggle {
+            color: #374151;
         }
 
         .nav-toggle:focus-visible {

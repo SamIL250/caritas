@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, Menu, X } from 'lucide-react';
@@ -14,7 +14,9 @@ export default function WebsiteHeader() {
   const { isModalOpen, openModal, closeModal } = useDonation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState<SubKey | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const tickingRef = useRef(false);
 
   const closeNav = useCallback(() => {
     setMobileMenuOpen(false);
@@ -40,19 +42,35 @@ export default function WebsiteHeader() {
     }
   }, [mobileMenuOpen, closeNav]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 20);
+        tickingRef.current = false;
+      });
+    };
+    setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const isActive = (path: string) => pathname === path;
 
   const toggleSub = (key: SubKey) => {
     setOpenSub((s) => (s === key ? null : key));
   };
 
-  const navClass = 'navbar-container';
+  const headerClass = scrolled ? 'site-header scrolled' : 'site-header';
+  const containerClass = scrolled ? 'navbar-container scrolled' : 'navbar-container';
 
   return (
-    <header className="site-header">
-      <div className={navClass}>
-        <Link href="/" className="logo" onClick={() => { closeNav(); closeModal(); }}>
-          <img src="/img/logo_bg.png" alt="Caritas Rwanda" />
+    <header className={headerClass}>
+      <div className={containerClass}>
+        <Link href="/" className={scrolled ? 'logo show-scroll-logo' : 'logo'} onClick={() => { closeNav(); closeModal(); }}>
+          <img src="/img/logo_caritas.png" alt="Caritas Rwanda" className="logo-default" />
+          <img src="/img/logo_bg.png" alt="Caritas Rwanda" className="logo-scroll" />
         </Link>
 
         <button
