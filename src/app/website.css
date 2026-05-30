@@ -391,27 +391,67 @@
             color: #ffffff;
             z-index: 1;
             overflow: hidden;
-            background: #7a0f0f;
-            transition: box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease;
+            background: transparent;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
             transform: translateY(0);
+        }
+
+        /* Animated gradient border ring */
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: inherit;
+            background: conic-gradient(from 0deg, #8c2208, #d66b3d, #f0c070, #f5dcaa, #f0c070, #d66b3d, #8c2208);
+            z-index: -2;
+            animation: rotatingGradient 3s linear infinite;
+        }
+
+        /* Inner solid fill */
+        .btn-donate::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: inherit;
+            background: #8c2208;
+            z-index: -1;
+            transition: background 0.3s ease;
         }
 
         .btn-donate:hover {
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(140, 34, 8, 0.5);
+            box-shadow: 0 4px 20px rgba(140, 34, 8, 0.4);
+        }
+
+        .btn-donate:hover::before {
+            animation-duration: 1.5s;
+        }
+
+        .btn-donate:hover::after {
+            background: #701a05;
         }
 
         .btn-donate:active {
             transform: translateY(0) scale(1.02);
         }
 
+        .btn-donate:active::after {
+            background: #5a1505;
+        }
+
         .navbar-container.scrolled .btn-donate {
-            background: #7a0f0f;
             box-shadow: 0 4px 12px rgba(122, 29, 6, 0.3);
         }
 
-        .navbar-container.scrolled .btn-donate:hover {
+        .navbar-container.scrolled .btn-donate::after {
+            background: #7a0f0f;
+        }
+
+        .navbar-container.scrolled .btn-donate:hover::after {
             background: #6d0e0e;
+        }
+
+        .navbar-container.scrolled .btn-donate:hover {
             box-shadow: 0 8px 18px rgba(122, 29, 6, 0.4);
         }
 

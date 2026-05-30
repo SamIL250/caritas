@@ -221,7 +221,7 @@ export default function WebsiteHeader() {
                     <i className="fa-solid fa-chart-bar"></i> Our Impact
                   </Link>
                   <Link href="/get-involved" className={isActive('/get-involved') ? 'current' : ''} onClick={closeNav}>
-                    <i className="fa-solid fa-hand-heart"></i> Get Involved
+                    <i className="fa-solid fa-hand-holding-heart"></i> Get Involved
                   </Link>
                   <div className="nav-dropdown-divider"></div>
                   <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
