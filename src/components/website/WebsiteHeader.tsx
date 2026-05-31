@@ -69,8 +69,8 @@ export default function WebsiteHeader() {
     <header className={headerClass}>
       <div className={containerClass}>
         <Link href="/" className={scrolled ? 'logo show-scroll-logo' : 'logo'} onClick={() => { closeNav(); closeModal(); }}>
-          <img src="/img/logo_caritas.png" alt="Caritas Rwanda" className="logo-default" />
-          <img src="/img/logo_bg.png" alt="Caritas Rwanda" className="logo-scroll" />
+          <img src="/img/logo_caritas.webp" alt="Caritas Rwanda" className="logo-default" />
+          <img src="/img/logo_bg.webp" alt="Caritas Rwanda" className="logo-scroll" />
         </Link>
 
         <button

@@ -11,12 +11,12 @@ export default function Testimonial({
   quote = "Caritas Rwanda has been a beacon of hope for our community. Their dedication to restoring dignity and providing sustainable support has changed my life forever.", 
   author = "Marie Claire Uwimana", 
   role = "Community Beneficiary", 
-  avatar_url = "/img/slide2.jpg" 
+  avatar_url = "/img/slide2.webp" 
 }: TestimonialProps) {
   const displayQuote = quote || "Caritas Rwanda has been a beacon of hope for our community. Their dedication to restoring dignity and providing sustainable support has changed my life forever.";
   const displayAuthor = author || "Marie Claire Uwimana";
   const displayRole = role || "Community Beneficiary";
-  const displayAvatarUrl = avatar_url || "/img/slide2.jpg";
+  const displayAvatarUrl = avatar_url || "/img/slide2.webp";
   return (
     <section className="py-24 bg-white overflow-hidden relative">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[200px] font-serif text-stone-50 leading-none pointer-events-none select-none">

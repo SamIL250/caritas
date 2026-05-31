@@ -78,7 +78,7 @@ export default async function DiocesanPage() {
   const imageUrl =
     typeof heroRow?.image_url === "string" && heroRow.image_url.trim() !== ""
       ? heroRow.image_url
-      : "/img/slide1.png";
+      : "/img/slide1.webp";
 
   const rawNav = options.quick_nav as
     | Array<{ label: string; href: string; icon?: string }>

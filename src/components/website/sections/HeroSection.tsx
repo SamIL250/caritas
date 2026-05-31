@@ -74,7 +74,7 @@ export default function HeroSection({
     subheading: subheading || "Through strategic humanitarian programs, social development initiatives, and faith-driven service, Caritas Rwanda works to create lasting change for the most vulnerable.",
     cta_text: cta_text || "Donate Now",
     cta_url: cta_url || "#",
-    image_url: image_url || "/img/bg_3.png",
+    image_url: image_url || "/img/bg_3.webp",
     badge_text: options?.badge_text || "WELCOME TO CARITAS RWANDA",
     secondary_cta_text: options?.secondary_cta_text || "Volunteer with Us",
     secondary_cta_url: options?.secondary_cta_url || "#"

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import ContactInfo from "@/components/website/sections/ContactInfo";
-import OurLocationSection from "@/components/website/sections/OurLocationSection";
+import ContactMapSection from "@/components/website/sections/ContactMapSection";
 
 export const metadata: Metadata = {
   title: "Contact Us | Caritas Rwanda",
@@ -16,7 +15,7 @@ export default function ContactPage() {
         className="page-hero"
         style={
           {
-            ["--page-hero-image" as string]: `url("/img/slide1.png")`,
+            ["--page-hero-image" as string]: `url("/img/slide1.webp")`,
           } as React.CSSProperties
         }
       >
@@ -43,11 +42,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Contact Info & Form ── */}
-      <ContactInfo />
-
-      {/* ── Our Location on The Map ── */}
-      <OurLocationSection />
+      <ContactMapSection />
     </>
   );
 }

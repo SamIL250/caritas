@@ -81,7 +81,7 @@
   text-align: left;
   background-position: center;
   background-size: cover;
-  background-image: var(--page-hero-image, url("/img/slide1.png"));
+  background-image: var(--page-hero-image, url("/img/slide1.webp"));
 }
 
 .page-editor-section-preview.about-page-preview .page-hero::before {

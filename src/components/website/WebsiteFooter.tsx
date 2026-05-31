@@ -6,7 +6,7 @@ import { FOOTER_DEFAULTS, type FooterSettings } from '@/lib/footer-settings';
 import { isExternalOrSpecialHref } from '@/lib/footer-nav';
 import FooterNewsletterForm from '@/components/website/FooterNewsletterForm';
 
-const DEFAULT_LOGO = '/img/logo_caritas.png';
+const DEFAULT_LOGO = '/img/logo_caritas.webp';
 
 type WebsiteFooterProps = {
   settings?: FooterSettings;

@@ -56,7 +56,7 @@ export const CANONICAL_PROGRAMS: ProgramItem[] = [
     ],
     icon: "fa-solid fa-people-roof",
     link_url: PROGRAM_SLOT_LEARN_MORE_HREF[0],
-    image_url: "/img/bg_1.png",
+    image_url: "/img/bg_1.webp",
   },
   {
     tab_label: "Health",
@@ -70,7 +70,7 @@ export const CANONICAL_PROGRAMS: ProgramItem[] = [
     ],
     icon: "fa-solid fa-heart-pulse",
     link_url: PROGRAM_SLOT_LEARN_MORE_HREF[1],
-    image_url: "/img/health.JPG",
+    image_url: "/img/health.webp",
   },
   {
     tab_label: "Development",
@@ -84,7 +84,7 @@ export const CANONICAL_PROGRAMS: ProgramItem[] = [
     ],
     icon: "fa-solid fa-seedling",
     link_url: PROGRAM_SLOT_LEARN_MORE_HREF[2],
-    image_url: "/img/bg_2.png",
+    image_url: "/img/bg_2.webp",
   },
   {
     tab_label: "Admin &\nFinance",
@@ -98,7 +98,7 @@ export const CANONICAL_PROGRAMS: ProgramItem[] = [
     ],
     icon: "fa-solid fa-building-columns",
     link_url: PROGRAM_SLOT_LEARN_MORE_HREF[3],
-    image_url: "/img/slide5.jpg",
+    image_url: "/img/slide5.webp",
   },
 ];
 

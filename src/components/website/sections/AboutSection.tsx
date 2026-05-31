@@ -6,7 +6,7 @@ export default function AboutSection(_props: Record<string, unknown> = {}) {
   return (
     <section className="bg-[#8b221d]">
       <img
-        src="/img/about_bg.png"
+        src="/img/about_bg.webp"
         alt="Caritas Rwanda Network — About Us"
         className="w-full select-none pointer-events-none"
         draggable={false}

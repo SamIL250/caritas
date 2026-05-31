@@ -55,7 +55,7 @@ export default function PageHeroSection({
   heading,
   headingAccent,
   subheading,
-  imageUrl = "/img/slide1.png",
+  imageUrl = "/img/slide1.webp",
   breadcrumbLabel = "About Us",
   quickNav = [],
 }: PageHeroSectionProps) {
