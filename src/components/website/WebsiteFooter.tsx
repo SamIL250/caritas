@@ -46,7 +46,7 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
   const logoSrc = (s.brand.logoUrl && s.brand.logoUrl.trim()) || DEFAULT_LOGO;
 
   const socialEntries: { key: keyof FooterSettings['social']; icon: string; label: string }[] = [
-    { key: 'twitter', icon: 'fab fa-twitter', label: 'Twitter' },
+    { key: 'twitter', icon: 'fa-brands fa-x-twitter', label: 'X (Twitter)' },
     { key: 'youtube', icon: 'fab fa-youtube', label: 'YouTube' },
     { key: 'facebook', icon: 'fab fa-facebook-f', label: 'Facebook' },
     { key: 'linkedin', icon: 'fab fa-linkedin-in', label: 'LinkedIn' },
@@ -55,137 +55,104 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
 
   return (
     <footer className="website-footer">
-      <div className="container-wide">
-        <div className="footer-grid">
-          <div className="footer-col">
-            <img
-              src={logoSrc}
-              alt={s.bottom.orgName}
-              className="footer-logo"
-              style={{ filter: 'brightness(0) invert(1)' }}
-            />
-            <p className="footer-tagline">{s.brand.mission}</p>
-            <div className="ft-socials">
-              {socialEntries.map(({ key, icon, label }) => {
-                const url = s.social[key].trim();
-                if (!url) return null;
-                return (
-                  <a
-                    key={key}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ft-social-btn"
-                    aria-label={label}
-                  >
-                    <i className={icon} />
-                  </a>
-                );
-              })}
-            </div>
-          </div>
+      <div className="ft-blob-1" />
+      <div className="ft-blob-2" />
 
-          <div className="footer-col">
-            <div className="ft-col-heading">Quick Links</div>
-            <ul className="ft-links">
-              {s.quickLinks.map((item, i) => (
-                <li key={`q-${i}`}>
-                  {item.behavior === 'donate' ? (
-                    <button type="button" onClick={() => openModal()} className="ft-link-btn">
-                      {item.label}
-                    </button>
-                  ) : (
-                    <NavOrExternal href={item.href}>{item.label}</NavOrExternal>
-                  )}
-                </li>
-              ))}
-            </ul>
+      <div className="footer-grid">
+        <div className="footer-top">
+          <div className="footer-top-tagline">
+            Serving Rwanda with <span>Faith, Hope</span> &amp; Love.
           </div>
-
-          <div className="footer-col">
-            <div className="ft-col-heading">{s.programColumn.heading}</div>
-            <ul className="ft-links">
-              {s.programColumn.links.map((item, i) => (
-                <li key={`p-${i}`}>
-                  <NavOrExternal href={item.href}>{item.label}</NavOrExternal>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <FooterNewsletterForm
-              heading={s.newsletter.heading}
-              description={s.newsletter.description}
-              placeholder={s.newsletter.placeholder}
-              buttonLabel={s.newsletter.buttonLabel}
-            />
+          <a href="#contact" className="footer-top-cta">
+            <i className="fa-solid fa-envelope" />
+            Get In Touch
+          </a>
+        </div>
+        <div className="footer-col">
+          <img
+            src={logoSrc}
+            alt={s.bottom.orgName}
+            className="footer-logo"
+          />
+          <div className="ft-socials">
+            {socialEntries.map(({ key, icon, label }) => {
+              const url = s.social[key].trim();
+              if (!url) return null;
+              return (
+                <a
+                  key={key}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ft-social-btn"
+                  aria-label={label}
+                >
+                  <i className={icon} />
+                </a>
+              );
+            })}
           </div>
         </div>
 
-        <div className="ft-contact-bar">
-          <div className="ft-contact-chips">
-            <div className="ft-chip">
-              <div className="ft-chip-icon">
-                <i className="fa-solid fa-location-dot" aria-hidden />
-              </div>
-              <div>
-                <div className="ft-chip-label">{s.contact.addressLabel}</div>
-                <div className="ft-chip-value">{s.contact.address}</div>
-              </div>
+        <div className="footer-col">
+          <div className="ft-col-heading">Contact Us</div>
+          <div className="ft-chip">
+            <div className="ft-chip-icon">
+              <i className="fa-solid fa-location-dot" />
             </div>
-            <div className="ft-chip">
-              <div className="ft-chip-icon">
-                <i className="fa-solid fa-phone" aria-hidden />
-              </div>
-              <div>
-                <div className="ft-chip-label">{s.contact.phoneLabel}</div>
-                <div className="ft-chip-value">{s.contact.phone}</div>
-              </div>
-            </div>
-            <div className="ft-chip">
-              <div className="ft-chip-icon">
-                <i className="fa-solid fa-envelope" aria-hidden />
-              </div>
-              <div>
-                <div className="ft-chip-label">{s.contact.emailLabel}</div>
-                <div className="ft-chip-value">
-                  <a href={`mailto:${s.contact.email}`}>{s.contact.email}</a>
-                </div>
-              </div>
+            <div>
+              <div className="ft-chip-label">Headquarters</div>
+              <div className="ft-chip-value">Kigali, Rwanda</div>
             </div>
           </div>
+          <div className="ft-chip">
+            <div className="ft-chip-icon">
+              <i className="fa-solid fa-phone" />
+            </div>
+            <div>
+              <div className="ft-chip-label">Phone</div>
+              <div className="ft-chip-value">(+250) 252 574 34</div>
+            </div>
+          </div>
+          <div className="ft-chip">
+            <div className="ft-chip-icon">
+              <i className="fa-solid fa-envelope" />
+            </div>
+            <div>
+              <div className="ft-chip-label">Email</div>
+              <div className="ft-chip-value">info@caritasrwanda.org</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-col">
+          <div className="ft-col-heading">Stay Updated</div>
+          <p className="ft-newsletter-text">
+            Subscribe to our newsletter and get the latest stories, program updates, and impact reports delivered to your inbox.
+          </p>
+          <FooterNewsletterForm
+            heading=""
+            description=""
+            placeholder="your@email.com"
+            buttonLabel="Subscribe"
+          />
         </div>
       </div>
 
       <div className="ft-bottom">
-        <div className="container-wide">
-          <div className="ft-bottom-inner">
-            <div className="ft-bottom-left">
-              <div>
-                &copy; {new Date().getFullYear()} {s.bottom.orgName}. All rights reserved.
-              </div>
-              <a
-                href="https://caritas-rwanda.vercel.app/dashboard"
-                className="ml-2 text-[10px] tracking-wider opacity-20 transition-opacity hover:opacity-70"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Dashboard
-              </a>
-              {s.bottom.showDeveloperCredit ? (
-                <div className="ft-developer">
-                  <a href="https://lerony.com" target="_blank" rel="noopener noreferrer">Lerony</a>
-                </div>
-              ) : null}
+        <div className="ft-bottom-inner">
+          <div className="ft-bottom-left">
+            <div>&copy; {new Date().getFullYear()} Caritas Rwanda. All rights reserved.</div>
+            <div className="ft-developer">
+              Designed &amp; developed by <strong>Lerony Software Company</strong>
             </div>
-            <div className="ft-bottom-links">
-              {s.legalLinks.map((link, i) => (
-                <Link key={`l-${i}`} href={link.href}>
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+          </div>
+          <div className="ft-bottom-links">
+            {s.legalLinks.map((link, i) => (
+              <Link key={`l-${i}`} href={link.href}>
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

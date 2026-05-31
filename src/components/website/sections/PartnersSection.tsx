@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useLayoutEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import {
@@ -18,16 +18,7 @@ export type PartnersSectionProps = {
   items?: Partner[];
 };
 
-/**
- * Negative translate moves the strip left → logos drift right-to-left across the viewport.
- * Transform-based marquee works even when native horizontal overflow doesn’t scroll.
- */
-const AUTO_SCROLL_PX_PER_SEC = 14;
-
-/** After prev/next / wheel / keyboard nudge, pause auto drift briefly. */
-const USER_PAUSE_MS = 4200;
-
-function PartnerCard({ partner }: { partner: Partner }) {
+function PartnerCard({ partner, className }: { partner: Partner; className?: string }) {
   const url = (partner.url || "").trim();
   const img = (
     <img
@@ -44,7 +35,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
     return (
       <a
         href={url}
-        className="partner-card"
+        className={`partner-card${className ? " " + className : ""}`}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {img}
@@ -54,7 +45,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
   }
 
   return (
-    <div className="partner-card">
+    <div className={`partner-card${className ? " " + className : ""}`}>
       {img}
       {label}
     </div>
@@ -67,183 +58,160 @@ export default function PartnersSection({
   subtitle = "Working together with trusted global and local organizations to deliver lasting impact across Rwanda.",
   items: itemsProp,
 }: PartnersSectionProps) {
-  const rowRef = useRef<HTMLDivElement>(null);
-  /** Horizontal offset (px). Negative = strip shifted left (motion right → left). */
-  const translateRef = useRef(0);
-  const hoverStripRef = useRef(false);
-  const userPauseUntilRef = useRef(0);
-  const rafRef = useRef(0);
-  const lastFrameRef = useRef(0);
-
-  const bumpUserPause = useCallback(() => {
-    userPauseUntilRef.current = performance.now() + USER_PAUSE_MS;
-  }, []);
-
   const list = filterPartnersForDisplay(
     itemsProp && itemsProp.length > 0 ? itemsProp : DEFAULT_PARTNERS,
   );
 
-  const loopPairs =
-    list.length > 0
-      ? [...list.map((p, i) => ({ p, key: `a-${p.name}-${i}` })), ...list.map((p, i) => ({ p, key: `b-${p.name}-${i}` }))]
-      : [];
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const applyTransform = useCallback(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    row.style.transform = `translate3d(${translateRef.current}px, 0, 0)`;
-  }, []);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
+  const posRef = useRef(0);
+  const pausedRef = useRef(false);
 
-  const scrollStepPx = useCallback(() => {
-    const row = rowRef.current;
-    if (!row) return 280;
-    const style = window.getComputedStyle(row);
-    const gap = Number.parseFloat(style.columnGap || style.gap || "16") || 16;
-    const card = row.querySelector<HTMLElement>(".partner-card");
-    const cardW = card?.offsetWidth ?? 260;
-    return Math.round(cardW + gap);
-  }, []);
+  const SCROLL_SPEED = 0.35;
 
-  const normalizeLoop = useCallback(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    const half = row.scrollWidth / 2;
-    if (half < 8) return;
-    while (translateRef.current <= -half + 0.5) translateRef.current += half;
-    while (translateRef.current > 0.5) translateRef.current -= half;
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || list.length === 0) return;
+
+    const step = () => {
+      if (track && !pausedRef.current) {
+        posRef.current -= SCROLL_SPEED;
+        const half = track.scrollWidth / 2;
+        if (Math.abs(posRef.current) >= half - 1) {
+          posRef.current += half;
+        }
+        track.style.transform = `translateX(${posRef.current}px)`;
+      }
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [list.length]);
+
+  const scrollStep = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return 200;
+    const card = track.querySelector<HTMLElement>(".partner-card");
+    return (card?.offsetWidth ?? 180) + 24;
   }, []);
 
   const scrollPrev = useCallback(() => {
-    bumpUserPause();
-    translateRef.current += scrollStepPx();
-    normalizeLoop();
-    applyTransform();
-  }, [applyTransform, bumpUserPause, normalizeLoop, scrollStepPx]);
+    pausedRef.current = true;
+    posRef.current += scrollStep();
+    const track = trackRef.current;
+    if (track) {
+      const half = track.scrollWidth / 2;
+      if (posRef.current > 0) posRef.current -= half;
+      track.style.transform = `translateX(${posRef.current}px)`;
+    }
+    setTimeout(() => { pausedRef.current = false; }, 3000);
+  }, [scrollStep]);
 
   const scrollNext = useCallback(() => {
-    bumpUserPause();
-    translateRef.current -= scrollStepPx();
-    normalizeLoop();
-    applyTransform();
-  }, [applyTransform, bumpUserPause, normalizeLoop, scrollStepPx]);
-
-  useLayoutEffect(() => {
-    translateRef.current = 0;
-    const rowEl = rowRef.current;
-    if (rowEl) rowEl.style.transform = "translate3d(0, 0, 0)";
-
-    if (list.length === 0) return;
-
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    const tick = (now: number) => {
-      const row = rowRef.current;
-      const last = lastFrameRef.current || now;
-      const dt = Math.min(now - last, 80);
-      lastFrameRef.current = now;
-
-      const allowAuto =
-        row &&
-        !mq.matches &&
-        !hoverStripRef.current &&
-        performance.now() >= userPauseUntilRef.current;
-
-      if (allowAuto) {
-        translateRef.current -= (AUTO_SCROLL_PX_PER_SEC * dt) / 1000;
-        const half = row.scrollWidth / 2;
-        if (half > 8 && -translateRef.current >= half - 0.5) {
-          translateRef.current += half;
-        }
-        row.style.transform = `translate3d(${translateRef.current}px, 0, 0)`;
-      }
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    lastFrameRef.current = performance.now();
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [list]);
+    pausedRef.current = true;
+    posRef.current -= scrollStep();
+    const track = trackRef.current;
+    if (track) {
+      const half = track.scrollWidth / 2;
+      if (Math.abs(posRef.current) >= half - 1) posRef.current += half;
+      track.style.transform = `translateX(${posRef.current}px)`;
+    }
+    setTimeout(() => { pausedRef.current = false; }, 3000);
+  }, [scrollStep]);
 
   return (
-    <section
-      className="partners-section"
-      id="partners"
-      aria-labelledby="partners-section-title"
-    >
-      <div className="partners-inner">
-        <header className="partners-header">
-          {eyebrow ? (
-            <div className="partners-eyebrow">
-              <i className="fa-solid fa-handshake" aria-hidden />
-              {eyebrow}
-            </div>
-          ) : null}
-          <h2 className="partners-title" id="partners-section-title">
-            {title}
-          </h2>
-          {subtitle ? <p className="partners-subtitle">{subtitle}</p> : null}
-        </header>
-
-        <div className="partners-carousel">
-          <button
-            type="button"
-            className="partners-carousel-btn partners-carousel-btn--prev"
-            onClick={scrollPrev}
-            aria-label="Previous partners"
-          >
-            <ChevronLeft size={22} strokeWidth={2.25} aria-hidden />
-          </button>
-
-          <div
-            className="partners-marquee-mask"
-            onMouseEnter={() => {
-              hoverStripRef.current = true;
-            }}
-            onMouseLeave={() => {
-              hoverStripRef.current = false;
-            }}
-            onWheel={(e) => {
-              if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-              bumpUserPause();
-              translateRef.current -= e.deltaX * 0.45;
-              normalizeLoop();
-              applyTransform();
-            }}
-          >
-            <div
-              ref={rowRef}
-              className="partners-marquee-row"
-              role="region"
-              aria-roledescription="carousel"
-              aria-label="Partner organizations"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "ArrowLeft") {
-                  e.preventDefault();
-                  scrollPrev();
-                } else if (e.key === "ArrowRight") {
-                  e.preventDefault();
-                  scrollNext();
-                }
-              }}
-            >
-              {loopPairs.map(({ p, key }) => (
-                <PartnerCard key={key} partner={p} />
-              ))}
-            </div>
+    <>
+      <section className="partners-section" id="partners" aria-labelledby="partners-section-title">
+        <div className="partners-inner">
+          <div className="partners-header">
+            {eyebrow ? (
+              <div className="partners-eyebrow">
+                <i className="fa-solid fa-handshake" aria-hidden />
+                {eyebrow}
+              </div>
+            ) : null}
+            <h2 className="partners-title" id="partners-section-title">
+              {title}
+            </h2>
+            {subtitle ? <p className="partners-subtitle">{subtitle}</p> : null}
           </div>
 
-          <button
-            type="button"
-            className="partners-carousel-btn partners-carousel-btn--next"
-            onClick={scrollNext}
-            aria-label="Next partners"
-          >
-            <ChevronRight size={22} strokeWidth={2.25} aria-hidden />
-          </button>
+          <div className="partners-slider-wrap">
+            <button
+              type="button"
+              className="partner-arrow"
+              onClick={scrollPrev}
+              aria-label="Previous"
+            >
+              <ChevronLeft size={18} strokeWidth={2.5} aria-hidden />
+            </button>
+
+            <div
+              className="partners-grid"
+              onMouseEnter={() => { pausedRef.current = true; }}
+              onMouseLeave={() => { pausedRef.current = false; }}
+            >
+              <div ref={trackRef} className="partners-track">
+                {[...list, ...list].map((p, i) => (
+                  <PartnerCard key={`${p.name}-${i}`} partner={p} />
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="partner-arrow"
+              onClick={scrollNext}
+              aria-label="Next"
+            >
+              <ChevronRight size={18} strokeWidth={2.5} aria-hidden />
+            </button>
+          </div>
+
+          <div className="partners-footer">
+            <button
+              type="button"
+              className="partners-view-all-btn"
+              onClick={() => setModalOpen(true)}
+            >
+              <i className="fa-solid fa-grip" aria-hidden />
+              View All Partners
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div
+        className={`partners-modal-overlay${modalOpen ? " is-open" : ""}`}
+        onClick={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}
+        onKeyDown={(e) => { if (e.key === "Escape") setModalOpen(false); }}
+        role="dialog"
+        aria-modal="true"
+        aria-label="All Partners"
+        tabIndex={-1}
+      >
+        <div className="partners-modal">
+          <div className="partners-modal-header">
+            <h3>All Our <span>Partners</span></h3>
+            <button
+              type="button"
+              className="partners-modal-close"
+              onClick={() => setModalOpen(false)}
+              aria-label="Close"
+            >
+              <i className="fa-solid fa-xmark" />
+            </button>
+          </div>
+          <div className="partners-modal-grid">
+            {list.map((p, i) => (
+              <PartnerCard key={`modal-${p.name}-${i}`} partner={p} />
+            ))}
+          </div>
         </div>
       </div>
-    </section>
+    </>
   );
 }

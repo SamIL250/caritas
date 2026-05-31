@@ -76,7 +76,7 @@ export default async function MetricsPage() {
   }).filter(s => s.visible);
 
   return (
-    <main className="metrics-page min-h-screen bg-white">
+    <div className="metrics-page min-h-screen bg-white">
       <PageHeroSection
         imageUrl={heroImage}
         eyebrow={badgeText}
@@ -104,6 +104,6 @@ export default async function MetricsPage() {
           />
         </div>
       </section>
-    </main>
+    </div>
   );
 }

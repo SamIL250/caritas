@@ -95,7 +95,7 @@ export default async function DiocesanPage() {
     : [];
 
   return (
-    <main className="diocesan-page-content">
+    <div className="diocesan-page-content">
       <PageHeroSection
         eyebrow={eyebrow}
         heading={heading}
@@ -115,6 +115,6 @@ export default async function DiocesanPage() {
         }
         return renderWebsiteSectionWithFeatured(s);
       })}
-    </main>
+    </div>
   );
 }

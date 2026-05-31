@@ -94,7 +94,7 @@ export default async function AboutPage() {
     : [];
 
   return (
-    <main className="about-page-content">
+    <div className="about-page-content">
       <PageHeroSection
         eyebrow={eyebrow}
         heading={heading}
@@ -105,6 +105,6 @@ export default async function AboutPage() {
         quickNav={quickNav}
       />
       {renderWebsiteSectionsWithFeatured(sections)}
-    </main>
+    </div>
   );
 }

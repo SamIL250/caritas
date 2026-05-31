@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main>
+    <>
       {/* ── Page Hero ── */}
       <section
         className="page-hero"
@@ -48,6 +48,6 @@ export default function ContactPage() {
 
       {/* ── Our Location on The Map ── */}
       <OurLocationSection />
-    </main>
+    </>
   );
 }
