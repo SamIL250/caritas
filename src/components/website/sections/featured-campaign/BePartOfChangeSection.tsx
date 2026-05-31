@@ -20,7 +20,6 @@ export type BePartCampaignVM = {
   progress_percent: number;
   donors_count_display: string;
   days_left_display: string;
-  /** When false and primary_action_url is #donate, open story page instead of modal */
   donations_enabled?: boolean;
   primary_action_label: string;
   primary_action_url: string;
@@ -50,12 +49,6 @@ function iconClass(raw: string) {
   if (t.startsWith("fa-") && t.includes(" ")) return t;
   if (t.startsWith("fa-")) return `fa-solid ${t}`;
   return `fa-solid fa-${t.replace(/^fa-?/i, "")}`;
-}
-
-function clampPct(n: unknown): number {
-  const x = typeof n === "number" ? n : Number.parseFloat(String(n));
-  if (!Number.isFinite(x)) return 0;
-  return Math.min(100, Math.max(0, Math.round(x)));
 }
 
 function formatLegacyHeading(
@@ -149,11 +142,6 @@ function smallTagStyle(tone: string | undefined): CSSProperties | undefined {
   return undefined;
 }
 
-function smallBarClass(tone: string | undefined): string {
-  if (tone === "teal") return "bpc-small-bar-fill bpc-small-bar-fill--teal";
-  return "bpc-small-bar-fill";
-}
-
 function primaryDonateHref(campaign: BePartCampaignVM | null, raw: string): string {
   const u = (raw || "").trim() || "#donate";
   if (u === "#donate" && campaign?.donations_enabled === false && campaign.slug) {
@@ -189,7 +177,6 @@ export default function BePartOfChangeSection({
     (body || "").trim() ||
     "Your support enables us to continue transforming lives and building sustainable communities across all nine dioceses of Rwanda.";
 
-  const pct = campaign ? clampPct(campaign.progress_percent) : 0;
   const pbText = (campaign?.primary_action_label || "Donate Now").trim();
   const pbUrl = (campaign?.primary_action_url || "#donate").trim() || "#donate";
   const discussLabel = (campaign?.discussion_label || "").trim();
@@ -198,29 +185,6 @@ export default function BePartOfChangeSection({
   const impactItems = Array.isArray(impact_panel?.items) ? impact_panel!.items! : [];
   const impactTitle = (impact_panel?.title || "Our collective impact").trim();
   const impactIcon = (impact_panel?.icon || "fa-chart-line").trim();
-
-  const stats =
-    campaign &&
-    (campaign.raised_display ||
-      campaign.goal_display ||
-      campaign.donors_count_display ||
-      campaign.days_left_display)
-      ? [
-          { num: `${clampPct(campaign.progress_percent)}%`, label: "Funded" },
-          ...(campaign.donors_count_display?.trim()
-            ? [{ num: campaign.donors_count_display.trim(), label: "Donors" }]
-            : []),
-          ...(campaign.days_left_display?.trim()
-            ? [
-                {
-                  num: campaign.days_left_display.trim(),
-                  label:
-                    campaign.days_left_display.trim() === "0" ? "Ended" : "Days left",
-                },
-              ]
-            : []),
-        ]
-      : [];
 
   return (
     <section className="featured-campaign-bpc-scope bpc-section" id={anchor_id}>
@@ -287,33 +251,6 @@ export default function BePartOfChangeSection({
                   {(campaign.excerpt || "").trim() ? (
                     <p className="bpc-feat-story">{campaign.excerpt}</p>
                   ) : null}
-                  {(campaign.raised_display || campaign.goal_display) && (
-                    <div className="bpc-progress-wrap">
-                      <div className="bpc-progress-labels">
-                        {(campaign.raised_display || "").trim() ? (
-                          <span className="bpc-raised">{campaign.raised_display}</span>
-                        ) : (
-                          <span className="bpc-raised">&nbsp;</span>
-                        )}
-                        {(campaign.goal_display || "").trim() ? (
-                          <span className="bpc-goal">{campaign.goal_display}</span>
-                        ) : null}
-                      </div>
-                      <div className="bpc-bar-track" aria-hidden>
-                        <div className="bpc-bar-fill" style={{ width: `${pct}%` }} />
-                      </div>
-                    </div>
-                  )}
-                  {stats.length > 0 ? (
-                    <div className="bpc-stats-row">
-                      {stats.map((s) => (
-                        <div key={`${s.label}-${s.num}`} className="bpc-stat">
-                          <span className="bpc-stat-num">{s.num}</span>
-                          <span className="bpc-stat-label">{s.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
                   <DonateOrLink
                     href={primaryDonateHref(campaign, pbUrl)}
                     className="bpc-donate-btn"
@@ -341,7 +278,6 @@ export default function BePartOfChangeSection({
 
           <div className="bpc-right-col">
             {sidebar_cards.map((card, idx) => {
-              const cp = clampPct(card.progress_pct);
               const tone = card.category_tone || "rose";
               const btnText = (card.button_text || "Support").trim();
               const btnUrl = (card.button_url || "#donate").trim() || "#donate";
@@ -368,13 +304,6 @@ export default function BePartOfChangeSection({
                     {(card.description || "").trim() ? (
                       <p className="bpc-small-desc">{card.description}</p>
                     ) : null}
-                    <div className="bpc-small-bar-track" aria-hidden>
-                      <div className={smallBarClass(card.bar_tone)} style={{ width: `${cp}%` }} />
-                    </div>
-                    <div className="bpc-small-progress-text">
-                      <span>{(card.raised_label || "").trim()}</span>
-                      <span>{(card.goal_pct_label || "").trim()}</span>
-                    </div>
                     <DonateOrLink href={btnUrl} className="bpc-small-donate" modalCampaignId={card.modal_campaign_id ?? null}>
                       <i className="fa-solid fa-hand-holding-heart" aria-hidden />
                       {btnText}

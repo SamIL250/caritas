@@ -98,7 +98,7 @@ export default async function LandingPage() {
 
       {/* Default programs block only when no program_cards row exists in CMS */}
       {!hasProgramSection ? <ProgramCards key="fallback-program-cards" /> : null}
-      {enrichedSections?.map(renderWebsiteSectionWithFeatured)}
+      {enrichedSections?.filter((s: any) => s.type !== 'video_gallery').map(renderWebsiteSectionWithFeatured)}
     </main>
   );
 }

@@ -180,12 +180,6 @@ function formatLegacyHeading(
   return { line1: full, line2: "" };
 }
 
-function clampPct(n: unknown): number {
-  const x = typeof n === "number" ? n : Number.parseFloat(String(n));
-  if (!Number.isFinite(x)) return 0;
-  return Math.min(100, Math.max(0, Math.round(x)));
-}
-
 function FeaturedDonateSection(props: {
   featured: CtaFeaturedCard;
   sidebar_cards: CtaSidebarCard[];
@@ -205,7 +199,6 @@ function FeaturedDonateSection(props: {
     bottom_secondary_url,
   } = props;
 
-  const pct = clampPct(featured.progress_pct);
   const pbText = (featured.primary_button_text || "Donate Now").trim();
   const pbUrl = (featured.primary_button_url || "#donate").trim() || "#donate";
   const discussLabel = (featured.discussion_label || "").trim();
@@ -247,33 +240,6 @@ function FeaturedDonateSection(props: {
             {(featured.story || "").trim() ? (
               <p className="cr-bpc-feat-story">{featured.story}</p>
             ) : null}
-            {(featured.raised_label || featured.goal_label) && (
-              <div className="cr-bpc-progress-wrap">
-                <div className="cr-bpc-progress-labels">
-                  {(featured.raised_label || "").trim() ? (
-                    <span className="cr-bpc-raised">{featured.raised_label}</span>
-                  ) : (
-                    <span className="cr-bpc-raised">&nbsp;</span>
-                  )}
-                  {(featured.goal_label || "").trim() ? (
-                    <span className="cr-bpc-goal">{featured.goal_label}</span>
-                  ) : null}
-                </div>
-                <div className="cr-bpc-bar-track" aria-hidden>
-                  <div className="cr-bpc-bar-fill" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
-            )}
-            {Array.isArray(featured.stats) && featured.stats.length > 0 ? (
-              <div className="cr-bpc-feat-stats">
-                {featured.stats.map((s, i) => (
-                  <div key={`${s.label}-${i}`} className="cr-bpc-mini-stat">
-                    <div className="cr-bpc-mini-stat-num">{s.num}</div>
-                    <div className="cr-bpc-mini-stat-label">{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            ) : null}
             <DonateOrLink
               href={pbUrl}
               className="cr-bpc-btn-full"
@@ -292,8 +258,7 @@ function FeaturedDonateSection(props: {
         </article>
 
         <div className="cr-bpc-right-col">
-          {sidebar_cards.map((card, idx) => {
-            const cp = clampPct(card.progress_pct);
+            {sidebar_cards.map((card, idx) => {
             const tone = card.category_tone || "rose";
             const tagCls =
               tone === "sky"
@@ -301,12 +266,6 @@ function FeaturedDonateSection(props: {
                 : tone === "teal"
                   ? "cr-bpc-small-tag cr-bpc-small-tag--teal"
                   : "cr-bpc-small-tag";
-            const fillTone =
-              card.bar_tone === "teal"
-                ? "cr-bpc-bar-fill cr-bpc-bar-fill--teal"
-                : card.bar_tone === "sky"
-                  ? "cr-bpc-bar-fill cr-bpc-bar-fill--sky"
-                  : "cr-bpc-bar-fill";
             const btnText = (card.button_text || "Support").trim();
             const btnUrl = (card.button_url || "#donate").trim() || "#donate";
             const dLab = (card.discuss_label || "").trim();
@@ -339,13 +298,6 @@ function FeaturedDonateSection(props: {
                   {(card.description || "").trim() ? (
                     <p className="cr-bpc-small-desc">{card.description}</p>
                   ) : null}
-                  <div className="cr-bpc-bar-track" aria-hidden>
-                    <div className={fillTone} style={{ width: `${cp}%` }} />
-                  </div>
-                  <div className="cr-bpc-small-meta">
-                    <span>{(card.raised_label || "").trim()}</span>
-                    <span>{(card.goal_pct_label || "").trim()}</span>
-                  </div>
                   <div className="cr-bpc-small-actions">
                     <DonateOrLink href={btnUrl} className="cr-bpc-small-btn">
                       <i className="fa-solid fa-hand-holding-heart" aria-hidden />
