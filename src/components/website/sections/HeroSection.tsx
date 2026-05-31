@@ -124,6 +124,9 @@ export default function HeroSection({
   const alignmentClass = displayAlignment === 'center' ? 'text-center items-center mx-auto' : displayAlignment === 'right' ? 'text-right items-end ml-auto' : 'text-left items-start';
   
   const { openModal } = useDonation();
+
+  const foundingYear = 1959;
+  const yearsActive = new Date().getFullYear() - foundingYear;
   
   return (
     <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-stone-900 font-poppins">
@@ -155,6 +158,13 @@ export default function HeroSection({
       <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_20%_50%,rgba(140,34,8,0.15)_0%,transparent_50%)] pointer-events-none" />
       
       <div className="container relative z-10 mx-auto px-6 md:px-12">
+        {/* Years Badge — positioned within container margins */}
+        <div className="hero-years-badge" aria-label={`${yearsActive} years of saving lives`}>
+          <div className="hero-years-circle">
+            <span className="hero-years-num">{yearsActive}</span>
+            <span className="hero-years-word">years of saving lives</span>
+          </div>
+        </div>
         <div className={`flex flex-col max-w-4xl ${alignmentClass}`}>
           <AnimatePresence mode="wait" initial={false} custom={slideDir}>
             <motion.div
@@ -280,6 +290,7 @@ export default function HeroSection({
           ))}
         </div>
       )}
+
     </section>
   );
 }

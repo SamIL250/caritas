@@ -722,10 +722,140 @@
             z-index: 1;
         }
 
-        /* Hero carousel arrows — now styled inline via Tailwind in the HeroSection component */
+        /* ── Years Badge ("67 years of saving lives") ── */
+        @keyframes badgeSoftPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18); }
+            50%      { transform: scale(1.04); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22); }
+        }
+
+        .hero-years-badge {
+            position: absolute;
+            top: 2.5rem;
+            right: 0;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .hero-years-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            animation: badgeSoftPulse 4s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-years-num {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .hero-years-word {
+            font-size: 0.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 0.2rem;
+            line-height: 1.2;
+            max-width: 76px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .hero-years-badge {
+                top: 2rem;
+                right: 0;
+            }
+            .hero-years-circle {
+                width: 84px;
+                height: 84px;
+            }
+            .hero-years-num {
+                font-size: 1.5rem;
+            }
+            .hero-years-word {
+                font-size: 0.42rem;
+                max-width: 60px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero-years-badge {
+                top: 1.5rem;
+                right: 0;
+            }
+            .hero-years-circle {
+                width: 72px;
+                height: 72px;
+            }
+            .hero-years-num {
+                font-size: 1.25rem;
+            }
+            .hero-years-word {
+                font-size: 0.38rem;
+                max-width: 50px;
+            }
+        }
+
+        /* ── Hero Carousel Arrows ── */
+        .hero-carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .hero-carousel-btn:hover {
+            background: rgba(145, 19, 19, 0.75);
+            border-color: rgba(145, 19, 19, 0.5);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+        }
+
         .hero-carousel-btn:focus-visible {
             outline: 2px solid #fff;
             outline-offset: 3px;
+        }
+
+        .hero-carousel-btn--prev { left: 1.5rem; }
+        .hero-carousel-btn--next { right: 1.5rem; }
+
+        @media (max-width: 480px) {
+            .hero-carousel-btn {
+                width: 36px;
+                height: 36px;
+            }
+            .hero-carousel-btn--prev { left: 0.75rem; }
+            .hero-carousel-btn--next { right: 0.75rem; }
         }
 
         .hero-contents-wrapper {

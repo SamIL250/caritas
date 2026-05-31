@@ -1,0 +1,93 @@
+## Visual Layout Description
+The section has a full-width dark red background (#B5272D). The content is
+centered with a max-width container.
+
+**Top area:**
+- "About us" heading — top-left, large, Playfair Display font, white
+- Subtitle below it: "Caritas Rwanda Interventions Scale Through Its Network" — smaller, white, left-aligned
+
+**Main diagram (center of section):**
+A large circle (~420px diameter) with an off-white/beige background (#E8E0D5)
+sits in the center. Inside this large circle are THREE smaller dark red circles
+arranged in a triangle:
+- Top-left inner circle: labeled "OUR MISSION" (two lines, small caps)
+- Top-right inner circle: labeled "OUR VALUES" (two lines, small caps)
+- Bottom-center inner circle: labeled "OUR VISION" (two lines, small caps)
+All three inner circles are ~110px diameter, dark red bg (#8B1A1A), white text,
+Outfit font.
+
+**Six satellite circles** orbit OUTSIDE the large circle, connected to its edge
+by thin lines. Each is a dark red circle (~80px diameter) containing a bold
+white number. Their positions and labels (text outside the circle):
+
+1. Top-left of large circle — number: "1", label above: "Caritas Rwanda"
+2. Top-right of large circle — number: "10", label above: "Diocesan Caritas"
+3. Middle-right — number: "229", label right: "Parish Caritas"
+4. Bottom-right — number: "882", label right: "Sub-Parish Caritas"
+5. Bottom-left — number: "29,141", label left: "Basic Christian Community Caritas"
+6. Middle-left — number: "56,345+", label left: "Volunteers"
+
+Thin connector lines (white or light red, 1px) run from the edge of the large
+circle to each satellite circle.
+
+**Left info box** (floats to the left of the large circle, vertically centered):
+- Semi-transparent dark red box (#8B1A1A at ~60% opacity), rounded corners, padding
+- Target/goal icon at top (use react-icons: AiOutlineAim or similar)
+- Text: "To assist people in needs and promote their integral human development,
+  drawing on the Charity as per the World of God."
+- White text, Outfit font
+
+**Right info box** (floats to the right of the large circle, near the top):
+- Same semi-transparent dark red box styling
+- Group/people icon at top (use react-icons: MdGroups or similar)
+- A bulleted list of values, each with a small red dot icon:
+  Advocacy, Compassion, Environment Protection, Equity, Hope, Human Dignity,
+  Justice, Service, Solidarity, Stewardship and Accountability,
+  Subsidiarity and Partnership
+- White text, small font size
+
+**Bottom of diagram:**
+- Centered below the large circle: an eye icon (react-icons: AiOutlineEye)
+  inside a small circle outline, white
+- Below the icon: text "Promoting Human Dignity for All" — centered, white, Outfit
+
+**Bottom of section:**
+- A "Read More →" button — centered, white border, white text, rounded-full
+  (pill shape), transparent background, hover: white bg with red text
+
+---
+
+## Implementation Notes
+
+**Circle diagram positioning:**
+- Use a `relative` container div sized to fit the diagram (~700px wide, ~600px tall)
+- The large circle is `absolute` centered in this container
+- Each satellite circle is `absolute` positioned using top/left percentages
+- Use an `<svg>` with `position: absolute; inset: 0; width: 100%; height: 100%`
+  behind everything to draw `<line>` connectors from center to each satellite
+
+**Approximate satellite absolute positions (% of container):**
+- "1" Caritas Rwanda: top: 5%, left: 28%
+- "10" Diocesan Caritas: top: 5%, left: 58%
+- "229" Parish Caritas: top: 42%, left: 82%
+- "882" Sub-Parish Caritas: top: 68%, left: 72%
+- "29,141" BCC Caritas: top: 68%, left: 30%
+- "56,345+" Volunteers: top: 42%, left: 8%
+
+**Responsive (mobile):**
+Hide the circular diagram. Show instead:
+- A centered block with three dark red pill badges: "Our Mission", "Our Values",
+  "Our Vision"
+- A 2-column stat grid with all 6 network numbers + labels
+- The mission text and values list stacked vertically
+
+---
+
+## Constraints
+- Do NOT touch any other existing components or global styles
+- Framer Motion is already installed — use `fadeInUp` variants and
+  `staggerChildren` on the satellite nodes for entrance animation
+- react-icons is already installed — use it for all icons
+- Tailwind only for styling (no inline style objects except for absolute
+  positioning percentages)
+- Export default: `export default function AboutSection()`
