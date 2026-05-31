@@ -6,6 +6,13 @@ import Link from "next/link";
 export const PROGRAM_TAB_KEYS = ["social", "health", "dev", "admin"] as const;
 export type ProgramTabKey = (typeof PROGRAM_TAB_KEYS)[number];
 
+export const PROGRAM_COLORS: Record<ProgramTabKey, string> = {
+  social: "#911313",
+  health: "#5BA9C4",
+  dev: "#1F7A6E",
+  admin: "#111111",
+};
+
 export interface ProgramItem {
   title: string;
   description: string;
@@ -233,7 +240,7 @@ export default function ProgramCards({
           ))}
         </div>
 
-        <div className="prog-content-col">
+        <div className="prog-content-col" style={{ background: PROGRAM_COLORS[activeKey], transition: 'background 0.45s ease' }}>
           <div
             className="prog-nav"
             role="tablist"
