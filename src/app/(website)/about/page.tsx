@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { renderWebsiteSection } from "@/lib/public-page-sections";
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
-import { renderWebsiteSectionsWithFeatured } from "@/lib/public-page-sections-server";
+import ChairpersonSection from "@/components/website/sections/ChairpersonSection";
+import HistoryBentoSection from "@/components/website/sections/HistoryBentoSection";
+import MissionVisionValuesSection from "@/components/website/sections/MissionVisionValuesSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
@@ -25,6 +28,14 @@ export async function generateMetadata(): Promise<Metadata> {
       meta.seo_description ||
       "Discover Caritas Rwanda’s history, mission, values, and nationwide humanitarian network.",
   };
+}
+
+function sectionContent(
+  content: unknown,
+): Record<string, unknown> {
+  return content && typeof content === "object" && !Array.isArray(content)
+    ? (content as Record<string, unknown>)
+    : {};
 }
 
 export default async function AboutPage() {
@@ -93,6 +104,8 @@ export default async function AboutPage() {
       }))
     : [];
 
+  const sectionsArr = sections ?? [];
+
   return (
     <div className="about-page-content">
       <PageHeroSection
@@ -104,7 +117,37 @@ export default async function AboutPage() {
         breadcrumbLabel="About Us"
         quickNav={quickNav}
       />
-      {renderWebsiteSectionsWithFeatured(sections)}
+      {sectionsArr.flatMap((section) => {
+        switch (section.type) {
+          case "stats_banner":
+            return [];
+          case "featured_quote": {
+            const c = sectionContent(section.content);
+            return [
+              <ChairpersonSection
+                key={section.id}
+                name={c.name as string}
+                title={c.subtitle as string}
+                quote={c.quote as string}
+                meta={c.meta as string}
+                photoUrl={(c.photo_url as string) || "/img/Chairperson/anaclet.jpg"}
+              />,
+            ];
+          }
+          case "timeline":
+            return [<HistoryBentoSection key={section.id} />];
+          case "pillar_cards":
+            return [];
+          case "values_grid":
+            return [<MissionVisionValuesSection key={section.id} />];
+          case "network_section":
+            return [renderWebsiteSection(section)];
+          case "leadership_grid":
+            return [renderWebsiteSection(section)];
+          default:
+            return [renderWebsiteSection(section)];
+        }
+      })}
     </div>
   );
 }
