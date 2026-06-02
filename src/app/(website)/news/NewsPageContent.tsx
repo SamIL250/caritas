@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Fragment, useState } from "react";
-import type { NewsArticleCategory } from "@/lib/news";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
 
 import type { NewsCmsSection, NewsPageChrome } from "./get-news-data";
@@ -30,7 +29,6 @@ export default function NewsPageContent({
   gridArticles,
   departmentPillars,
 }: Props) {
-  const [topicFilter, setTopicFilter] = useState<NewsArticleCategory | "all">("all");
   const [departmentFilter, setDepartmentFilter] = useState<string | "all">("all");
   const [query, setQuery] = useState("");
 
@@ -74,8 +72,8 @@ export default function NewsPageContent({
               featuredArticle={featuredArticle}
               gridArticles={gridArticles}
               departmentPillars={departmentPillars}
-              topicFilter={topicFilter}
-              onTopicFilterChange={setTopicFilter}
+              topicFilter="all"
+              onTopicFilterChange={() => {}}
               departmentFilter={departmentFilter}
               onDepartmentFilterChange={setDepartmentFilter}
               query={query}

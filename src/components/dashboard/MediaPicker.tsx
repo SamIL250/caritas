@@ -106,22 +106,32 @@ export function MediaPicker({
   }, [isOpen]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+    const files = Array.from(e.target.files || []);
     e.target.value = "";
-    if (!file) return;
+    if (files.length === 0) return;
+    
     setUploading(true);
     setUploadError(null);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      if (uploadIntoId) {
-        formData.append("folder_id", uploadIntoId);
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        if (uploadIntoId) {
+          formData.append("folder_id", uploadIntoId);
+        }
+        return await uploadMedia(formData);
+      });
+      
+      const uploadedMedia = await Promise.all(uploadPromises);
+      
+      setMedia((prev) => [...(uploadedMedia as MediaItem[]), ...prev]);
+      
+      if (!multi) {
+        setSelectedIds([uploadedMedia[0].id]);
+      } else {
+        setSelectedIds((prev) => [...prev, ...uploadedMedia.map(m => m.id)]);
       }
-      const newMedia = await uploadMedia(formData);
-      const item = newMedia as MediaItem;
-      setMedia((prev) => [item, ...prev]);
-      if (!multi) setSelectedIds([item.id]);
-      else setSelectedIds((prev) => [...prev, item.id]);
+      
       void loadFoldersAndMedia();
     } catch (error: unknown) {
       setUploadError(error instanceof Error ? error.message : "Upload failed.");
@@ -199,7 +209,7 @@ export function MediaPicker({
               />
             </div>
             <label className="cursor-pointer">
-              <input type="file" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
+              <input type="file" multiple className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
               <div
                 className={`flex items-center gap-2 rounded-xl border-2 border-dashed border-stone-200 px-6 py-2 font-medium text-stone-500 hover:border-[#7A1515] hover:text-[#7A1515] ${uploading ? "opacity-50" : ""}`}
               >

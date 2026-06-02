@@ -338,16 +338,21 @@ export default function MediaLibraryClient({
   );
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+    const files = Array.from(e.target.files || []);
     e.target.value = "";
-    if (!file) return;
+    if (files.length === 0) return;
+    
     setUploading(true);
     setError(null);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      if (currentFolderId) fd.append("folder_id", currentFolderId);
-      await uploadMedia(fd);
+      const uploadPromises = files.map(async (file) => {
+        const fd = new FormData();
+        fd.append("file", file);
+        if (currentFolderId) fd.append("folder_id", currentFolderId);
+        return await uploadMedia(fd);
+      });
+      
+      await Promise.all(uploadPromises);
       await reload();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Upload failed.");
@@ -419,7 +424,7 @@ export default function MediaLibraryClient({
 
   const uploadTrigger = (
     <label className="cursor-pointer">
-      <input type="file" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading || trashMode} />
+      <input type="file" multiple className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading || trashMode} />
       <Button variant="primary" className="pointer-events-none h-9 gap-2" disabled={uploading || trashMode}>
         {uploading ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <Upload size={16} aria-hidden />}
         {uploading ? "Uploading…" : "Upload"}

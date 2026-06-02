@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import type {
   PublicationCategoryRow,
   PublicationRow,
@@ -45,6 +45,7 @@ function gridClassForKind(kind: string, slug: string): string {
 
 export default function PublicationsLibrary({ publications, categories }: Props) {
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [activePublication, setActivePublication] = useState<PublicationRow | null>(null);
 
   const sortedCategories = useMemo(
     () =>
@@ -73,6 +74,21 @@ export default function PublicationsLibrary({ publications, categories }: Props)
 
   const totalCount = publications.filter((p) => p.category !== "success_story").length;
   const showSection = (slug: string) => filter === "all" || filter === slug;
+
+  // Lock body scroll when drawer open
+  useEffect(() => {
+    document.body.style.overflow = activePublication ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [activePublication]);
+
+  // Close on Escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setActivePublication(null);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <>
@@ -126,65 +142,27 @@ export default function PublicationsLibrary({ publications, categories }: Props)
             id={readCategoryBehavior(strategicCat).site_anchor || "strategic"}
             aria-labelledby="pub-strategic-heading"
           >
-            <a
-              href={publicationPrimaryHref(strategicFeatured)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pub-featured"
-            >
-              <div className="pub-feat-img">
-                {strategicFeatured.cover_image_url.trim() ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={encodePublicationAssetUrl(strategicFeatured.cover_image_url)}
-                    alt={strategicFeatured.cover_image_alt || strategicFeatured.title}
-                  />
-                ) : null}
-                <div className="pub-feat-badge">
-                  <i className="fa-solid fa-star" aria-hidden /> Featured
-                </div>
+            {publicationHasPdf(strategicFeatured) ? (
+              <a
+                href={publicationPrimaryHref(strategicFeatured)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pub-featured"
+              >
+                <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
+              </a>
+            ) : (
+              <div
+                className="pub-featured"
+                role="button"
+                tabIndex={0}
+                onClick={() => setActivePublication(strategicFeatured)}
+                onKeyDown={(e) => e.key === "Enter" && setActivePublication(strategicFeatured)}
+                style={{ cursor: "pointer" }}
+              >
+                <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
               </div>
-              <div className="pub-feat-body">
-                <div className="pub-feat-tag">
-                  {strategicCat.icon ? <i className={strategicCat.icon} aria-hidden /> : null}
-                  {strategicCat.label}
-                </div>
-                <h2 className="pub-feat-title" id="pub-strategic-heading">
-                  {strategicFeatured.title}
-                </h2>
-                <p className="pub-feat-desc">{strategicFeatured.excerpt}</p>
-                <div className="pub-feat-meta">
-                  {strategicFeatured.published_at ? (
-                    <div className="pub-feat-meta-item">
-                      <i className="fa-solid fa-calendar-days" aria-hidden />
-                      {formatHeroDate(strategicFeatured.published_at)}
-                    </div>
-                  ) : null}
-                  {publicationHasPdf(strategicFeatured) ? (
-                    <div className="pub-feat-meta-item">
-                      <i className="fa-solid fa-file-pdf" aria-hidden />
-                      PDF document
-                    </div>
-                  ) : null}
-                  {strategicFeatured.meta_line.trim() ? (
-                    <div className="pub-feat-meta-item">
-                      <i className="fa-solid fa-globe" aria-hidden />
-                      {strategicFeatured.meta_line}
-                    </div>
-                  ) : null}
-                </div>
-                <div className="pub-feat-actions">
-                  <span className="pub-btn-download">
-                    <i className="fa-solid fa-download" aria-hidden />
-                    Download PDF
-                  </span>
-                  <span className="pub-btn-preview">
-                    <i className="fa-solid fa-eye" aria-hidden />
-                    Open
-                  </span>
-                </div>
-              </div>
-            </a>
+            )}
           </section>
         ) : null}
 
@@ -201,10 +179,79 @@ export default function PublicationsLibrary({ publications, categories }: Props)
               items={items}
               anchor={anchor}
               visible={visible}
+              onOpenDrawer={setActivePublication}
             />
           );
         })}
       </main>
+
+      <PublicationDrawer
+        publication={activePublication}
+        categories={categories}
+        onClose={() => setActivePublication(null)}
+      />
+    </>
+  );
+}
+
+function FeaturedContent({ cat, pub }: { cat: PublicationCategoryRow; pub: PublicationRow }) {
+  return (
+    <>
+      <div className="pub-feat-img">
+        {pub.cover_image_url.trim() ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={encodePublicationAssetUrl(pub.cover_image_url)}
+            alt={pub.cover_image_alt || pub.title}
+          />
+        ) : null}
+        <div className="pub-feat-badge">
+          <i className="fa-solid fa-star" aria-hidden /> Featured
+        </div>
+      </div>
+      <div className="pub-feat-body">
+        <div className="pub-feat-tag">
+          {cat.icon ? <i className={cat.icon} aria-hidden /> : null}
+          {cat.label}
+        </div>
+        <h2 className="pub-feat-title" id="pub-strategic-heading">
+          {pub.title}
+        </h2>
+        <p className="pub-feat-desc">{pub.excerpt}</p>
+        <div className="pub-feat-meta">
+          {pub.published_at ? (
+            <div className="pub-feat-meta-item">
+              <i className="fa-solid fa-calendar-days" aria-hidden />
+              {formatHeroDate(pub.published_at)}
+            </div>
+          ) : null}
+          {publicationHasPdf(pub) ? (
+            <div className="pub-feat-meta-item">
+              <i className="fa-solid fa-file-pdf" aria-hidden />
+              PDF document
+            </div>
+          ) : null}
+          {pub.meta_line.trim() ? (
+            <div className="pub-feat-meta-item">
+              <i className="fa-solid fa-globe" aria-hidden />
+              {pub.meta_line}
+            </div>
+          ) : null}
+        </div>
+        <div className="pub-feat-actions">
+          {publicationHasPdf(pub) ? (
+            <span className="pub-btn-download">
+              <i className="fa-solid fa-download" aria-hidden />
+              Download PDF
+            </span>
+          ) : (
+            <span className="pub-btn-preview">
+              <i className="fa-solid fa-eye" aria-hidden />
+              Open
+            </span>
+          )}
+        </div>
+      </div>
     </>
   );
 }
@@ -214,11 +261,13 @@ function CategorySection({
   items,
   anchor,
   visible,
+  onOpenDrawer,
 }: {
   cat: PublicationCategoryRow;
   items: PublicationRow[];
   anchor: string;
   visible: boolean;
+  onOpenDrawer: (row: PublicationRow) => void;
 }) {
   const headingId = `pub-${cat.slug}-heading`;
   const gridClass = gridClassForKind(cat.kind, cat.slug);
@@ -241,22 +290,19 @@ function CategorySection({
       </div>
       <div className={gridClass}>
         {items.map((p) => (
-          <CategoryCard key={p.id} cat={cat} row={p} />
+          <CategoryCard key={p.id} cat={cat} row={p} onOpenDrawer={onOpenDrawer} />
         ))}
       </div>
     </section>
   );
 }
 
-function CategoryCard({ cat, row }: { cat: PublicationCategoryRow; row: PublicationRow }) {
+function CategoryCard({ cat, row, onOpenDrawer }: { cat: PublicationCategoryRow; row: PublicationRow; onOpenDrawer: (row: PublicationRow) => void }) {
+  const hasPdf = publicationHasPdf(row);
+
   if (cat.slug === "annual_report" || (cat.kind === "pdf" && cat.slug !== "newsletter")) {
-    return (
-      <a
-        href={publicationPrimaryHref(row)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="pub-report-card"
-      >
+    const content = (
+      <>
         <div className="pub-report-cover">
           {row.cover_image_url.trim() ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -268,22 +314,42 @@ function CategoryCard({ cat, row }: { cat: PublicationCategoryRow; row: Publicat
         <div className="pub-report-body">
           <div className="pub-report-title">{row.title}</div>
           <div className="pub-report-download">
-            <i className="fa-solid fa-download" aria-hidden />
-            {publicationHasPdf(row) ? "Download PDF" : "Open"}
+            <i className={hasPdf ? "fa-solid fa-download" : "fa-solid fa-eye"} aria-hidden />
+            {hasPdf ? "Download PDF" : "Open"}
           </div>
         </div>
-      </a>
+      </>
+    );
+
+    if (hasPdf) {
+      return (
+        <a
+          href={publicationPrimaryHref(row)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pub-report-card"
+        >
+          {content}
+        </a>
+      );
+    }
+    return (
+      <div
+        className="pub-report-card"
+        role="button"
+        tabIndex={0}
+        onClick={() => onOpenDrawer(row)}
+        onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
+        style={{ cursor: "pointer" }}
+      >
+        {content}
+      </div>
     );
   }
 
   if (cat.slug === "newsletter") {
-    return (
-      <a
-        href={publicationPrimaryHref(row)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="pub-nl-card"
-      >
+    const content = (
+      <>
         <div className="pub-nl-cover">
           {row.cover_image_url.trim() ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -294,21 +360,42 @@ function CategoryCard({ cat, row }: { cat: PublicationCategoryRow; row: Publicat
           {row.period_label.trim() ? <div className="pub-nl-period">{row.period_label}</div> : null}
           <div className="pub-nl-title">{row.title}</div>
           <div className="pub-nl-download">
-            <i className="fa-solid fa-download" aria-hidden /> Download
+            <i className={hasPdf ? "fa-solid fa-download" : "fa-solid fa-eye"} aria-hidden /> 
+            {hasPdf ? "Download" : "Open"}
           </div>
         </div>
-      </a>
+      </>
+    );
+
+    if (hasPdf) {
+      return (
+        <a
+          href={publicationPrimaryHref(row)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pub-nl-card"
+        >
+          {content}
+        </a>
+      );
+    }
+    return (
+      <div
+        className="pub-nl-card"
+        role="button"
+        tabIndex={0}
+        onClick={() => onOpenDrawer(row)}
+        onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
+        style={{ cursor: "pointer" }}
+      >
+        {content}
+      </div>
     );
   }
 
   if (cat.kind === "external" || cat.slug === "recent_update") {
-    return (
-      <a
-        href={publicationPrimaryHref(row)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="pub-news-card"
-      >
+    const content = (
+      <>
         <div className="pub-news-img">
           {row.cover_image_url.trim() ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -326,18 +413,38 @@ function CategoryCard({ cat, row }: { cat: PublicationCategoryRow; row: Publicat
             Read more <i className="fa-solid fa-arrow-right" aria-hidden />
           </div>
         </div>
-      </a>
+      </>
+    );
+
+    if (hasPdf) {
+      return (
+        <a
+          href={publicationPrimaryHref(row)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pub-news-card"
+        >
+          {content}
+        </a>
+      );
+    }
+    return (
+      <div
+        className="pub-news-card"
+        role="button"
+        tabIndex={0}
+        onClick={() => onOpenDrawer(row)}
+        onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
+        style={{ cursor: "pointer" }}
+      >
+        {content}
+      </div>
     );
   }
 
   // story (or hybrid fallback)
-  return (
-    <a
-      href={publicationPrimaryHref(row)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="pub-story-card"
-    >
+  const storyContent = (
+    <>
       <div className="pub-story-img">
         {row.cover_image_url.trim() ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -357,6 +464,144 @@ function CategoryCard({ cat, row }: { cat: PublicationCategoryRow; row: Publicat
           Read story <i className="fa-solid fa-arrow-right" aria-hidden />
         </div>
       </div>
-    </a>
+    </>
+  );
+
+  if (hasPdf) {
+    return (
+      <a
+        href={publicationPrimaryHref(row)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="pub-story-card"
+      >
+        {storyContent}
+      </a>
+    );
+  }
+  
+  return (
+    <div
+      className="pub-story-card"
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpenDrawer(row)}
+      onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
+      style={{ cursor: "pointer" }}
+    >
+      {storyContent}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Publication Drawer                                                   */
+/* ------------------------------------------------------------------ */
+function PublicationDrawer({
+  publication,
+  categories,
+  onClose,
+}: {
+  publication: PublicationRow | null;
+  categories: PublicationCategoryRow[];
+  onClose: () => void;
+}) {
+  const isOpen = Boolean(publication);
+  const cat = publication ? categories.find(c => c.slug === publication.category) : null;
+  const tagLabel = cat?.label || publication?.tag_label || "Publication";
+  
+  const hasExternal = Boolean(publication?.external_url?.trim());
+  const hasBody = Boolean((publication as any)?.body?.trim());
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className={`pub-drawer-backdrop${isOpen ? " open" : ""}`}
+        onClick={onClose}
+        aria-hidden
+      />
+
+      {/* Panel */}
+      <aside
+        className={`pub-drawer-panel${isOpen ? " open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label={publication?.title || "Publication details"}
+      >
+        {publication && (
+          <>
+            {/* Close button */}
+            <button className="pub-drawer-close" type="button" onClick={onClose} aria-label="Close">
+              <i className="fa-solid fa-xmark" aria-hidden />
+            </button>
+
+            {/* Hero image */}
+            {publication.cover_image_url?.trim() ? (
+              <div className="pub-drawer-hero">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={encodePublicationAssetUrl(publication.cover_image_url)}
+                  alt={publication.cover_image_alt || publication.title}
+                />
+              </div>
+            ) : (
+              <div className="pub-drawer-hero-placeholder" />
+            )}
+
+            {/* Content */}
+            <div className="pub-drawer-content">
+              {/* Top: category pill + date */}
+              <div className="pub-drawer-meta">
+                <span className="pub-drawer-cat">
+                  {cat?.icon ? <i className={cat.icon} aria-hidden /> : null}{" "}
+                  {tagLabel}
+                </span>
+                {(publication.period_label || publication.published_at) && (
+                  <span className="pub-drawer-date">
+                    <i className="fa-regular fa-calendar" aria-hidden />
+                    {publication.period_label || formatHeroDate(publication.published_at)}
+                  </span>
+                )}
+              </div>
+
+              <h2 className="pub-drawer-title">{publication.title}</h2>
+              {publication.excerpt ? (
+                <p className="pub-drawer-excerpt">{publication.excerpt}</p>
+              ) : null}
+
+              <div className="pub-drawer-divider" />
+
+              {/* Action buttons: External */}
+              {hasExternal && (
+                <div className="pub-drawer-actions">
+                  <a
+                    href={publication.external_url!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pub-drawer-btn"
+                  >
+                    <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden />
+                    Read Full Article
+                  </a>
+                </div>
+              )}
+
+              {/* Written body */}
+              {hasBody ? (
+                <div
+                  className="pub-drawer-body"
+                  dangerouslySetInnerHTML={{ __html: (publication as any).body! }}
+                />
+              ) : !hasExternal ? (
+                <p className="pub-drawer-no-body">
+                  Full content is not available here. Check back later.
+                </p>
+              ) : null}
+            </div>
+          </>
+        )}
+      </aside>
+    </>
   );
 }

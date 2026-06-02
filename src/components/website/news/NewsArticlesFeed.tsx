@@ -1,23 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   categoryLabel,
   formatPublishedDate,
   inferredDepartmentSlugFromLegacyNewsCategory,
-  type NewsArticleCategory,
 } from "@/lib/news";
 import type { PublishedNewsArticle } from "@/app/(website)/news/get-news-data";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
-
-const FILTERS: { id: NewsArticleCategory | "all"; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "development", label: "Development" },
-  { id: "health", label: "Health & ECD" },
-  { id: "organizational", label: "Organizational" },
-  { id: "international", label: "International" },
-  { id: "social", label: "Social Welfare" },
-];
 
 function normalize(s: string) {
   return s.toLowerCase().trim();
@@ -27,11 +17,6 @@ function effectiveDepartmentSlug(a: PublishedNewsArticle): string | null {
   const slug = a.department?.slug?.trim();
   if (slug) return slug;
   return inferredDepartmentSlugFromLegacyNewsCategory(a.category);
-}
-
-function matchesTopicFilter(a: PublishedNewsArticle, filter: NewsArticleCategory | "all"): boolean {
-  if (filter === "all") return true;
-  return a.category === filter;
 }
 
 function matchesDepartmentFilter(a: PublishedNewsArticle, filter: string | "all"): boolean {
@@ -50,8 +35,8 @@ type Props = {
   featuredArticle: PublishedNewsArticle | null;
   gridArticles: PublishedNewsArticle[];
   departmentPillars: ProgramDepartmentOption[];
-  topicFilter: NewsArticleCategory | "all";
-  onTopicFilterChange: (f: NewsArticleCategory | "all") => void;
+  topicFilter: string;
+  onTopicFilterChange: (f: any) => void;
   departmentFilter: string | "all";
   onDepartmentFilterChange: (slug: string | "all") => void;
   query: string;
@@ -61,56 +46,55 @@ export default function NewsArticlesFeed({
   featuredArticle,
   gridArticles,
   departmentPillars,
-  topicFilter,
-  onTopicFilterChange,
   departmentFilter,
   onDepartmentFilterChange,
   query,
 }: Props) {
+  const [activeArticle, setActiveArticle] = useState<PublishedNewsArticle | null>(null);
+
   const featuredVisible =
     featuredArticle &&
-    matchesTopicFilter(featuredArticle, topicFilter) &&
     matchesDepartmentFilter(featuredArticle, departmentFilter) &&
     matchesQuery(featuredArticle, query);
 
   const filteredGrid = useMemo(() => {
     return gridArticles.filter(
       (a) =>
-        matchesTopicFilter(a, topicFilter) &&
         matchesDepartmentFilter(a, departmentFilter) &&
         matchesQuery(a, query),
     );
-  }, [gridArticles, topicFilter, departmentFilter, query]);
+  }, [gridArticles, departmentFilter, query]);
 
   const tagLabel = (a: PublishedNewsArticle) =>
     a.department?.label?.trim() || categoryLabel(a.category);
 
+  // Lock body scroll when drawer open
+  useEffect(() => {
+    document.body.style.overflow = activeArticle ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [activeArticle]);
+
+  // Close on Escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setActiveArticle(null);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <>
-      <div className="news-filter-bar">
-        <div className="news-filter-inner">
-          {FILTERS.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className={`news-filter-btn ${topicFilter === t.id ? "is-active" : ""}`}
-              onClick={() => onTopicFilterChange(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
+      {/* Single filter bar — departments only */}
       {departmentPillars.length > 0 ? (
-        <div className="news-filter-bar news-filter-bar--departments">
+        <div className="news-filter-bar">
           <div className="news-filter-inner">
             <button
               type="button"
               className={`news-filter-btn ${departmentFilter === "all" ? "is-active" : ""}`}
               onClick={() => onDepartmentFilterChange("all")}
             >
-              All programs
+              All Programs
             </button>
             {departmentPillars.map((p) => (
               <button
@@ -128,11 +112,13 @@ export default function NewsArticlesFeed({
 
       <div className="news-wrap">
         {featuredVisible && featuredArticle && (
-          <a
-            href={featuredArticle.external_url || `/news/${featuredArticle.slug}`}
-            target={featuredArticle.external_url ? "_blank" : undefined}
-            rel={featuredArticle.external_url ? "noopener noreferrer" : undefined}
-            className="block text-inherit no-underline"
+          <div
+            className="block text-inherit no-underline news-featured-clickable"
+            role="button"
+            tabIndex={0}
+            onClick={() => setActiveArticle(featuredArticle)}
+            onKeyDown={(e) => e.key === "Enter" && setActiveArticle(featuredArticle)}
+            aria-label={`Read: ${featuredArticle.title}`}
           >
             <article className="news-featured">
               <div className="news-feat-img">
@@ -162,12 +148,12 @@ export default function NewsArticlesFeed({
                 </span>
               </div>
             </article>
-          </a>
+          </div>
         )}
 
         {filteredGrid.length === 0 && !featuredVisible && (
           <p className="news-empty">
-            No articles match your search or category. Try adjusting filters or search terms.
+            No articles match your search or filters. Try adjusting your search terms.
           </p>
         )}
 
@@ -179,12 +165,15 @@ export default function NewsArticlesFeed({
 
             <div className="news-grid">
               {filteredGrid.map((a) => (
-                <a
+                <div
                   key={a.id}
-                  href={a.external_url || `/news/${a.slug}`}
-                  target={a.external_url ? "_blank" : undefined}
-                  rel={a.external_url ? "noopener noreferrer" : undefined}
+                  role="button"
+                  tabIndex={0}
                   className="news-card text-inherit no-underline"
+                  onClick={() => setActiveArticle(a)}
+                  onKeyDown={(e) => e.key === "Enter" && setActiveArticle(a)}
+                  aria-label={`Read: ${a.title}`}
+                  style={{ cursor: "pointer" }}
                 >
                   <div className="news-card-img">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -203,12 +192,121 @@ export default function NewsArticlesFeed({
                       Read more <i className="fa-solid fa-arrow-right text-xs" aria-hidden />
                     </span>
                   </div>
-                </a>
+                </div>
               ))}
             </div>
           </>
         )}
       </div>
+
+      {/* Article Drawer */}
+      <NewsArticleDrawer
+        article={activeArticle}
+        tagLabel={activeArticle ? tagLabel(activeArticle) : ""}
+        onClose={() => setActiveArticle(null)}
+      />
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* News Article Drawer                                                  */
+/* ------------------------------------------------------------------ */
+function NewsArticleDrawer({
+  article,
+  tagLabel,
+  onClose,
+}: {
+  article: PublishedNewsArticle | null;
+  tagLabel: string;
+  onClose: () => void;
+}) {
+  const isOpen = Boolean(article);
+  const hasExternal = Boolean(article?.external_url?.trim());
+  const hasBody = Boolean((article as any)?.body?.trim());
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className={`news-drawer-backdrop${isOpen ? " open" : ""}`}
+        onClick={onClose}
+        aria-hidden
+      />
+
+      {/* Panel */}
+      <aside
+        className={`news-drawer-panel${isOpen ? " open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label={article?.title || "Article"}
+      >
+        {article && (
+          <>
+            {/* Close */}
+            <button className="news-drawer-close" type="button" onClick={onClose} aria-label="Close">
+              <i className="fa-solid fa-xmark" aria-hidden />
+            </button>
+
+            {/* Hero image */}
+            {article.image_url ? (
+              <div className="news-drawer-hero">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={article.image_url} alt={article.image_alt || article.title} />
+              </div>
+            ) : (
+              <div className="news-drawer-hero-placeholder" />
+            )}
+
+            {/* Content */}
+            <div className="news-drawer-content">
+              {/* Category + date */}
+              <div className="news-drawer-meta">
+                <span className="news-drawer-cat">{tagLabel}</span>
+                <span className="news-drawer-date">
+                  <i className="fa-regular fa-calendar" aria-hidden />
+                  {formatPublishedDate(article.published_at)}
+                </span>
+              </div>
+
+              <h2 className="news-drawer-title">{article.title}</h2>
+
+              {article.excerpt ? (
+                <p className="news-drawer-excerpt">{article.excerpt}</p>
+              ) : null}
+
+              <div className="news-drawer-divider" />
+
+              {/* External link button */}
+              {hasExternal && (
+                <div className="news-drawer-actions">
+                  <a
+                    href={article.external_url!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="news-drawer-btn"
+                  >
+                    <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden />
+                    Read Full Article
+                  </a>
+                </div>
+              )}
+
+              {/* Body */}
+              {hasBody ? (
+                <div
+                  className="news-drawer-body"
+                  dangerouslySetInnerHTML={{ __html: (article as any).body }}
+                />
+              ) : !hasExternal ? (
+                <p className="news-drawer-no-body">
+                  Full article content is not available here. Check back later or follow the link above.
+                </p>
+              ) : null}
+            </div>
+          </>
+        )}
+      </aside>
     </>
   );
 }

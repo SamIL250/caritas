@@ -76,6 +76,9 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
     const cover_image_url = String(form.get("cover_image_url") || "").trim();
     const cover_image_alt = String(form.get("cover_image_alt") || "").trim();
     const external_url = String(form.get("external_url") || "").trim();
+    const subtitle = String(form.get("subtitle") || "").trim();
+    const location = String(form.get("location") || "").trim();
+    const contact_phone = String(form.get("contact_phone") || "").trim();
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
@@ -104,6 +107,9 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
         cover_image_url,
         cover_image_alt,
         external_url,
+        subtitle,
+        location,
+        contact_phone,
         tag_label,
         tag_icon,
         featured,
@@ -153,6 +159,9 @@ export async function updateProgram(
     const cover_image_url = String(form.get("cover_image_url") || "").trim();
     const cover_image_alt = String(form.get("cover_image_alt") || "").trim();
     const external_url = String(form.get("external_url") || "").trim();
+    const subtitle = String(form.get("subtitle") || "").trim();
+    const location = String(form.get("location") || "").trim();
+    const contact_phone = String(form.get("contact_phone") || "").trim();
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
@@ -173,6 +182,9 @@ export async function updateProgram(
         cover_image_url,
         cover_image_alt,
         external_url,
+        subtitle,
+        location,
+        contact_phone,
         tag_label,
         tag_icon,
         featured,

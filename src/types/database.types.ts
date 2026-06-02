@@ -1029,6 +1029,9 @@ export interface Database {
           cover_image_url: string
           cover_image_alt: string
           external_url: string
+          subtitle: string
+          location: string
+          contact_phone: string
           tag_label: string
           tag_icon: string
           featured: boolean
@@ -1050,6 +1053,9 @@ export interface Database {
           cover_image_url?: string
           cover_image_alt?: string
           external_url?: string
+          subtitle?: string
+          location?: string
+          contact_phone?: string
           tag_label?: string
           tag_icon?: string
           featured?: boolean
@@ -1071,6 +1077,9 @@ export interface Database {
           cover_image_url?: string
           cover_image_alt?: string
           external_url?: string
+          subtitle?: string
+          location?: string
+          contact_phone?: string
           tag_label?: string
           tag_icon?: string
           featured?: boolean

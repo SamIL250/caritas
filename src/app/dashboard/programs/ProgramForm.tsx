@@ -222,6 +222,37 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
           />
         </div>
 
+        <div className="space-y-1">
+          <label
+            className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+            htmlFor="subtitle"
+          >
+            Subtitle (Optional)
+          </label>
+          <Input id="subtitle" name="subtitle" defaultValue={(program as any)?.subtitle ?? ""} placeholder="e.g. Be Resilient, Be Self Reliant" />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1">
+            <label
+              className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+              htmlFor="location"
+            >
+              Location
+            </label>
+            <Input id="location" name="location" defaultValue={(program as any)?.location ?? ""} placeholder="e.g. Karongi, Nyamasheke" />
+          </div>
+          <div className="space-y-1">
+            <label
+              className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+              htmlFor="contact_phone"
+            >
+              Contact Phone
+            </label>
+            <Input id="contact_phone" name="contact_phone" defaultValue={(program as any)?.contact_phone ?? ""} placeholder="e.g. +250 078X XXX XXX" />
+          </div>
+        </div>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1">
             <label
