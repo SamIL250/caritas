@@ -8,7 +8,7 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { useDonation } from '@/context/DonationContext';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 
-type SubKey = 'about' | 'programs' | 'publications' | 'more';
+type SubKey = 'about' | 'programs' | 'publications';
 
 export default function WebsiteHeader() {
   const { isModalOpen, openModal, closeModal } = useDonation();
@@ -189,49 +189,38 @@ export default function WebsiteHeader() {
 
             <li>
               <Link href="/news" onClick={closeNav}>
-                News
+                News &amp; Updates
               </Link>
             </li>
 
-            <li className={['has-dropdown', openSub === 'more' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
-              <div className="nav-item-row">
-                <a className={(isActive('/diocesan') || isActive('/metrics') || isActive('/get-involved') || isActive('/publications')) ? 'current' : ''}>
-                  More <span className="caret">▾</span>
-                </a>
-                <button
-                  type="button"
-                  className="nav-submenu-toggle"
-                  aria-expanded={openSub === 'more'}
-                  aria-label="Toggle More submenu"
-                  onClick={() => toggleSub('more')}
-                >
-                  <ChevronDown
-                    size={18}
-                    aria-hidden
-                    className={openSub === 'more' ? 'rotate-180 transition-transform' : 'transition-transform'}
-                  />
-                </button>
-              </div>
-              <div className="nav-dropdown">
-                <div className="nav-dropdown-inner">
-                  <Link href="/diocesan" className={isActive('/diocesan') ? 'current' : ''} onClick={closeNav}>
-                    <i className="fa-solid fa-church"></i> Diocesan Caritas
-                  </Link>
-                  <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>
-                    <i className="fa-solid fa-chart-bar"></i> Our Impact
-                  </Link>
-                  <Link href="/get-involved" className={isActive('/get-involved') ? 'current' : ''} onClick={closeNav}>
-                    <i className="fa-solid fa-hand-holding-heart"></i> Get Involved
-                  </Link>
-                  <div className="nav-dropdown-divider"></div>
-                  <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
-                    <i className="fa-solid fa-book-open"></i> Publications
-                  </Link>
-                  <Link href="/contact" onClick={closeNav}>
-                    <i className="fa-solid fa-envelope"></i> Contact
-                  </Link>
-                </div>
-              </div>
+            {/* <li>
+              <Link href="/diocesan" className={isActive('/diocesan') ? 'current' : ''} onClick={closeNav}>
+                Diocesan Caritas
+              </Link>
+            </li> */}
+
+            <li>
+              <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>
+                Metrics
+              </Link>
+            </li>
+
+            {/* <li>
+              <Link href="/get-involved" className={isActive('/get-involved') ? 'current' : ''} onClick={closeNav}>
+                Get Involved
+              </Link>
+            </li> */}
+
+            <li>
+              <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
+                Publications
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/contact" onClick={closeNav}>
+                Contact Us
+              </Link>
             </li>
           </ul>
           <div className="nav-cta-group">

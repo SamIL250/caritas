@@ -160,21 +160,23 @@
         nav > ul {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: clamp(0.5rem, 1.2vw, 1.5rem);
             margin: 0 auto;
+            max-width: 100%;
         }
 
         nav a,
         nav > ul > li > a {
             color: #ffffff;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: clamp(0.65rem, 0.85vw, 0.85rem);
             font-weight: 500;
             letter-spacing: 0.2px;
             transition: color 0.2s ease;
             position: relative;
             display: inline-block;
             padding: 0.25rem 0;
+            white-space: nowrap;
         }
 
         nav a:hover {
