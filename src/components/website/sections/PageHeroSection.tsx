@@ -12,10 +12,11 @@ type PageHeroSectionProps = {
   heading: string;
   headingAccent?: string;
   subheading: string;
-  /** Background image URL (fallback /img/slide1.png) */
+  /** Background image URL — baked into --page-hero-image CSS var */
   imageUrl?: string;
   breadcrumbLabel?: string;
   quickNav?: QuickNavItem[];
+  children?: React.ReactNode;
 };
 
 function HeadingWithAccent({
@@ -58,6 +59,7 @@ export default function PageHeroSection({
   imageUrl = "/img/slide1.webp",
   breadcrumbLabel = "About Us",
   quickNav = [],
+  children,
 }: PageHeroSectionProps) {
   return (
     <section
@@ -69,41 +71,42 @@ export default function PageHeroSection({
       }
     >
       <div className="page-hero-container">
-      <div className="page-hero-inner">
-        {eyebrow ? (
-          <div className="hero-eyebrow">
-            <i className="fa-solid fa-circle-info" aria-hidden />
-            {eyebrow}
-          </div>
-        ) : null}
-        <h1>
-          <HeadingWithAccent heading={heading} headingAccent={headingAccent} />
-        </h1>
-        {subheading ? <p>{subheading}</p> : null}
-        <nav className="hero-breadcrumb" aria-label="Breadcrumb">
-          <Link href="/">Home</Link>
-          <span aria-hidden>›</span>
-          <span>{breadcrumbLabel}</span>
-        </nav>
-        {quickNav.length > 0 ? (
-          <nav className="hero-quick-nav" aria-label="On this page">
-            {quickNav.map((item) => {
-              const ic = item.icon?.trim();
-              const iconClass = ic
-                ? ic.includes("fa-")
-                  ? `fa-solid ${ic.replace(/^fa-solid\s+/i, "")}`
-                  : `fa-solid fa-${ic}`
-                : null;
-              return (
-                <a key={item.href} href={item.href} className="qnav-pill">
-                  {iconClass ? <i className={iconClass} aria-hidden /> : null}
-                  {item.label}
-                </a>
-              );
-            })}
+        <div className="page-hero-inner">
+          {eyebrow ? (
+            <div className="hero-eyebrow">
+              <i className="fa-solid fa-circle-info" aria-hidden />
+              {eyebrow}
+            </div>
+          ) : null}
+          <h1>
+            <HeadingWithAccent heading={heading} headingAccent={headingAccent} />
+          </h1>
+          {subheading ? <p>{subheading}</p> : null}
+          <nav className="hero-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden>›</span>
+            <span>{breadcrumbLabel}</span>
           </nav>
-        ) : null}
-      </div>
+          {quickNav.length > 0 ? (
+            <nav className="hero-quick-nav" aria-label="On this page">
+              {quickNav.map((item) => {
+                const ic = item.icon?.trim();
+                const iconClass = ic
+                  ? ic.includes("fa-")
+                    ? `fa-solid ${ic.replace(/^fa-solid\s+/i, "")}`
+                    : `fa-solid fa-${ic}`
+                  : null;
+                return (
+                  <a key={item.href} href={item.href} className="qnav-pill">
+                    {iconClass ? <i className={iconClass} aria-hidden /> : null}
+                    {item.label}
+                  </a>
+                );
+              })}
+            </nav>
+          ) : null}
+          {children}
+        </div>
       </div>
     </section>
   );

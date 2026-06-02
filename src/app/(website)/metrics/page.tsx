@@ -78,7 +78,7 @@ export default async function MetricsPage() {
   return (
     <div className="metrics-page min-h-screen bg-white">
       <PageHeroSection
-        imageUrl={heroImage}
+        imageUrl={heroImage || "/img/slide5.webp"}
         eyebrow={badgeText}
         heading={heading}
         headingAccent={headingAccent}

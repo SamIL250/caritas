@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Fragment, useState } from "react";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
 
@@ -9,8 +8,8 @@ import type { PublishedNewsArticle } from "./get-news-data";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
 
 import NewsArticlesFeed from "@/components/website/news/NewsArticlesFeed";
-import NewsLandingHero from "@/components/website/news/NewsLandingHero";
 import NewsNewsletterFooter from "@/components/website/news/NewsNewsletterFooter";
+import PageHeroSection from "@/components/website/sections/PageHeroSection";
 
 import "./news-page.css";
 
@@ -32,15 +31,24 @@ export default function NewsPageContent({
   const [departmentFilter, setDepartmentFilter] = useState<string | "all">("all");
   const [query, setQuery] = useState("");
 
+  // original-website/news.html has no dedicated hero image — use slide4 (community) which fits the news context
+  const heroImage =
+    chrome.heroImageUrl?.trim() || "/img/slide4.webp";
+
+  const headlineAccent = (chrome.headlineAccent || "Updates").trim();
+  const headlinePrefix = (chrome.headlinePrefix || "News &").trim();
+
   return (
     <div className="news-page-root bg-[#f7f5f2]">
-      <NewsLandingHero
-        eyebrow={chrome.eyebrow}
-        headlinePrefix={chrome.headlinePrefix || "News &"}
-        headlineAccent={chrome.headlineAccent || "Updates"}
-        intro={chrome.intro}
-        heroImageUrl={chrome.heroImageUrl}
+      <PageHeroSection
+        imageUrl={heroImage}
+        eyebrow={chrome.eyebrow || "Latest from Caritas Rwanda"}
+        heading={`${headlinePrefix} ${headlineAccent}`}
+        headingAccent={headlineAccent}
+        subheading={chrome.intro}
+        breadcrumbLabel="News"
       >
+        {/* Search bar rendered inside the hero as children */}
         <div className="news-hero-search">
           <input
             type="search"
@@ -54,13 +62,7 @@ export default function NewsPageContent({
             <i className="fa-solid fa-magnifying-glass" aria-hidden />
           </span>
         </div>
-
-        <nav className="news-breadcrumb" aria-label="Breadcrumb">
-          <Link href="/">Home</Link>
-          <span aria-hidden>›</span>
-          <span>News</span>
-        </nav>
-      </NewsLandingHero>
+      </PageHeroSection>
 
       {cmsSections.map((section) => {
         if (!section.visible) return null;

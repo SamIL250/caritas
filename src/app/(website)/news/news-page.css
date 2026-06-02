@@ -8,86 +8,15 @@
   --news-edge: rgba(13, 27, 42, 0.1);
 }
 
-.news-page-root .news-hero {
-  padding: clamp(5rem, 12vw, 7.5rem) 1.5rem 2.75rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  background-position: center;
-  background-size: cover;
-  background-image: var(
-    --news-hero-image,
-    url("https://caritasrwanda.org/wp-content/uploads/2026/03/162A7732-scaled.jpg")
-  );
-}
-
-.news-page-root .news-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: rgb(22 38 53 / 0.88);
-  z-index: 0;
-}
-
-.news-page-root .news-hero-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+/* Search bar rendered inside the shared page-hero via children */
+.news-hero-search {
+  margin: 1.5rem 0 0;
+  max-width: 540px;
   width: 100%;
-}
-
-.news-page-root .news-hero-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: 0;
-  text-align: left;
-}
-
-.news-page-root .news-hero .hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 0.45rem 1.1rem;
-  border-radius: 100px;
-  margin-bottom: 1rem;
-  backdrop-filter: none;
-}
-
-.news-page-root .news-hero h1 {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 900;
-  color: #fff;
-  line-height: 1.15;
-  margin-bottom: 0.9rem;
-}
-
-.news-page-root .news-hero h1 span {
-  color: #dcb896;
-}
-
-.news-page-root .news-hero .news-hero-intro {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.75);
-  margin: 0 0 1.25rem;
-  line-height: 1.75;
-  max-width: 560px;
-}
-
-.news-page-root .news-hero-search {
-  margin: 1.5rem 0 1.35rem;
-  max-width: 640px;
   position: relative;
 }
 
-.news-page-root .news-hero-search input {
+.news-hero-search input {
   width: 100%;
   padding: 0.85rem 2.85rem 0.85rem 1.3rem;
   border-radius: 100px;
@@ -95,22 +24,21 @@
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
   font-size: 0.93rem;
+  font-family: inherit;
   outline: none;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
 
-.news-page-root .news-hero-search input::placeholder {
+.news-hero-search input::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.news-page-root .news-hero-search input:focus {
+.news-hero-search input:focus {
   border-color: rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.18);
 }
 
-.news-page-root .news-hero-search .search-icon {
+.news-hero-search .search-icon {
   position: absolute;
   right: 1rem;
   top: 50%;
@@ -118,23 +46,6 @@
   color: rgba(255, 255, 255, 0.55);
   font-size: 0.92rem;
   pointer-events: none;
-}
-
-.news-page-root .news-breadcrumb {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.5rem;
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.news-page-root .news-breadcrumb a {
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.news-page-root .news-breadcrumb a:hover {
-  color: #fff;
 }
 
 /* Sticky filters — clears below site header (~4rem); adjust if navbar height changes */
