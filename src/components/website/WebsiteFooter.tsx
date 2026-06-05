@@ -61,7 +61,7 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
       <div className="footer-grid">
         <div className="footer-top">
           <div className="footer-top-tagline">
-            Serving Rwanda with <span>Faith, Hope</span> &amp; Love.
+            Serving Rwanda with <span>Faith, Hope </span> &amp; Love.
           </div>
           <a href="#contact" className="footer-top-cta">
             <i className="fa-solid fa-envelope" />
@@ -144,7 +144,7 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
           <div className="ft-bottom-left">
             <div>&copy; {new Date().getFullYear()} Caritas Rwanda. All rights reserved.</div>
             <div className="ft-developer">
-              Designed &amp; developed by <strong>Lerony Software Company</strong>
+              Designed &amp; developed by <a href="https://lerony.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}><strong>Lerony</strong></a>
             </div>
           </div>
           <div className="ft-bottom-links">

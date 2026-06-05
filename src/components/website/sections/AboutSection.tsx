@@ -11,8 +11,8 @@ export default function AboutSection(_props: Record<string, unknown> = {}) {
         className="w-full select-none pointer-events-none"
         draggable={false}
       />
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="border-t border-white/10 mt-16 md:mt-20" />
+      <div className="container mx-auto px-4 md:px-12">
+        <div className="border-t border-white/10 mt-8 md:mt-20" />
         <div className="flex justify-center py-7 md:py-9">
           <Link
             href="/about"

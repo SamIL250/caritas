@@ -64,7 +64,7 @@ export type FooterSettings = {
 export const FOOTER_DEFAULTS: FooterSettings = {
   banner: {
     lineBefore: "Serving Rwanda with ",
-    accent: "Faith, Hope",
+    accent: "Faith, Hope ",
     lineAfter: " & Love.",
     ctaLabel: "Get In Touch",
     ctaHref: "/contact",
@@ -118,7 +118,7 @@ export const FOOTER_DEFAULTS: FooterSettings = {
   bottom: {
     orgName: "Caritas Rwanda",
     showDeveloperCredit: true,
-    developerCredit: "Lerony Software Company",
+    developerCredit: "Lerony",
   },
   legalLinks: [
     { label: "Privacy Policy", href: "/privacy" },
@@ -279,12 +279,12 @@ export function mergeFooterSettings(stored: unknown): FooterSettings {
     quickLinks: mergeNavLinks(stored.quickLinks, d.quickLinks),
     programColumn: isObj(stored.programColumn)
       ? {
-          heading:
-            typeof stored.programColumn.heading === "string"
-              ? stored.programColumn.heading
-              : d.programColumn.heading,
-          links: mergeProgramLinks(stored.programColumn.links, d.programColumn.links),
-        }
+        heading:
+          typeof stored.programColumn.heading === "string"
+            ? stored.programColumn.heading
+            : d.programColumn.heading,
+        links: mergeProgramLinks(stored.programColumn.links, d.programColumn.links),
+      }
       : { ...d.programColumn, links: [...d.programColumn.links] },
     newsletter: mergeNewsletter(d.newsletter, stored.newsletter),
     contact: mergeContact(d.contact, stored.contact),

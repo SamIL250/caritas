@@ -118,7 +118,7 @@ export default function HeroSection({
 
   const slide = slides[currentSlide];
   const displayAlignment = options?.align || 'left';
-  const displayOpacity = options?.overlay_opacity ?? 0.45;
+  const displayOpacity = options?.overlay_opacity ?? 0.55;
   const displayTextColor = options?.text_color || '#ffffff';
 
   const alignmentClass = displayAlignment === 'center' ? 'text-center items-center mx-auto' : displayAlignment === 'right' ? 'text-right items-end ml-auto' : 'text-left items-start';
@@ -129,7 +129,27 @@ export default function HeroSection({
   const yearsActive = new Date().getFullYear() - foundingYear;
   
   return (
-    <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-stone-900 font-poppins">
+    <section className="relative hero-section-height flex items-end pb-20 md:items-center md:pb-0 pt-32 md:pt-32 lg:pt-20 overflow-hidden bg-stone-900 font-poppins">
+      {/* Hidden eager-loaded img elements so the browser discovers and fetches
+          hero background images as early as possible (background-image CSS is
+          discovered late; an <img> with fetchPriority is picked up in the preload
+          scanner). The first slide gets high priority for LCP. */}
+      <div aria-hidden className="sr-only">
+        {slides.map((s, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={`preload-img-${i}`}
+            src={s.image_url}
+            alt=""
+            fetchPriority={i === 0 ? 'high' : 'low'}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding={i === 0 ? 'sync' : 'async'}
+            width={1}
+            height={1}
+          />
+        ))}
+      </div>
+
       {/* overflow-hidden clips sliding layers so nothing flashes the fallback bg between slides */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="sync" initial={false} custom={slideDir}>
@@ -143,7 +163,10 @@ export default function HeroSection({
             exit="exit"
             transition={heroSlideTransition}
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${slide.image_url})` }}
+            style={{
+              backgroundImage: `url(${slide.image_url})`,
+              backgroundPosition: 'center top',
+            }}
           />
         </AnimatePresence>
       </div>
@@ -154,10 +177,13 @@ export default function HeroSection({
         style={{ opacity: displayOpacity }}
       />
       
+      {/* Top Dark Gradient for Header Contrast */}
+      <div className="absolute inset-x-0 top-0 h-40 z-1 bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
+      
       {/* Radial Glow (Matches original .hero::before) */}
       <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_20%_50%,rgba(140,34,8,0.15)_0%,transparent_50%)] pointer-events-none" />
       
-      <div className="container relative z-10 mx-auto px-6 md:px-12">
+      <div className="container relative z-10 mx-auto px-4 md:px-12">
         {/* Years Badge — positioned within container margins */}
         <div className="hero-years-badge" aria-label={`${yearsActive} years of saving lives`}>
           <div className="hero-years-circle">
@@ -177,9 +203,8 @@ export default function HeroSection({
               transition={heroSlideTransition}
               className={`flex flex-col ${alignmentClass}`}
             >
-              {/* Hero Badge */}
               {slide.badge_text && (
-                <div className="inline-block px-6 py-2 rounded-full !bg-white/10 !border !border-white/20 !backdrop-blur-xl !text-[10px] md:!text-[11px] !font-black !text-white !uppercase !tracking-[0.3em] !mb-8 !shadow-xl !shadow-black/20">
+                <div className="inline-block px-6 py-2 rounded-full !bg-white/10 !border !border-white/20 !backdrop-blur-xl !text-[10px] md:!text-[11px] !font-black !text-white !uppercase !tracking-[0.3em] !mb-4 md:!mb-8 !shadow-xl !shadow-black/20">
                   {slide.badge_text}
                 </div>
               )}
@@ -275,7 +300,7 @@ export default function HeroSection({
 
       {/* Slide Indicators */}
       {slides.length > 1 && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
           {slides.map((_, idx) => (
             <button
               key={idx}

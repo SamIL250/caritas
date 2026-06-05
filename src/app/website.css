@@ -50,23 +50,34 @@
         }
 
         .navbar-container {
+            position: relative;
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 100px;
             padding: 0.85rem 1.8rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1.2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
             transition: all 0.4s ease;
         }
 
-        .navbar-container:hover {
+        .navbar-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: inherit;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            z-index: -1;
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+
+        .navbar-container:hover::before {
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.35);
         }
@@ -74,13 +85,18 @@
         .navbar-container.scrolled {
             max-width: 100%;
             border-radius: 0;
+        }
+
+        .navbar-container.scrolled::before {
             background: #ffffff;
             border: none;
             border-bottom: 1px solid rgba(0, 0, 0, 0.08);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
 
-        .navbar-container.scrolled:hover {
+        .navbar-container.scrolled:hover::before {
             background: #fafafa;
         }
 
@@ -501,7 +517,7 @@
                 cursor: pointer;
             }
 
-            .navbar-container > nav {
+            .site-header nav {
                 display: flex;
                 position: fixed;
                 top: 0;
@@ -523,11 +539,11 @@
                 gap: 0;
             }
 
-            .navbar-container > nav.nav--open {
+            .site-header nav.nav--open {
                 transform: translateX(0);
             }
 
-            .navbar-container > nav > ul {
+            .site-header nav > ul {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0;
@@ -536,30 +552,30 @@
                 padding: 0 0.75rem;
             }
 
-            .navbar-container > nav > ul > li {
+            .site-header nav > ul > li {
                 width: 100%;
                 border-bottom: 1px solid #f3f4f6;
             }
 
-            .navbar-container > nav > ul > li:not(.has-dropdown) > a {
+            .site-header nav > ul > li:not(.has-dropdown) > a {
                 display: block;
                 padding: 0.85rem 0.75rem;
                 color: #374151 !important;
             }
 
-            .navbar-container > nav a {
+            .site-header nav a {
                 color: #374151 !important;
             }
 
-            .navbar-container > nav a:hover {
+            .site-header nav a:hover {
                 color: #8c2208 !important;
             }
 
-            .navbar-container > nav a::after {
+            .site-header nav a::after {
                 display: none;
             }
 
-            .navbar-container > nav a.current {
+            .site-header nav a.current {
                 color: #8c2208 !important;
             }
 
@@ -651,7 +667,7 @@
                 gap: 0.15rem;
             }
 
-            .navbar-container > nav {
+            .site-header nav {
                 display: flex;
                 position: static;
                 width: auto;
@@ -4241,6 +4257,14 @@
             padding: 2.8rem;
             position: relative;
             overflow: hidden;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .contact-form-card {
+                padding: 1.5rem 1rem;
+                border-radius: 16px;
+            }
         }
 
         /* Inner top shine */
@@ -4307,6 +4331,14 @@
             outline: none;
             transition: all 0.3s ease;
             width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .cf-field input,
+            .cf-field select,
+            .cf-field textarea {
+                border-radius: 8px;
+            }
         }
 
         .cf-field input::placeholder,
@@ -4764,6 +4796,12 @@
             background: #fafafa;
             padding: 5rem 1.5rem;
         }
+        
+        @media (max-width: 768px) {
+            .cm-toggle-section {
+                padding: 2.5rem 1rem;
+            }
+        }
 
         .cm-toggle-header {
             display: flex;
@@ -4861,8 +4899,9 @@
 
         @media (max-width: 768px) {
             .cm-toggle-header {
-                flex-direction: column;
-                align-items: center;
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
                 gap: 0.5rem;
             }
 
@@ -7199,13 +7238,13 @@
         ══════════════════════════════════════════ */
         .donation-modal-overlay {
             position: fixed;
-            top: 68px;
+            top: 0;
             left: 0;
             width: 100%;
-            height: calc(100% - 68px);
+            height: 100%;
             background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(20px);
-            z-index: 2500;
+            z-index: 4000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -7965,6 +8004,12 @@
             margin-bottom: 1rem;
         }
 
+        @media (max-width: 640px) {
+            .donation-pay-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .donation-pay-methods--stripe-only {
             grid-template-columns: 1fr;
         }
@@ -8638,6 +8683,14 @@
             white-space: nowrap;
         }
 
+        @media (max-width: 600px) {
+            .footer-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
         .footer-top-cta:hover { color: #e2e8f0; }
 
         /* Main grid */
@@ -8806,6 +8859,17 @@
         .ft-bottom {
             border-top: 1px solid rgba(255,255,255,0.05);
             padding: 0.7rem 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .ft-bottom {
+                padding-bottom: 5.5rem;
+            }
+            .ft-bottom-inner {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
         }
 
         .ft-bottom-inner {
@@ -9239,4 +9303,198 @@
 }
 .animate-fade-in {
   animation: fadeInUpMetrics 0.35s ease forwards;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVENESS FIXES — June 2026
+   ============================================================ */
+
+/* ── 1. HERO: Responsive height ──────────────────────────── */
+/* Desktop: full viewport height */
+.hero-section-height {
+  height: 100vh;
+  min-height: 600px;
+}
+
+/* Mobile: ~60vh so the next section peeks in below the fold */
+@media (max-width: 767px) {
+  .hero-section-height {
+    height: 60vh;
+    min-height: 500px;
+  }
+}
+
+/* Tablet: 70vh */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-section-height {
+    height: 70vh;
+    min-height: 520px;
+  }
+}
+
+/* Make hero text content more compact on mobile */
+@media (max-width: 767px) {
+  .hero-section-height h1 {
+    margin-bottom: 0.5rem !important;
+    font-size: 1.35rem !important;
+  }
+  .hero-section-height p {
+    margin-bottom: 0.75rem !important;
+    font-size: 0.85rem !important;
+    line-height: 1.55 !important;
+  }
+  /* Shrink CTA buttons on mobile */
+  .hero-section-height [class*="px-12"] {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+    font-size: 0.7rem !important;
+  }
+  /* Reduce years badge size on mobile — already handled above but hide when too cramped */
+  .hero-section-height .hero-years-badge { display: none; }
+}
+
+/* ── 2. HERO BG: Better initial position ────────────────── */
+.hero-section-height .bg-cover {
+  background-position: center top !important;
+}
+
+/* ── 3. PROGRAM TABS: Mobile horizontal scroll tabs ──────── */
+@media (max-width: 860px) {
+  .cr-prog-tabs {
+    padding: 2.5rem 0 2.5rem;
+  }
+  .cr-prog-tabs .prog-tabs-header {
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cr-prog-tabs {
+    padding: 2rem 0;
+  }
+  /* Horizontal scrollable tabs instead of cramped 2x2 grid */
+  .cr-prog-tabs .prog-nav {
+    display: flex !important;
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    grid-template-columns: unset;
+    gap: 0;
+    padding: 0;
+    scroll-snap-type: x mandatory;
+  }
+  .cr-prog-tabs .prog-nav::-webkit-scrollbar { display: none; }
+
+  .cr-prog-tabs .prog-tab-btn {
+    flex: 0 0 auto;
+    min-width: 70px;
+    padding: 0.8rem 0.5rem;
+    scroll-snap-align: start;
+  }
+  .cr-prog-tabs .prog-tab-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  .cr-prog-tabs .prog-tab-label {
+    font-size: 0.5rem;
+    max-width: 58px;
+  }
+  .cr-prog-tabs .prog-content-area {
+    padding: 1.25rem 1rem;
+  }
+  .cr-prog-tabs .prog-heading {
+    font-size: 1.15rem;
+  }
+  .cr-prog-tabs .prog-desc {
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+  }
+  .cr-prog-tabs .prog-image-col {
+    min-height: 180px;
+  }
+}
+
+/* ── 4. NEWS & MEDIA: Compact mobile layout ──────────────── */
+@media (max-width: 899px) {
+  .stories {
+    padding: 3rem 0 2.5rem;
+  }
+  .stories-magazine {
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+  .story-featured {
+    min-height: 320px !important;
+  }
+  .feat-slide-content {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .story-featured h3 {
+    font-size: 1.05rem;
+  }
+  .story-featured p {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .stories {
+    padding: 2rem 0 2rem;
+  }
+  .stories-magazine {
+    padding: 0 0.75rem;
+    gap: 0.75rem;
+  }
+  .story-featured {
+    min-height: 250px !important;
+    border-radius: 16px;
+  }
+  .feat-slide-content {
+    padding: 0.9rem 1rem 1.1rem;
+  }
+  .story-featured h3 {
+    font-size: 0.92rem;
+    margin-bottom: 0.4rem;
+  }
+  .story-feat-tag {
+    font-size: 0.58rem;
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .story-small {
+    border-radius: 12px;
+  }
+  .story-small-image {
+    width: 80px;
+    min-height: 80px;
+  }
+  .story-small-body {
+    padding: 0.8rem 0.85rem;
+  }
+  .story-small h3 {
+    font-size: 0.8rem;
+  }
+  .story-small p {
+    display: none;
+  }
+  .stories-cta {
+    margin-top: 1.5rem;
+  }
+}
+
+/* ── 5. GENERAL: Reduce section padding on small screens ──── */
+@media (max-width: 480px) {
+  section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  .container-wide {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 }

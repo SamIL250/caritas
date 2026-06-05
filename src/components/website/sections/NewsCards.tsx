@@ -128,7 +128,7 @@ export default function NewsCards({
   return (
     <section className="stories" id="stories" aria-labelledby="stories-section-title">
       <div className="container-wide">
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '2rem' }}>
+        <div className="flex justify-center md:justify-end mb-10 md:mb-12">
           <button
             type="button"
             onClick={() => setShowVideos((v) => !v)}
@@ -178,7 +178,7 @@ export default function NewsCards({
             }}
           >
             {/* ── SLIDE 1: Full News & Stories section ── */}
-            <div style={{ width: '100%', flexShrink: 0 }}>
+            <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 0 : 'auto', overflow: showVideos ? 'hidden' : 'visible' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
                 {eyebrow ? (
                   <div className="section-eyebrow">
@@ -348,7 +348,7 @@ export default function NewsCards({
             </div>
 
             {/* ── SLIDE 2: Full Stories in Motion section (white background) ── */}
-            <div style={{ width: '100%', flexShrink: 0 }}>
+            <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 'auto' : 0, overflow: showVideos ? 'visible' : 'hidden' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
                 <div className="section-eyebrow">
                   <i className="fa-solid fa-play" aria-hidden />

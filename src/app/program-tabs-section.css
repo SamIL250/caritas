@@ -14,6 +14,15 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+@media (max-width: 768px) {
+  .cr-prog-tabs {
+    padding: 2.5rem 0;
+  }
+  .cr-prog-tabs .prog-tabs-header {
+    padding: 0 1rem;
+  }
+}
 .cr-prog-tabs .prog-tabs-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -236,7 +245,7 @@
 }
 
 .page-editor-section-preview .cr-prog-tabs {
-  padding: 2rem var(--editor-section-px, 1.25rem) 2.5rem;
+  padding: 2rem var(--editor-section-px, 1rem) 2.5rem;
 }
 .page-editor-section-preview .cr-prog-tabs .prog-tabs-header {
   margin-bottom: 1.5rem;
@@ -251,7 +260,7 @@
   min-height: 200px;
 }
 .page-editor-section-preview .cr-prog-tabs .prog-content-area {
-  padding: 1.15rem 1.25rem;
+  padding: 1.15rem 1rem;
 }
 .page-editor-section-preview .cr-prog-tabs .prog-content-area .prog-heading {
   font-size: 1rem;
