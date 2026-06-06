@@ -12,13 +12,14 @@ import "../our-location-section.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://caritasrwanda.org'),
   title: {
     default: "Caritas Rwanda | Serving with Faith, Hope & Love",
     template: "%s | Caritas Rwanda",
   },
-  description: "Caritas Rwanda empowers communities, provides healthcare, education, and humanitarian assistance, transforming lives across all nine dioceses of Rwanda.",
-  keywords: ["Caritas Rwanda", "NGO Rwanda", "Humanitarian Rwanda", "Catholic Church Rwanda", "Community Development", "Healthcare Rwanda", "Education Rwanda", "Charity", "Lerony"],
-  authors: [{ name: "Caritas Rwanda" }, { name: "Lerony", url: "https://lerony.com" }],
+  description: "Caritas Rwanda empowers communities, provides healthcare, education, and humanitarian assistance, transforming lives across all nine dioceses of Rwanda. Developed by Lerony, an IT Technology and Innovation company.",
+  keywords: ["Caritas Rwanda", "NGO Rwanda", "Humanitarian Rwanda", "Catholic Church Rwanda", "Community Development", "Healthcare Rwanda", "Education Rwanda", "Charity", "Lerony", "IT Technology and Innovation"],
+  authors: [{ name: "Caritas Rwanda", url: "https://caritasrwanda.org" }, { name: "Lerony", url: "https://lerony.com" }],
   creator: "Lerony",
   publisher: "Caritas Rwanda",
   formatDetection: {
@@ -28,11 +29,19 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Caritas Rwanda | Serving with Faith, Hope & Love",
-    description: "Empowering communities and transforming lives through humanitarian programs across Rwanda.",
+    description: "Empowering communities and transforming lives through humanitarian programs across Rwanda. Developed by Lerony.",
     url: "https://caritasrwanda.org",
     siteName: "Caritas Rwanda",
     locale: "en_RW",
     type: "website",
+    images: [
+      {
+        url: '/img/caritas_rwanda_og.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Caritas Rwanda - Serving with Faith, Hope & Love',
+      }
+    ],
   },
   twitter: {
     card: "summary_large_image",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ContactInfo from "@/components/website/sections/ContactInfo";
 import OurLocationSection from "@/components/website/sections/OurLocationSection";
 
@@ -14,6 +14,29 @@ export default function ContactMapToggleSection({
   mapProps,
 }: ContactMapToggleProps) {
   const [showMap, setShowMap] = useState(false);
+  const [trackHeight, setTrackHeight] = useState<number | 'auto'>('auto');
+  const panel1Ref = useRef<HTMLDivElement>(null);
+  const panel2Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const activeEl = showMap ? panel2Ref.current : panel1Ref.current;
+      if (activeEl) {
+        setTrackHeight(activeEl.offsetHeight);
+      }
+    };
+    
+    updateHeight();
+    
+    // Slight delay to handle child components loading (like map iframes)
+    const timeout = setTimeout(updateHeight, 300);
+    window.addEventListener("resize", updateHeight);
+    
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, [showMap]);
 
   return (
     <section className="cm-toggle-section" id="contact-find">
@@ -36,17 +59,23 @@ export default function ContactMapToggleSection({
         </button>
       </div>
 
-      <div className="cm-toggle-track-wrap">
+      <div 
+        className="cm-toggle-track-wrap"
+        style={{ 
+          height: trackHeight, 
+          transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1)' 
+        }}
+      >
         <div
           className="cm-toggle-track"
-          style={{ transform: showMap ? "translateX(-50%)" : "translateX(0)" }}
+          style={{ transform: showMap ? "translateX(-50%)" : "translateX(0)", alignItems: 'flex-start' }}
         >
-          <div className="cm-toggle-panel">
+          <div className="cm-toggle-panel" ref={panel1Ref}>
             <div className="cm-toggle-panel-inner">
               <ContactInfo {...(contactProps ?? {})} />
             </div>
           </div>
-          <div className="cm-toggle-panel">
+          <div className="cm-toggle-panel" ref={panel2Ref}>
             <div className="cm-toggle-panel-inner cm-toggle-panel-inner--map">
               <OurLocationSection {...(mapProps ?? {})} />
             </div>

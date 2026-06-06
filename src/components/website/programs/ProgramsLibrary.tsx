@@ -87,6 +87,7 @@ export default function ProgramsLibrary({ programs, categories, successStories }
               className={`prog-filter-btn${filter === c.slug ? " active" : ""}`}
               onClick={() => setFilter(c.slug)}
               aria-pressed={filter === c.slug}
+              style={{ "--tab-color": c.accent || "#a5280d" } as React.CSSProperties}
             >
               {c.icon ? <i className={c.icon} aria-hidden /> : null}
               {c.plural_label || c.label}

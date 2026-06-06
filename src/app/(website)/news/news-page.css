@@ -65,8 +65,16 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding-bottom: 0.5rem; /* For scrollbar breathing room */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.news-page-root .news-filter-inner::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .news-page-root .news-filter-btn {
@@ -79,6 +87,7 @@
   color: var(--news-muted);
   cursor: pointer;
   transition: color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
 }
 
 .news-page-root .news-filter-btn:hover {

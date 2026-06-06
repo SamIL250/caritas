@@ -139,7 +139,7 @@ export default function NewsCards({
             {/* ── SLIDE 1: Full News & Stories section ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 0 : 'auto', overflow: showVideos ? 'hidden' : 'visible' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-3 mb-2">
                   {eyebrow ? (
                     <div className="section-eyebrow" style={{ marginBottom: 0 }}>
                       <i className="fa-solid fa-newspaper" aria-hidden />
@@ -337,7 +337,7 @@ export default function NewsCards({
             {/* ── SLIDE 2: Full Stories in Motion section (white background) ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 'auto' : 0, overflow: showVideos ? 'visible' : 'hidden' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-3 mb-2">
                   <div className="section-eyebrow" style={{ marginBottom: 0 }}>
                     <i className="fa-solid fa-play" aria-hidden />
                     Caritas Rwanda

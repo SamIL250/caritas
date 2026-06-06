@@ -93,32 +93,32 @@
 }
 
 .cr-prog-tabs .prog-nav {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-}
-@media (max-width: 480px) {
-  .cr-prog-tabs .prog-nav { grid-template-columns: repeat(2, 1fr); }
+  display: flex;
+  width: 100%;
 }
 .cr-prog-tabs .prog-tab-btn {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 1rem 0.4rem;
+  padding: 1.25rem 0.4rem;
   border: none;
   cursor: pointer;
   font-family: inherit;
   position: relative;
-  background: transparent;
-  opacity: 0.7;
-  transition: opacity 0.25s ease, background 0.25s ease;
+  opacity: 0.6;
+  transition: opacity 0.25s ease, filter 0.25s ease;
+  filter: brightness(0.8);
 }
 .cr-prog-tabs .prog-tab-btn:hover {
   opacity: 0.9;
+  filter: brightness(0.9);
 }
 .cr-prog-tabs .prog-tab-btn.active {
   opacity: 1;
+  filter: brightness(1);
 }
 .cr-prog-tabs .prog-tab-icon {
   width: 38px;

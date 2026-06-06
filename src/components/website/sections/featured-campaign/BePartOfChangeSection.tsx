@@ -330,32 +330,32 @@ export default function BePartOfChangeSection({
                 </div>
               </div>
             ) : null}
-          </div>
-        </div>
 
-        <div className="bpc-cta-row">
-          {(bottom_primary_text || "").trim() ? (
-            <DonateOrLink
-              href={primaryDonateHref(campaign, (bottom_primary_url || "#donate").trim() || "#donate")}
-              className="bpc-cta-primary"
-              modalCampaignId={primaryModalId(
-                campaign,
-                (bottom_primary_url || "#donate").trim() || "#donate",
-              )}
-            >
-              <i className="fa-solid fa-heart" aria-hidden />
-              {bottom_primary_text.trim()}
-            </DonateOrLink>
-          ) : null}
-          {(bottom_secondary_text || "").trim() ? (
-            <CtaSecondaryLink
-              href={(bottom_secondary_url || "#").trim() || "#"}
-              className="bpc-cta-ghost"
-            >
-              <i className="fa-solid fa-people-group" aria-hidden />
-              {bottom_secondary_text.trim()}
-            </CtaSecondaryLink>
-          ) : null}
+            <div className="bpc-cta-row">
+              {(bottom_primary_text || "").trim() ? (
+                <DonateOrLink
+                  href={primaryDonateHref(campaign, (bottom_primary_url || "#donate").trim() || "#donate")}
+                  className="bpc-cta-primary"
+                  modalCampaignId={primaryModalId(
+                    campaign,
+                    (bottom_primary_url || "#donate").trim() || "#donate",
+                  )}
+                >
+                  <i className="fa-solid fa-heart" aria-hidden />
+                  {bottom_primary_text.trim()}
+                </DonateOrLink>
+              ) : null}
+              {(bottom_secondary_text || "").trim() ? (
+                <CtaSecondaryLink
+                  href={(bottom_secondary_url || "#").trim() || "#"}
+                  className="bpc-cta-ghost"
+                >
+                  <i className="fa-solid fa-people-group" aria-hidden />
+                  {bottom_secondary_text.trim()}
+                </CtaSecondaryLink>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
     </section>

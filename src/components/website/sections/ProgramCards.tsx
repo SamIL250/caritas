@@ -277,6 +277,7 @@ export default function ProgramCards({
                   aria-controls={panelId}
                   tabIndex={selected ? 0 : -1}
                   className={`prog-tab-btn${selected ? " active" : ""}`}
+                  style={{ background: PROGRAM_COLORS[tabKey] }}
                   onClick={() => setActiveIdx(idx)}
                 >
                   <div className="prog-tab-icon">

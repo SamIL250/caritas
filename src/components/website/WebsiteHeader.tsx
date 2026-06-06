@@ -62,7 +62,7 @@ export default function WebsiteHeader() {
     setOpenSub((s) => (s === key ? null : key));
   };
 
-  const headerClass = scrolled ? 'site-header scrolled' : 'site-header';
+  const headerClass = `site-header${scrolled ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}`;
   const containerClass = scrolled ? 'navbar-container scrolled' : 'navbar-container';
 
   return (
@@ -104,8 +104,19 @@ export default function WebsiteHeader() {
 
             <li className={['has-dropdown', openSub === 'about' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
               <div className="nav-item-row">
-                <Link href="/about" className={isActive('/about') ? 'current' : ''} onClick={closeNav}>
-                  About Us <span className="caret">▾</span>
+                <Link 
+                  href="/about" 
+                  className={isActive('/about') ? 'current' : ''} 
+                  onClick={(e) => {
+                    if (window.innerWidth < 1024) {
+                      e.preventDefault();
+                      toggleSub('about');
+                    } else {
+                      closeNav();
+                    }
+                  }}
+                >
+                  About Us
                 </Link>
                 <button
                   type="button"
@@ -123,6 +134,9 @@ export default function WebsiteHeader() {
               </div>
               <div className="nav-dropdown">
                 <div className="nav-dropdown-inner">
+                  <Link href="/about" className="md:hidden !font-bold text-[#8c2208]" onClick={closeNav}>
+                    Explore All About Us
+                  </Link>
                   <Link href="/about#history" onClick={closeNav}>
                     <i className="fa-solid fa-clock-rotate-left"></i> History
                   </Link>
@@ -151,9 +165,16 @@ export default function WebsiteHeader() {
                 <Link
                   href="/programs"
                   className={isActive('/programs') ? 'current' : ''}
-                  onClick={closeNav}
+                  onClick={(e) => {
+                    if (window.innerWidth < 1024) {
+                      e.preventDefault();
+                      toggleSub('programs');
+                    } else {
+                      closeNav();
+                    }
+                  }}
                 >
-                  Programs <span className="caret">▾</span>
+                  Programs
                 </Link>
                 <button
                   type="button"
@@ -171,6 +192,9 @@ export default function WebsiteHeader() {
               </div>
               <div className="nav-dropdown">
                 <div className="nav-dropdown-inner nav-dropdown-cards">
+                  <Link href="/programs" className="md:hidden !font-bold text-[#8c2208]" onClick={closeNav}>
+                    Explore All Programs
+                  </Link>
                   <Link href="/programs#social-welfare" onClick={closeNav}>
                     <i className="fa-solid fa-people-roof"></i> Social Welfare
                   </Link>

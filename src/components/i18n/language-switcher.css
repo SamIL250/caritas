@@ -118,6 +118,38 @@
   }
 }
 
+@media (max-width: 1023px) {
+  .lang-switch {
+    width: 100%;
+    display: block;
+  }
+  .lang-switch__popover {
+    top: auto;
+    bottom: calc(100% + 0.45rem);
+    right: auto;
+    left: 0;
+    width: 100%;
+    animation: lang-switch-pop-up 0.16s ease-out;
+  }
+  .lang-switch__trigger,
+  .lang-switch--compact .lang-switch__trigger {
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+  }
+}
+
+@keyframes lang-switch-pop-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .lang-switch__search-row {
   display: flex;
   align-items: center;
