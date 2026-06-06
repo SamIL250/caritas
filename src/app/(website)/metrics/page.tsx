@@ -50,15 +50,15 @@ export default async function MetricsPage() {
   const badgeText = 'badge_text' in options ? String(options.badge_text) : 'Data & Transparency';
   const headingAccent = 'heading_accent' in options ? String(options.heading_accent) : '& Programme Data';
 
-  // Fetch KPIs from dedicated table
-  const { data: kpiRows } = await supabase
+  // Fetch KPIs from dedicated table (cast to bypass type generation)
+  const { data: kpiRows } = await (supabase as any)
     .from('metrics_kpis')
     .select('*')
     .eq('page_id', page.id)
     .order('sort_order', { ascending: true });
 
-  // Fetch Tab Sections from dedicated table
-  const { data: sectionRows } = await supabase
+  // Fetch Tab Sections from dedicated table (cast to bypass type generation)
+  const { data: sectionRows } = await (supabase as any)
     .from('metrics_sections')
     .select('*')
     .eq('page_id', page.id)

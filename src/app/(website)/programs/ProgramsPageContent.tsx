@@ -60,7 +60,7 @@ export default function ProgramsPageContent({ chrome, programs, categories, succ
             <button
               type="button"
               className="prog-partner-btn-primary"
-              onClick={openModal}
+              onClick={() => openModal()}
             >
               Donate Now
             </button>
