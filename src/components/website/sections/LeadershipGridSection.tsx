@@ -72,7 +72,7 @@ function LeaderNode({
       <div className="ldr-card">
         <div className="ldr-photo">
           {src ? (
-            <img src={src} alt={name.trim() ? name : role.trim() ? role : "Leader portrait"} />
+            <img src={src} alt={name.trim() ? name : role.trim() ? role : "Leader portrait"} loading="lazy" />
           ) : (
             <div className="ldr-photo-placeholder">
               <i className="fa-solid fa-user-tie" aria-hidden />

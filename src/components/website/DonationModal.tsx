@@ -17,6 +17,7 @@ import {
   Landmark,
   Smartphone,
   Wifi,
+  X,
 } from "lucide-react";
 import {
   frequencyChoicesForCampaign,
@@ -51,6 +52,29 @@ const PAY_METHOD_ICONS: Record<DonationPaymentMethod, typeof CreditCard> = {
   mtn_momo: Smartphone,
   airtel_money: Wifi,
 };
+
+function ModalGridImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return <div className="dimg-placeholder flex items-center justify-center text-zinc-400 opacity-20" aria-hidden><ImageIcon size={32} /></div>;
+  }
+
+  return (
+    <>
+      {!loaded && <div className="dimg-placeholder animate-pulse" style={{ position: 'absolute', inset: 0, zIndex: 1 }} />}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        onError={() => setError(true)}
+        style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.3s ease', width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+    </>
+  );
+}
 
 interface DonationModalProps {
   isOpen: boolean;
@@ -119,6 +143,7 @@ export default function DonationModal({
   const [frequencyId, setFrequencyId] = useState<string>("one_time");
   const [paymentMethod, setPaymentMethod] = useState<DonationPaymentMethod>("stripe");
   const [error, setError] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const flowSteps = useMemo((): FlowStep[] => {
     const showDetail = Boolean(selectedCampaign && selectedCampaign.id);
@@ -469,16 +494,71 @@ export default function DonationModal({
               <div className="donation-modal-image-panel">
                 <div className="dimg-grid">
                   {displayImages.map((img, i) => (
-                    <div key={img.id} className={imgSizeClass(i)}>
+                    <div 
+                      key={img.id} 
+                      className={`${imgSizeClass(i)} cursor-pointer`}
+                      onClick={() => setLightboxIndex(i)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setLightboxIndex(i);
+                        }
+                      }}
+                    >
                       {img.url ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={img.url} alt={img.alt} />
+                        <ModalGridImage src={img.url} alt={img.alt} />
                       ) : (
                         <div className="dimg-placeholder" />
                       )}
                     </div>
                   ))}
                 </div>
+
+                <AnimatePresence>
+                  {lightboxIndex !== null && (
+                    <motion.div 
+                      className="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <button 
+                        className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10"
+                        onClick={() => setLightboxIndex(null)}
+                      >
+                        <X size={36} />
+                      </button>
+
+                      <button 
+                        className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLightboxIndex(prev => prev! > 0 ? prev! - 1 : displayImages.length - 1);
+                        }}
+                      >
+                        <ChevronLeft size={48} />
+                      </button>
+
+                      <img 
+                        src={displayImages[lightboxIndex].url} 
+                        alt={displayImages[lightboxIndex].alt || "Gallery image"}
+                        className="max-h-[90vh] max-w-[90vw] object-contain select-none"
+                      />
+
+                      <button 
+                        className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLightboxIndex(prev => prev! < displayImages.length - 1 ? prev! + 1 : 0);
+                        }}
+                      >
+                        <ChevronRight size={48} />
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
                 <div className="dimg-overlay" />
                 <div className="dimg-quote">
                   <span className="dimg-quote-icon">"</span>

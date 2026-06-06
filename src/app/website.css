@@ -1050,7 +1050,7 @@
         }
 
         section {
-            padding: 5rem 1rem;
+            padding: 5rem 0;
         }
 
         .section-title {
@@ -1211,7 +1211,7 @@
             margin-bottom: 1rem;
         }
         .sub-section-title {
-            font-size: 2.2rem;
+            font-size: clamp(1.6rem, 5vw, 2.5rem);
             font-weight: 800;
             color: #0d1b2a;
             line-height: 1.2;
@@ -5212,7 +5212,7 @@
             margin-bottom: 1rem;
         }
         .sub-section-title {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-size: clamp(1.6rem, 5vw, 2.5rem);
             font-weight: 800;
             color: #0d1b2a;
             line-height: 1.2;
@@ -6418,7 +6418,7 @@
         ══════════════════════════════════════════ */
         .about-history-section {
             background: #f7f3ef;
-            padding: 5.5rem 1.5rem;
+            padding: 5.5rem 0;
         }
         .about-hist-bento {
             display: grid;
@@ -7316,7 +7316,8 @@
         .dimg-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 90px;
+            grid-auto-rows: minmax(0, 1fr);
+            grid-auto-flow: dense;
             gap: 8px;
             padding: 8px;
             width: 100%;
@@ -7336,7 +7337,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.5s ease;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .dimg:hover img {
@@ -7696,7 +7697,7 @@
 
         .custom-amount-input input {
             width: 100%;
-            padding: 0.8rem 0.8rem 0.8rem 3rem;
+            padding: 0.8rem 0.8rem 0.8rem 3.5rem;
             border-radius: 10px;
             border: 2px solid #f1f3f5;
             font-size: 0.85rem;
@@ -8368,14 +8369,14 @@
 
         /* Clean donation flow (full-page light UI; hides legacy sidebar) — aligns with redesigned modal */
         .donation-modal-overlay {
-            top: 68px !important;
-            height: calc(100% - 68px) !important;
+            top: 0 !important;
+            height: 100% !important;
             background: #ffffff !important;
             backdrop-filter: none !important;
             padding: 0 !important;
             align-items: stretch !important;
             justify-content: stretch !important;
-            z-index: 2500 !important;
+            z-index: 4000 !important;
         }
 
         .donation-modal-container {

@@ -27,7 +27,7 @@ May this be not only a reminder of the past, but above all an invitation to cont
         <div className="about-chairperson-visual">
           <div className="about-chairperson-photo-wrap">
             <div className="about-chairperson-photo">
-              <img src={photoUrl} alt={photoAlt} />
+              <img src={photoUrl} alt={photoAlt} loading="lazy" />
             </div>
           </div>
           <div className="about-chairperson-badge">

@@ -235,6 +235,7 @@ export default function ProgramCards({
               className={`prog-img${idx === activeIdx ? " active" : ""}`}
               width={1200}
               height={900}
+              loading="lazy"
               decoding="async"
             />
           ))}

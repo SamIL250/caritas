@@ -199,8 +199,7 @@ export default function BePartOfChangeSection({
           <h2 className="bpc-title">
             {line2 ? (
               <>
-                {line1}
-                <br />
+                {line1}{' '}
                 <span>{line2}</span>
               </>
             ) : (

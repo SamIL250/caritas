@@ -10,6 +10,7 @@ export default function AboutSection(_props: Record<string, unknown> = {}) {
         alt="Caritas Rwanda Network — About Us"
         className="w-full select-none pointer-events-none"
         draggable={false}
+        loading="lazy"
       />
       <div className="container mx-auto px-4 md:px-12">
         <div className="border-t border-white/10 mt-8 md:mt-20" />

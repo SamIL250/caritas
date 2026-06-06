@@ -62,6 +62,29 @@ import { DonationProvider } from "@/context/DonationContext";
 import { VolunteerProvider } from "@/context/VolunteerContext";
 import { getMergedFooterSettings } from "@/lib/site-settings";
 
+import { Poppins, Inter, Playfair_Display } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
 export default async function WebsiteLayout({
   children,
 }: {
@@ -71,20 +94,12 @@ export default async function WebsiteLayout({
   return (
     <VolunteerProvider>
       <DonationProvider>
-        <div className="website-root">
-          {/* Preconnect to Google Fonts and FontAwesome origins for faster DNS/TLS */}
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <div className={`website-root ${poppins.variable} ${inter.variable} ${playfair.variable}`}>
           <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
           {/* FontAwesome */}
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          />
-          {/* Poppins, Inter, and Playfair Display Fonts */}
-          <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
-            rel="stylesheet"
           />
 
           <WebsiteHeader />

@@ -435,8 +435,7 @@ export default function CTA({
           <h2 className={usePartGrid ? "cr-bpc-title" : "cta-engage__title"} id="cta-engage-title">
             {line2 ? (
               <>
-                {line1}
-                <br />
+                {line1}{' '}
                 <span className={usePartGrid ? "cr-bpc-title-accent" : "cta-engage__title-accent"}>
                   {line2}
                 </span>

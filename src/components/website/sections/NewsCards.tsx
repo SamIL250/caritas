@@ -128,47 +128,6 @@ export default function NewsCards({
   return (
     <section className="stories" id="stories" aria-labelledby="stories-section-title">
       <div className="container-wide">
-        <div className="flex justify-center md:justify-end mb-10 md:mb-12">
-          <button
-            type="button"
-            onClick={() => setShowVideos((v) => !v)}
-            aria-expanded={showVideos}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              border: showVideos ? '1px solid #911313' : '1px solid rgba(145,19,19,0.25)',
-              borderRadius: '9999px',
-              padding: '10px 22px',
-              background: showVideos ? '#911313' : 'transparent',
-              color: showVideos ? '#ffffff' : '#911313',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              letterSpacing: '0.03em',
-              transition: 'all 0.25s ease',
-              whiteSpace: 'nowrap',
-            }}
-            onMouseEnter={(e) => {
-              if (!showVideos) {
-                e.currentTarget.style.background = 'rgba(145,19,19,0.06)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!showVideos) {
-                e.currentTarget.style.background = 'transparent';
-              }
-            }}
-          >
-            <i className="fa-solid fa-play" style={{ fontSize: '11px' }} />
-            {showVideos ? 'News & Stories' : 'Stories in Motion'}
-            <i
-              className={`fa-solid ${showVideos ? 'fa-chevron-left' : 'fa-chevron-right'}`}
-              style={{ fontSize: '10px' }}
-            />
-          </button>
-        </div>
-
         <div style={{ overflow: 'hidden' }}>
           <div
             style={{
@@ -180,12 +139,40 @@ export default function NewsCards({
             {/* ── SLIDE 1: Full News & Stories section ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 0 : 'auto', overflow: showVideos ? 'hidden' : 'visible' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                {eyebrow ? (
-                  <div className="section-eyebrow">
-                    <i className="fa-solid fa-newspaper" aria-hidden />
-                    {eyebrow}
-                  </div>
-                ) : null}
+                <div className="flex justify-between items-center mb-2">
+                  {eyebrow ? (
+                    <div className="section-eyebrow" style={{ marginBottom: 0 }}>
+                      <i className="fa-solid fa-newspaper" aria-hidden />
+                      {eyebrow}
+                    </div>
+                  ) : <div />}
+                  <button
+                    type="button"
+                    onClick={() => setShowVideos(true)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      border: '1px solid rgba(145,19,19,0.25)',
+                      borderRadius: '9999px',
+                      padding: '6px 14px',
+                      background: 'transparent',
+                      color: '#911313',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      letterSpacing: '0.03em',
+                      transition: 'all 0.25s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(145,19,19,0.06)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <i className="fa-solid fa-play" style={{ fontSize: '10px' }} />
+                    Stories in Motion
+                    <i className="fa-solid fa-chevron-right" style={{ fontSize: '9px' }} />
+                  </button>
+                </div>
                 <h2 className="section-title" id="stories-section-title">
                   {heading} <span>{heading_highlight}</span>
                 </h2>
@@ -350,9 +337,34 @@ export default function NewsCards({
             {/* ── SLIDE 2: Full Stories in Motion section (white background) ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 'auto' : 0, overflow: showVideos ? 'visible' : 'hidden' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div className="section-eyebrow">
-                  <i className="fa-solid fa-play" aria-hidden />
-                  Caritas Rwanda
+                <div className="flex justify-between items-center mb-2">
+                  <div className="section-eyebrow" style={{ marginBottom: 0 }}>
+                    <i className="fa-solid fa-play" aria-hidden />
+                    Caritas Rwanda
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowVideos(false)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      border: '1px solid #911313',
+                      borderRadius: '9999px',
+                      padding: '6px 14px',
+                      background: '#911313',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      letterSpacing: '0.03em',
+                      transition: 'all 0.25s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <i className="fa-solid fa-chevron-left" style={{ fontSize: '9px' }} />
+                    News & Stories
+                  </button>
                 </div>
                 <h2 className="section-title">
                   Stories in <span>Motion</span>

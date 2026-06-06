@@ -29,7 +29,7 @@ export default function Testimonial({
           </blockquote>
           <div className="mt-12 flex flex-col items-center">
             <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-stone-50 shadow-lg">
-              <img src={displayAvatarUrl} alt={displayAuthor} className="w-full h-full object-cover" />
+              <img src={displayAvatarUrl} alt={displayAuthor} className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="mt-4">
               <div className="font-bold text-stone-900 text-lg uppercase tracking-wider">{displayAuthor}</div>
