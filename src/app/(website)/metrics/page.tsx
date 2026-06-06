@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import PageHeroSection from '@/components/website/sections/PageHeroSection';
-import MetricsKpiStrip from '@/components/website/sections/MetricsKpiStrip';
 import MetricsPageClient from '@/components/website/MetricsPageClient';
+import './metrics-page.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
@@ -50,30 +50,32 @@ export default async function MetricsPage() {
   const badgeText = 'badge_text' in options ? String(options.badge_text) : 'Data & Transparency';
   const headingAccent = 'heading_accent' in options ? String(options.heading_accent) : '& Programme Data';
 
-  // Fetch All Generic Sections
-  const { data: allSections } = await supabase
-    .from('sections')
+  // Fetch KPIs from dedicated table
+  const { data: kpiRows } = await supabase
+    .from('metrics_kpis')
     .select('*')
     .eq('page_id', page.id)
-    .order('order', { ascending: true });
+    .order('sort_order', { ascending: true });
 
-  const kpis = (allSections?.find(s => s.type === 'metrics_kpis')?.content as any)?.items || [];
-  const statCards = (allSections?.find(s => s.type === 'metrics_stat_cards')?.content as any)?.items || [];
-  const tabSections = allSections?.filter(s => ['metrics_overview', 'metrics_program', 'metrics_reach'].includes(s.type)) || [];
-  
-  // Re-map the generic sections to match the expected legacy tab sections format
-  const sections = tabSections.map(s => {
-    const c = s.content as any;
-    return {
-      id: s.id,
-      tab_key: c.tab_key,
-      tab_label: c.tab_label,
-      tab_icon: c.tab_icon,
-      visible: s.visible,
-      sort_order: s.order,
-      content: c
-    };
-  }).filter(s => s.visible);
+  // Fetch Tab Sections from dedicated table
+  const { data: sectionRows } = await supabase
+    .from('metrics_sections')
+    .select('*')
+    .eq('page_id', page.id)
+    .order('sort_order', { ascending: true });
+
+  const kpis = (kpiRows as any[]) || [];
+
+  // Map tab sections to the expected format
+  const sections = (sectionRows || []).map(s => ({
+    id: s.id,
+    tab_key: s.tab_key,
+    tab_label: s.tab_label,
+    tab_icon: s.tab_icon || 'fa-chart-bar',
+    visible: s.visible !== false,
+    sort_order: s.sort_order,
+    content: s.content,
+  })).filter(s => s.visible);
 
   return (
     <div className="metrics-page min-h-screen bg-white">
@@ -86,21 +88,12 @@ export default async function MetricsPage() {
         breadcrumbLabel="Impact Metrics"
       />
 
-      {/* Hero KPIs Strip — Full Viewport */}
-      {kpis && kpis.length > 0 ? (
-        <section className="metrics-kpi-section">
-          <div className="metrics-kpi-section-inner">
-            <MetricsKpiStrip items={kpis as any} />
-          </div>
-        </section>
-      ) : null}
-
-      {/* Tabs and Content — Full Viewport */}
+      {/* Content — Full Viewport */}
       <section className="metrics-tabs-section">
         <div className="metrics-tabs-section-inner">
           <MetricsPageClient
             sections={(sections as any) || []}
-            statCards={(statCards as any) || []}
+            kpis={(kpis as any) || []}
           />
         </div>
       </section>

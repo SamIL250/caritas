@@ -75,7 +75,7 @@ export const FOOTER_DEFAULTS: FooterSettings = {
     logoUrl: null,
   },
   social: {
-    twitter: "https://twitter.com",
+    twitter: "https://x.com",
     youtube: "https://youtube.com",
     facebook: "https://facebook.com",
     linkedin: "https://linkedin.com",

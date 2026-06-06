@@ -192,9 +192,6 @@ export default function WebsiteHeader() {
               </div>
               <div className="nav-dropdown">
                 <div className="nav-dropdown-inner nav-dropdown-cards">
-                  <Link href="/programs" className="md:hidden !font-bold text-[#8c2208]" onClick={closeNav}>
-                    Explore All Programs
-                  </Link>
                   <Link href="/programs#social-welfare" onClick={closeNav}>
                     <i className="fa-solid fa-people-roof"></i> Social Welfare
                   </Link>

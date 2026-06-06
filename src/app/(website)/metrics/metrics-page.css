@@ -1,0 +1,311 @@
+/* ════════════════════════════════════════════════════════════
+   METRICS PAGE — Impact at a Glance banner with Read More
+   ════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════
+   IMPACT BANNER — Dark infographic section with bubbles
+   ════════════════════════════════════════════════════════════ */
+.ig-banner {
+  background: #03112b;
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+  margin: 1.5rem auto;
+  max-width: 1100px;
+}
+.ig-banner-orb1 {
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(145,19,19,0.3) 0%, transparent 70%);
+  top: -200px; right: -100px;
+  pointer-events: none;
+  z-index: 2;
+}
+.ig-banner-orb2 {
+  position: absolute;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,154,108,0.12) 0%, transparent 70%);
+  bottom: -100px; left: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.ig-banner-inner { position: relative; z-index: 3; }
+
+.ig-banner-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(255,200,150,0.7);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.ig-banner-label::before,
+.ig-banner-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+}
+.ig-banner-title {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  line-height: 1.2;
+}
+.ig-banner-title span { color: #ff9a6c; }
+
+.ig-bubbles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.ig-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  cursor: default;
+  flex-shrink: 0;
+}
+.ig-bubble:hover { transform: scale(1.07); }
+
+.ig-bubble-xl {
+  width: 260px; height: 260px;
+  background: rgba(145,19,19,0.5);
+  border: 3px solid rgba(255,154,108,0.4);
+}
+.ig-bubble-lg {
+  width: 210px; height: 210px;
+  background: rgba(22,163,74,0.35);
+  border: 2.5px solid rgba(74,222,128,0.3);
+  margin: 0 -12px;
+}
+.ig-bubble-sm {
+  width: 148px; height: 148px;
+  background: rgba(124,58,237,0.35);
+  border: 2px solid rgba(196,181,253,0.3);
+  margin: 0 -6px;
+}
+.ig-bubble-xs {
+  width: 120px; height: 120px;
+  background: rgba(217,119,6,0.35);
+  border: 2px solid rgba(251,191,36,0.3);
+}
+
+.ig-bubble-offset {
+  margin-top: 30px !important;
+}
+
+.ig-bubble-val {
+  font-size: clamp(1.4rem, 2.5vw, 2.5rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  text-align: center;
+}
+.ig-bubble-lbl {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.35rem;
+  line-height: 1.3;
+  max-width: 100px;
+}
+.ig-bubble-xl .ig-bubble-lbl { max-width: 120px; font-size: 0.72rem; }
+
+/* ── Read More Dropdown ── */
+.rm-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  position: relative;
+}
+.rm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: 50px;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+.rm-btn:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.38);
+}
+.rm-caret {
+  font-size: 0.68rem;
+  transition: transform 0.25s ease;
+}
+.rm-caret-open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.rm-panel {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  width: 840px;
+  max-width: calc(100vw - 3rem);
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 4px 12px rgba(0,0,0,0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 300;
+}
+.rm-panel::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 8px;
+  background: #fff;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.06));
+}
+.rm-panel-open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+.rm-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.35rem 1.25rem;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  transition: all 0.18s ease;
+  background: #f9fafb;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.rm-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+.rm-card-icon {
+  font-size: 1.35rem;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.45rem;
+}
+.rm-card-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.rm-card-desc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.5;
+  /* Show up to 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rm-card-arrow {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.18s ease;
+}
+.rm-card:hover .rm-card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Card variants */
+.rm-sw  { border-color: rgba(145,19,19,0.12); }
+.rm-sw:hover  { border-color: rgba(145,19,19,0.28); background: rgba(145,19,19,0.03); }
+.rm-sw  .rm-card-icon { background: rgba(145,19,19,0.09); color: #911313; }
+.rm-sw  .rm-card-name { color: #911313; } .rm-sw  .rm-card-arrow { color: #911313; }
+.rm-health { border-color: rgba(31,140,170,0.12); }
+.rm-health:hover { border-color: rgba(31,140,170,0.28); background: rgba(31,140,170,0.03); }
+.rm-health .rm-card-icon { background: rgba(31,140,170,0.09); color: #1F8CAA; }
+.rm-health .rm-card-name { color: #1F8CAA; } .rm-health .rm-card-arrow { color: #1F8CAA; }
+.rm-dev { border-color: rgba(31,122,110,0.12); }
+.rm-dev:hover { border-color: rgba(31,122,110,0.28); background: rgba(31,122,110,0.03); }
+.rm-dev .rm-card-icon { background: rgba(31,122,110,0.09); color: #1F7A6E; }
+.rm-dev .rm-card-name { color: #1F7A6E; } .rm-dev .rm-card-arrow { color: #1F7A6E; }
+.rm-admin { border-color: rgba(184,134,11,0.12); }
+.rm-admin:hover { border-color: rgba(184,134,11,0.28); background: rgba(184,134,11,0.03); }
+.rm-admin .rm-card-icon { background: rgba(184,134,11,0.09); color: #B8860B; }
+.rm-admin .rm-card-name { color: #B8860B; } .rm-admin .rm-card-arrow { color: #B8860B; }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE — Bubble sizing
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .ig-banner { padding: 2rem 1rem; }
+  .ig-bubble-xl { width: 180px; height: 180px; }
+  .ig-bubble-lg { width: 140px; height: 140px; margin: 0 -8px; }
+  .ig-bubble-sm { width: 112px; height: 112px; margin: 0 -6px; }
+  .ig-bubble-xs { width: 96px; height: 96px; }
+}
+
+@media (max-width: 900px) {
+  .rm-panel {
+    width: calc(100vw - 2rem);
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    padding: 1rem;
+  }
+  .rm-card {
+    padding: 1rem 0.9rem;
+    min-width: 42%;
+  }
+}
+
+@media (max-width: 480px) {
+  .ig-bubble-xl { width: 140px; height: 140px; }
+  .ig-bubble-lg { width: 110px; height: 110px; margin: 0 -6px; }
+  .ig-bubble-sm { width: 90px; height: 90px; }
+  .ig-bubble-xs { width: 76px; height: 76px; }
+  .ig-bubble-val { font-size: 1rem; }
+  .ig-bubble-lbl { font-size: 0.5rem; }
+  .ig-bubble-offset { margin-top: 18px !important; }
+}

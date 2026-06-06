@@ -3091,6 +3091,20 @@
             transition: border-color 0.2s ease, color 0.2s ease;
         }
 
+        .ft-x-icon {
+          display: block;
+          width: 16px;
+          height: 16px;
+          object-fit: contain;
+          filter: brightness(0) invert(1);
+          opacity: 0.4;
+          transition: opacity 0.2s ease;
+        }
+
+        .ft-social-btn:hover .ft-x-icon {
+          opacity: 1;
+        }
+
         .ft-social-btn:hover {
             border-color: rgba(255,255,255,0.25);
             color: #ffffff;

@@ -969,6 +969,130 @@
   color: #111111;
 }
 
+/* ==================== PARTNER WITH US ==================== */
+
+.prog-partner-section {
+  background: linear-gradient(155deg, #ffffff 0%, #fdf6f6 35%, #f4fafc 65%, #f3faf8 100%);
+  padding: 5rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  border-top: 1px solid #f0f0f0;
+}
+
+.prog-partner-section::before {
+  content: '';
+  position: absolute;
+  top: -140px;
+  left: -100px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(145, 19, 19, 0.09) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.prog-partner-section::after {
+  content: '';
+  position: absolute;
+  bottom: -120px;
+  right: -80px;
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, rgba(31, 140, 170, 0.09) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.prog-partner-inner {
+  max-width: 660px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.prog-partner-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(145, 19, 19, 0.08);
+  border: 1px solid rgba(145, 19, 19, 0.2);
+  color: #911313;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0.38rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 1rem;
+}
+
+.prog-partner-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #111;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin: 0 0 0.75rem;
+}
+
+.prog-partner-sub {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.75;
+  max-width: 500px;
+  margin: 0 auto 1.8rem;
+}
+
+.prog-partner-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.prog-partner-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.4rem;
+  border-radius: 100px;
+  background: #911313;
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.prog-partner-btn-primary:hover {
+  transform: translateY(-3px);
+  background: #7a0f0f;
+  color: #fff;
+}
+
+.prog-partner-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.4rem;
+  border-radius: 100px;
+  border: 2px solid #e5e7eb;
+  color: #374151;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color 0.25s, background 0.25s, color 0.25s;
+}
+
+.prog-partner-btn-outline:hover {
+  border-color: #911313;
+  background: rgba(145, 19, 19, 0.04);
+  color: #911313;
+}
+
 /* ── Drawer meta date ── */
 .drawer-meta-date {
   font-size: 0.75rem;

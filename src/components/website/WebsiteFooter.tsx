@@ -87,7 +87,18 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
                   className="ft-social-btn"
                   aria-label={label}
                 >
-                  <i className={icon} />
+                  {key === 'twitter' ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src="/img/x-logo.png"
+                      alt="X"
+                      className="ft-x-icon"
+                      width={14}
+                      height={14}
+                    />
+                  ) : (
+                    <i className={icon} />
+                  )}
                 </a>
               );
             })}

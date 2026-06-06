@@ -33,14 +33,14 @@ function formatHeroDate(iso: string | null): string {
 }
 
 function gridClassForKind(kind: string, slug: string): string {
-  if (slug === "annual_report") return "pub-report-grid";
-  if (slug === "newsletter") return "pub-nl-grid";
-  if (slug === "recent_update") return "pub-news-grid";
-  if (slug === "success_story") return "pub-stories-grid";
-  if (kind === "pdf") return "pub-report-grid";
-  if (kind === "story") return "pub-stories-grid";
-  if (kind === "external") return "pub-news-grid";
-  return "pub-news-grid";
+  if (slug === "annual_report") return "pub-card-grid";
+  if (slug === "newsletter") return "pub-card-grid";
+  if (slug === "recent_update") return "pub-card-grid";
+  if (slug === "success_story") return "pub-card-grid";
+  if (kind === "pdf") return "pub-card-grid";
+  if (kind === "story") return "pub-card-grid";
+  if (kind === "external") return "pub-card-grid";
+  return "pub-card-grid";
 }
 
 export default function PublicationsLibrary({ publications, categories }: Props) {
@@ -297,199 +297,80 @@ function CategorySection({
   );
 }
 
+/* ── Unified card design matching the success story / news card pattern from the programs page ── */
 function CategoryCard({ cat, row, onOpenDrawer }: { cat: PublicationCategoryRow; row: PublicationRow; onOpenDrawer: (row: PublicationRow) => void }) {
   const hasPdf = publicationHasPdf(row);
+  const imageUrl = row.cover_image_url.trim()
+    ? encodePublicationAssetUrl(row.cover_image_url)
+    : null;
+  const isPdfKind = cat.slug === "annual_report" || cat.slug === "newsletter" || cat.kind === "pdf";
 
-  if (cat.slug === "annual_report" || (cat.kind === "pdf" && cat.slug !== "newsletter")) {
-    const content = (
-      <>
-        <div className="pub-report-cover">
-          {row.cover_image_url.trim() ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={encodePublicationAssetUrl(row.cover_image_url)} alt={row.cover_image_alt || row.title} />
-          ) : null}
-          <div className="pub-report-cover-overlay" aria-hidden />
-          {row.period_label.trim() ? <div className="pub-report-year">{row.period_label}</div> : null}
-        </div>
-        <div className="pub-report-body">
-          <div className="pub-report-title">{row.title}</div>
-          <div className="pub-report-download">
-            <i className={hasPdf ? "fa-solid fa-download" : "fa-solid fa-eye"} aria-hidden />
-            {hasPdf ? "Download PDF" : "Open"}
-          </div>
-        </div>
-      </>
-    );
+  /* 1. Determine meta line (date / period / tag) */
+  const metaLine = row.period_label?.trim()
+    ? row.period_label
+    : row.tag_label?.trim()
+      ? row.tag_label
+      : row.published_at
+        ? formatHeroDate(row.published_at)
+        : null;
 
-    if (hasPdf) {
-      return (
-        <a
-          href={publicationPrimaryHref(row)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pub-report-card"
-        >
-          {content}
-        </a>
-      );
-    }
-    return (
-      <div
-        className="pub-report-card"
-        role="button"
-        tabIndex={0}
-        onClick={() => onOpenDrawer(row)}
-        onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
-        style={{ cursor: "pointer" }}
-      >
-        {content}
-      </div>
-    );
-  }
+  /* 2. Build action text */
+  const actionIcon = hasPdf ? "fa-download" : "fa-arrow-right";
+  const actionText = hasPdf ? "Download PDF" : "Read more";
 
-  if (cat.slug === "newsletter") {
-    const content = (
-      <>
-        <div className="pub-nl-cover">
-          {row.cover_image_url.trim() ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={encodePublicationAssetUrl(row.cover_image_url)} alt={row.cover_image_alt || row.title} />
-          ) : null}
-        </div>
-        <div className="pub-nl-body">
-          {row.period_label.trim() ? <div className="pub-nl-period">{row.period_label}</div> : null}
-          <div className="pub-nl-title">{row.title}</div>
-          <div className="pub-nl-download">
-            <i className={hasPdf ? "fa-solid fa-download" : "fa-solid fa-eye"} aria-hidden /> 
-            {hasPdf ? "Download" : "Open"}
-          </div>
-        </div>
-      </>
-    );
-
-    if (hasPdf) {
-      return (
-        <a
-          href={publicationPrimaryHref(row)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pub-nl-card"
-        >
-          {content}
-        </a>
-      );
-    }
-    return (
-      <div
-        className="pub-nl-card"
-        role="button"
-        tabIndex={0}
-        onClick={() => onOpenDrawer(row)}
-        onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
-        style={{ cursor: "pointer" }}
-      >
-        {content}
-      </div>
-    );
-  }
-
-  if (cat.kind === "external" || cat.slug === "recent_update") {
-    const content = (
-      <>
-        <div className="pub-news-img">
-          {row.cover_image_url.trim() ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={encodePublicationAssetUrl(row.cover_image_url)} alt={row.cover_image_alt || row.title} />
-          ) : null}
-          {row.tag_label.trim() ? <div className="pub-news-category">{row.tag_label}</div> : null}
-        </div>
-        <div className="pub-news-body">
-          <div className="pub-news-date">
-            <i className="fa-solid fa-calendar" aria-hidden />
-            {row.period_label.trim() || formatHeroDate(row.published_at)}
-          </div>
-          <div className="pub-news-title">{row.title}</div>
-          <div className="pub-news-read">
-            Read more <i className="fa-solid fa-arrow-right" aria-hidden />
-          </div>
-        </div>
-      </>
-    );
-
-    if (hasPdf) {
-      return (
-        <a
-          href={publicationPrimaryHref(row)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pub-news-card"
-        >
-          {content}
-        </a>
-      );
-    }
-    return (
-      <div
-        className="pub-news-card"
-        role="button"
-        tabIndex={0}
-        onClick={() => onOpenDrawer(row)}
-        onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
-        style={{ cursor: "pointer" }}
-      >
-        {content}
-      </div>
-    );
-  }
-
-  // story (or hybrid fallback)
-  const storyContent = (
+  /* 3. Card content (image + body, same structure for all types) */
+  const cardContent = (
     <>
-      <div className="pub-story-img">
-        {row.cover_image_url.trim() ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={encodePublicationAssetUrl(row.cover_image_url)} alt={row.cover_image_alt || row.title} />
+      {/* Image */}
+      {imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={imageUrl} alt={row.cover_image_alt || row.title} className="pub-card-image" />
+      ) : (
+        <div className="pub-card-image pub-card-image-placeholder" />
+      )}
+
+      {/* Body */}
+      <div className="pub-card-body">
+        {metaLine ? (
+          <span className="pub-card-meta">{metaLine}</span>
         ) : null}
-      </div>
-      <div className="pub-story-body">
-        {row.tag_label.trim() ? (
-          <div className="pub-story-tag">
-            {row.tag_icon.trim() ? <i className={row.tag_icon.trim()} aria-hidden /> : null}{" "}
-            {row.tag_label}
-          </div>
+
+        <h4 className="pub-card-title">{row.title}</h4>
+
+        {row.excerpt?.trim() ? (
+          <p className="pub-card-desc">{row.excerpt}</p>
         ) : null}
-        <div className="pub-story-title">{row.title}</div>
-        {row.excerpt.trim() ? <p className="pub-story-excerpt">{row.excerpt}</p> : null}
-        <div className="pub-story-link">
-          Read story <i className="fa-solid fa-arrow-right" aria-hidden />
-        </div>
+
+        <span className="pub-card-action">
+          <i className={`fa-solid ${actionIcon}`} aria-hidden /> {actionText}
+        </span>
       </div>
     </>
   );
 
+  /* 4. Wrap in <a> for PDF/external, <div> for drawer */
   if (hasPdf) {
     return (
       <a
         href={publicationPrimaryHref(row)}
         target="_blank"
         rel="noopener noreferrer"
-        className="pub-story-card"
+        className="pub-card"
       >
-        {storyContent}
+        {cardContent}
       </a>
     );
   }
-  
+
   return (
     <div
-      className="pub-story-card"
+      className="pub-card"
       role="button"
       tabIndex={0}
       onClick={() => onOpenDrawer(row)}
       onKeyDown={(e) => e.key === "Enter" && onOpenDrawer(row)}
-      style={{ cursor: "pointer" }}
     >
-      {storyContent}
+      {cardContent}
     </div>
   );
 }
