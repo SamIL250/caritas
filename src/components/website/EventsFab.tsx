@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar as CalendarIcon,
@@ -64,7 +64,11 @@ function sameDay(a: Date, b: Date): boolean {
   );
 }
 
-export default function EventsFab() {
+export interface EventsFabHandle {
+  open: () => void;
+}
+
+const EventsFab = forwardRef<EventsFabHandle, object>(function EventsFab(_props, ref) {
   const gtDom = useGoogleTranslateDomActive();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -75,35 +79,46 @@ export default function EventsFab() {
   const [monthAnchor, setMonthAnchor] = useState<Date>(() => startOfMonth(new Date()));
   const [activeDay, setActiveDay] = useState<Date | null>(null);
 
-  /* eslint-disable react-hooks/set-state-in-effect -- toggle body scroll + load on open */
+  // Fetch upcoming events once on mount (so the badge shows immediately)
+  // and again each time the panel opens (to refresh).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    if (!open) {
+    if (open) document.body.style.overflow = "hidden";
+    else {
       document.body.style.overflow = "unset";
       return;
     }
-    document.body.style.overflow = "hidden";
-    void (async () => {
-      const supabase = createClient();
-      setLoading(true);
-      setError(null);
-      try {
-        const nowIso = new Date().toISOString();
-        const { data, error: qErr } = await supabase
-          .from("events")
-          .select("*")
-          .eq("status", "published")
-          .or(`starts_at.gte.${nowIso},ends_at.gte.${nowIso}`)
-          .order("starts_at", { ascending: true });
-        if (qErr) throw qErr;
-        setEvents((data || []) as EventRow[]);
-      } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "Could not load events.");
-      } finally {
-        setLoading(false);
-      }
-    })();
+    void fetchEvents();
+    return () => { document.body.style.overflow = "unset"; };
   }, [open]);
+
+  // Also fetch on mount so the badge renders with a count
+  useEffect(() => {
+    if (events.length === 0) void fetchEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  async function fetchEvents() {
+    const supabase = createClient();
+    setLoading(true);
+    setError(null);
+    try {
+      const nowIso = new Date().toISOString();
+      const { data, error: qErr } = await supabase
+        .from("events")
+        .select("*")
+        .eq("status", "published")
+        .or(`starts_at.gte.${nowIso},ends_at.gte.${nowIso}`)
+        .order("starts_at", { ascending: true });
+      if (qErr) throw qErr;
+      setEvents((data || []) as EventRow[]);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Could not load events.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const selected = useMemo(
     () => events.find((e) => e.id === selectedId) ?? null,
@@ -278,6 +293,8 @@ export default function EventsFab() {
     </>
   );
 
+  useImperativeHandle(ref, () => ({ open: () => setOpen(true) }), []);
+
   return (
     <>
       <button
@@ -345,7 +362,9 @@ export default function EventsFab() {
       ) : null}
     </>
   );
-}
+});
+
+export default EventsFab;
 
 function CalendarMonthGrid({
   monthAnchor,

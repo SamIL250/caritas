@@ -65,7 +65,7 @@ import WebsiteHeader from "@/components/website/WebsiteHeader";
 import WebsiteFooter from "@/components/website/WebsiteFooter";
 import DonationModalWrapper from "@/components/website/DonationModalWrapper";
 import VolunteerModalWrapper from "@/components/website/VolunteerModalWrapper";
-import EventsFab from "@/components/website/EventsFab";
+import EventsWidget from "@/components/website/EventsWidget";
 import ChatbotFab from "@/components/website/ChatbotFab";
 import { DonationProvider } from "@/context/DonationContext";
 import { VolunteerProvider } from "@/context/VolunteerContext";
@@ -117,7 +117,7 @@ export default async function WebsiteLayout({
 
           <DonationModalWrapper />
           <VolunteerModalWrapper />
-          <EventsFab />
+          <EventsWidget />
           <ChatbotFab />
         </div>
       </DonationProvider>
