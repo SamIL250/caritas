@@ -11,13 +11,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProgramsPage() {
-  const { chrome, programs, categories, successStories } = await resolveProgramsPublicPagePayload();
+  const { chrome, programs, categories, successStories, news } = await resolveProgramsPublicPagePayload();
   return (
     <ProgramsPageContent
       chrome={chrome}
       programs={programs}
       categories={categories}
       successStories={successStories}
+      news={news}
     />
   );
 }

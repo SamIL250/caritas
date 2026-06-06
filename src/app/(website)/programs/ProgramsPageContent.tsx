@@ -5,6 +5,7 @@ import type {
   ProgramRow,
 } from "@/lib/programs";
 import type { PublicationRow } from "@/lib/publications";
+import type { NewsArticleRow } from "@/lib/news";
 
 import ProgramsLandingHero from "@/components/website/programs/ProgramsLandingHero";
 import ProgramsLibrary from "@/components/website/programs/ProgramsLibrary";
@@ -18,9 +19,10 @@ type Props = {
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
   successStories: PublicationRow[];
+  news: NewsArticleRow[];
 };
 
-export default function ProgramsPageContent({ chrome, programs, categories, successStories }: Props) {
+export default function ProgramsPageContent({ chrome, programs, categories, successStories, news }: Props) {
   return (
     <div className="prog-page-root">
       <ProgramsLandingHero
@@ -33,6 +35,7 @@ export default function ProgramsPageContent({ chrome, programs, categories, succ
         programs={programs}
         categories={categories}
         successStories={successStories}
+        news={news}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import type {
   ProgramRow,
 } from "@/lib/programs";
 import type { PublicationRow } from "@/lib/publications";
+import type { NewsArticleRow } from "@/lib/news";
 
 export type ProgramsPageChrome = {
   eyebrow: string;
@@ -87,6 +88,16 @@ export async function fetchPublishedSuccessStories(): Promise<PublicationRow[]> 
   return (data ?? []) as PublicationRow[];
 }
 
+export async function fetchPublishedNews(): Promise<NewsArticleRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("news_articles")
+    .select("*")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+  return (data ?? []) as NewsArticleRow[];
+}
+
 export async function resolveProgramsPublicPagePayload(): Promise<{
   seoTitle: string;
   seoDescription: string;
@@ -94,6 +105,7 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
   successStories: PublicationRow[];
+  news: NewsArticleRow[];
 }> {
   const supabase = await createClient();
 
@@ -104,13 +116,14 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
     .maybeSingle();
   const page = pageRow as { id: string; meta: Json | null } | null;
 
-  const [heroRes, programs, categories, successStories] = await Promise.all([
+  const [heroRes, programs, categories, successStories, news] = await Promise.all([
     page?.id
       ? supabase.from("hero_content").select("*").eq("page_id", page.id).maybeSingle()
       : Promise.resolve({ data: null }),
     fetchPublishedPrograms(),
     fetchProgramCategories(),
     fetchPublishedSuccessStories(),
+    fetchPublishedNews(),
   ]);
 
   const heroRow = (heroRes?.data ?? null) as Record<string, unknown> | null;
@@ -126,7 +139,7 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
     programs,
     categories,
     successStories,
-    // success stories are surfaced via department-related content on program pages.
+    news,
   };
 }
 
