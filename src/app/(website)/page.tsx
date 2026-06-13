@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import HeroSection from "@/components/website/sections/HeroSection";
 import ProgramCards from "@/components/website/sections/ProgramCards";
 import AboutSection from "@/components/website/sections/AboutSection";
-import ContactMapToggleSection from "@/components/website/sections/ContactMapToggleSection";
+import ContactWithMapSection from "@/components/website/sections/ContactWithMapSection";
 import { renderWebsiteSectionWithFeatured } from "@/lib/public-page-sections-server";
 import { enrichCtaSectionsWithFeaturedCampaigns } from "@/lib/enrich-cta-featured-campaign";
 import type { PublicSectionRow } from "@/lib/public-page-sections";
@@ -100,7 +100,7 @@ export default async function LandingPage() {
       {/* Default programs block only when no program_cards row exists in CMS */}
       {!hasProgramSection ? <ProgramCards key="fallback-program-cards" /> : null}
 
-      {/* Group contact_info + map_section into a toggle; everything else renders normally */}
+      {/* Merge contact_info + map_section into a combined map+form section */}
       {(() => {
         const contactSections = enrichedSections?.filter(
           (s: any) => s.type === 'contact_info' || s.type === 'map_section'
@@ -112,22 +112,20 @@ export default async function LandingPage() {
         const contactRow = contactSections.find((s: any) => s.type === 'contact_info');
         const mapRow = contactSections.find((s: any) => s.type === 'map_section');
 
+        const combinedProps = {
+          ...(contactRow?.content && typeof contactRow.content === 'object' && !Array.isArray(contactRow.content)
+            ? (contactRow.content as Record<string, unknown>)
+            : {}),
+          ...(mapRow?.content && typeof mapRow.content === 'object' && !Array.isArray(mapRow.content)
+            ? (mapRow.content as Record<string, unknown>)
+            : {}),
+        };
+
         return (
           <>
             {otherSections.map(renderWebsiteSectionWithFeatured)}
             {contactRow || mapRow ? (
-              <ContactMapToggleSection
-                contactProps={
-                  contactRow?.content && typeof contactRow.content === 'object' && !Array.isArray(contactRow.content)
-                    ? (contactRow.content as Record<string, unknown>)
-                    : undefined
-                }
-                mapProps={
-                  mapRow?.content && typeof mapRow.content === 'object' && !Array.isArray(mapRow.content)
-                    ? (mapRow.content as Record<string, unknown>)
-                    : undefined
-                }
-              />
+              <ContactWithMapSection {...combinedProps} />
             ) : null}
           </>
         );

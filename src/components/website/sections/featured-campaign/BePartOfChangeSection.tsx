@@ -164,7 +164,6 @@ export default function BePartOfChangeSection({
   heading_accent,
   body = "Your support enables us to continue transforming lives and building sustainable communities across all nine dioceses of Rwanda.",
   sidebar_cards = [],
-  impact_panel,
   bottom_primary_text = "Start Donating Today",
   bottom_primary_url = "#donate",
   bottom_secondary_text = "Volunteer with Us",
@@ -182,18 +181,13 @@ export default function BePartOfChangeSection({
   const discussLabel = (campaign?.discussion_label || "").trim();
   const discussUrl = (campaign?.discussion_url || "").trim();
 
-  const impactItems = Array.isArray(impact_panel?.items) ? impact_panel!.items! : [];
-  const impactTitle = (impact_panel?.title || "Our collective impact").trim();
-  const impactIcon = (impact_panel?.icon || "fa-chart-line").trim();
-
   return (
     <section className="featured-campaign-bpc-scope bpc-section" id={anchor_id}>
       <div className="bpc-inner">
         <div className="bpc-header">
           {displayEyebrow ? (
             <div className="bpc-eyebrow">
-              <i className="fa-solid fa-heart" aria-hidden />
-              &nbsp; {displayEyebrow}
+              {displayEyebrow}
             </div>
           ) : null}
           <h2 className="bpc-title">
@@ -255,7 +249,6 @@ export default function BePartOfChangeSection({
                     className="bpc-donate-btn"
                     modalCampaignId={primaryModalId(campaign, pbUrl)}
                   >
-                    <i className="fa-solid fa-heart" aria-hidden />
                     {pbText}
                   </DonateOrLink>
                   {discussLabel && discussUrl ? (
@@ -304,7 +297,6 @@ export default function BePartOfChangeSection({
                       <p className="bpc-small-desc">{card.description}</p>
                     ) : null}
                     <DonateOrLink href={btnUrl} className="bpc-small-donate" modalCampaignId={card.modal_campaign_id ?? null}>
-                      <i className="fa-solid fa-hand-holding-heart" aria-hidden />
                       {btnText}
                     </DonateOrLink>
                   </div>
@@ -312,24 +304,7 @@ export default function BePartOfChangeSection({
               );
             })}
 
-            {impactItems.length > 0 ? (
-              <div className="glass-card bpc-impact-panel">
-                <div className="bpc-impact-header">
-                  <div className="bpc-impact-icon">
-                    <i className={iconClass(impactIcon)} aria-hidden />
-                  </div>
-                  <span className="bpc-impact-title">{impactTitle}</span>
-                </div>
-                <div className="bpc-impact-grid">
-                  {impactItems.map((it, i) => (
-                    <div key={`${it.label}-${i}`} className="bpc-impact-item">
-                      <span className="bpc-impact-num">{it.num}</span>
-                      <span className="bpc-impact-label">{it.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
+
 
             <div className="bpc-cta-row">
               {(bottom_primary_text || "").trim() ? (
@@ -341,7 +316,6 @@ export default function BePartOfChangeSection({
                     (bottom_primary_url || "#donate").trim() || "#donate",
                   )}
                 >
-                  <i className="fa-solid fa-heart" aria-hidden />
                   {bottom_primary_text.trim()}
                 </DonateOrLink>
               ) : null}

@@ -15,9 +15,6 @@
   }
 }
 
-.cta-engage.cr-bpc::before {
-  display: none;
-}
 
 .cr-bpc-inner {
   max-width: 1200px;

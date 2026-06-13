@@ -59,15 +59,6 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
       <div className="ft-blob-2" />
 
       <div className="footer-grid">
-        <div className="footer-top">
-          <div className="footer-top-tagline">
-            Serving Rwanda with <span>Faith, Hope </span> &amp; Love.
-          </div>
-          <a href="#contact" className="footer-top-cta">
-            <i className="fa-solid fa-envelope" />
-            Get In Touch
-          </a>
-        </div>
         <div className="footer-col">
           <img
             src={logoSrc}
