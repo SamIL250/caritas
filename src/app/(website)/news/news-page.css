@@ -48,29 +48,25 @@
   pointer-events: none;
 }
 
-/* Sticky filters — clears below site header (~4rem); adjust if navbar height changes */
+/* Sticky filter tabs — matching programs page tab bar style */
 .news-page-root .news-filter-bar {
   position: sticky;
-  top: 4rem;
-  z-index: 30;
-  border-bottom: none;
-  background: rgba(255, 255, 255, 0.88);
-  padding: 0.85rem 1.25rem;
-  backdrop-filter: blur(12px);
+  top: 70px;
+  z-index: 200;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .news-page-root .news-filter-inner {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0 1.5rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .news-page-root .news-filter-inner::-webkit-scrollbar {
@@ -78,26 +74,35 @@
 }
 
 .news-page-root .news-filter-btn {
-  padding: 0.42rem 1.1rem;
-  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
   font-size: 0.8rem;
   font-weight: 600;
+  font-family: inherit;
+  background: none;
   border: none;
-  background: rgba(13, 27, 42, 0.06);
-  color: var(--news-muted);
+  border-bottom: 2.5px solid transparent;
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
+  color: #6b7280;
   white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  position: relative;
+  bottom: -1px;
 }
 
 .news-page-root .news-filter-btn:hover {
-  color: var(--news-red);
-  background: rgba(165, 40, 13, 0.08);
+  color: #374151;
+  background-color: #f9fafb;
 }
 
 .news-page-root .news-filter-btn.is-active {
-  background: var(--news-red);
-  color: #fff;
+  color: var(--news-red);
+  border-bottom-color: var(--news-red);
+  font-weight: 700;
 }
 
 .news-page-root .news-filter-bar--departments {
@@ -604,4 +609,20 @@
   font-size: 0.9rem;
   color: #9ca3af;
   font-style: italic;
+}
+/* ==================== TAB RESPONSIVE OVERRIDES ==================== */
+
+@media (max-width: 768px) {
+  .news-page-root .news-filter-bar {
+    top: 60px;
+  }
+
+  .news-page-root .news-filter-btn {
+    padding: 0.85rem 1rem;
+    font-size: 0.72rem;
+  }
+
+  .news-page-root .news-filter-inner {
+    padding: 0 1rem;
+  }
 }

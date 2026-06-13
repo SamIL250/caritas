@@ -270,8 +270,8 @@
 
 .prog-card-min {
   width: 62%;
-  background: #ffffff;
-  border: 1px solid #e8e5e0;
+  background: #f0ebe0;
+  border: 1px solid #ddd5c0;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -281,10 +281,19 @@
   position: relative;
 }
 
+.prog-card-min-wrap.align-right .prog-card-min {
+  background: #e8e0d0;
+}
+
 .prog-card-min:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
   border-color: color-mix(in srgb, var(--dept-color, #1a1a1a) 20%, transparent);
+  background: #f0ebe0;
+}
+
+.prog-card-min-wrap.align-right .prog-card-min:hover {
+  background: #e8e0d0;
 }
 
 @media (max-width: 900px) {

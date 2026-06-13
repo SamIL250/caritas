@@ -50,7 +50,7 @@ function mergeLegacy(p: ContactInfoProps) {
   };
 }
 
-function ContactMessageForm({
+export function ContactMessageForm({
   formTitle,
   formSubtitle,
 }: {

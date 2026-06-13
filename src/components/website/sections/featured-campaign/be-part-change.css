@@ -4,7 +4,7 @@
 .featured-campaign-bpc-scope.bpc-section {
   position: relative;
   padding: 6rem 1.5rem;
-  background: #0f172a;
+  background: linear-gradient(145deg, #ffffff 0%, #fdf4f4 55%, #f8f0f0 82%, #ffffff 100%);
   overflow: hidden;
 }
 .featured-campaign-bpc-scope .bpc-inner {
@@ -21,9 +21,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  background: rgba(145, 19, 19, 0.08);
+  border: 1px solid rgba(145, 19, 19, 0.14);
+  color: #911313;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 2px;
@@ -35,17 +35,17 @@
 .featured-campaign-bpc-scope .bpc-title {
   font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: 900;
-  color: #f8fafc;
+  color: #1a1a2e;
   line-height: 1.08;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
 }
 .featured-campaign-bpc-scope .bpc-title span {
-  color: #d97757;
+  color: #911313;
 }
 .featured-campaign-bpc-scope .bpc-subtitle {
   font-size: 1rem;
-  color: #64748b;
+  color: #6b7280;
   max-width: 540px;
   line-height: 1.78;
 }
@@ -61,13 +61,17 @@
   }
 }
 .featured-campaign-bpc-scope .glass-card {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
   border-radius: 24px;
-  transition: border-color 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 .featured-campaign-bpc-scope .glass-card:hover {
-  border-color: #475569;
+  border-color: rgba(145, 19, 19, 0.22);
+  box-shadow: 0 18px 44px rgba(145, 19, 19, 0.1);
 }
 .featured-campaign-bpc-scope .bpc-feat-card {
   padding: 0;
@@ -78,7 +82,7 @@
   width: 100%;
   height: 300px;
   overflow: hidden;
-  background: #1e293b;
+  background: #fef2f2;
 }
 .featured-campaign-bpc-scope .bpc-feat-img-wrap img {
   width: 100%;
@@ -89,19 +93,19 @@
 .featured-campaign-bpc-scope .bpc-feat-img-placeholder {
   width: 100%;
   height: 300px;
-  background: #1e293b;
+  background: #fef2f2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   font-size: 4.5rem;
-  color: #475569;
+  color: rgba(145, 19, 19, 0.35);
 }
 .featured-campaign-bpc-scope .bpc-feat-img-label {
   font-size: 0.72rem;
   font-weight: 700;
-  color: #64748b;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
@@ -112,9 +116,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(145, 19, 19, 0.14);
+  color: #911313;
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 1.2px;
@@ -128,13 +132,13 @@
 .featured-campaign-bpc-scope .bpc-feat-name {
   font-size: 1.55rem;
   font-weight: 800;
-  color: #f8fafc;
+  color: #1f2937;
   margin-bottom: 0.35rem;
   line-height: 1.2;
 }
 .featured-campaign-bpc-scope .bpc-feat-location {
   font-size: 0.78rem;
-  color: #64748b;
+  color: #6b7280;
   margin-bottom: 1.1rem;
   display: flex;
   align-items: center;
@@ -142,10 +146,10 @@
 }
 .featured-campaign-bpc-scope .bpc-feat-story {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: #4b5563;
   line-height: 1.78;
   margin-bottom: 1.5rem;
-  border-left: 2px solid rgba(217, 119, 87, 0.4);
+  border-left: 2px solid rgba(145, 19, 19, 0.28);
   padding-left: 1rem;
 }
 .featured-campaign-bpc-scope .bpc-progress-wrap {
@@ -160,22 +164,22 @@
 .featured-campaign-bpc-scope .bpc-raised {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #f8fafc;
+  color: #1f2937;
 }
 .featured-campaign-bpc-scope .bpc-goal {
   font-size: 0.78rem;
-  color: #64748b;
+  color: #6b7280;
 }
 .featured-campaign-bpc-scope .bpc-bar-track {
   width: 100%;
   height: 9px;
-  background: #334155;
+  background: #e5e7eb;
   border-radius: 100px;
   overflow: hidden;
 }
 .featured-campaign-bpc-scope .bpc-bar-fill {
   height: 100%;
-  background: #d97757;
+  background: #911313;
   border-radius: 100px;
 }
 .featured-campaign-bpc-scope .bpc-stats-row {
@@ -192,12 +196,12 @@
 .featured-campaign-bpc-scope .bpc-stat-num {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #f8fafc;
+  color: #1f2937;
   line-height: 1;
 }
 .featured-campaign-bpc-scope .bpc-stat-label {
   font-size: 0.67rem;
-  color: #64748b;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   font-weight: 600;
@@ -208,7 +212,7 @@
   justify-content: center;
   gap: 0.6rem;
   width: 100%;
-  background: #d97757;
+  background: #911313;
   color: #fff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -221,7 +225,7 @@
   transition: background 0.2s ease;
 }
 .featured-campaign-bpc-scope .bpc-donate-btn:hover {
-  background: #c0693e;
+  background: #7a0f0f;
 }
 .featured-campaign-bpc-scope .bpc-link-discuss {
   display: inline-flex;
@@ -232,16 +236,16 @@
   width: 100%;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #64748b;
+  color: #6b7280;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 .featured-campaign-bpc-scope .bpc-link-discuss:hover {
-  color: #cbd5e1;
+  color: #911313;
 }
 .featured-campaign-bpc-scope .bpc-empty-hint {
   font-size: 0.88rem;
-  color: #64748b;
+  color: #6b7280;
   line-height: 1.65;
   margin: 0;
   text-align: center;
@@ -262,12 +266,12 @@
   width: 68px;
   height: 68px;
   border-radius: 16px;
-  background: #334155;
+  background: #fef2f2;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.8rem;
-  color: #64748b;
+  color: rgba(145, 19, 19, 0.35);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -285,7 +289,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  color: #f59e9e;
+  color: #911313;
   margin-bottom: 0.28rem;
   display: flex;
   align-items: center;
@@ -294,12 +298,12 @@
 .featured-campaign-bpc-scope .bpc-small-name {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: #1f2937;
   margin-bottom: 0.28rem;
 }
 .featured-campaign-bpc-scope .bpc-small-desc {
   font-size: 0.76rem;
-  color: #64748b;
+  color: #6b7280;
   line-height: 1.55;
   margin-bottom: 0.7rem;
   display: -webkit-box;
@@ -310,7 +314,7 @@
 .featured-campaign-bpc-scope .bpc-small-bar-track {
   width: 100%;
   height: 5px;
-  background: #334155;
+  background: #e5e7eb;
   border-radius: 100px;
   overflow: hidden;
   margin-bottom: 0.35rem;
@@ -325,7 +329,7 @@
 }
 .featured-campaign-bpc-scope .bpc-small-progress-text {
   font-size: 0.66rem;
-  color: #64748b;
+  color: #6b7280;
   display: flex;
   justify-content: space-between;
 }
@@ -335,8 +339,8 @@
   gap: 0.35rem;
   margin-top: 0.75rem;
   background: transparent;
-  border: 1px solid #475569;
-  color: #94a3b8;
+  border: 1.5px solid #d1d5db;
+  color: #374151;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.32rem 0.9rem;
@@ -347,13 +351,15 @@
   font-family: inherit;
 }
 .featured-campaign-bpc-scope .bpc-small-donate:hover {
-  border-color: #d97757;
-  color: #f8fafc;
+  border-color: #911313;
+  color: #911313;
+  background: #fef2f2;
 }
 .featured-campaign-bpc-scope .bpc-impact-panel {
   padding: 1.6rem;
-  background: #1e293b;
-  border-color: #334155;
+  background: linear-gradient(135deg, #fef2f2, #fff7f7);
+  border-color: rgba(145, 19, 19, 0.14);
+  box-shadow: 0 4px 20px rgba(145, 19, 19, 0.07);
 }
 .featured-campaign-bpc-scope .bpc-impact-header {
   display: flex;
@@ -365,11 +371,11 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: #334155;
+  background: rgba(145, 19, 19, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d97757;
+  color: #911313;
   font-size: 0.85rem;
 }
 .featured-campaign-bpc-scope .bpc-impact-title {
@@ -377,7 +383,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #94a3b8;
+  color: #6b7280;
 }
 .featured-campaign-bpc-scope .bpc-impact-grid {
   display: grid;
@@ -392,12 +398,12 @@
 .featured-campaign-bpc-scope .bpc-impact-num {
   font-size: 1.55rem;
   font-weight: 900;
-  color: #f8fafc;
+  color: #1f2937;
   line-height: 1;
 }
 .featured-campaign-bpc-scope .bpc-impact-label {
   font-size: 0.67rem;
-  color: #64748b;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   font-weight: 600;
@@ -415,7 +421,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  background: #d97757;
+  background: #911313;
   color: #fff;
   font-size: 0.92rem;
   font-weight: 700;
@@ -428,24 +434,25 @@
   cursor: pointer;
 }
 .featured-campaign-bpc-scope .bpc-cta-primary:hover {
-  background: #c0693e;
+  background: #7a0f0f;
 }
 .featured-campaign-bpc-scope .bpc-cta-ghost {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #94a3b8;
+  color: #374151;
   font-size: 0.88rem;
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid #475569;
+  border: 1.5px solid #d1d5db;
   padding: 0.88rem 1.6rem;
   border-radius: 100px;
   transition: all 0.2s ease;
 }
 .featured-campaign-bpc-scope .bpc-cta-ghost:hover {
-  color: #f8fafc;
-  border-color: #64748b;
+  color: #911313;
+  border-color: #911313;
+  background: #fef2f2;
 }
 @media (max-width: 600px) {
   .featured-campaign-bpc-scope .bpc-title {

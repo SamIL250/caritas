@@ -465,34 +465,7 @@ function ProgramDrawer({
                 </div>
               </div>
 
-              {program.body ? (
-                <div className="drawer-body-section">
-                  <h3 className="drawer-info-heading">About this Program</h3>
-                  <div className="drawer-body-html" dangerouslySetInnerHTML={{ __html: program.body }} />
-                </div>
-              ) : null}
 
-              {program.external_url?.trim() ? (
-                <div className="drawer-ext-link">
-                  <div>
-                    <span className="drawer-ext-link-label">Learn more</span>
-                    <a href={program.external_url} target="_blank" rel="noopener noreferrer" className="drawer-info-link">
-                      Visit program page
-                    </a>
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="drawer-cta-block">
-                <p className="drawer-cta-text">
-                  For more information, reach out to the project manager.
-                </p>
-                {program.contact_phone ? (
-                  <a href={`tel:${program.contact_phone.replace(/\s/g, "")}`} className="drawer-cta-btn">
-                    {program.contact_phone}
-                  </a>
-                ) : null}
-              </div>
             </div>
           </>
         )}

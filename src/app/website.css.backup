@@ -7034,6 +7034,25 @@
         @keyframes ldr-pulse {
             0%, 100% { box-shadow: 0 0 0 4px rgba(165,40,13,0.18), 0 0 14px rgba(165,40,13,0.45); }
             50%       { box-shadow: 0 0 0 9px rgba(165,40,13,0.07), 0 0 24px rgba(165,40,13,0.25); }
+        .ldr-dot-end {
+            position: absolute;
+            left: auto; right: 0; transform: translateX(50%);
+            top: 148px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: #a5280d;
+            border: 3px solid #f7f3ef;
+            box-shadow: 0 0 0 2px rgba(165,40,13,0.3);
+            z-index: 2;
+        }
+        .ldr-year-tag-end {
+            position: absolute;
+            left: auto; right: 0; transform: translateX(50%);
+            font-size: 0.64rem; font-weight: 800; color: #a5280d;
+            letter-spacing: 0.04em; white-space: nowrap; z-index: 1;
+        }
+        .ldr-node--above .ldr-year-tag-end { top: 166px; }
+        .ldr-node--below .ldr-year-tag-end { top: 130px; }
         }
 
 
@@ -7075,7 +7094,7 @@
             .ldr-node--below .ldr-card { top: unset; }
             .ldr-photo { width: 52px; height: 52px; margin-bottom: 0; flex-shrink: 0; }
             .ldr-card-text { align-items: flex-start; }
-            .ldr-stem, .ldr-dot, .ldr-year-tag { display: none; }
+            .ldr-stem, .ldr-dot, .ldr-year-tag, .ldr-dot-end, .ldr-year-tag-end { display: none; }
         }
 
         /* Optional OUR RESOURCES impact layout: ../resources-impact-section.css */

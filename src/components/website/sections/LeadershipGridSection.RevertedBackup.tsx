@@ -40,6 +40,7 @@ function encodePublicSrc(url: string) {
   return encodeURI(path);
 }
 
+
 function LeaderNode({
   year,
   name,
@@ -72,11 +73,7 @@ function LeaderNode({
       <div className="ldr-card">
         <div className="ldr-photo">
           {src ? (
-            <img
-              src={src}
-              alt={name.trim() ? name : role.trim() ? role : "Leader portrait"}
-              loading="lazy"
-            />
+            <img src={src} alt={name.trim() ? name : role.trim() ? role : "Leader portrait"} loading="lazy" />
           ) : (
             <div className="ldr-photo-placeholder">
               <i className="fa-solid fa-user-tie" aria-hidden />
@@ -117,12 +114,7 @@ function LeaderScrollTimeline({
 
   return (
     <div className="ldr-scroll-wrap">
-      <button
-        className="ldr-arrow ldr-prev"
-        aria-label="Previous"
-        type="button"
-        onClick={() => scrollBy("prev")}
-      >
+      <button className="ldr-arrow ldr-prev" aria-label="Previous" type="button" onClick={() => scrollBy("prev")}>
         <i className="fa-solid fa-chevron-left" aria-hidden />
       </button>
       <div className="ldr-scroll" ref={scrollRef}>
@@ -142,12 +134,7 @@ function LeaderScrollTimeline({
           ))}
         </div>
       </div>
-      <button
-        className="ldr-arrow ldr-next"
-        aria-label="Next"
-        type="button"
-        onClick={() => scrollBy("next")}
-      >
+      <button className="ldr-arrow ldr-next" aria-label="Next" type="button" onClick={() => scrollBy("next")}>
         <i className="fa-solid fa-chevron-right" aria-hidden />
       </button>
     </div>
@@ -186,21 +173,13 @@ export default function LeadershipGridSection({
             <h2 className="sub-section-title">A Legacy of Faithful Service</h2>
           </div>
 
-          {/* Chairpersons */}
           <div className="ldr-era-block">
             <div className="ldr-era-header">
-              <div className="ldr-era-title">
-                <i className="fa-solid fa-crown" aria-hidden /> Chairpersons
-              </div>
+              <div className="ldr-era-title"><i className="fa-solid fa-crown" aria-hidden /> Chairpersons</div>
               <span className="ldr-era-span">1959 — Present</span>
             </div>
             <div className="ldr-scroll-wrap">
-              <button
-                className="ldr-arrow ldr-prev"
-                aria-label="Previous"
-                type="button"
-                onClick={() => scrollBy(chairScrollRef, "prev")}
-              >
+              <button className="ldr-arrow ldr-prev" aria-label="Previous" type="button" onClick={() => scrollBy(chairScrollRef, "prev")}>
                 <i className="fa-solid fa-chevron-left" aria-hidden />
               </button>
               <div className="ldr-scroll" ref={chairScrollRef}>
@@ -208,11 +187,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 13 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Chairperson/perraudin.jpg")}
-                          alt="Archbishop Perraudin"
-                          style={{ objectPosition: "center top" }}
-                        />
+                        <img src={encodePublicSrc("img/Chairperson/perraudin.jpg")} alt="Archbishop Perraudin" style={{ objectPosition: "center top" }} />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Archbishop Perraudin</div>
@@ -228,10 +203,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below" style={{ "--dur": 25 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Chairperson/gahamanyi.png")}
-                          alt="H.E. Mgr. Jean Baptiste Gahamanyi"
-                        />
+                        <img src={encodePublicSrc("img/Chairperson/gahamanyi.png")} alt="H.E. Mgr. Jean Baptiste Gahamanyi" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">H.E. Mgr. Jean Baptiste Gahamanyi</div>
@@ -247,9 +219,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 25 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <div className="ldr-photo-placeholder">
-                          <i className="fa-solid fa-user-tie" aria-hidden />
-                        </div>
+                        <div className="ldr-photo-placeholder"><i className="fa-solid fa-user-tie" aria-hidden /></div>
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">H.E. Mgr. Thaddée Ntihinyurwa</div>
@@ -265,10 +235,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below ldr-node--current" style={{ "--dur": 4 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Chairperson/anaclet.jpg")}
-                          alt="H.E. Mgr. Anaclet Mwumvaneza"
-                        />
+                        <img src={encodePublicSrc("img/Chairperson/anaclet.jpg")} alt="H.E. Mgr. Anaclet Mwumvaneza" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">H.E. Mgr. Anaclet Mwumvaneza</div>
@@ -283,32 +250,19 @@ export default function LeadershipGridSection({
                   </div>
                 </div>
               </div>
-              <button
-                className="ldr-arrow ldr-next"
-                aria-label="Next"
-                type="button"
-                onClick={() => scrollBy(chairScrollRef, "next")}
-              >
+              <button className="ldr-arrow ldr-next" aria-label="Next" type="button" onClick={() => scrollBy(chairScrollRef, "next")}>
                 <i className="fa-solid fa-chevron-right" aria-hidden />
               </button>
             </div>
           </div>
 
-          {/* Secretary Generals */}
           <div className="ldr-era-block">
             <div className="ldr-era-header">
-              <div className="ldr-era-title">
-                <i className="fa-solid fa-person-chalkboard" aria-hidden /> Secretary Generals
-              </div>
+              <div className="ldr-era-title"><i className="fa-solid fa-person-chalkboard" aria-hidden /> Secretary Generals</div>
               <span className="ldr-era-span">1961 — Present</span>
             </div>
             <div className="ldr-scroll-wrap">
-              <button
-                className="ldr-arrow ldr-prev"
-                aria-label="Previous"
-                type="button"
-                onClick={() => scrollBy(secScrollRef, "prev")}
-              >
+              <button className="ldr-arrow ldr-prev" aria-label="Previous" type="button" onClick={() => scrollBy(secScrollRef, "prev")}>
                 <i className="fa-solid fa-chevron-left" aria-hidden />
               </button>
               <div className="ldr-scroll" ref={secScrollRef}>
@@ -316,10 +270,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 11 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Arthur%20Dejemeppe.jpg")}
-                          alt="Father Arthur Dejemeppe"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Arthur%20Dejemeppe.jpg")} alt="Father Arthur Dejemeppe" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Arthur Dejemeppe</div>
@@ -335,10 +286,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below" style={{ "--dur": 1 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Roger%20Pien.jpg")}
-                          alt="Father Roger Pien"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Roger%20Pien.jpg")} alt="Father Roger Pien" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Roger Pien</div>
@@ -354,10 +302,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 4 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Cyriaque%20Munyansanga.png")}
-                          alt="Father Cyriaque Munyansanga"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Cyriaque%20Munyansanga.png")} alt="Father Cyriaque Munyansanga" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Cyriaque Munyansanga</div>
@@ -373,10 +318,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below" style={{ "--dur": 1 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Carles%20Maria%20Giol.png")}
-                          alt="Father Carles Maria Giol"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Carles%20Maria%20Giol.png")} alt="Father Carles Maria Giol" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Carles Maria Giol</div>
@@ -392,10 +334,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 17 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Descombers.jpg")}
-                          alt="Father Michel Descombes"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Descombers.jpg")} alt="Father Michel Descombes" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Michel Descombes</div>
@@ -411,10 +350,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below" style={{ "--dur": 1 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Callixte%20Twagirayezu.jpg")}
-                          alt="Father Callixte Twagirayezu"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Callixte%20Twagirayezu.jpg")} alt="Father Callixte Twagirayezu" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Callixte Twagirayezu</div>
@@ -430,10 +366,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 17 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg")}
-                          alt="Monsignor Oreste Incimatata"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg")} alt="Monsignor Oreste Incimatata" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Msgr. Oreste Incimatata</div>
@@ -449,10 +382,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below" style={{ "--dur": 3 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/anaclet.jpg")}
-                          alt="H.E. Mgr. Anaclet Mwumvaneza"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/anaclet.jpg")} alt="H.E. Mgr. Anaclet Mwumvaneza" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">H.E. Mgr. Anaclet Mwumvaneza</div>
@@ -468,10 +398,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--above" style={{ "--dur": 7 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/JMV%20Twagirayezu.jpg")}
-                          alt="H.E. Mgr. Jean Marie Vianney Twagirayezu"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/JMV%20Twagirayezu.jpg")} alt="H.E. Mgr. Jean Marie Vianney Twagirayezu" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">H.E. Mgr. JMV Twagirayezu</div>
@@ -487,10 +414,7 @@ export default function LeadershipGridSection({
                   <div className="ldr-node ldr-node--below ldr-node--current" style={{ "--dur": 3 } as React.CSSProperties}>
                     <div className="ldr-card">
                       <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Oscar%20Kagimbura.png")}
-                          alt="Father Oscar Kagimbura"
-                        />
+                        <img src={encodePublicSrc("img/Secretary%20Generals/Oscar%20Kagimbura.png")} alt="Father Oscar Kagimbura" />
                       </div>
                       <div className="ldr-card-text">
                         <div className="ldr-name">Father Oscar Kagimbura</div>
@@ -505,12 +429,7 @@ export default function LeadershipGridSection({
                   </div>
                 </div>
               </div>
-              <button
-                className="ldr-arrow ldr-next"
-                aria-label="Next"
-                type="button"
-                onClick={() => scrollBy(secScrollRef, "next")}
-              >
+              <button className="ldr-arrow ldr-next" aria-label="Next" type="button" onClick={() => scrollBy(secScrollRef, "next")}>
                 <i className="fa-solid fa-chevron-right" aria-hidden />
               </button>
             </div>

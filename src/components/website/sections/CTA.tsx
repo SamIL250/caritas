@@ -183,7 +183,6 @@ function formatLegacyHeading(
 function FeaturedDonateSection(props: {
   featured: CtaFeaturedCard;
   sidebar_cards: CtaSidebarCard[];
-  impact_panel?: CtaImpactPanel;
   bottom_primary_text?: string;
   bottom_primary_url?: string;
   bottom_secondary_text?: string;
@@ -192,7 +191,6 @@ function FeaturedDonateSection(props: {
   const {
     featured,
     sidebar_cards,
-    impact_panel,
     bottom_primary_text,
     bottom_primary_url,
     bottom_secondary_text,
@@ -203,10 +201,6 @@ function FeaturedDonateSection(props: {
   const pbUrl = (featured.primary_button_url || "#donate").trim() || "#donate";
   const discussLabel = (featured.discussion_label || "").trim();
   const discussUrl = (featured.discussion_url || "").trim();
-
-  const impactItems = Array.isArray(impact_panel?.items) ? impact_panel!.items! : [];
-  const impactTitle = (impact_panel?.title || "Our collective impact").trim();
-  const impactIcon = (impact_panel?.icon || "fa-chart-line").trim();
 
   return (
     <>
@@ -245,7 +239,6 @@ function FeaturedDonateSection(props: {
               className="cr-bpc-btn-full"
               modalCampaignId={featured.donation_modal_campaign_id ?? null}
             >
-              <i className="fa-solid fa-heart" aria-hidden />
               {pbText}
             </DonateOrLink>
             {discussLabel && discussUrl ? (
@@ -300,7 +293,6 @@ function FeaturedDonateSection(props: {
                   ) : null}
                   <div className="cr-bpc-small-actions">
                     <DonateOrLink href={btnUrl} className="cr-bpc-small-btn">
-                      <i className="fa-solid fa-hand-holding-heart" aria-hidden />
                       {btnText}
                     </DonateOrLink>
                     {dLab && dUrl ? (
@@ -315,24 +307,7 @@ function FeaturedDonateSection(props: {
             );
           })}
 
-          {impactItems.length > 0 ? (
-            <div className="cr-bpc-card cr-bpc-impact">
-              <div className="cr-bpc-impact-head">
-                <div className="cr-bpc-impact-icon">
-                  <i className={iconClass(impactIcon)} aria-hidden />
-                </div>
-                <span className="cr-bpc-impact-title">{impactTitle}</span>
-              </div>
-              <div className="cr-bpc-impact-grid">
-                {impactItems.map((it, i) => (
-                  <div key={`${it.label}-${i}`} className="cr-bpc-impact-item">
-                    <span className="cr-bpc-impact-num">{it.num}</span>
-                    <span className="cr-bpc-impact-label">{it.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
+
         </div>
       </div>
 
@@ -343,7 +318,6 @@ function FeaturedDonateSection(props: {
               href={(bottom_primary_url || "#donate").trim()}
               className="cr-bpc-bottom-btn cr-bpc-bottom-btn--primary"
             >
-              <i className="fa-solid fa-heart" aria-hidden />
               {bottom_primary_text}
             </DonateOrLink>
           ) : null}
@@ -376,7 +350,6 @@ export default function CTA({
   be_part_grid = false,
   featured_card,
   sidebar_cards = [],
-  impact_panel,
   bottom_primary_text,
   bottom_primary_url,
   bottom_secondary_text,
@@ -428,7 +401,6 @@ export default function CTA({
         <header className={usePartGrid ? "cr-bpc-header" : "cta-engage__text"}>
           {displayEyebrow ? (
             <p className={usePartGrid ? "cr-bpc-badge" : "cta-engage__eyebrow"}>
-              <i className="fa-solid fa-heart" aria-hidden />
               {displayEyebrow}
             </p>
           ) : null}
@@ -480,7 +452,6 @@ export default function CTA({
           <FeaturedDonateSection
             featured={featured}
             sidebar_cards={Array.isArray(sidebar_cards) ? sidebar_cards : []}
-            impact_panel={impact_panel}
             bottom_primary_text={bottom_primary_text}
             bottom_primary_url={bottom_primary_url}
             bottom_secondary_text={bottom_secondary_text}
