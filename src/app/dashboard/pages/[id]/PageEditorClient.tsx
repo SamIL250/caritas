@@ -1821,316 +1821,67 @@ function SectionForm({
         </div>
       );
     case 'home_about': {
-      const ha = DEFAULT_SECTION_CONTENT.home_about as Record<string, unknown>;
-      const defParagraphs = (ha.paragraph_html as string[]) || ['', ''];
-      const defMilestones = (ha.milestones as string[]) || [];
-      const defPillars = (ha.pillars as Record<string, unknown>[]) || [];
-      const defStatsItems =
-        ((((ha.stats_bar as Record<string, unknown>)?.items as { value?: string; label?: string }[]) ||
-          []) as { value: string; label: string }[]) || [];
+      const def = DEFAULT_SECTION_CONTENT.home_about as Record<string, unknown>;
+      const defValues = (def.values as string[]) || [];
 
-      const ensureMilestones = (): string[] => {
-        const cur = [...(state.milestones || [])];
-        for (let i = 0; i < 4; i++) {
-          cur[i] = cur[i] ?? defMilestones[i] ?? '';
+      const ensureValues = (): string[] => {
+        const cur = [...(state.values || [])];
+        for (let i = 0; i < 11; i++) {
+          cur[i] = cur[i] ?? defValues[i] ?? '';
         }
-        return cur.slice(0, 4);
+        return cur.slice(0, 11);
       };
 
-      const ensurePillars = (): Record<string, unknown>[] => {
-        const cur = [...(state.pillars || [])];
-        for (let i = 0; i < 3; i++) {
-          const d = defPillars[i] || {};
-          cur[i] = {
-            icon: '',
-            title: '',
-            body: '',
-            footer: '',
-            chips: [] as string[],
-            cta_label: '',
-            cta_href: '',
-            ...d,
-            ...(cur[i] || {}),
-          };
-        }
-        return cur.slice(0, 3);
-      };
-
-      const ensureStatsItems = (): { value: string; label: string }[] => {
-        const cur = [...((state.stats_bar && state.stats_bar.items) || [])];
-        for (let i = 0; i < 4; i++) {
-          cur[i] = {
-            value: '',
-            label: '',
-            ...(defStatsItems[i] || {}),
-            ...(cur[i] || {}),
-          };
-        }
-        return cur.slice(0, 4);
-      };
-
-      const milestones = ensureMilestones();
-      const pillars = ensurePillars();
-      const statItems = ensureStatsItems();
-      const paragraphs: [string, string] = [
-        (state.paragraph_html?.[0] as string) ?? defParagraphs[0] ?? '',
-        (state.paragraph_html?.[1] as string) ?? defParagraphs[1] ?? '',
-      ];
-      const storyCta = (state.story_cta || ha.story_cta || {}) as { label?: string; href?: string };
-      const statsBarMerged = (state.stats_bar || ha.stats_bar || {}) as {
-        items?: { value?: string; label?: string }[];
-        cta_label?: string;
-        cta_href?: string;
-      };
+      const values = ensureValues();
 
       return (
         <div className="space-y-5">
           <p className="text-[10px] leading-relaxed text-stone-500">
-            Homepage about band (burgundy card on beige): matches the live site layout — badges, history copy,
-            quote, milestones, Vision/Mission/Values, stats row.
+            Homepage about infographic: heading, subtitle, mission text, values list, and vision tagline.
+            The radial network diagram (nodes, labels, layout) is fixed.
           </p>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-stone-400" htmlFor="ha-badge-est">
-                Badge — established
-              </label>
-              <input
-                id="ha-badge-est"
-                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                value={(state.badge_est as string) ?? ''}
-                onChange={(e) => onChange('badge_est', e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-stone-400" htmlFor="ha-badge-loc">
-                Badge — location
-              </label>
-              <input
-                id="ha-badge-loc"
-                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                value={(state.badge_location as string) ?? ''}
-                onChange={(e) => onChange('badge_location', e.target.value)}
-              />
-            </div>
-          </div>
-          {renderField('Headline line 1', 'heading_line1', 'text')}
-          {renderField('Headline line 2 (accent)', 'heading_line2_accent', 'text')}
-          {renderField('History label', 'history_label', 'text')}
+          {renderField('Title', 'title', 'text')}
+          {renderField('Subtitle', 'subtitle', 'text')}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-stone-400" htmlFor="ha-p1">
-              Paragraph 1 (HTML ok)
+            <label className="text-[10px] font-bold uppercase text-stone-400">
+              Mission text
             </label>
             <textarea
-              id="ha-p1"
               className="w-full rounded-lg border border-stone-200 p-2 text-xs"
               rows={4}
-              value={paragraphs[0]}
-              onChange={(e) => onChange('paragraph_html', [e.target.value, paragraphs[1]])}
+              value={(state.missionText as string) ?? ''}
+              onChange={(e) => onChange('missionText', e.target.value)}
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-stone-400" htmlFor="ha-p2">
-              Paragraph 2 (HTML ok)
+            <label className="text-[10px] font-bold uppercase text-stone-400">
+              Vision text
             </label>
-            <textarea
-              id="ha-p2"
+            <input
               className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-              rows={3}
-              value={paragraphs[1]}
-              onChange={(e) => onChange('paragraph_html', [paragraphs[0], e.target.value])}
+              value={(state.visionText as string) ?? ''}
+              onChange={(e) => onChange('visionText', e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-stone-400">Story button label</label>
-              <input
-                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                value={storyCta.label ?? ''}
-                onChange={(e) =>
-                  onChange('story_cta', { ...(state.story_cta || {}), label: e.target.value })
-                }
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-stone-400">Story button URL</label>
-              <input
-                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                value={storyCta.href ?? ''}
-                onChange={(e) =>
-                  onChange('story_cta', { ...(state.story_cta || {}), href: e.target.value })
-                }
-              />
-            </div>
-          </div>
-          {renderField('Quote', 'quote_text', 'textarea', { rows: 3 })}
-          {renderField('Quote attribution', 'quote_attribution', 'text')}
-          <p className="text-[10px] font-bold uppercase text-stone-400">Milestones (4)</p>
+          <p className="text-[10px] font-bold uppercase text-stone-400">
+            Values (11)
+          </p>
           <ul className="space-y-2">
-            {milestones.map((line: string, idx: number) => (
+            {values.map((v: string, idx: number) => (
               <li key={idx} className="list-none">
                 <input
                   className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                  value={line}
+                  value={v}
                   onChange={(e) => {
-                    const list = ensureMilestones();
+                    const list = ensureValues();
                     list[idx] = e.target.value;
-                    onChange('milestones', list);
+                    onChange('values', list);
                   }}
-                  placeholder={`Milestone ${idx + 1}`}
+                  placeholder={`Value ${idx + 1}`}
                 />
               </li>
             ))}
           </ul>
-          <p className="text-[10px] font-bold uppercase text-stone-400">Vision / Mission / Values cards</p>
-          <ul className="space-y-4">
-            {pillars.map((pillar: Record<string, unknown>, idx: number) => (
-              <li key={idx} className="list-none rounded-lg border border-stone-100 bg-stone-50 p-3 space-y-2">
-                <p className="text-[10px] font-semibold text-stone-600">
-                  Card {idx + 1}
-                  {idx === 2 ? ' (values — chips + optional CTA)' : ''}
-                </p>
-                <input
-                  className="w-full rounded border border-stone-200 p-2 text-xs"
-                  placeholder="Font Awesome icon classes e.g. fa-regular fa-eye"
-                  value={(pillar.icon as string) ?? ''}
-                  onChange={(e) => {
-                    const list = ensurePillars();
-                    list[idx] = { ...list[idx], icon: e.target.value };
-                    onChange('pillars', list);
-                  }}
-                />
-                <input
-                  className="w-full rounded border border-stone-200 p-2 text-xs font-semibold"
-                  placeholder="Title"
-                  value={(pillar.title as string) ?? ''}
-                  onChange={(e) => {
-                    const list = ensurePillars();
-                    list[idx] = { ...list[idx], title: e.target.value };
-                    onChange('pillars', list);
-                  }}
-                />
-                <textarea
-                  className="w-full rounded border border-stone-200 p-2 text-xs"
-                  rows={3}
-                  placeholder="Body (HTML ok)"
-                  value={(pillar.body as string) ?? ''}
-                  onChange={(e) => {
-                    const list = ensurePillars();
-                    list[idx] = { ...list[idx], body: e.target.value };
-                    onChange('pillars', list);
-                  }}
-                />
-                <textarea
-                  className="w-full rounded border border-stone-200 p-2 text-xs"
-                  rows={2}
-                  placeholder="Footer (italic line — optional)"
-                  value={(pillar.footer as string) ?? ''}
-                  onChange={(e) => {
-                    const list = ensurePillars();
-                    list[idx] = { ...list[idx], footer: e.target.value };
-                    onChange('pillars', list);
-                  }}
-                />
-                {idx === 2 ? (
-                  <>
-                    <input
-                      className="w-full rounded border border-stone-200 p-2 text-xs"
-                      placeholder="Chips — comma-separated"
-                      value={Array.isArray(pillar.chips) ? (pillar.chips as string[]).join(', ') : ''}
-                      onChange={(e) => {
-                        const chips = e.target.value
-                          .split(',')
-                          .map((s) => s.trim())
-                          .filter(Boolean);
-                        const list = ensurePillars();
-                        list[idx] = { ...list[idx], chips };
-                        onChange('pillars', list);
-                      }}
-                    />
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
-                        className="w-full rounded border border-stone-200 p-2 text-xs"
-                        placeholder="Read more label"
-                        value={(pillar.cta_label as string) ?? ''}
-                        onChange={(e) => {
-                          const list = ensurePillars();
-                          list[idx] = { ...list[idx], cta_label: e.target.value };
-                          onChange('pillars', list);
-                        }}
-                      />
-                      <input
-                        className="w-full rounded border border-stone-200 p-2 text-xs"
-                        placeholder="Read more URL"
-                        value={(pillar.cta_href as string) ?? ''}
-                        onChange={(e) => {
-                          const list = ensurePillars();
-                          list[idx] = { ...list[idx], cta_href: e.target.value };
-                          onChange('pillars', list);
-                        }}
-                      />
-                    </div>
-                  </>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-          <p className="text-[10px] font-bold uppercase text-stone-400">Stats bar</p>
-          <ul className="space-y-3">
-            {statItems.map((st: { value: string; label: string }, idx: number) => (
-              <li key={idx} className="list-none grid grid-cols-2 gap-2 rounded-lg border border-stone-100 bg-stone-50 p-3">
-                <input
-                  className="w-full rounded border border-stone-200 p-2 text-xs"
-                  placeholder="67+"
-                  value={st.value ?? ''}
-                  onChange={(e) => {
-                    const list = ensureStatsItems();
-                    list[idx] = { ...list[idx], value: e.target.value };
-                    onChange('stats_bar', { ...statsBarMerged, items: list });
-                  }}
-                />
-                <input
-                  className="w-full rounded border border-stone-200 p-2 text-xs"
-                  placeholder="Label"
-                  value={st.label ?? ''}
-                  onChange={(e) => {
-                    const list = ensureStatsItems();
-                    list[idx] = { ...list[idx], label: e.target.value };
-                    onChange('stats_bar', { ...statsBarMerged, items: list });
-                  }}
-                />
-              </li>
-            ))}
-          </ul>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-stone-400">Stats bar button label</label>
-              <input
-                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                value={statsBarMerged.cta_label ?? ''}
-                onChange={(e) =>
-                  onChange('stats_bar', {
-                    ...statsBarMerged,
-                    items: statItems,
-                    cta_label: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-stone-400">Stats bar button URL</label>
-              <input
-                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                value={statsBarMerged.cta_href ?? ''}
-                onChange={(e) =>
-                  onChange('stats_bar', {
-                    ...statsBarMerged,
-                    items: statItems,
-                    cta_href: e.target.value,
-                  })
-                }
-              />
-            </div>
-          </div>
         </div>
       );
     }
