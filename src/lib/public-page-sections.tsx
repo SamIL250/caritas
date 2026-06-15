@@ -19,6 +19,7 @@ import PillarCardsSection from "@/components/website/sections/PillarCardsSection
 import ValuesGridSection from "@/components/website/sections/ValuesGridSection";
 import NetworkSection from "@/components/website/sections/NetworkSection";
 import LeadershipGridSection from "@/components/website/sections/LeadershipGridSection";
+import Testimonial from "@/components/website/sections/Testimonial";
 import AboutSection from "@/components/website/sections/AboutSection";
 import VideoGallerySection from "@/components/website/sections/VideoGallerySection";
 import DioceseMapSection from "@/components/website/sections/DioceseMapSection";
@@ -36,6 +37,7 @@ const SECTION_COMPONENTS: Record<string, React.ComponentType<any>> = {
   program_cards: ProgramCards,
   news_cards: NewsCards,
   cta: CTA,
+  testimonial: Testimonial,
   partners: PartnersSection,
   contact_info: ContactInfo,
   gallery: Gallery,

@@ -106,7 +106,7 @@ export default async function LandingPage() {
           (s: any) => s.type === 'contact_info' || s.type === 'map_section'
         ) ?? [];
         const otherSections = enrichedSections?.filter(
-          (s: any) => s.type !== 'video_gallery' && s.type !== 'contact_info' && s.type !== 'map_section'
+          (s: any) => s.type !== 'contact_info' && s.type !== 'map_section'
         ) ?? [];
 
         const contactRow = contactSections.find((s: any) => s.type === 'contact_info');
