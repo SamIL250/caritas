@@ -90,6 +90,21 @@ function LeaderNode({
           {featured ? <span className="ldr-current-badge">Current</span> : null}
         </div>
       </div>
+      <div className="ldr-tooltip" role="tooltip">
+        <div className="ldr-tooltip-arrow" />
+        <div className="ldr-tooltip-body">
+          <div className="ldr-tooltip-photo">
+            {src ? (
+              <img src={src} alt={name.trim() ? name : "Portrait"} loading="lazy" />
+            ) : (
+              <div className="ldr-tooltip-photo-placeholder">
+                <i className="fa-solid fa-user-tie" aria-hidden />
+              </div>
+            )}
+          </div>
+          <div className="ldr-tooltip-role">{role}</div>
+        </div>
+      </div>
       <div className="ldr-stem" aria-hidden />
       <div className="ldr-dot" aria-hidden />
       <div className="ldr-year-tag">{year}</div>
@@ -178,6 +193,26 @@ export default function LeadershipGridSection({
     container.scrollBy({ left: direction === "next" ? distance : -distance, behavior: "smooth" });
   };
 
+  const chairpersonMembers: LeaderMember[] = [
+    { year: "1959", name: "Archbishop Perraudin", role: "Founding Chairperson", period: "1959 — 1972 · 13 yrs", duration: 13, photo_url: "img/Chairperson/perraudin.jpg" },
+    { year: "1972", name: "H.E. Mgr. Jean Baptiste Gahamanyi", role: "Chairperson", period: "1972 — 1997 · 25 yrs", duration: 25, photo_url: "img/Chairperson/gahamanyi.png" },
+    { year: "1997", name: "H.E. Mgr. Thaddée Ntihinyurwa", role: "Chairperson", period: "1997 — 2022 · 25 yrs", duration: 25 },
+    { year: "2022", name: "H.E. Mgr. Anaclet Mwumvaneza", role: "Chairperson — Nyundo Diocese", period: "2022 — Present", duration: 4, featured: true, photo_url: "img/Chairperson/anaclet.jpg" },
+  ];
+
+  const secretaryMembers: LeaderMember[] = [
+    { year: "1961", name: "Father Arthur Dejemeppe", role: "Secretary General", period: "1961 — 1972 · 11 yrs", duration: 11, photo_url: "img/Secretary%20Generals/Arthur%20Dejemeppe.jpg" },
+    { year: "1972", name: "Father Roger Pien", role: "Secretary General", period: "1972 — 1973 · 1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Roger%20Pien.jpg" },
+    { year: "1973", name: "Father Cyriaque Munyansanga", role: "Secretary General", period: "1973 — 1977 · 4 yrs", duration: 4, photo_url: "img/Secretary%20Generals/Cyriaque%20Munyansanga.png" },
+    { year: "1977", name: "Father Carles Maria Giol", role: "Secretary General", period: "1977 — 1978 · 1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Carles%20Maria%20Giol.png" },
+    { year: "1978", name: "Father Michel Descombes", role: "Secretary General", period: "1978 — 1995 · 17 yrs", duration: 17, photo_url: "img/Secretary%20Generals/Descombers.jpg" },
+    { year: "1995", name: "Father Callixte Twagirayezu", role: "Secretary General", period: "1995 — 1996 · 1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Callixte%20Twagirayezu.jpg" },
+    { year: "1996", name: "Msgr. Oreste Incimatata", role: "Secretary General", period: "1996 — 2013 · 17 yrs", duration: 17, photo_url: "img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg" },
+    { year: "2013", name: "H.E. Mgr. Anaclet Mwumvaneza", role: "Secretary General", period: "2013 — 2016 · 3 yrs", duration: 3, photo_url: "img/Secretary%20Generals/anaclet.jpg" },
+    { year: "2016", name: "H.E. Mgr. Jean Marie Vianney Twagirayezu", role: "Secretary General", period: "2016 — 2023 · 7 yrs", duration: 7, photo_url: "img/Secretary%20Generals/JMV%20Twagirayezu.jpg" },
+    { year: "2023", name: "Father Oscar Kagimbura", role: "Secretary General", period: "2023 — Present", duration: 3, featured: true, photo_url: "img/Secretary%20Generals/Oscar%20Kagimbura.png" },
+  ];
+
   if (!groups || groups.length === 0) {
     return (
       <section className="section-warm ldr-section" id={anchor_id || undefined} data-watermark={wm}>
@@ -204,83 +239,20 @@ export default function LeadershipGridSection({
                 <i className="fa-solid fa-chevron-left" aria-hidden />
               </button>
               <div className="ldr-scroll" ref={chairScrollRef}>
-                <div className="ldr-timeline">
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 13 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Chairperson/perraudin.jpg")}
-                          alt="Archbishop Perraudin"
-                          style={{ objectPosition: "center top" }}
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Archbishop Perraudin</div>
-                        <div className="ldr-role">Founding Chairperson</div>
-                        <div className="ldr-period">1959 — 1972 · 13 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1959</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below" style={{ "--dur": 25 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Chairperson/gahamanyi.png")}
-                          alt="H.E. Mgr. Jean Baptiste Gahamanyi"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">H.E. Mgr. Jean Baptiste Gahamanyi</div>
-                        <div className="ldr-role">Chairperson</div>
-                        <div className="ldr-period">1972 — 1997 · 25 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1972</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 25 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <div className="ldr-photo-placeholder">
-                          <i className="fa-solid fa-user-tie" aria-hidden />
-                        </div>
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">H.E. Mgr. Thaddée Ntihinyurwa</div>
-                        <div className="ldr-role">Chairperson</div>
-                        <div className="ldr-period">1997 — 2022 · 25 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1997</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below ldr-node--current" style={{ "--dur": 4 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Chairperson/anaclet.jpg")}
-                          alt="H.E. Mgr. Anaclet Mwumvaneza"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">H.E. Mgr. Anaclet Mwumvaneza</div>
-                        <div className="ldr-role">Chairperson — Nyundo Diocese</div>
-                        <div className="ldr-period">2022 — Present</div>
-                        <span className="ldr-current-badge">Current</span>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">2022</div>
-                  </div>
+                <div className="ldr-timeline" role="list" aria-label="Chairpersons">
+                  {chairpersonMembers.map((m, mi) => (
+                    <LeaderNode
+                      key={`${m.year}-${m.name}-${mi}`}
+                      index={mi}
+                      year={String(m.year ?? "")}
+                      name={String(m.name ?? "")}
+                      role={String(m.role ?? "")}
+                      period={m.period}
+                      duration={m.duration}
+                      featured={m.featured}
+                      photo_url={m.photo_url}
+                    />
+                  ))}
                 </div>
               </div>
               <button
@@ -312,197 +284,20 @@ export default function LeadershipGridSection({
                 <i className="fa-solid fa-chevron-left" aria-hidden />
               </button>
               <div className="ldr-scroll" ref={secScrollRef}>
-                <div className="ldr-timeline">
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 11 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Arthur%20Dejemeppe.jpg")}
-                          alt="Father Arthur Dejemeppe"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Arthur Dejemeppe</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1961 — 1972 · 11 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1961</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below" style={{ "--dur": 1 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Roger%20Pien.jpg")}
-                          alt="Father Roger Pien"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Roger Pien</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1972 — 1973 · 1 yr</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1972</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 4 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Cyriaque%20Munyansanga.png")}
-                          alt="Father Cyriaque Munyansanga"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Cyriaque Munyansanga</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1973 — 1977 · 4 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1973</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below" style={{ "--dur": 1 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Carles%20Maria%20Giol.png")}
-                          alt="Father Carles Maria Giol"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Carles Maria Giol</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1977 — 1978 · 1 yr</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1977</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 17 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Descombers.jpg")}
-                          alt="Father Michel Descombes"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Michel Descombes</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1978 — 1995 · 17 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1978</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below" style={{ "--dur": 1 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Callixte%20Twagirayezu.jpg")}
-                          alt="Father Callixte Twagirayezu"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Callixte Twagirayezu</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1995 — 1996 · 1 yr</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1995</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 17 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg")}
-                          alt="Monsignor Oreste Incimatata"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Msgr. Oreste Incimatata</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">1996 — 2013 · 17 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">1996</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below" style={{ "--dur": 3 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/anaclet.jpg")}
-                          alt="H.E. Mgr. Anaclet Mwumvaneza"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">H.E. Mgr. Anaclet Mwumvaneza</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">2013 — 2016 · 3 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">2013</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--above" style={{ "--dur": 7 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/JMV%20Twagirayezu.jpg")}
-                          alt="H.E. Mgr. Jean Marie Vianney Twagirayezu"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">H.E. Mgr. JMV Twagirayezu</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">2016 — 2023 · 7 yrs</div>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">2016</div>
-                  </div>
-
-                  <div className="ldr-node ldr-node--below ldr-node--current" style={{ "--dur": 3 } as React.CSSProperties}>
-                    <div className="ldr-card">
-                      <div className="ldr-photo">
-                        <img
-                          src={encodePublicSrc("img/Secretary%20Generals/Oscar%20Kagimbura.png")}
-                          alt="Father Oscar Kagimbura"
-                        />
-                      </div>
-                      <div className="ldr-card-text">
-                        <div className="ldr-name">Father Oscar Kagimbura</div>
-                        <div className="ldr-role">Secretary General</div>
-                        <div className="ldr-period">2023 — Present</div>
-                        <span className="ldr-current-badge">Current</span>
-                      </div>
-                    </div>
-                    <div className="ldr-stem" aria-hidden />
-                    <div className="ldr-dot" aria-hidden />
-                    <div className="ldr-year-tag">2023</div>
-                  </div>
+                <div className="ldr-timeline" role="list" aria-label="Secretary Generals">
+                  {secretaryMembers.map((m, mi) => (
+                    <LeaderNode
+                      key={`${m.year}-${m.name}-${mi}`}
+                      index={mi}
+                      year={String(m.year ?? "")}
+                      name={String(m.name ?? "")}
+                      role={String(m.role ?? "")}
+                      period={m.period}
+                      duration={m.duration}
+                      featured={m.featured}
+                      photo_url={m.photo_url}
+                    />
+                  ))}
                 </div>
               </div>
               <button
