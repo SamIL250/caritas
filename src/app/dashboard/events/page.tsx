@@ -14,7 +14,7 @@ export default async function DashboardEventsPage() {
   const events = (data ?? []) as EventRow[];
 
   return (
-    <div className="w-full max-w-6xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Events"
         subtitle={

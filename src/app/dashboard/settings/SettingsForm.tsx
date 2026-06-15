@@ -45,7 +45,7 @@ export function SettingsForm({ initial }: { initial: SettingsFormInitial }) {
   }
 
   return (
-    <div className="mt-6 max-w-4xl space-y-8 pb-10">
+    <div className="mt-6 max-w-full space-y-8 pb-10">
       {message && (
         <p
           className={

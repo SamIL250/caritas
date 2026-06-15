@@ -18,7 +18,7 @@ export default async function DashboardVolunteersPage() {
   );
 
   return (
-    <div className="w-full max-w-6xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Volunteers"
         subtitle={

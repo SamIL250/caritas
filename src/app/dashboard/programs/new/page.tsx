@@ -26,7 +26,7 @@ export default async function NewProgramPage({ searchParams }: PageProps) {
   const categories = (catRows ?? []) as ProgramCategoryRow[];
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="New program"
         subtitle="Write a program article — pick a category, add a cover and tell the story."

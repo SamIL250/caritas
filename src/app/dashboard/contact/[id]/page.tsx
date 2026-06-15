@@ -11,7 +11,7 @@ export default async function ContactDetailPage({ params }: Props) {
   if (!detail) notFound();
 
   return (
-    <div className="w-full max-w-6xl">
+    <div className="w-full max-w-full">
       <Topbar title="Contact message" subtitle="Review the thread and reply by email." />
       <ContactDetailClient
         message={detail.message}

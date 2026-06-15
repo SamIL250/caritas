@@ -16,7 +16,7 @@ section.cr-home-about {
 .cr-about-inner {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 4rem 2rem 4rem;
+  padding: 2rem 2rem 3rem;
 }
 
 /* ════════════════════════════════════════════════════
@@ -24,7 +24,7 @@ section.cr-home-about {
    ════════════════════════════════════════════════════ */
 
 .cr-about-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .cr-about-title {
@@ -51,7 +51,7 @@ section.cr-home-about {
   width: 48px;
   height: 1px;
   background: #B5272D;
-  margin: 20px 0 48px 0;
+  margin: 16px 0 24px 0;
 }
 
 /* ════════════════════════════════════════════════════
@@ -116,14 +116,14 @@ section.cr-home-about {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: #f5f0e8;
-  border: 2px solid rgba(122, 21, 21, 0.4);
+  background: #8b221d;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #7a1515;
+  color: #ffffff;
   z-index: 3;
 }
 
@@ -133,8 +133,7 @@ section.cr-home-about {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #9a4a4a;
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.8);
   display: block;
   line-height: 1.2;
 }
@@ -143,7 +142,7 @@ section.cr-home-about {
   font-family: var(--font-inter, 'Inter', sans-serif);
   font-size: 18px;
   font-weight: 600;
-  color: #7a1515;
+  color: #ffffff;
   letter-spacing: 0.05em;
   display: block;
   line-height: 1.15;
@@ -190,12 +189,12 @@ section.cr-home-about {
 
 .cr-info-box {
   position: absolute;
-  background: rgba(139, 25, 25, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top: 2px solid #B5272D;
-  border-radius: 4px;
+  background: #ebe3dd;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
   padding: 28px 24px 24px 24px;
   z-index: 4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .cr-info-box--left {
@@ -217,7 +216,7 @@ section.cr-home-about {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.5);
+  color: #8b221d;
   margin-bottom: 16px;
   line-height: 1;
 }
@@ -225,8 +224,8 @@ section.cr-home-about {
 .cr-box-body {
   font-family: var(--font-inter, 'Inter', sans-serif);
   font-size: 15px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  color: #333333;
   line-height: 1.6;
   margin: 0;
 }
@@ -237,9 +236,23 @@ section.cr-home-about {
 
 .cr-box-icon {
   position: absolute;
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  top: -28px;
+  right: -28px;
+}
+
+.cr-box-react-icon {
+  position: absolute;
   width: 44px;
   height: 44px;
-  background: #8b1919;
+  background: #8b221d;
   border: 1.5px solid rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   display: flex;
@@ -274,10 +287,10 @@ section.cr-home-about {
   padding: 6px 0;
   font-family: var(--font-inter, 'Inter', sans-serif);
   font-size: 15px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  color: #333333;
   line-height: 1.5;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .cr-info-values li:last-child {

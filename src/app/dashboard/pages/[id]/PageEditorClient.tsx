@@ -737,7 +737,7 @@ export default function PageEditorClient({
       case 'metrics_stat_cards': return <div className="p-6"><MetricsStatCards cards={props.items || []} /></div>;
       case 'metrics_overview':
         return (
-          <div className="p-8 max-w-4xl mx-auto">
+          <div className="p-8 max-w-full mx-auto">
             <div className="mb-6">
               <h3 className="metrics-panel-title">{props.heading || 'Organisation Overview'}</h3>
               <p className="metrics-panel-sub">{props.subheading}</p>
@@ -1131,7 +1131,7 @@ export default function PageEditorClient({
                 >
                   <iframe
                     ref={iframeRef}
-                    src={`/${page.slug}`}
+                    src={page.slug === 'home' ? '/' : `/${page.slug}`}
                     className="h-full min-h-0 w-full border-none bg-white pointer-events-none"
                     title="Page Preview"
                   />

@@ -22,7 +22,7 @@ export default async function EditPublicationCategoryPage({
     row as Database["public"]["Tables"]["publication_categories"]["Row"];
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <PublicationCategoryForm mode="edit" category={category} />
     </div>
   );

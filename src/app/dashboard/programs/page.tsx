@@ -25,7 +25,7 @@ export default async function DashboardProgramsPage() {
   const editorHref = programsPageRow?.id ? `/dashboard/pages/${programsPageRow.id}` : null;
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Programs"
         subtitle={

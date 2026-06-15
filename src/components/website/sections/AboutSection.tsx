@@ -177,7 +177,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
             {/* ─── Left text box (Mission) ─── */}
             <div className="cr-info-box cr-info-box--left">
               <div className="cr-box-icon" aria-hidden="true">
-                <FiCrosshair size={22} />
+                <img src="/img/image.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <span className="cr-box-heading">OUR MISSION</span>
               <p className="cr-box-body">{content.missionText}</p>
@@ -185,13 +185,14 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
 
             {/* ─── Right text box (Values) ─── */}
             <div className="cr-info-box cr-info-box--right">
-              <div className="cr-box-icon cr-box-icon--bottom-left" aria-hidden="true">
+              <div className="cr-box-react-icon cr-box-icon--bottom-left" aria-hidden="true">
                 <FiStar size={22} />
               </div>
               <span className="cr-box-heading">OUR VALUES</span>
               <ul className="cr-info-values">
                 {content.values.map((v) => (
                   <li key={v}>
+
                     <FiChevronRight size={14} className="cr-val-icon" aria-hidden="true" />
                     <span>{v}</span>
                   </li>

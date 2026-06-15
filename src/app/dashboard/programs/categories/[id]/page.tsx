@@ -19,7 +19,7 @@ export default async function EditProgramCategoryPage({ params }: PageProps) {
   const category = catRow as ProgramCategoryRow;
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Edit program category"
         subtitle="Tune the appearance, slug or description for this program area."

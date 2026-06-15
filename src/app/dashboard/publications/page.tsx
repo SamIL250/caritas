@@ -22,7 +22,7 @@ export default async function DashboardPublicationsPage() {
   const editorHref = pageRow?.id ? `/dashboard/pages/${pageRow.id}` : null;
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Publications"
         subtitle={

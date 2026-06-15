@@ -130,7 +130,7 @@ export default function NavigationPage() {
           </Button>
         } 
       />
-      <div className="mt-2 w-full max-w-4xl sm:mt-3">
+      <div className="mt-2 w-full max-w-full sm:mt-3">
         <Card className="p-0 overflow-hidden">
           <div className="grid grid-cols-12 gap-4 p-4 border-b border-[var(--color-border-default)] bg-stone-50 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">
             <div className="col-span-1 pl-8">Order</div>

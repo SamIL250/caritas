@@ -22,7 +22,7 @@ export default async function EditStoryPage({
   if (!article) notFound();
 
   return (
-    <div className="w-full max-w-5xl space-y-6">
+    <div className="w-full max-w-full space-y-6">
       <Topbar title="Edit story" />
       <NewsArticleForm mode="edit" article={article} departments={departments} />
     </div>

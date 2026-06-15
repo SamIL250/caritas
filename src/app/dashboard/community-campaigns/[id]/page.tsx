@@ -34,7 +34,7 @@ export default async function EditCommunityCampaignPage({ params }: { params: Pr
   const editorHref = await homeFeaturedHref(supabase);
 
   return (
-    <div className="w-full max-w-5xl space-y-6">
+    <div className="w-full max-w-full space-y-6">
       <Topbar title="Edit campaign" subtitle={row.title} />
       <CampaignForm mode="edit" campaign={row} categories={catRows} homeFeaturedEditorHref={editorHref} />
     </div>
