@@ -73,6 +73,7 @@ import type { CtaImpactPanel, CtaSidebarCard } from '@/components/website/sectio
 import PartnersSection from '@/components/website/sections/PartnersSection';
 import NewsCards from '@/components/website/sections/NewsCards';
 import ContactInfo from '@/components/website/sections/ContactInfo';
+import FaqSection from '@/components/website/sections/FaqSection';
 import Gallery from '@/components/website/sections/Gallery';
 import Divider from '@/components/website/sections/Divider';
 import ProgramCards from '@/components/website/sections/ProgramCards';
@@ -697,6 +698,7 @@ export default function PageEditorClient({
       case 'partners': return <PartnersSection {...props} />;
       case 'news_cards': return <NewsCards {...props} />;
       case 'contact_info': return <ContactInfo {...props} />;
+      case 'faq_section': return <FaqSection {...props} />;
       case 'gallery': return <Gallery {...props} />;
       case 'divider': return <Divider />;
       case 'program_cards': return <ProgramCards {...props} />;
@@ -2845,6 +2847,76 @@ function SectionForm({
           >
             <Plus size={14} className="mr-2" />
             Add form field
+          </Button>
+        </div>
+      );
+    }
+    case 'faq_section': {
+      const patchFaqItem = (idx: number, field: string, value: string) => {
+        const next = [...(state.items || [])];
+        next[idx] = { ...next[idx], [field]: value };
+        onChange('items', next);
+      };
+      const addFaqItem = () => {
+        onChange('items', [
+          ...(state.items || []),
+          { question: '', answer: '' }
+        ]);
+      };
+      const removeFaqItem = (idx: number) => {
+        const next = (state.items || []).filter((_: any, i: number) => i !== idx);
+        onChange('items', next);
+      };
+      return (
+        <div className="space-y-6">
+          {renderField('Eyebrow', 'eyebrow', 'text')}
+          {renderField('Title', 'title', 'text')}
+          <hr className="border-stone-200" />
+          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" id="faq-list-label">
+            Questions & answers
+          </p>
+          <ul className="space-y-4" aria-labelledby="faq-list-label">
+            {(state.items || []).map((item: any, idx: number) => (
+              <li key={idx} className="p-4 bg-stone-50 rounded-2xl border border-stone-100 space-y-3 relative list-none">
+                <button
+                  type="button"
+                  onClick={() => removeFaqItem(idx)}
+                  className="absolute top-2 right-2 text-stone-300 hover:text-red-500 rounded-md p-1"
+                  aria-label={`Remove FAQ ${idx + 1}`}
+                >
+                  <X size={16} />
+                </button>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-stone-400 uppercase">Question</label>
+                  <input
+                    type="text"
+                    value={item.question ?? ''}
+                    onChange={(e) => patchFaqItem(idx, 'question', e.target.value)}
+                    className="w-full border border-stone-200 rounded-lg p-2 text-sm font-semibold"
+                    placeholder="How can I donate?"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-stone-400 uppercase">Answer</label>
+                  <textarea
+                    value={item.answer ?? ''}
+                    onChange={(e) => patchFaqItem(idx, 'answer', e.target.value)}
+                    rows={4}
+                    className="w-full border border-stone-200 rounded-lg p-2 text-sm"
+                    placeholder="You can donate by..."
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full py-2 h-auto text-xs"
+            onClick={addFaqItem}
+          >
+            <Plus size={14} className="mr-2" />
+            Add question
           </Button>
         </div>
       );

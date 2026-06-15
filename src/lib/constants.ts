@@ -28,6 +28,7 @@ import {
   Activity,
   Presentation,
   TrendingUp,
+  CircleHelp,
 } from "lucide-react";
 import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
@@ -369,6 +370,17 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   },
   news_article_feed: {},
   publications_library: {},
+  faq_section: {
+    eyebrow: "FAQ",
+    title: "Frequently Asked Questions",
+    items: [
+      { question: "How can I donate to Caritas Rwanda?", answer: "You can donate by contacting our office directly..." },
+      { question: "How can I volunteer with Caritas Rwanda?", answer: "We welcome volunteers at both our national headquarters in Kigali and through our 10 Diocesan Caritas offices..." },
+      { question: "How can my organization partner with Caritas Rwanda?", answer: "Caritas Rwanda actively partners with NGOs, faith-based organizations, government agencies, and international donors." },
+      { question: "How can I access Caritas Rwanda's annual reports and publications?", answer: "All annual reports, quarterly newsletters, and strategic plans are freely available on our Publications page." },
+      { question: "Where are Caritas Rwanda's Diocesan offices located?", answer: "Caritas Rwanda has 10 Diocesan Caritas offices covering all provinces of Rwanda." },
+    ],
+  },
   news_footer: {
     title: "Stay connected",
     body:
@@ -493,6 +505,7 @@ export const SECTION_ICONS: Record<string, any> = {
   publications_library: BookOpen,
   news_footer: Mail,
   video_gallery: PlayCircle,
+  faq_section: CircleHelp,
   metrics_kpis: Activity,
   metrics_stat_cards: PieChart,
   metrics_overview: Presentation,
@@ -527,6 +540,7 @@ export const SECTION_LABELS: Record<string, string> = {
   publications_library: "Publications library",
   news_footer: "News footer strip",
   video_gallery: "Video gallery (YouTube)",
+  faq_section: "FAQ accordion",
   metrics_kpis: "Metrics KPIs Strip",
   metrics_stat_cards: "Metrics Stat Cards",
   metrics_overview: "Metrics Overview Tab",
