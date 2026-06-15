@@ -2,8 +2,16 @@
 
 import React, { useState, useTransition } from "react";
 import type { FormEvent } from "react";
-import { CONTACT_TOPICS } from "@/lib/contact-topics";
 import { submitContactMessage } from "@/app/actions/contact-messages";
+
+export type FormFieldConfig = {
+  key: string;
+  type: "text" | "email" | "tel" | "textarea" | "select";
+  label: string;
+  required: boolean;
+  placeholder?: string;
+  options?: string[];
+};
 
 export type ContactInfoProps = {
   eyebrow?: string;
@@ -20,9 +28,21 @@ export type ContactInfoProps = {
   office_hours?: string;
   form_title?: string;
   form_subtitle?: string;
+  form_fields?: FormFieldConfig[];
   /** @deprecated Legacy field; merged into `headquarters` when set */
   address?: string;
 };
+
+const DEFAULT_FORM_FIELDS: FormFieldConfig[] = [
+  { key: "name", type: "text", label: "Full Name", required: true, placeholder: "e.g. Jean Hakizimana" },
+  { key: "email", type: "email", label: "Email Address", required: true, placeholder: "you@example.com" },
+  { key: "phone", type: "tel", label: "Phone Number", required: false, placeholder: "+250 7xx xxx xxx" },
+  { key: "organization", type: "text", label: "Organization", required: false, placeholder: "Your organization" },
+  { key: "topic", type: "select", label: "Topic", required: true, placeholder: "Select a topic", options: ["General Inquiry", "Partnership", "Volunteering", "Donation", "Media"] },
+  { key: "message", type: "textarea", label: "Your Message", required: true, placeholder: "Tell us how we can help you..." },
+];
+
+const STANDARD_KEYS = new Set(["name", "email", "phone", "organization", "topic", "message"]);
 
 function mergeLegacy(p: ContactInfoProps) {
   const headquarters =
@@ -47,34 +67,133 @@ function mergeLegacy(p: ContactInfoProps) {
       (p.office_hours || "").trim() || "Mon – Fri, 8:00 AM – 5:00 PM",
     form_title: (p.form_title || "Send Us a Message").trim(),
     form_subtitle: (p.form_subtitle || "We'll get back to you within 24 hours.").trim(),
+    form_fields: Array.isArray(p.form_fields) && p.form_fields.length > 0
+      ? p.form_fields
+      : DEFAULT_FORM_FIELDS,
   };
+}
+
+function FormFieldInput({
+  field,
+  value,
+  onChange,
+  disabled,
+}: {
+  field: FormFieldConfig;
+  value: string;
+  onChange: (v: string) => void;
+  disabled: boolean;
+}) {
+  const fieldId = `cf-${field.key}`;
+
+  if (field.type === "textarea") {
+    return (
+      <div className="cf-full cf-field">
+        <label htmlFor={fieldId}>{field.label}</label>
+        <textarea
+          id={fieldId}
+          name={field.key}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={field.placeholder}
+          required={field.required}
+          rows={5}
+          disabled={disabled}
+        />
+      </div>
+    );
+  }
+
+  if (field.type === "select" && field.options) {
+    return (
+      <div className="cf-full cf-field">
+        <label htmlFor={fieldId}>{field.label}</label>
+        <select
+          id={fieldId}
+          name={field.key}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={field.required}
+          disabled={disabled}
+          className="cf-select"
+        >
+          <option value="">{field.placeholder || "Select..."}</option>
+          {field.options.map((opt) => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cf-field">
+      <label htmlFor={fieldId}>{field.label}</label>
+      <input
+        type={field.type}
+        id={fieldId}
+        name={field.key}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={field.placeholder}
+        required={field.required}
+        autoComplete={field.type === "email" ? "email" : field.type === "tel" ? "tel" : "off"}
+        disabled={disabled}
+      />
+    </div>
+  );
 }
 
 export function ContactMessageForm({
   formTitle,
   formSubtitle,
+  formFields,
 }: {
   formTitle: string;
   formSubtitle: string;
+  formFields: FormFieldConfig[];
 }) {
-  const [subject, setSubject] = useState<string>(CONTACT_TOPICS[0]);
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    for (const f of formFields) {
+      initial[f.key] = "";
+    }
+    return initial;
+  });
   const [feedback, setFeedback] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, startTransition] = useTransition();
+
+  function setField(key: string, value: string) {
+    setFieldValues((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function isLast(field: FormFieldConfig, idx: number): boolean {
+    if (idx === formFields.length - 2) {
+      const next = formFields[idx + 1];
+      return next?.type === "textarea" || next?.type === "select";
+    }
+    return false;
+  }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFeedback(null);
-    const form = e.currentTarget;
-    const fd = new FormData(form);
 
     startTransition(async () => {
+      const fieldsData: Record<string, string> = {};
+
+      for (const f of formFields) {
+        fieldsData[f.key] = fieldValues[f.key] ?? "";
+      }
+
       const r = await submitContactMessage({
-        fullName: String(fd.get("name") ?? ""),
-        email: String(fd.get("email") ?? ""),
-        phone: String(fd.get("phone") ?? ""),
-        organization: String(fd.get("org") ?? ""),
-        topic: subject,
-        message: String(fd.get("message") ?? ""),
+        fullName: fieldsData["name"] ?? "",
+        email: fieldsData["email"] ?? "",
+        phone: fieldsData["phone"] ?? "",
+        organization: fieldsData["organization"] ?? "",
+        topic: fieldsData["topic"] ?? "",
+        message: fieldsData["message"] ?? "",
+        fieldsData,
       });
 
       if (r.ok) {
@@ -82,8 +201,11 @@ export function ContactMessageForm({
           ok: true,
           text: "Thank you — your message is on its way. Please check your inbox for a quick confirmation.",
         });
-        form.reset();
-        setSubject(CONTACT_TOPICS[0]);
+        const reset: Record<string, string> = {};
+        for (const f of formFields) {
+          reset[f.key] = "";
+        }
+        setFieldValues(reset);
       } else {
         setFeedback({
           ok: false,
@@ -109,85 +231,60 @@ export function ContactMessageForm({
       ) : null}
 
       <form id="contactForm" onSubmit={handleSubmit}>
-        <div className="cf-row">
-          <div className="cf-field">
-            <label htmlFor="cf-name">Full Name</label>
-            <input
-              type="text"
-              id="cf-name"
-              name="name"
-              placeholder="e.g. Jean Hakizimana"
-              required
-              autoComplete="name"
-              disabled={pending}
-            />
-          </div>
-          <div className="cf-field">
-            <label htmlFor="cf-email">Email Address</label>
-            <input
-              type="email"
-              id="cf-email"
-              name="email"
-              placeholder="you@example.com"
-              required
-              autoComplete="email"
-              disabled={pending}
-            />
-          </div>
-        </div>
-
-        <div className="cf-row">
-          <div className="cf-field">
-            <label htmlFor="cf-phone">Phone Number</label>
-            <input
-              type="tel"
-              id="cf-phone"
-              name="phone"
-              placeholder="+250 7xx xxx xxx"
-              autoComplete="tel"
-              disabled={pending}
-            />
-          </div>
-          <div className="cf-field">
-            <label htmlFor="cf-org">Organization (optional)</label>
-            <input
-              type="text"
-              id="cf-org"
-              name="org"
-              placeholder="Your organization"
-              disabled={pending}
-            />
-          </div>
-        </div>
-
-        <div className="cf-full">
-          <span className="cf-pill-label">Topic</span>
-          <div className="cf-subject-pills" role="group" aria-label="Message topic">
-            {CONTACT_TOPICS.map((pill) => (
-              <button
-                key={pill}
-                type="button"
-                className={`cf-pill${subject === pill ? " active" : ""}`}
-                onClick={() => setSubject(pill)}
+        {formFields.map((field, idx) => {
+          if (field.type === "textarea" || field.type === "select") {
+            return (
+              <FormFieldInput
+                key={field.key}
+                field={field}
+                value={fieldValues[field.key] ?? ""}
+                onChange={(v) => setField(field.key, v)}
                 disabled={pending}
-              >
-                {pill}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="cf-full cf-field">
-          <label htmlFor="cf-message">Your Message</label>
-          <textarea
-            id="cf-message"
-            name="message"
-            placeholder="Tell us how we can help you..."
-            required
-            rows={5}
-            disabled={pending}
-          />
-        </div>
+              />
+            );
+          }
+          const nextIsNewRow = idx < formFields.length - 1 && (isLast(field, idx) || (
+            idx % 2 === 0 && idx < formFields.length - 1 &&
+            formFields[idx + 1].type !== "textarea" &&
+            formFields[idx + 1].type !== "select"
+          ));
+          if (nextIsNewRow && idx % 2 === 0) {
+            const next = formFields[idx + 1];
+            return (
+              <div className="cf-row" key={`row-${field.key}`}>
+                <FormFieldInput
+                  field={field}
+                  value={fieldValues[field.key] ?? ""}
+                  onChange={(v) => setField(field.key, v)}
+                  disabled={pending}
+                />
+                <FormFieldInput
+                  field={next}
+                  value={fieldValues[next.key] ?? ""}
+                  onChange={(v) => setField(next.key, v)}
+                  disabled={pending}
+                />
+              </div>
+            );
+          }
+          if (idx % 2 === 0) return null;
+          return (
+            <div className="cf-row" key={`row-${field.key}`}>
+              <FormFieldInput
+                field={formFields[idx - 1]}
+                value={fieldValues[formFields[idx - 1].key] ?? ""}
+                onChange={(v) => setField(formFields[idx - 1].key, v)}
+                disabled={pending}
+              />
+              <FormFieldInput
+                field={field}
+                value={fieldValues[field.key] ?? ""}
+                onChange={(v) => setField(field.key, v)}
+                disabled={pending}
+              />
+            </div>
+          );
+        })}
 
         <button type="submit" className="cf-submit" disabled={pending}>
           {pending ? (
@@ -271,7 +368,11 @@ export default function ContactInfo(props: ContactInfoProps) {
         </div>
 
         <div className="contact-form-card">
-          <ContactMessageForm formTitle={c.form_title} formSubtitle={c.form_subtitle} />
+          <ContactMessageForm
+            formTitle={c.form_title}
+            formSubtitle={c.form_subtitle}
+            formFields={c.form_fields}
+          />
         </div>
       </div>
     </section>

@@ -110,6 +110,18 @@ export default function ContactDetailClient({
             <dt className="text-[10px] font-bold uppercase text-stone-400">Topic</dt>
             <dd className="font-medium text-stone-900">{message.topic}</dd>
           </div>
+          {(message as any).fields_data && typeof (message as any).fields_data === 'object' && Object.keys((message as any).fields_data).length > 0 ? (
+            Object.entries((message as any).fields_data).map(([key, value]) => {
+              if (['name', 'email', 'phone', 'organization', 'topic', 'message'].includes(key)) return null;
+              if (!value) return null;
+              return (
+                <div key={key}>
+                  <dt className="text-[10px] font-bold uppercase text-stone-400">{key}</dt>
+                  <dd className="font-medium text-stone-900">{String(value)}</dd>
+                </div>
+              );
+            })
+          ) : null}
           <div className="sm:col-span-2">
             <dt className="text-[10px] font-bold uppercase text-stone-400">Message</dt>
             <dd className="whitespace-pre-wrap rounded-lg border border-stone-100 bg-stone-50/80 p-4 text-stone-800">

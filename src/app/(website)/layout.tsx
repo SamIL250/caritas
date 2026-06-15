@@ -9,6 +9,7 @@ import "../network-section.css";
 import "../news-cards-section.css";
 import "../partners-section.css";
 import "../our-location-section.css";
+import "../faq-section.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

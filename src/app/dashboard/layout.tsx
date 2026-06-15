@@ -2,6 +2,7 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { createClient } from "@/lib/supabase/server";
 import "../globals.css";
 import "../resources-impact-section.css";
+import "../faq-section.css";
 import "./dashboard.css";
 
 import { DonationProvider } from "@/context/DonationContext";
