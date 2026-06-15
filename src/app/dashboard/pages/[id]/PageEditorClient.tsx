@@ -84,6 +84,9 @@ import FeaturedQuoteSection from '@/components/website/sections/FeaturedQuoteSec
 import TimelineSection from '@/components/website/sections/TimelineSection';
 import PillarCardsSection from '@/components/website/sections/PillarCardsSection';
 import ValuesGridSection from '@/components/website/sections/ValuesGridSection';
+import ChairpersonSection from '@/components/website/sections/ChairpersonSection';
+import HistoryBentoSection from '@/components/website/sections/HistoryBentoSection';
+import MissionVisionValuesSection from '@/components/website/sections/MissionVisionValuesSection';
 import NetworkSection from '@/components/website/sections/NetworkSection';
 import LeadershipGridSection from '@/components/website/sections/LeadershipGridSection';
 import AboutSection from '@/components/website/sections/AboutSection';
@@ -703,11 +706,28 @@ export default function PageEditorClient({
       case 'divider': return <Divider />;
       case 'program_cards': return <ProgramCards {...props} />;
       case 'map_section': return <OurLocationSection {...props} />;
-      case 'stats_banner': return <StatsBannerSection {...props} />;
-      case 'featured_quote': return <FeaturedQuoteSection {...props} />;
-      case 'timeline': return <TimelineSection {...props} />;
-      case 'pillar_cards': return <PillarCardsSection {...props} />;
-      case 'values_grid': return <ValuesGridSection {...props} />;
+      case 'stats_banner':
+        return isAboutPage ? null : <StatsBannerSection {...props} />;
+      case 'featured_quote':
+        if (isAboutPage) {
+          const c = props as Record<string, unknown>;
+          return (
+            <ChairpersonSection
+              name={c.name as string}
+              title={c.subtitle as string}
+              quote={c.quote as string}
+              meta={c.meta as string}
+              photoUrl={(c.photo_url as string) || "/img/Chairperson/anaclet.jpg"}
+            />
+          );
+        }
+        return <FeaturedQuoteSection {...props} />;
+      case 'timeline':
+        return isAboutPage ? <HistoryBentoSection /> : <TimelineSection {...props} />;
+      case 'pillar_cards':
+        return isAboutPage ? null : <PillarCardsSection {...props} />;
+      case 'values_grid':
+        return isAboutPage ? <MissionVisionValuesSection /> : <ValuesGridSection {...props} />;
       case 'network_section': return <NetworkSection {...props} showFullInfo={page.slug === 'diocesan'} />;
       case 'diocese_map_section': return <DioceseMapSection {...props} />;
       case 'leadership_grid': return <LeadershipGridSection {...props} />;
