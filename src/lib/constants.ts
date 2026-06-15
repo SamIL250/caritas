@@ -205,7 +205,15 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     hours_label: "Office Hours",
     office_hours: "Mon – Fri, 8:00 AM – 5:00 PM",
     form_title: "Send Us a Message",
-    form_subtitle: "We'll get back to you within 24 hours."
+    form_subtitle: "We'll get back to you within 24 hours.",
+    form_fields: [
+      { key: "name", type: "text", label: "Full Name", required: true, placeholder: "e.g. Jean Hakizimana" },
+      { key: "email", type: "email", label: "Email Address", required: true, placeholder: "you@example.com" },
+      { key: "phone", type: "tel", label: "Phone Number", required: false, placeholder: "+250 7xx xxx xxx" },
+      { key: "organization", type: "text", label: "Organization", required: false, placeholder: "Your organization" },
+      { key: "topic", type: "select", label: "Topic", required: true, placeholder: "Select a topic", options: ["General Inquiry", "Partnership", "Volunteering", "Donation", "Media"] },
+      { key: "message", type: "textarea", label: "Your Message", required: true, placeholder: "Tell us how we can help you..." }
+    ]
   },
   gallery: {
     images: [],

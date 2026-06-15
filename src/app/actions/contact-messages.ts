@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import type { Database } from "@/types/database.types";
 import { getMergedFooterSettings } from "@/lib/site-settings";
-import { isContactTopic } from "@/lib/contact-topics";
+
 import { resolveDefaultMailFrom, isMailFailure } from "@/lib/mail";
 import { resolveSiteOrigin } from "@/lib/site-origin";
 import {
@@ -33,6 +33,7 @@ export async function submitContactMessage(input: {
   organization?: string;
   topic: string;
   message: string;
+  fieldsData?: Record<string, string>;
 }): Promise<{ ok: boolean; error?: string }> {
   try {
     const full_name = input.fullName.trim();
@@ -41,10 +42,11 @@ export async function submitContactMessage(input: {
     const organization = (input.organization ?? "").trim();
     const topic = input.topic.trim();
     const message_body = input.message.trim();
+    const fields_data = input.fieldsData ?? {};
 
     if (full_name.length < 2) return { ok: false, error: "Please enter your full name." };
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, error: "Please enter a valid email." };
-    if (!isContactTopic(topic)) return { ok: false, error: "Please choose a valid topic." };
+    if (topic && topic.length > 120) return { ok: false, error: "Topic is too long." };
     if (message_body.length < 10) return { ok: false, error: "Please write a bit more detail (at least 10 characters)." };
 
     const supabase = await createClient();
@@ -60,6 +62,7 @@ export async function submitContactMessage(input: {
         topic,
         message_body,
         staff_notes: "",
+        fields_data,
       })
       .select("id")
       .maybeSingle();

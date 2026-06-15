@@ -2701,7 +2701,23 @@ function SectionForm({
           {renderField('Avatar Image', 'avatar_url', 'image')}
         </div>
       );
-    case 'contact_info':
+    case 'contact_info': {
+      const patchFormField = (idx: number, field: string, value: unknown) => {
+        const next = [...(state.form_fields || [])];
+        next[idx] = { ...next[idx], [field]: value };
+        onChange('form_fields', next);
+      };
+      const addFormField = () => {
+        onChange('form_fields', [
+          ...(state.form_fields || []),
+          { key: '', type: 'text', label: '', required: false, placeholder: '' }
+        ]);
+      };
+      const removeFormField = (idx: number) => {
+        const next = (state.form_fields || []).filter((_: any, i: number) => i !== idx);
+        onChange('form_fields', next);
+      };
+      const FIELD_TYPES = ['text', 'email', 'tel', 'textarea', 'select'];
       return (
         <div className="space-y-6">
           <p className="text-[10px] text-stone-500 leading-relaxed">
@@ -2731,8 +2747,108 @@ function SectionForm({
             {renderField('Form title', 'form_title', 'text')}
             {renderField('Form subtitle', 'form_subtitle', 'text')}
           </div>
+          <hr className="border-stone-200" />
+          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+            Form fields
+          </p>
+          <p className="text-[9px] text-stone-400 -mt-4">
+            Add, remove, or reorder form fields. The <strong>key</strong> must be a unique identifier (e.g. "message"). Built-in keys (name, email, phone, organization, topic, message) map to dedicated columns; all others are stored in the message's fields JSON.
+          </p>
+          <ul className="space-y-4">
+            {(state.form_fields || []).map((field: any, idx: number) => (
+              <li key={idx} className="p-4 bg-stone-50 rounded-2xl border border-stone-100 space-y-3 relative list-none">
+                <button
+                  type="button"
+                  onClick={() => removeFormField(idx)}
+                  className="absolute top-2 right-2 text-stone-300 hover:text-red-500 rounded-md p-1"
+                  aria-label={`Remove field ${idx + 1}`}
+                >
+                  <X size={16} />
+                </button>
+                <div className="grid grid-cols-2 gap-2 pr-6">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-stone-400 uppercase">Key</label>
+                    <input
+                      type="text"
+                      value={field.key ?? ''}
+                      onChange={(e) => patchFormField(idx, 'key', e.target.value)}
+                      className="w-full border border-stone-200 rounded-lg p-2 text-xs font-mono"
+                      placeholder="e.g. subject"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-stone-400 uppercase">Type</label>
+                    <select
+                      value={field.type ?? 'text'}
+                      onChange={(e) => patchFormField(idx, 'type', e.target.value)}
+                      className="w-full border border-stone-200 rounded-lg p-2 text-xs bg-white"
+                    >
+                      {FIELD_TYPES.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-stone-400 uppercase">Label</label>
+                  <input
+                    type="text"
+                    value={field.label ?? ''}
+                    onChange={(e) => patchFormField(idx, 'label', e.target.value)}
+                    className="w-full border border-stone-200 rounded-lg p-2 text-sm"
+                    placeholder="e.g. Subject"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-stone-400 uppercase">Placeholder</label>
+                    <input
+                      type="text"
+                      value={field.placeholder ?? ''}
+                      onChange={(e) => patchFormField(idx, 'placeholder', e.target.value)}
+                      className="w-full border border-stone-200 rounded-lg p-2 text-xs"
+                      placeholder="e.g. Your subject..."
+                    />
+                  </div>
+                  <div className="flex items-end pb-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!!field.required}
+                        onChange={(e) => patchFormField(idx, 'required', e.target.checked)}
+                        className="rounded border-stone-300 text-[#7A1515] focus:ring-[#7A1515]/20"
+                      />
+                      <span className="text-[10px] font-bold text-stone-500 uppercase">Required</span>
+                    </label>
+                  </div>
+                </div>
+                {field.type === 'select' && (
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-stone-400 uppercase">Options (one per line)</label>
+                    <textarea
+                      value={Array.isArray(field.options) ? field.options.join('\n') : ''}
+                      onChange={(e) => patchFormField(idx, 'options', e.target.value.split('\n').filter(Boolean))}
+                      rows={3}
+                      className="w-full border border-stone-200 rounded-lg p-2 text-xs"
+                      placeholder="General Inquiry&#10;Partnership&#10;Volunteering"
+                    />
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full py-2 h-auto text-xs"
+            onClick={addFormField}
+          >
+            <Plus size={14} className="mr-2" />
+            Add form field
+          </Button>
         </div>
       );
+    }
     case 'partners': {
       const patchPartner = (idx: number, key: string, value: string) => {
         const next = [...(state.items || [])];
