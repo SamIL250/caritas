@@ -150,6 +150,8 @@ function primaryDonateHref(campaign: BePartCampaignVM | null, raw: string): stri
   return u;
 }
 
+import { useState } from "react";
+
 function primaryModalId(campaign: BePartCampaignVM | null, raw: string): string | null {
   const u = (raw || "").trim() || "#donate";
   if (u !== "#donate") return null;
@@ -170,6 +172,7 @@ export default function BePartOfChangeSection({
   bottom_secondary_url = "#",
   campaign,
 }: BePartOfChangeSectionProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const displayEyebrow = (eyebrow || "").trim();
   const { line1, line2 } = formatLegacyHeading(heading, heading_accent);
   const displayBody =
@@ -183,7 +186,26 @@ export default function BePartOfChangeSection({
 
   return (
     <section className="featured-campaign-bpc-scope bpc-section" id={anchor_id}>
-      <div className="bpc-inner">
+      <div className="bpc-orb bpc-orb-1" aria-hidden></div>
+      <div className="bpc-orb bpc-orb-2" aria-hidden></div>
+      <div className="bpc-orb bpc-orb-3" aria-hidden></div>
+      <div className="bpc-dot-grid" aria-hidden></div>
+
+      <div className="bpc-toggle-row">
+        <button 
+          className="bpc-toggle-btn" 
+          aria-expanded={isOpen} 
+          aria-controls="bpcContent"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <i className="fa-solid fa-hands-holding-heart" aria-hidden />
+          <span className="bpc-toggle-label">Fold me to support</span>
+          <i className="fa-solid fa-chevron-down bpc-toggle-arrow" aria-hidden />
+        </button>
+      </div>
+
+      <div className={`bpc-collapse ${isOpen ? "open" : ""}`} id="bpcContent" aria-hidden={!isOpen}>
+        <div className="bpc-inner">
         <div className="bpc-header">
           {displayEyebrow ? (
             <div className="bpc-eyebrow">
@@ -331,6 +353,7 @@ export default function BePartOfChangeSection({
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

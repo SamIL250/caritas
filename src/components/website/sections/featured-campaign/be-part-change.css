@@ -3,10 +3,87 @@
 
 .featured-campaign-bpc-scope.bpc-section {
   position: relative;
-  padding: 6rem 1.5rem;
+  padding: 0 1.5rem;
   background: linear-gradient(145deg, #ffffff 0%, #fdf4f4 55%, #f8f0f0 82%, #ffffff 100%);
   overflow: hidden;
 }
+
+/* ── Fold / Unfold toggle ── */
+.featured-campaign-bpc-scope .bpc-toggle-row {
+  display: flex;
+  justify-content: center;
+  padding: 2.8rem 1rem;
+  position: relative;
+  z-index: 2;
+}
+.featured-campaign-bpc-scope .bpc-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 2.2rem;
+  background: #911313;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-poppins), sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 28px rgba(145,19,19,0.32);
+  letter-spacing: 0.02em;
+}
+.featured-campaign-bpc-scope .bpc-toggle-btn:hover {
+  background: #7a0f0f;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(145,19,19,0.42);
+}
+.featured-campaign-bpc-scope .bpc-toggle-arrow {
+  font-size: 0.8rem;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.featured-campaign-bpc-scope .bpc-toggle-btn[aria-expanded="true"] .bpc-toggle-arrow {
+  transform: rotate(180deg);
+}
+
+/* ── Collapsible wrapper ── */
+.featured-campaign-bpc-scope .bpc-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s ease,
+              padding 0.4s ease;
+  opacity: 0;
+}
+.featured-campaign-bpc-scope .bpc-collapse.open {
+  max-height: 4000px;
+  opacity: 1;
+  padding-bottom: 4rem;
+}
+
+.featured-campaign-bpc-scope .bpc-orb {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; z-index: 0;
+  will-change: transform;
+}
+.featured-campaign-bpc-scope .bpc-orb-1 {
+  width: 640px; height: 640px;
+  top: -220px; left: -160px;
+  background: radial-gradient(circle, rgba(145,19,19,0.08) 0%, transparent 65%);
+}
+.featured-campaign-bpc-scope .bpc-orb-2 {
+  width: 500px; height: 500px;
+  bottom: -160px; right: -120px;
+  background: radial-gradient(circle, rgba(145,19,19,0.06) 0%, transparent 65%);
+}
+.featured-campaign-bpc-scope .bpc-orb-3 { display: none; }
+.featured-campaign-bpc-scope .bpc-dot-grid {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(145,19,19,0.07) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none; z-index: 0;
+}
+
 .featured-campaign-bpc-scope .bpc-inner {
   position: relative;
   z-index: 1;
@@ -14,40 +91,44 @@
   margin: 0 auto;
 }
 .featured-campaign-bpc-scope .bpc-header {
-  text-align: left;
-  margin-bottom: 1.5rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 .featured-campaign-bpc-scope .bpc-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(145, 19, 19, 0.08);
-  border: 1px solid rgba(145, 19, 19, 0.14);
+  background: rgba(145, 19, 19, 0.09);
+  border: 1px solid rgba(145, 19, 19, 0.2);
   color: #911313;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  padding: 0.38rem 1.1rem;
+  padding: 0.28rem 0.9rem;
   border-radius: 100px;
-  margin-bottom: 1.1rem;
+  margin-bottom: 0.8rem;
 }
 .featured-campaign-bpc-scope .bpc-title {
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
   font-weight: 900;
   color: #1a1a2e;
-  line-height: 1.08;
+  line-height: 1.1;
   letter-spacing: -0.02em;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 .featured-campaign-bpc-scope .bpc-title span {
-  color: #911313;
+  background: linear-gradient(135deg, #911313 0%, #c0392b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 .featured-campaign-bpc-scope .bpc-subtitle {
-  font-size: 1rem;
+  font-size: 0.87rem;
   color: #6b7280;
-  max-width: 540px;
-  line-height: 1.78;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
 }
 .featured-campaign-bpc-scope .bpc-grid {
   display: grid;

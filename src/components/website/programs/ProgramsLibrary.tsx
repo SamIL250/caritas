@@ -56,17 +56,49 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
     return () => window.removeEventListener("hashchange", syncFromHash);
   }, [sortedCategories]);
 
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
   // Toggle sticky class on tab bar
   useEffect(() => {
     const bar = tabBarRef.current;
-    if (!bar) return;
+    const sentinel = sentinelRef.current;
+    if (!bar || !sentinel) return;
+
+    let isFixed = false;
+
     function handleSticky() {
-      const top = bar.getBoundingClientRect().top;
-      bar.classList.toggle("is-stuck", top <= 70);
+      const hdr = document.querySelector("header");
+      const hdrH = hdr ? hdr.getBoundingClientRect().height : 70;
+      const sentTop = sentinel!.getBoundingClientRect().top;
+
+      if (!isFixed && sentTop <= hdrH) {
+        bar!.style.position = "fixed";
+        bar!.style.top = hdrH + "px";
+        bar!.style.left = "0";
+        bar!.style.right = "0";
+        bar!.style.width = "100%";
+        bar!.style.zIndex = "900";
+        sentinel!.style.height = bar!.offsetHeight + "px";
+        bar!.classList.add("is-stuck");
+        isFixed = true;
+      } else if (isFixed && sentTop > hdrH) {
+        bar!.style.position = "";
+        bar!.style.top = "";
+        bar!.style.left = "";
+        bar!.style.right = "";
+        bar!.style.width = "";
+        sentinel!.style.height = "0px";
+        bar!.classList.remove("is-stuck");
+        isFixed = false;
+      }
     }
     handleSticky();
     window.addEventListener("scroll", handleSticky, { passive: true });
-    return () => window.removeEventListener("scroll", handleSticky);
+    window.addEventListener("resize", handleSticky, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleSticky);
+      window.removeEventListener("resize", handleSticky);
+    };
   }, []);
 
   // Close drawers on Escape
@@ -105,6 +137,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
   return (
     <>
       {/* ── Sticky Tab Bar ── */}
+      <div ref={sentinelRef} style={{ height: 0, margin: 0, padding: 0, border: 0 }} />
       <div className="prog-tab-bar" ref={tabBarRef}>
         <div className="prog-tab-inner">
           {sortedCategories.map((cat) => {

@@ -131,7 +131,7 @@
 .prog-panel-title {
   font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   font-weight: 800;
-  color: #111111;
+  color: var(--dept-color, #111111);
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin: 0 0 0.75rem;
