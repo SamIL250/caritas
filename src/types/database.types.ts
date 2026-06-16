@@ -1214,6 +1214,7 @@ export interface Database {
           topic: string
           message_body: string
           staff_notes: string
+          fields_data: Json
           read_at: string | null
           read_by: string | null
           created_at: string
@@ -1229,6 +1230,7 @@ export interface Database {
           topic: string
           message_body: string
           staff_notes?: string
+          fields_data?: Json
           read_at?: string | null
           read_by?: string | null
           created_at?: string
@@ -1244,6 +1246,7 @@ export interface Database {
           topic?: string
           message_body?: string
           staff_notes?: string
+          fields_data?: Json
           read_at?: string | null
           read_by?: string | null
           created_at?: string
