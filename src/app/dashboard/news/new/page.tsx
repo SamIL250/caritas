@@ -10,7 +10,7 @@ export default async function NewStoryPage() {
 
   return (
     <div className="w-full max-w-full space-y-6">
-      <Topbar title="New story" />
+      <Topbar title="New story" backUrl="/dashboard/news" />
       <p className="text-sm text-stone-500">
         Create a listing for the News page: image, teaser, category, optional full body, and a read-more URL (often an
         external WordPress article).

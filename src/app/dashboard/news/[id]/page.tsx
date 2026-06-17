@@ -23,7 +23,7 @@ export default async function EditStoryPage({
 
   return (
     <div className="w-full max-w-full space-y-6">
-      <Topbar title="Edit story" />
+      <Topbar title="Edit story" backUrl="/dashboard/news" />
       <NewsArticleForm mode="edit" article={article} departments={departments} />
     </div>
   );

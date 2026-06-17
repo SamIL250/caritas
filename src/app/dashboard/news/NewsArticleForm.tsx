@@ -37,6 +37,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
 
     if (!featuredUrl.trim()) {
       setMsg({ ok: false, text: "Choose a featured image from the media library." });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -52,6 +53,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
     setSaving(false);
     if (res.error) {
       setMsg({ ok: false, text: res.error });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setMsg({ ok: true, text: mode === "create" ? "Story created." : "Changes saved." });
@@ -67,18 +69,6 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
 
   return (
     <form className="max-w-2xl space-y-6" onSubmit={handleSubmit} noValidate>
-      <div className="flex items-center gap-3">
-        <Link
-          href="/dashboard/news"
-          className="inline-flex rounded-lg p-2 text-stone-500 hover:bg-stone-100 hover:text-stone-900"
-        >
-          <ArrowLeft size={18} />
-        </Link>
-        <h2 className="text-lg font-bold text-stone-900">
-          {mode === "create" ? "New story" : "Edit story"}
-        </h2>
-      </div>
-
       {msg && (
         <p role="status" className={`text-sm ${msg.ok ? "text-emerald-700" : "text-red-600"}`}>
           {msg.text}
@@ -300,14 +290,14 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
         }}
       />
 
-      <div className="flex justify-end gap-3">
+      <div className="sticky bottom-4 flex gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur mt-8 z-50 shadow-lg">
         <Link
           href="/dashboard/news"
-          className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
+          className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving}>
+        <Button type="submit" variant="primary" disabled={saving} className="flex-1 h-10">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…

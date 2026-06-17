@@ -72,6 +72,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
     e.preventDefault();
     if (!category) {
       setMsg({ ok: false, text: "Pick a program category first." });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setMsg(null);
@@ -89,6 +90,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
     setSaving(false);
     if (res.error) {
       setMsg({ ok: false, text: res.error });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setMsg({ ok: true, text: mode === "create" ? "Program created." : "Changes saved." });
@@ -104,26 +106,6 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
 
   return (
     <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
-      <div className="flex items-center gap-3">
-        <Link
-          href={category ? `/dashboard/programs?tab=${encodeURIComponent(category.slug)}` : "/dashboard/programs"}
-          className="inline-flex rounded-lg p-2 text-stone-500 hover:bg-stone-100 hover:text-stone-900"
-        >
-          <ArrowLeft size={18} />
-        </Link>
-        <div>
-          <h2 className="text-lg font-bold text-stone-900">
-            {mode === "create" ? "New program article" : "Edit program article"}
-          </h2>
-          {category ? (
-            <p className="mt-0.5 inline-flex items-center gap-2 text-xs font-medium text-stone-500">
-              <ProgramCategoryIcon icon={category.icon} accent={category.accent} size={20} />
-              {category.label}
-            </p>
-          ) : null}
-        </div>
-      </div>
-
       {msg ? (
         <p
           role="status"
@@ -422,18 +404,18 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
         }}
       />
 
-      <div className="sticky bottom-2 flex justify-end gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur mt-8">
+      <div className="sticky bottom-4 flex gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur mt-8 z-50 shadow-lg">
         <Link
           href={
             category
               ? `/dashboard/programs?tab=${encodeURIComponent(category.slug)}`
               : "/dashboard/programs"
           }
-          className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
+          className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving}>
+        <Button type="submit" variant="primary" disabled={saving} className="flex-1 h-10">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…

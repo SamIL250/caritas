@@ -7,8 +7,8 @@ import { submitContactMessage } from "@/app/actions/contact-messages";
 
 interface ContactMapSectionProps {
   eyebrow?: string;
-  heading?: string;
-  heading_accent?: string;
+  heading_line1?: string;
+  heading_line2?: string;
   subtext?: string;
 }
 
@@ -27,7 +27,12 @@ const DEFAULTS = {
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.5112492331314!2d30.05660827473925!3d-1.9485541980337648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca425b5be2a55%3A0xcc6cf890e6ae864!2sCaritas%20Rwanda!5e0!3m2!1sen!2srw!4v1776832048548!5m2!1sen!2srw",
 };
 
-export default function ContactMapSection() {
+export default function ContactMapSection({
+  eyebrow = "Get In Touch",
+  heading_line1 = "We'd love to",
+  heading_line2 = "hear from you",
+  subtext = "Whether you have a question, want to volunteer, or want to partner with us, we're ready to answer all your questions.",
+}: ContactMapSectionProps) {
   const c = DEFAULTS;
 
   const [subject, setSubject] = useState<string>(CONTACT_TOPICS[0]);
@@ -73,14 +78,14 @@ export default function ContactMapSection() {
         <div className="cm-left">
           <div className="cm-eyebrow">
             <i className="fa-solid fa-envelope" aria-hidden />
-            {c.eyebrow}
+            {eyebrow}
           </div>
           <h2 className="cm-heading" id="cm-heading">
-            {c.heading_line1}
+            {heading_line1}
             <br />
-            <span>{c.heading_line2}</span>
+            <span>{heading_line2}</span>
           </h2>
-          <p className="cm-subtext">{c.subtext}</p>
+          <p className="cm-subtext">{subtext}</p>
 
           <div className="cm-info-grid">
             <div className="cm-info-item">

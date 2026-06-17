@@ -119,7 +119,10 @@ export default async function LandingPage() {
         const newsCardsRowIndex = otherSections.findIndex((s: any) => s.type === 'news_cards');
 
         // Remove video_gallery from otherSections since it will be embedded
-        const finalOtherSections = otherSections.filter((s: any) => s.type !== 'video_gallery');
+        // Also remove faq_section from rendering on the homepage
+        const finalOtherSections = otherSections.filter((s: any) => 
+          s.type !== 'video_gallery' && s.type !== 'faq_section'
+        );
 
         // If both exist, merge videoGalleryProps into news_cards content
         if (videoGalleryRow && newsCardsRowIndex !== -1) {

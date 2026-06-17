@@ -57,6 +57,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${article.title} — Caritas Rwanda`,
     description: article.excerpt || undefined,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt || undefined,
+      images: article.image_url ? [{ url: article.image_url }] : undefined,
+    },
   };
 }
 
