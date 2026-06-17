@@ -10,12 +10,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
   const { data: page } = await supabase
     .from("pages")
-  .select("title, meta")
-  .eq("slug", "contact")
-  .single();
+    .select("title, meta")
+    .eq("slug", "contact")
+    .single();
+
   const meta = (page?.meta || {}) as {
     seo_title?: string;
     seo_description?: string;
+  };
+
   return {
     title:
       meta.seo_title ||
@@ -25,13 +28,14 @@ export async function generateMetadata(): Promise<Metadata> {
       "Get in touch with Caritas Rwanda — reach our headquarters in Kigali, send us a message, or find us on the map.",
   };
 }
+
 export default async function ContactPage() {
   const supabase = await createClient();
 
   const { data: page } = await supabase
-  .from("pages")
-  .select("id")
-  .eq("slug", "contact")
+    .from("pages")
+    .select("id")
+    .eq("slug", "contact")
     .single();
 
   const pageId = page?.id;
