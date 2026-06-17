@@ -195,7 +195,7 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     heading_line1: "Let's Talk &",
     heading_line2: "Work Together",
     subtext:
-      "Have a question, want to partner with us, or simply want to learn more about our work across Rwanda? We'd love to hear from you.",
+      "Please reach out to us with any questions, partnership opportunities, or to learn more about our initiatives across Rwanda.",
     headquarters_label: "Headquarters",
     headquarters: "Kigali, Rwanda",
     phone_label: "Phone",

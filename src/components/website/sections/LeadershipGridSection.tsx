@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { faSolidIconClass } from "@/lib/fontawesome";
 
 export type LeaderMember = {
@@ -49,6 +49,8 @@ function LeaderNode({
   featured,
   photo_url,
   index,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   year: string;
   name: string;
@@ -58,6 +60,8 @@ function LeaderNode({
   featured?: boolean;
   photo_url?: string;
   index: number;
+  onMouseEnter?: (e: React.MouseEvent<HTMLDivElement>, src: string, name: string, role: string) => void;
+  onMouseLeave?: () => void;
 }) {
   const src = photo_url?.trim() ? encodePublicSrc(photo_url.trim()) : "";
   const isAbove = index % 2 === 0;
@@ -68,6 +72,8 @@ function LeaderNode({
       className={`ldr-node ${isAbove ? "ldr-node--above" : "ldr-node--below"} ${featured ? "ldr-node--current" : ""}`}
       style={{ "--dur": durAttr } as React.CSSProperties}
       role="listitem"
+      onMouseEnter={(e) => onMouseEnter && onMouseEnter(e, src, name, role)}
+      onMouseLeave={onMouseLeave}
     >
       <div className="ldr-card">
         <div className="ldr-photo">
@@ -101,10 +107,14 @@ function LeaderScrollTimeline({
   group,
   timelineNodes,
   ariaLabel,
+  onNodeEnter,
+  onNodeLeave,
 }: {
   group: LeaderGroup;
   timelineNodes: LeaderMember[];
   ariaLabel: string;
+  onNodeEnter?: (e: React.MouseEvent<HTMLDivElement>, src: string, name: string, role: string) => void;
+  onNodeLeave?: () => void;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -138,6 +148,8 @@ function LeaderScrollTimeline({
               duration={m.duration}
               featured={m.featured}
               photo_url={m.photo_url}
+              onMouseEnter={onNodeEnter}
+              onMouseLeave={onNodeLeave}
             />
           ))}
         </div>
@@ -170,6 +182,63 @@ export default function LeadershipGridSection({
 
   const chairScrollRef = useRef<HTMLDivElement>(null);
   const secScrollRef = useRef<HTMLDivElement>(null);
+
+  const [popup, setPopup] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    flip: boolean;
+    src: string;
+    name: string;
+    role: string;
+  }>({
+    visible: false,
+    x: 0, y: 0, flip: false,
+    src: "", name: "", role: "",
+  });
+
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setPopup(prev => prev.visible ? { ...prev, visible: false } : prev);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, src: string, name: string, role: string) => {
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    if (!src) return;
+
+    const photoEl = e.currentTarget.querySelector('.ldr-photo') as HTMLElement;
+    if (!photoEl) return;
+
+    const rect = photoEl.getBoundingClientRect();
+    const popWidth = 200;
+    const popHeight = 305;
+    const gap = 14;
+
+    let left = rect.left + rect.width / 2 - popWidth / 2;
+    let top = rect.top - popHeight - gap;
+    let flip = false;
+
+    if (left < 8) left = 8;
+    if (left + popWidth > window.innerWidth - 8) left = window.innerWidth - popWidth - 8;
+
+    if (top < 8) {
+        top = rect.bottom + gap;
+        flip = true;
+    }
+
+    setPopup({ visible: true, x: left, y: top, flip, src, name, role });
+  };
+
+  const handleMouseLeave = () => {
+    hideTimerRef.current = setTimeout(() => {
+      setPopup(prev => ({ ...prev, visible: false }));
+    }, 120);
+  };
 
   const scrollBy = (ref: React.RefObject<HTMLDivElement | null>, direction: "prev" | "next") => {
     const container = ref.current;
@@ -561,11 +630,40 @@ export default function LeadershipGridSection({
                 group={group}
                 timelineNodes={timelineNodes}
                 ariaLabel={group.subgroup_label || "Leadership timeline"}
+                onNodeEnter={handleMouseEnter}
+                onNodeLeave={handleMouseLeave}
               />
             </div>
           );
         })}
       </div>
+      {popup.visible && popup.src ? (
+        <div
+          id="ldrPopup"
+          className="visible"
+          style={{ left: popup.x, top: popup.y, position: 'fixed' }}
+          onMouseEnter={() => { if (hideTimerRef.current) clearTimeout(hideTimerRef.current); }}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="ldr-popup-inner">
+            <div className="ldr-popup-img-wrap">
+              <img src={popup.src} alt={popup.name} />
+            </div>
+            <div className="ldr-popup-info">
+              <div className="ldr-popup-name">{popup.name}</div>
+              <div className="ldr-popup-role">{popup.role}</div>
+            </div>
+          </div>
+          <div
+            className="ldr-popup-caret"
+            style={{
+              bottom: popup.flip ? 'auto' : '-8px',
+              top: popup.flip ? '-8px' : 'auto',
+              transform: popup.flip ? 'translateX(-50%) rotate(225deg)' : 'translateX(-50%) rotate(45deg)'
+            }}
+          />
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -5,12 +5,14 @@ import type { FormEvent } from "react";
 import { CONTACT_TOPICS } from "@/lib/contact-topics";
 import { submitContactMessage } from "@/app/actions/contact-messages";
 
+interface ContactMapSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  heading_accent?: string;
+  subtext?: string;
+}
+
 const DEFAULTS = {
-  eyebrow: "Get In Touch",
-  heading_line1: "Let's Talk &",
-  heading_line2: "Work Together",
-  subtext:
-    "Have a question, want to partner with us, or simply want to learn more about our work across Rwanda? We'd love to hear from you.",
   headquarters_label: "Headquarters",
   headquarters: "Kigali, Rwanda",
   phone_label: "Phone",

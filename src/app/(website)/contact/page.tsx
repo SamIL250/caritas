@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
 import ContactWithMapSection from "@/components/website/sections/ContactWithMapSection";
+import FaqSection from "@/components/website/sections/FaqSection";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -129,6 +130,8 @@ export default async function ContactPage() {
       />
 
       <ContactWithMapSection {...combinedProps} />
+
+      <FaqSection />
 
       {otherSections.map(renderWebsiteSection)}
     </>

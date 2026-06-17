@@ -6,12 +6,13 @@ import PageHeroSection from "@/components/website/sections/PageHeroSection";
 import ChairpersonSection from "@/components/website/sections/ChairpersonSection";
 import HistoryBentoSection from "@/components/website/sections/HistoryBentoSection";
 import MissionVisionValuesSection from "@/components/website/sections/MissionVisionValuesSection";
+import ContactWithMapSection from "@/components/website/sections/ContactWithMapSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
   const { data: page } = await supabase
     .from("pages")
-    .select("title, meta")
+    .select("title, meta")  
     .eq("slug", "about")
     .single();
 
@@ -106,6 +107,25 @@ export default async function AboutPage() {
 
   const sectionsArr = sections ?? [];
 
+  const contactSections = sectionsArr.filter(
+    (s: any) => s.type === "contact_info" || s.type === "map_section"
+  );
+  const otherSections = sectionsArr.filter(
+    (s: any) => s.type !== "contact_info" && s.type !== "map_section"
+  );
+
+  const contactRow = contactSections.find((s: any) => s.type === "contact_info");
+  const mapRow = contactSections.find((s: any) => s.type === "map_section");
+
+  const combinedProps = {
+    ...(contactRow?.content && typeof contactRow.content === "object" && !Array.isArray(contactRow.content)
+      ? (contactRow.content as Record<string, unknown>)
+      : {}),
+    ...(mapRow?.content && typeof mapRow.content === "object" && !Array.isArray(mapRow.content)
+      ? (mapRow.content as Record<string, unknown>)
+      : {}),
+  };
+
   return (
     <div className="about-page-content">
       <PageHeroSection
@@ -117,7 +137,7 @@ export default async function AboutPage() {
         breadcrumbLabel="About Us"
         quickNav={quickNav}
       />
-      {sectionsArr.flatMap((section) => {
+      {otherSections.flatMap((section) => {
         switch (section.type) {
           case "stats_banner":
             return [];
@@ -148,6 +168,10 @@ export default async function AboutPage() {
             return [renderWebsiteSection(section)];
         }
       })}
+
+      {contactRow || mapRow ? (
+        <ContactWithMapSection {...combinedProps} />
+      ) : null}
     </div>
   );
 }
