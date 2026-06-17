@@ -117,14 +117,18 @@ export default async function AboutPage() {
   const contactRow = contactSections.find((s: any) => s.type === "contact_info");
   const mapRow = contactSections.find((s: any) => s.type === "map_section");
 
-  const combinedProps = {
-    ...(contactRow?.content && typeof contactRow.content === "object" && !Array.isArray(contactRow.content)
+  // Keep contact_info and map_section props separate so map fields
+  // never overwrite contact text fields (eyebrow, heading_line1, etc.)
+  const contactProps =
+    contactRow?.content && typeof contactRow.content === "object" && !Array.isArray(contactRow.content)
       ? (contactRow.content as Record<string, unknown>)
-      : {}),
-    ...(mapRow?.content && typeof mapRow.content === "object" && !Array.isArray(mapRow.content)
+      : {};
+  const mapProps =
+    mapRow?.content && typeof mapRow.content === "object" && !Array.isArray(mapRow.content)
       ? (mapRow.content as Record<string, unknown>)
-      : {}),
-  };
+      : {};
+
+  const combinedProps = { ...contactProps, ...mapProps };
 
   return (
     <div className="about-page-content">

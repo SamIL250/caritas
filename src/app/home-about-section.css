@@ -99,11 +99,11 @@ section.cr-home-about {
   position: absolute;
   width: 500px;
   height: 500px;
-  background: #f5f0e8;
+  background: #ebe3dd;
+  border: 7px solid #ffffff;
   border-radius: 50%;
   left: 400px;
   top: 150px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2;
 }
 
@@ -111,20 +111,43 @@ section.cr-home-about {
    5. INNER CIRCLES (Mission · Values · Vision) — Premium
    ════════════════════════════════════════════════════ */
 
+@keyframes cra-circle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.10);
+    box-shadow: 0 0 28px rgba(255, 255, 255, 0.22), 5px 5px 28px 0 rgba(0, 0, 0, 0.55);
+  }
+}
+
 .cr-info-inner {
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 132px;
+  height: 132px;
   border-radius: 50%;
-  background: #f5f0e8;
-  border: 2px solid rgba(122, 21, 21, 0.4);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background: #bdbec0;
+  border: 3px solid #943a37;
+  box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #7a1515;
+  color: #943a37;
   z-index: 3;
+  cursor: pointer;
+  animation: cra-circle-pulse 3s ease-in-out infinite;
+}
+
+/* Stagger Mission / Values / Vision */
+.cr-info-inner:nth-child(1) { animation-delay: 0s; }
+.cr-info-inner:nth-child(2) { animation-delay: 1s; }
+.cr-info-inner:nth-child(3) { animation-delay: 2s; }
+
+.cr-info-inner:hover {
+  animation-play-state: paused;
+  transform: scale(1.08);
 }
 
 .cr-inner-label {
@@ -133,8 +156,8 @@ section.cr-home-about {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #9a4a4a;
-  opacity: 0.7;
+  color: #943a37;
+  opacity: 0.8;
   display: block;
   line-height: 1.2;
 }
@@ -142,8 +165,8 @@ section.cr-home-about {
 .cr-inner-name {
   font-family: var(--font-inter, 'Inter', sans-serif);
   font-size: 18px;
-  font-weight: 600;
-  color: #7a1515;
+  font-weight: 700;
+  color: #943a37;
   letter-spacing: 0.05em;
   display: block;
   line-height: 1.15;
@@ -163,9 +186,12 @@ section.cr-home-about {
   justify-content: center;
   align-items: center;
   font-family: var(--font-inter, 'Inter', sans-serif);
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 900;
   color: #fff;
   z-index: 4;
+  pointer-events: none;
+  letter-spacing: -0.02em;
 }
 
 /* ════════════════════════════════════════════════════
@@ -176,12 +202,13 @@ section.cr-home-about {
   position: absolute;
   font-family: var(--font-inter, 'Inter', sans-serif);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   color: #fff;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   line-height: 1.35;
   z-index: 5;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
 /* ════════════════════════════════════════════════════
@@ -190,11 +217,8 @@ section.cr-home-about {
 
 .cr-info-box {
   position: absolute;
-  background: rgba(139, 25, 25, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top: 2px solid #B5272D;
-  border-radius: 4px;
-  padding: 28px 24px 24px 24px;
+  border-radius: 12px;
+  padding: 32px 24px;
   z-index: 4;
 }
 
@@ -202,31 +226,21 @@ section.cr-home-about {
   left: 20px;
   top: 210px;
   width: 300px;
+  background: #943a37;
 }
 
 .cr-info-box--right {
   left: 980px;
   top: 150px;
   width: 300px;
-}
-
-.cr-box-heading {
-  display: block;
-  font-family: var(--font-inter, 'Inter', sans-serif);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 16px;
-  line-height: 1;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .cr-box-body {
   font-family: var(--font-inter, 'Inter', sans-serif);
   font-size: 15px;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.85);
+  color: #fff;
   line-height: 1.6;
   margin: 0;
 }
@@ -237,29 +251,35 @@ section.cr-home-about {
 
 .cr-box-icon {
   position: absolute;
-  width: 44px;
-  height: 44px;
-  background: #8b1919;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  width: 90px;
+  height: 90px;
+  background: transparent;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 5;
-  top: -22px;
-  right: -22px;
-  color: #fff;
+  top: -45px;
+  right: -45px;
 }
 
 .cr-box-icon--bottom-left {
-  top: -22px;
-  left: -22px;
+  top: -45px;
+  left: -45px;
   right: auto;
 }
 
 /* ════════════════════════════════════════════════════
-   2. VALUES LIST — Thin line separator style
+   2. VALUES LIST — Legacy Text List
    ════════════════════════════════════════════════════ */
+
+.cr-info-values-text {
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.8;
+}
 
 .cr-info-values {
   list-style: none;

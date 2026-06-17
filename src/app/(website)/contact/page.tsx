@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
-import ContactWithMapSection from "@/components/website/sections/ContactWithMapSection";
+import ContactMapToggleSection from "@/components/website/sections/ContactMapToggleSection";
 import FaqSection from "@/components/website/sections/FaqSection";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
 
@@ -58,6 +58,25 @@ export default async function ContactPage() {
       .eq("visible", true)
       .order("order", { ascending: true });
     sections = s || [];
+
+    // Auto-seed contact_info + map_section rows if they don't exist yet.
+    // This makes them immediately editable in the dashboard without manual SQL.
+    const hasContactInfo = sections.some((s: any) => s.type === "contact_info");
+    const hasMapSection = sections.some((s: any) => s.type === "map_section");
+    if (!hasContactInfo || !hasMapSection) {
+      const { ensureContactPageSections } = await import(
+        "@/app/actions/init-contact-sections"
+      );
+      await ensureContactPageSections(pageId);
+      // Re-fetch after seeding
+      const { data: refreshed } = await supabase
+        .from("sections")
+        .select("*")
+        .eq("page_id", pageId)
+        .eq("visible", true)
+        .order("order", { ascending: true });
+      sections = refreshed || [];
+    }
   }
 
   const options =
@@ -72,12 +91,14 @@ export default async function ContactPage() {
       ? options.badge_text
       : "Get In Touch";
 
-  // Using simple professional words by default if not set in CMS
   const heading = String(heroRow?.heading || "Contact Us");
   const headingAccent =
     typeof options?.heading_accent === "string" ? options.heading_accent : "";
 
-  const subheading = String(heroRow?.subheading || "Please reach out to our headquarters in Kigali for any inquiries. We look forward to connecting with you.");
+  const subheading = String(
+    heroRow?.subheading ||
+      "Please reach out to our headquarters in Kigali for any inquiries. We look forward to connecting with you."
+  );
 
   const imageUrl =
     typeof heroRow?.image_url === "string" && heroRow.image_url.trim() !== ""
@@ -98,6 +119,8 @@ export default async function ContactPage() {
       }))
     : [];
 
+  // contact_info and map_section are pulled out and passed as separate props
+  // so map fields (embed URLs) never overwrite contact text fields (eyebrow, headings, etc.)
   const contactSections = sections.filter(
     (s: any) => s.type === "contact_info" || s.type === "map_section"
   );
@@ -108,14 +131,21 @@ export default async function ContactPage() {
   const contactRow = contactSections.find((s: any) => s.type === "contact_info");
   const mapRow = contactSections.find((s: any) => s.type === "map_section");
 
-  const combinedProps = {
-    ...(contactRow?.content && typeof contactRow.content === "object" && !Array.isArray(contactRow.content)
+  // Keep contact and map props strictly separated — ContactMapToggleSection
+  // passes each to its own panel (ContactInfo / OurLocationSection)
+  const contactProps =
+    contactRow?.content &&
+    typeof contactRow.content === "object" &&
+    !Array.isArray(contactRow.content)
       ? (contactRow.content as Record<string, unknown>)
-      : {}),
-    ...(mapRow?.content && typeof mapRow.content === "object" && !Array.isArray(mapRow.content)
+      : {};
+
+  const mapProps =
+    mapRow?.content &&
+    typeof mapRow.content === "object" &&
+    !Array.isArray(mapRow.content)
       ? (mapRow.content as Record<string, unknown>)
-      : {}),
-  };
+      : {};
 
   return (
     <>
@@ -129,7 +159,7 @@ export default async function ContactPage() {
         quickNav={quickNav}
       />
 
-      <ContactWithMapSection {...combinedProps} />
+      <ContactMapToggleSection contactProps={contactProps} mapProps={mapProps} />
 
       <FaqSection />
 

@@ -100,30 +100,58 @@ export default async function LandingPage() {
       {/* Default programs block only when no program_cards row exists in CMS */}
       {!hasProgramSection ? <ProgramCards key="fallback-program-cards" /> : null}
 
-      {/* Merge contact_info + map_section into a combined map+form section */}
+      {/* All other CMS sections + contact block */}
       {(() => {
         const contactSections = enrichedSections?.filter(
           (s: any) => s.type === 'contact_info' || s.type === 'map_section'
         ) ?? [];
+        // Note: video_gallery is intentionally kept in otherSections so it renders
+        // from DB via renderWebsiteSectionWithFeatured (VideoGallerySection)
         const otherSections = enrichedSections?.filter(
-          (s: any) => s.type !== 'video_gallery' && s.type !== 'contact_info' && s.type !== 'map_section'
+          (s: any) => s.type !== 'contact_info' && s.type !== 'map_section'
         ) ?? [];
 
         const contactRow = contactSections.find((s: any) => s.type === 'contact_info');
         const mapRow = contactSections.find((s: any) => s.type === 'map_section');
 
-        const combinedProps = {
-          ...(contactRow?.content && typeof contactRow.content === 'object' && !Array.isArray(contactRow.content)
+        // Extract video_gallery to pass its props to news_cards
+        const videoGalleryRow = otherSections.find((s: any) => s.type === 'video_gallery');
+        const newsCardsRowIndex = otherSections.findIndex((s: any) => s.type === 'news_cards');
+
+        // Remove video_gallery from otherSections since it will be embedded
+        const finalOtherSections = otherSections.filter((s: any) => s.type !== 'video_gallery');
+
+        // If both exist, merge videoGalleryProps into news_cards content
+        if (videoGalleryRow && newsCardsRowIndex !== -1) {
+          const ncIndex = finalOtherSections.findIndex((s: any) => s.type === 'news_cards');
+          if (ncIndex !== -1) {
+            const nc = finalOtherSections[ncIndex];
+            finalOtherSections[ncIndex] = {
+              ...nc,
+              content: {
+                ...(nc.content && typeof nc.content === 'object' && !Array.isArray(nc.content) ? nc.content : {}),
+                videoGalleryProps: videoGalleryRow.content,
+              }
+            };
+          }
+        }
+
+        // Keep contact_info and map_section props separate so map fields
+        // never overwrite contact text fields (eyebrow, heading_line1, etc.)
+        const contactProps =
+          contactRow?.content && typeof contactRow.content === 'object' && !Array.isArray(contactRow.content)
             ? (contactRow.content as Record<string, unknown>)
-            : {}),
-          ...(mapRow?.content && typeof mapRow.content === 'object' && !Array.isArray(mapRow.content)
+            : {};
+        const mapProps =
+          mapRow?.content && typeof mapRow.content === 'object' && !Array.isArray(mapRow.content)
             ? (mapRow.content as Record<string, unknown>)
-            : {}),
-        };
+            : {};
+
+        const combinedProps = { ...contactProps, ...mapProps };
 
         return (
           <>
-            {otherSections.map(renderWebsiteSectionWithFeatured)}
+            {finalOtherSections.map(renderWebsiteSectionWithFeatured)}
             {contactRow || mapRow ? (
               <ContactWithMapSection {...combinedProps} />
             ) : null}
