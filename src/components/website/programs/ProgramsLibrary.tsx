@@ -203,47 +203,10 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             </div>
 
             {/* ── Program Cards Section (with Rwanda map background) ── */}
-            <div className="prog-ref-section" style={{ position: "relative" }}>
+            <div className="prog-ref-section">
               <RwandaMapBackground />
               <div className="prog-ref-inner">
-                <div className="prog-bubbles-container">
-                  {items.map((p, idx) => {
-                    const BUBBLE_COLORS = [
-                      "rgba(206, 171, 147, 0.95)", // brown
-                      "rgba(216, 203, 184, 0.95)", // beige
-                      "rgba(235, 168, 105, 0.95)", // orange
-                      "rgba(110, 196, 232, 0.95)", // blue
-                      "rgba(107, 190, 153, 0.95)", // green
-                      "rgba(120, 180, 130, 0.95)", // dark green
-                      "rgba(170, 170, 170, 0.95)", // grey
-                      "rgba(215, 185, 160, 0.95)", // tan
-                    ];
-                    const color = BUBBLE_COLORS[idx % BUBBLE_COLORS.length];
-
-                    return (
-                      <div
-                        key={p.id}
-                        className="prog-bubble"
-                        style={{ "--bubble-bg": color } as React.CSSProperties}
-                        onClick={() => setActiveProgram(p)}
-                        role="button"
-                        tabIndex={0}
-                      >
-                        <h4 className="prog-bubble-title">{p.title}</h4>
-                        {p.tag_label && (
-                          <div className="prog-bubble-quote">"{p.tag_label}"</div>
-                        )}
-                        <div className="prog-bubble-desc">{p.excerpt}</div>
-                        {(p.location || p.tag_icon) && (
-                          <div className="prog-bubble-loc">
-                            <i className={p.tag_icon || "fa-solid fa-location-dot"} aria-hidden />
-                            <span>{p.location || "Rwanda"}</span>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                <ProgramBubbleGallery items={items} onClick={(p) => setActiveProgram(p)} />
               </div>
             </div>
 
@@ -322,7 +285,58 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Bubble Circle Gallery                                                */
+/* ------------------------------------------------------------------ */
+function ProgramBubbleGallery({ items, onClick }: { items: any[]; onClick: (p: any) => void }) {
+  const [showAll, setShowAll] = useState(false);
 
+  // If not showing all, show maximum 3 items (one slide)
+  const displayItems = showAll ? items : items.slice(0, 3);
+
+  return (
+    <div className={`bubble-slider-container ${showAll ? "show-all" : ""}`}>
+      <div className="bubble-slider">
+        <div className="bs-track-wrap">
+          <div className="bs-track" style={{ flexWrap: showAll ? "wrap" : "nowrap", gap: "2rem", justifyContent: "center" }}>
+            {displayItems.map((p, idx) => {
+              const BUBBLE_COLORS = ["bubble-blue", "bubble-tan", "bubble-green"];
+              const colorClass = BUBBLE_COLORS[idx % BUBBLE_COLORS.length];
+              const imageUrl = p.cover_image_url?.trim() ? encodeProgramAssetUrl(p.cover_image_url) : "";
+              
+              return (
+                <div 
+                  key={p.id}
+                  className={`bubble-circle ${colorClass}`}
+                  style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }}
+                  onClick={() => onClick(p)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === "Enter" && onClick(p)}
+                >
+                  <h4 className="bubble-title">{p.title}</h4>
+                  {p.subtitle && <p className="bubble-tagline">{p.subtitle}</p>}
+                  <div className="bubble-sep"></div>
+                  <p className="bubble-desc">{p.excerpt}</p>
+                  <div className="bubble-loc">
+                    <i className="fa-solid fa-location-dot"></i> {p.location || "Rwanda"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      {items.length > 3 && (
+        <div className="bubble-viewall-wrap">
+          <button className={`bubble-viewall-btn ${showAll ? "active" : ""}`} onClick={() => setShowAll(!showAll)}>
+            <i className={`fa-solid fa-${showAll ? "compress" : "expand"}`}></i> {showAll ? "Show Less" : "View All Programs"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Success Story Card                                                 */

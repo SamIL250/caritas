@@ -188,15 +188,6 @@
 .rm-panel::before {
   content: '';
   position: absolute;
-  bottom: -16px;
-  left: 0;
-  right: 0;
-  height: 16px;
-  background: transparent;
-}
-.rm-panel::after {
-  content: '';
-  position: absolute;
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
@@ -210,10 +201,6 @@
   opacity: 1;
   pointer-events: all;
   transform: translateX(-50%) translateY(0);
-}
-.rm-panel-open ~ .rm-caret,
-.rm-btn[aria-expanded="true"] .rm-caret {
-  transform: rotate(180deg);
 }
 
 .rm-card {

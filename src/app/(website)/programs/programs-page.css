@@ -9,22 +9,22 @@
 .prog-page-root {
   background: #ffffff;
   color: #1a1a1a;
-  overflow-x: hidden;
+  overflow-x: clip; /* clip instead of hidden allows position: sticky to work */
 }
 
 /* ==================== TAB BAR ==================== */
 
 .prog-tab-bar {
   position: sticky;
-  top: 70px;
+  top: 66px;
   z-index: 200;
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .prog-tab-bar.is-stuck {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 .prog-tab-inner {
@@ -197,18 +197,17 @@
   clip-path: inset(0);
 }
 
-/* Rwanda map SVG background — infographic style */
+/* Rwanda map SVG background — fixed, full-width, clips to section */
 .rwanda-map-bg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 900px;
-  height: auto;
-  color: #e5e7eb; /* Light grey map */
+  height: 100vh;
+  color: var(--dept-color, #1a1a1a);
   pointer-events: none;
   z-index: 0;
+  opacity: 0.4;
 }
 
 .prog-ref-inner {
@@ -216,125 +215,215 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  min-height: 500px; /* Ensure map fits */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem 0;
 }
 
-/* ── Bubbles Infographic Layout ── */
-
-.prog-bubbles-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.prog-bubble {
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.prog-ref-heading {
   text-align: center;
-  padding: 2.2rem 1.5rem;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  z-index: 2;
-  margin: -0.5rem; /* Slight overlap */
-  background: var(--bubble-bg, rgba(235, 168, 105, 0.95));
+  margin-bottom: 2.5rem;
 }
 
-.prog-bubble:hover {
-  transform: scale(1.05);
-  z-index: 10;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-}
-
-.prog-bubble-title {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #a5280d;
-  margin-bottom: 0.2rem;
-  line-height: 1.2;
-}
-
-.prog-bubble-quote {
-  font-size: 0.72rem;
-  font-style: italic;
-  color: #1a5b82;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-  opacity: 0.95;
-}
-
-.prog-bubble-desc {
-  font-size: 0.75rem;
-  color: #1f2937;
-  line-height: 1.45;
-  margin-bottom: 0.8rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.prog-bubble-loc {
+.prog-ref-label {
+  display: inline-block;
   font-size: 0.65rem;
-  font-weight: 500;
-  color: #1f2937;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--dept-color, #1a1a1a);
+  background: color-mix(in srgb, var(--dept-color, #1a1a1a) 7%, transparent);
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  margin-bottom: 0.6rem;
+}
+
+.prog-ref-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.prog-ref-sub {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.4rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ── Minimal Card List (Zigzag) ── */
+
+.prog-ref-list {
   display: flex;
   flex-direction: column;
+  gap: 2.5rem;
   align-items: center;
-  gap: 0.3rem;
-  margin-top: auto;
 }
 
-.prog-bubble-loc i {
-  font-size: 1.3rem;
-  color: #fff;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+/* ── Card Wrap ── */
+
+.prog-card-min-wrap {
+  display: flex;
+  width: 100%;
+}
+
+.prog-card-min-wrap.align-left {
+  justify-content: flex-start;
+}
+
+.prog-card-min-wrap.align-right {
+  justify-content: flex-end;
+}
+
+/* ── Card ── */
+
+.prog-card-min {
+  width: 62%;
+  background: #f0ebe0;
+  border: 1px solid #ddd5c0;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+}
+
+.prog-card-min-wrap.align-right .prog-card-min {
+  background: #e8e0d0;
+}
+
+.prog-card-min:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
+  border-color: color-mix(in srgb, var(--dept-color, #1a1a1a) 20%, transparent);
+  background: #f0ebe0;
+}
+
+.prog-card-min-wrap.align-right .prog-card-min:hover {
+  background: #e8e0d0;
 }
 
 @media (max-width: 900px) {
-  .prog-bubble {
-    width: 240px;
-    height: 240px;
-    padding: 1.5rem 1.2rem;
-    margin: 0;
-  }
-  .prog-bubble-title {
-    font-size: 1rem;
-  }
-  .prog-bubble-desc {
-    font-size: 0.7rem;
-    -webkit-line-clamp: 3;
+  .prog-card-min {
+    width: 85%;
   }
 }
 
 @media (max-width: 600px) {
-  .prog-bubble {
+  .prog-card-min {
     width: 100%;
-    height: auto;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
-  .rwanda-map-bg {
-    opacity: 0.2;
   }
 }
 
+/* ── Card Top: Image + Header ── */
+
+.prog-card-min-top {
+  display: flex;
+  align-items: stretch;
+}
+
+.prog-card-min-img {
+  width: 130px;
+  height: 90px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+.prog-card-min-img-placeholder {
+  background: #f0eee8;
+}
+
+.prog-card-min-header {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.prog-card-min-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.15rem;
+  line-height: 1.25;
+}
+
+.prog-card-min-tagline {
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.35;
+}
+
+@media (max-width: 500px) {
+  .prog-card-min-top {
+    flex-direction: column;
+  }
+  .prog-card-min-img {
+    width: 100%;
+    height: 140px;
+  }
+}
+
+/* ── Description ── */
+
+.prog-card-min-desc {
+  padding: 0.6rem 1rem 0.3rem;
+  font-size: 0.82rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Meta Row ── */
+
+.prog-card-min-meta {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #e5e2dd;
+  margin: 0.5rem 0 0;
+  padding: 1rem 1rem;
+  gap: 1rem;
+}
+
+.prog-card-min-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.prog-card-min-meta-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+}
+
+.prog-card-min-meta-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.prog-card-min-meta-divider {
+  width: 1px;
+  height: 34px;
+  background: #e5e2dd;
+  flex-shrink: 0;
+}
 
 /* ==================== EMPTY STATE ==================== */
 
@@ -1038,7 +1127,7 @@
 
 @media (max-width: 768px) {
   .prog-tab-bar {
-    top: 60px;
+    top: 64px;
   }
 
   .prog-tab-btn {
@@ -1085,5 +1174,60 @@
 
   .prog-panel-stat-value {
     font-size: 1.4rem;
+  }
+}
+
+/* ── BUBBLE CIRCLE PROJECT LAYOUT ── */
+.bubble-slider-container {
+  width: 100%;
+}
+.bubble-slider { display:flex; align-items:center; gap:1.2rem; padding:1.5rem 1rem 2.5rem; max-width:1000px; margin:0 auto; }
+.bs-track-wrap { overflow:hidden; flex:1; }
+.bs-track { display:flex; transition:transform .45s cubic-bezier(.4,0,.2,1); }
+.bs-slide { display:flex; gap:2rem; justify-content:center; min-width:100%; flex-shrink:0; }
+.bubble-circle { width:250px; height:250px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1.6rem 1.4rem; cursor:pointer; transition:transform .3s ease; overflow:hidden; position:relative; background-size:cover; background-position:center; }
+.bubble-circle:hover { transform:scale(1.04) translateY(-4px); }
+.bubble-circle::after { content:''; position:absolute; inset:0; z-index:0; border-radius:50%; }
+.bubble-blue  { background-color:#5AABCC; } .bubble-blue::after  { background:rgba(90,171,204,.65); }
+.bubble-tan   { background-color:#C8A87C; } .bubble-tan::after   { background:rgba(200,168,124,.65); }
+.bubble-green { background-color:#5A9E6E; } .bubble-green::after { background:rgba(90,158,110,.65); }
+.bubble-circle > * { position:relative; z-index:1; }
+.bubble-title { font-size:.9rem; font-weight:800; color:#fff; margin:0 0 .18rem; line-height:1.25; }
+.bubble-tagline { font-size:.62rem; font-style:italic; color:rgba(255,255,255,.9); margin:0 0 .3rem; line-height:1.3; }
+.bubble-sep { width:55%; height:1.5px; background:rgba(255,255,255,.45); margin:.28rem auto; }
+.bubble-desc { font-size:.63rem; color:rgba(255,255,255,.93); line-height:1.4; margin:.25rem 0 .45rem; display:-webkit-box; -webkit-line-clamp:4; line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+.bubble-loc { font-size:.62rem; color:rgba(255,255,255,.9); display:flex; align-items:center; gap:.25rem; justify-content:center; margin-top:auto; }
+.bubble-loc i { color:#fff; font-size:.68rem; }
+
+/* ── VIEW ALL BUTTON ── */
+.bubble-viewall-wrap { text-align:center; width:100%; margin-top: 1rem; }
+.bubble-viewall-btn { display:inline-flex; align-items:center; gap:.5rem; padding:.55rem 1.8rem; background:transparent; border:2px solid #8B1A1A; border-radius:100px; color:#8B1A1A; font-size:.82rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s, color .2s, transform .15s; }
+.bubble-viewall-btn:hover { background:#8B1A1A; color:#fff; transform:translateY(-2px); }
+.bubble-viewall-btn.active { background:#8B1A1A; color:#fff; }
+
+/* ── SHOW-ALL STATE ── */
+.bubble-slider-container.show-all .bubble-slider { flex-direction:column; max-width: none; }
+.bubble-slider-container.show-all .bs-track-wrap { overflow:visible; width: 100%; }
+.bubble-slider-container.show-all .bs-track { flex-wrap:wrap; transform:none !important; gap:2rem; justify-content:center; }
+.bubble-slider-container.show-all .bs-slide { min-width:auto; flex-shrink:1; flex-wrap:wrap; gap:2rem; justify-content:center; }
+
+@media (max-width: 768px) {
+  /* Increase map size on mobile */
+  .rwanda-map-bg {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+  
+  /* Make bubbles stack vertically on mobile */
+  .bs-track, .bubble-slider-container.show-all .bs-track {
+    flex-wrap: wrap !important;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .bubble-circle {
+    width: 270px;
+    height: 270px;
+    margin: 0 auto;
   }
 }
