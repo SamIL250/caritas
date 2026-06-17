@@ -92,7 +92,6 @@ import LeadershipGridSection from '@/components/website/sections/LeadershipGridS
 import AboutSection from '@/components/website/sections/AboutSection';
 import VideoGallerySection from '@/components/website/sections/VideoGallerySection';
 import DioceseMapSection from '@/components/website/sections/DioceseMapSection';
-import FaqSection from '@/components/website/sections/FaqSection';
 import MetricsKpiStrip from '@/components/website/sections/MetricsKpiStrip';
 import MetricsStatCards from '@/components/website/sections/MetricsStatCards';
 import MetricsProgramCard from '@/components/website/sections/MetricsProgramCard';
