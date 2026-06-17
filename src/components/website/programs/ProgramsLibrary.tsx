@@ -203,20 +203,46 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             </div>
 
             {/* ── Program Cards Section (with Rwanda map background) ── */}
-            <div className="prog-ref-section">
+            <div className="prog-ref-section" style={{ position: "relative" }}>
               <RwandaMapBackground />
               <div className="prog-ref-inner">
+                <div className="prog-bubbles-container">
+                  {items.map((p, idx) => {
+                    const BUBBLE_COLORS = [
+                      "rgba(206, 171, 147, 0.95)", // brown
+                      "rgba(216, 203, 184, 0.95)", // beige
+                      "rgba(235, 168, 105, 0.95)", // orange
+                      "rgba(110, 196, 232, 0.95)", // blue
+                      "rgba(107, 190, 153, 0.95)", // green
+                      "rgba(120, 180, 130, 0.95)", // dark green
+                      "rgba(170, 170, 170, 0.95)", // grey
+                      "rgba(215, 185, 160, 0.95)", // tan
+                    ];
+                    const color = BUBBLE_COLORS[idx % BUBBLE_COLORS.length];
 
-
-                <div className="prog-ref-list">
-                  {items.map((p, idx) => (
-                    <ProgramCardMinimal
-                      key={p.id}
-                      row={p}
-                      index={idx}
-                      onClick={() => setActiveProgram(p)}
-                    />
-                  ))}
+                    return (
+                      <div
+                        key={p.id}
+                        className="prog-bubble"
+                        style={{ "--bubble-bg": color } as React.CSSProperties}
+                        onClick={() => setActiveProgram(p)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <h4 className="prog-bubble-title">{p.title}</h4>
+                        {p.tag_label && (
+                          <div className="prog-bubble-quote">"{p.tag_label}"</div>
+                        )}
+                        <div className="prog-bubble-desc">{p.excerpt}</div>
+                        {(p.location || p.tag_icon) && (
+                          <div className="prog-bubble-loc">
+                            <i className={p.tag_icon || "fa-solid fa-location-dot"} aria-hidden />
+                            <span>{p.location || "Rwanda"}</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -296,64 +322,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Minimal Program Card                                                */
-/* ------------------------------------------------------------------ */
-function ProgramCardMinimal({ row, index, onClick }: { row: any; index: number; onClick: () => void }) {
-  const imageUrl = row.cover_image_url?.trim()
-    ? encodeProgramAssetUrl(row.cover_image_url)
-    : null;
 
-  const isLeft = index % 2 === 0;
-
-  return (
-    <div className={`prog-card-min-wrap ${isLeft ? "align-left" : "align-right"}`}>
-      <div
-        className="prog-card-min"
-        onClick={onClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && onClick()}
-        aria-label={`View details for ${row.title}`}
-      >
-        <div className="prog-card-min-top">
-          {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={imageUrl}
-              alt={row.cover_image_alt || row.title}
-              className="prog-card-min-img"
-            />
-          ) : (
-            <div className="prog-card-min-img prog-card-min-img-placeholder" />
-          )}
-          <div className="prog-card-min-header">
-            <h3 className="prog-card-min-title">{row.title}</h3>
-            {row.subtitle ? (
-              <p className="prog-card-min-tagline">&ldquo;{row.subtitle}&rdquo;</p>
-            ) : null}
-          </div>
-        </div>
-
-        {row.excerpt ? (
-          <p className="prog-card-min-desc">{row.excerpt}</p>
-        ) : null}
-
-        <div className="prog-card-min-meta">
-          <span className="prog-card-min-meta-item">
-            <span className="prog-card-min-meta-label">Location</span>
-            <span className="prog-card-min-meta-value">{row.location || "TBD"}</span>
-          </span>
-          <span className="prog-card-min-meta-divider" />
-          <span className="prog-card-min-meta-item">
-            <span className="prog-card-min-meta-label">Contact</span>
-            <span className="prog-card-min-meta-value">{row.contact_phone || "TBD"}</span>
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* Success Story Card                                                 */

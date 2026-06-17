@@ -232,10 +232,50 @@ export default function WebsiteHeader() {
               </Link>
             </li> */}
 
-            <li>
-              <Link href="/publications" className={isActive('/publications') ? 'current' : ''} onClick={closeNav}>
-                Publications
-              </Link>
+            <li className={['has-dropdown', openSub === 'publications' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
+              <div className="nav-item-row">
+                <Link
+                  href="/publications"
+                  className={isActive('/publications') ? 'current' : ''}
+                  onClick={(e) => {
+                    if (window.innerWidth < 1024) {
+                      e.preventDefault();
+                      toggleSub('publications');
+                    } else {
+                      closeNav();
+                    }
+                  }}
+                >
+                  Publications
+                </Link>
+                <button
+                  type="button"
+                  className="nav-submenu-toggle"
+                  aria-expanded={openSub === 'publications'}
+                  aria-label="Toggle Publications submenu"
+                  onClick={() => toggleSub('publications')}
+                >
+                  <ChevronDown
+                    size={18}
+                    aria-hidden
+                    className={openSub === 'publications' ? 'rotate-180 transition-transform' : 'transition-transform'}
+                  />
+                </button>
+              </div>
+              <div className="nav-dropdown">
+                <div className="nav-dropdown-inner">
+                  <Link href="/publications#annual-reports" onClick={closeNav}>
+                    <i className="fa-solid fa-chart-bar"></i> Annual Reports
+                  </Link>
+                  <Link href="/publications#newsletters" onClick={closeNav}>
+                    <i className="fa-solid fa-newspaper"></i> Newsletters
+                  </Link>
+                  <div className="nav-dropdown-divider"></div>
+                  <Link href="/publications#strategic" onClick={closeNav}>
+                    <i className="fa-solid fa-map"></i> Strategic Plan
+                  </Link>
+                </div>
+              </div>
             </li>
 
             <li>
