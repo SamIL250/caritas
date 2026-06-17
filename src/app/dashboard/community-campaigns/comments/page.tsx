@@ -10,7 +10,7 @@ export default async function CommunityCampaignCommentsPage() {
   const { pending, approved, rejected } = await fetchEnrichedCommentModerationQueues(supabase);
 
   return (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Comment moderation"
         subtitle="Approve or reject visitor messages before they appear under published campaigns."

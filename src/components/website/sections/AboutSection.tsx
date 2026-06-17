@@ -118,11 +118,40 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
           <div className="cr-infographic" ref={infographicRef}>
             {/* ─── SVG lines overlay ─── */}
             <svg className="cr-info-lines" width="1300" height="850" aria-hidden="true">
-              <line x1="320" y1="280" x2="415" y2="315" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-              <circle cx="415" cy="315" r="5" fill="rgba(255,255,255,0.4)" />
-              <line x1="960" y1="280" x2="885" y2="315" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-              <circle cx="885" cy="315" r="5" fill="rgba(255,255,255,0.4)" />
-              <line x1="650" y1="650" x2="650" y2="670" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+              {/* ── Lines from left panel → left side of center circle ── */}
+              <line x1="320" y1="390" x2="415" y2="420" stroke="rgba(215,185,160,0.45)" strokeWidth="1.5" />
+              <circle cx="415" cy="420" r="4" fill="rgba(215,185,160,0.55)" />
+
+              {/* ── Lines from right panel → right side of center circle ── */}
+              <line x1="980" y1="340" x2="905" y2="380" stroke="rgba(215,185,160,0.45)" strokeWidth="1.5" />
+              <circle cx="905" cy="380" r="4" fill="rgba(215,185,160,0.55)" />
+
+              {/* ── Inner circle MISSION → node 1 (top-left) ── */}
+              <line x1="552" y1="248" x2="565" y2="212" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              <circle cx="565" cy="212" r="4" fill="rgba(148,58,55,0.8)" />
+
+              {/* ── Inner circle VALUES → node 10 (top-right) ── */}
+              <line x1="740" y1="248" x2="735" y2="212" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              <circle cx="735" cy="212" r="4" fill="rgba(148,58,55,0.8)" />
+
+              {/* ── Inner circle VALUES → node 229 (right) ── */}
+              <line x1="784" y1="365" x2="856" y2="400" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              <circle cx="856" cy="400" r="4" fill="rgba(148,58,55,0.8)" />
+
+              {/* ── Inner circle VISION → node 882 (bottom-right) ── */}
+              <line x1="724" y1="560" x2="775" y2="616" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              <circle cx="775" cy="616" r="4" fill="rgba(148,58,55,0.8)" />
+
+              {/* ── Inner circle VISION → node 29,141 (bottom-left) ── */}
+              <line x1="576" y1="560" x2="525" y2="616" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              <circle cx="525" cy="616" r="4" fill="rgba(148,58,55,0.8)" />
+
+              {/* ── Inner circle MISSION → node 56,345+ (left) ── */}
+              <line x1="516" y1="365" x2="454" y2="400" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              <circle cx="454" cy="400" r="4" fill="rgba(148,58,55,0.8)" />
+
+              {/* ── Bottom vertical line from big circle → eye icon ── */}
+              <line x1="650" y1="650" x2="650" y2="685" stroke="rgba(215,185,160,0.4)" strokeWidth="1.5" />
             </svg>
 
             {/* ─── Center big circle ─── */}
@@ -152,7 +181,6 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
                   height: n.size,
                   left: n.left,
                   top: n.top,
-                  fontSize: n.size >= 100 ? '22px' : '20px',
                 }}
               >
                 {n.label}
@@ -177,31 +205,29 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
             {/* ─── Left text box (Mission) ─── */}
             <div className="cr-info-box cr-info-box--left">
               <div className="cr-box-icon" aria-hidden="true">
-                <FiCrosshair size={22} />
+                <img src="/img/image.png" alt="" style={{ width: '80px', height: 'auto', position: 'relative', top: '-10px', right: '-10px' }} />
               </div>
-              <span className="cr-box-heading">OUR MISSION</span>
-              <p className="cr-box-body">{content.missionText}</p>
+              <p className="cr-box-body" style={{ textAlign: 'center' }}>{content.missionText}</p>
             </div>
 
             {/* ─── Right text box (Values) ─── */}
             <div className="cr-info-box cr-info-box--right">
               <div className="cr-box-icon cr-box-icon--bottom-left" aria-hidden="true">
-                <FiStar size={22} />
+                <img src="/img/image-1.png" alt="" style={{ width: '80px', height: 'auto', position: 'relative', top: '-10px', left: '-10px' }} />
               </div>
-              <span className="cr-box-heading">OUR VALUES</span>
-              <ul className="cr-info-values">
+              <div className="cr-info-values-text">
                 {content.values.map((v) => (
-                  <li key={v}>
-                    <FiChevronRight size={14} className="cr-val-icon" aria-hidden="true" />
+                  <div key={v} style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start' }}>
+                    <span style={{ marginRight: '6px', fontSize: '11px', lineHeight: '22px', flexShrink: 0 }}>☛</span>
                     <span>{v}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* ─── Bottom vision ─── */}
             <div className="cr-info-eye" aria-hidden="true">
-              <FiEye size={36} />
+              <img src="/img/image-2.png" alt="" style={{ width: '90px', height: 'auto' }} />
             </div>
             <div className="cr-info-vision">
               <span dangerouslySetInnerHTML={{ __html: content.visionText || '' }} />

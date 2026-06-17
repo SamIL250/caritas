@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import VideoGallerySection from "@/components/website/sections/VideoGallerySection";
 
 export type NewsArticle = {
   title: string;
@@ -24,6 +25,7 @@ export interface NewsCardsProps {
   view_all_url?: string;
   view_all_label?: string;
   articles?: NewsArticle[];
+  videoGalleryProps?: Record<string, unknown>;
 }
 
 const DEFAULT_ARTICLES: NewsArticle[] = [
@@ -100,7 +102,8 @@ export default function NewsCards({
   subtitle = "Inspiring stories from the communities we serve",
   view_all_url = "/news",
   view_all_label = "View All News & Stories",
-  articles: articlesProp
+  articles: articlesProp,
+  videoGalleryProps
 }: NewsCardsProps) {
   const list =
     articlesProp && articlesProp.length > 0 ? articlesProp : DEFAULT_ARTICLES;
@@ -372,116 +375,128 @@ export default function NewsCards({
                 <p className="section-subtitle">Watch our impactful work across communities</p>
               </div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                gap: '1.25rem',
-              }}>
-                {[
-                  {
-                    title: 'Caritas Rwanda in Action',
-                    desc: 'See how our programs are transforming communities across Rwanda.',
-                    id: 'dQw4w9WgXcQ',
-                  },
-                  {
-                    title: 'Community Health Outreach',
-                    desc: 'Bringing healthcare services to remote communities.',
-                    id: 'dQw4w9WgXcQ',
-                  },
-                  {
-                    title: 'Sustainable Development Goals',
-                    desc: 'Working towards a better future for all Rwandans.',
-                    id: 'dQw4w9WgXcQ',
-                  },
-                ].map((video, i) => (
-                  <a
-                    key={i}
-                    href={`https://youtube.com/watch?v=${video.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'block',
-                      borderRadius: '14px',
-                      overflow: 'hidden',
-                      background: '#ffffff',
-                      border: '1px solid rgba(0,0,0,0.07)',
-                      textDecoration: 'none',
-                      transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                      cursor: 'pointer',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  >
-                    <div style={{
-                      position: 'relative',
-                      height: '180px',
-                      background: '#1a1a2e',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                      <img
-                        src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
-                        alt=""
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
-                        }}
-                      />
+              {videoGalleryProps ? (
+                <div style={{ marginTop: '-1rem' }}>
+                  <VideoGallerySection 
+                    {...(videoGalleryProps as any)} 
+                    eyebrow="" 
+                    heading_lead="" 
+                    heading_accent="" 
+                    subtitle="" 
+                  />
+                </div>
+              ) : (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: '1.25rem',
+                }}>
+                  {[
+                    {
+                      title: 'Caritas Rwanda in Action',
+                      desc: 'See how our programs are transforming communities across Rwanda.',
+                      id: 'dQw4w9WgXcQ',
+                    },
+                    {
+                      title: 'Community Health Outreach',
+                      desc: 'Bringing healthcare services to remote communities.',
+                      id: 'dQw4w9WgXcQ',
+                    },
+                    {
+                      title: 'Sustainable Development Goals',
+                      desc: 'Working towards a better future for all Rwandans.',
+                      id: 'dQw4w9WgXcQ',
+                    },
+                  ].map((video, i) => (
+                    <a
+                      key={i}
+                      href={`https://youtube.com/watch?v=${video.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'block',
+                        borderRadius: '14px',
+                        overflow: 'hidden',
+                        background: '#ffffff',
+                        border: '1px solid rgba(0,0,0,0.07)',
+                        textDecoration: 'none',
+                        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                        cursor: 'pointer',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
                       <div style={{
-                        position: 'absolute',
-                        inset: 0,
+                        position: 'relative',
+                        height: '180px',
+                        background: '#1a1a2e',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}>
+                        <img
+                          src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
+                          alt=""
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            display: 'block',
+                          }}
+                        />
                         <div style={{
-                          width: '52px',
-                          height: '52px',
-                          borderRadius: '50%',
-                          background: 'rgba(255,255,255,0.15)',
-                          backdropFilter: 'blur(6px)',
-                          border: '2px solid rgba(255,255,255,0.5)',
+                          position: 'absolute',
+                          inset: 0,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#ffffff',
-                          fontSize: '1.1rem',
                         }}>
-                          <i className="fa-solid fa-play" style={{ marginLeft: '3px' }} />
+                          <div style={{
+                            width: '52px',
+                            height: '52px',
+                            borderRadius: '50%',
+                            background: 'rgba(255,255,255,0.15)',
+                            backdropFilter: 'blur(6px)',
+                            border: '2px solid rgba(255,255,255,0.5)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#ffffff',
+                            fontSize: '1.1rem',
+                          }}>
+                            <i className="fa-solid fa-play" style={{ marginLeft: '3px' }} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div style={{ padding: '1.2rem 1.25rem 1.4rem' }}>
-                      <h4 style={{
-                        fontSize: '0.95rem',
-                        fontWeight: 800,
-                        color: '#0d1b2a',
-                        margin: '0 0 0.4rem',
-                        lineHeight: 1.3,
-                      }}>
-                        {video.title}
-                      </h4>
-                      <p style={{
-                        fontSize: '0.8rem',
-                        color: '#5a6a7a',
-                        margin: 0,
-                        lineHeight: 1.55,
-                      }}>
-                        {video.desc}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
+                      <div style={{ padding: '1.2rem 1.25rem 1.4rem' }}>
+                        <h4 style={{
+                          fontSize: '0.95rem',
+                          fontWeight: 800,
+                          color: '#0d1b2a',
+                          margin: '0 0 0.4rem',
+                          lineHeight: 1.3,
+                        }}>
+                          {video.title}
+                        </h4>
+                        <p style={{
+                          fontSize: '0.8rem',
+                          color: '#5a6a7a',
+                          margin: 0,
+                          lineHeight: 1.55,
+                        }}>
+                          {video.desc}
+                        </p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

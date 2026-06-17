@@ -22,7 +22,7 @@ export default async function ContactInboxPage() {
   const rows = (data ?? []) as ContactMessageRow[];
 
   return (
-    <div className="w-full max-w-6xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Contact inbox"
         subtitle={

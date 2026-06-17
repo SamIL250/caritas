@@ -19,6 +19,8 @@ export default function ContactMapToggleSection({
   const panel2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let resizeObserver: ResizeObserver | null = null;
+    
     const updateHeight = () => {
       const activeEl = showMap ? panel2Ref.current : panel1Ref.current;
       if (activeEl) {
@@ -28,12 +30,18 @@ export default function ContactMapToggleSection({
     
     updateHeight();
     
-    // Slight delay to handle child components loading (like map iframes)
-    const timeout = setTimeout(updateHeight, 300);
+    const activeEl = showMap ? panel2Ref.current : panel1Ref.current;
+    if (activeEl && typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        updateHeight();
+      });
+      resizeObserver.observe(activeEl);
+    }
+    
     window.addEventListener("resize", updateHeight);
     
     return () => {
-      clearTimeout(timeout);
+      if (resizeObserver) resizeObserver.disconnect();
       window.removeEventListener("resize", updateHeight);
     };
   }, [showMap]);

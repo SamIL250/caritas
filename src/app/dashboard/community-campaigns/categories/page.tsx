@@ -16,7 +16,7 @@ export default async function CommunityCampaignCategoriesPage() {
     (data ?? []) as Database["public"]["Tables"]["community_campaign_categories"]["Row"][];
 
   return (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Campaign categories"
         subtitle="Medical Support, Education, Livelihood, and any custom programmes you add."

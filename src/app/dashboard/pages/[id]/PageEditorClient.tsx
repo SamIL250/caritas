@@ -92,6 +92,7 @@ import LeadershipGridSection from '@/components/website/sections/LeadershipGridS
 import AboutSection from '@/components/website/sections/AboutSection';
 import VideoGallerySection from '@/components/website/sections/VideoGallerySection';
 import DioceseMapSection from '@/components/website/sections/DioceseMapSection';
+import FaqSection from '@/components/website/sections/FaqSection';
 import MetricsKpiStrip from '@/components/website/sections/MetricsKpiStrip';
 import MetricsStatCards from '@/components/website/sections/MetricsStatCards';
 import MetricsProgramCard from '@/components/website/sections/MetricsProgramCard';
@@ -212,6 +213,7 @@ export default function PageEditorClient({
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
   const [slideToDelete, setSlideToDelete] = useState<string | null>(null);
   const [showSlideMediaPicker, setShowSlideMediaPicker] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -242,6 +244,7 @@ export default function PageEditorClient({
 
   const handleDeleteSlide = async () => {
     if (!slideToDelete) return;
+    setIsDeleting(true);
     try {
       await deleteSlide(slideToDelete);
       setSlides(slides.filter((s: any) => s.id !== slideToDelete));
@@ -249,6 +252,8 @@ export default function PageEditorClient({
       setSlideToDelete(null);
     } catch (err: any) {
       setErrorDetails(`Failed to delete slide: ${err.message}`);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -269,6 +274,7 @@ export default function PageEditorClient({
 
   const [activeTab, setActiveTab] = useState<'preview' | 'full'>('preview');
   const [isStale, setIsStale] = useState(false);
+  const [iframeLoading, setIframeLoading] = useState(true);
 
   const [leftPanelWidth, setLeftPanelWidth] = useState(EDITOR_SIDEBAR_WIDTH_MIN);
   const [previewCanvasWidth, setPreviewCanvasWidth] = useState(1200);
@@ -485,6 +491,7 @@ export default function PageEditorClient({
 
   const handleDelete = async () => {
     if (!selectedId || selectedId === 'hero') return;
+    setIsDeleting(true);
     try {
       await deleteSection(selectedId);
       setSections(sections.filter(s => s.id !== selectedId));
@@ -494,6 +501,8 @@ export default function PageEditorClient({
       setIsStale(true);
     } catch (error) {
       console.error('Delete failed:', error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -666,6 +675,7 @@ export default function PageEditorClient({
     switch (section.type) {
       case 'text_block': return <TextBlock {...props} />;
       case 'home_about': return <AboutSection {...props} />;
+      case 'faq_section': return <FaqSection {...props} />;
       case 'image_grid': return <ImageGrid {...props} />;
       case 'testimonial': return <Testimonial {...props} />;
       case 'cta': return <CTA {...props} />;
@@ -759,7 +769,7 @@ export default function PageEditorClient({
       case 'metrics_stat_cards': return <div className="p-6"><MetricsStatCards cards={props.items || []} /></div>;
       case 'metrics_overview':
         return (
-          <div className="p-8 max-w-4xl mx-auto">
+          <div className="p-8 max-w-full mx-auto">
             <div className="mb-6">
               <h3 className="metrics-panel-title">{props.heading || 'Organisation Overview'}</h3>
               <p className="metrics-panel-sub">{props.subheading}</p>
@@ -1151,11 +1161,18 @@ export default function PageEditorClient({
                         : 'border border-stone-200'
                     }`}
                 >
+                  {iframeLoading && (
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm">
+                      <Loader2 size={32} className="animate-spin text-[#7A1515]" />
+                      <p className="mt-4 text-xs font-medium text-stone-500 uppercase tracking-widest">Loading full layout...</p>
+                    </div>
+                  )}
                   <iframe
                     ref={iframeRef}
-                    src={`/${page.slug}`}
-                    className="h-full min-h-0 w-full border-none bg-white pointer-events-none"
+                    src={page.slug === 'home' ? '/' : `/${page.slug}`}
+                    className={`h-full min-h-0 w-full border-none bg-white pointer-events-none transition-opacity duration-300 ${iframeLoading ? 'opacity-0' : 'opacity-100'}`}
                     title="Page Preview"
+                    onLoad={() => setIframeLoading(false)}
                   />
                   {/* Overlay to prevent interaction in the iframe */}
                   <div className="absolute inset-0 z-10"></div>
@@ -1315,8 +1332,9 @@ export default function PageEditorClient({
         isOpen={!!slideToDelete}
         onClose={() => setSlideToDelete(null)}
         onConfirm={handleDeleteSlide}
-        title="Delete carousel slide?"
-        description="This will permanently remove this slide from the hero carousel."
+        title="Delete slide?"
+        description="Are you sure you want to permanently remove this slide?"
+        isLoading={isDeleting}
       />
 
       <Modal
@@ -1340,6 +1358,7 @@ export default function PageEditorClient({
         onConfirm={handleDelete}
         title="Delete section?"
         description="This action cannot be undone. All content in this section will be permanently removed."
+        isLoading={isDeleting}
       />
 
       <ConfirmDialog
@@ -1842,6 +1861,101 @@ function SectionForm({
           {renderField('Alignment', 'alignment', 'alignment')}
         </div>
       );
+    case 'faq_section': {
+      const faqs = (state.faqs as any[]) || [];
+      const patchFaq = (idx: number, key: string, val: string) => {
+        const next = [...faqs];
+        next[idx] = { ...next[idx], [key]: val };
+        onChange('faqs', next);
+      };
+      const addFaq = () => {
+        onChange('faqs', [...faqs, { q: 'New Question?', a: 'New answer text.' }]);
+      };
+      const removeFaq = (idx: number) => {
+        onChange('faqs', faqs.filter((_, i) => i !== idx));
+      };
+
+      return (
+        <div className="space-y-6">
+          {renderField('Eyebrow', 'eyebrow', 'text')}
+          {renderField('Title', 'title', 'text')}
+          
+          <div className="space-y-3">
+            <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">FAQs List</label>
+            <div className="space-y-3">
+              {faqs.map((faq, i) => (
+                <div key={i} className="group relative rounded-xl border border-stone-200 bg-stone-50 p-4 pt-8 transition-colors hover:border-[#7A1515]/30">
+                  <div className="absolute right-2 top-2 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (i > 0) {
+                          const next = [...faqs];
+                          [next[i - 1], next[i]] = [next[i], next[i - 1]];
+                          onChange('faqs', next);
+                        }
+                      }}
+                      className="p-1.5 text-stone-400 hover:text-stone-600 disabled:opacity-30"
+                      disabled={i === 0}
+                      title="Move up"
+                    >
+                      <i className="fa-solid fa-arrow-up" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (i < faqs.length - 1) {
+                          const next = [...faqs];
+                          [next[i], next[i + 1]] = [next[i + 1], next[i]];
+                          onChange('faqs', next);
+                        }
+                      }}
+                      className="p-1.5 text-stone-400 hover:text-stone-600 disabled:opacity-30"
+                      disabled={i === faqs.length - 1}
+                      title="Move down"
+                    >
+                      <i className="fa-solid fa-arrow-down" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeFaq(i)}
+                      className="p-1.5 text-stone-400 hover:text-red-600"
+                      title="Remove"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm focus:border-[#7A1515] focus:outline-none focus:ring-1 focus:ring-[#7A1515]"
+                      placeholder="Question"
+                      value={faq.q || ''}
+                      onChange={(e) => patchFaq(i, 'q', e.target.value)}
+                    />
+                    <textarea
+                      rows={3}
+                      className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm focus:border-[#7A1515] focus:outline-none focus:ring-1 focus:ring-[#7A1515]"
+                      placeholder="Answer"
+                      value={faq.a || ''}
+                      onChange={(e) => patchFaq(i, 'a', e.target.value)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addFaq}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-stone-300 py-3 text-[11px] font-bold uppercase tracking-wider text-stone-500 hover:border-[#7A1515]/50 hover:bg-[#7A1515]/5 hover:text-[#7A1515]"
+            >
+              <i className="fa-solid fa-plus" />
+              Add FAQ
+            </button>
+          </div>
+        </div>
+      );
+    }
     case 'home_about': {
       const def = DEFAULT_SECTION_CONTENT.home_about as Record<string, unknown>;
       const defValues = (def.values as string[]) || [];

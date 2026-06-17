@@ -17,12 +17,6 @@ export default async function PagesPage() {
     <div className="w-full">
       <Topbar 
         title="Pages" 
-        actions={
-          <Button className="h-9 px-4">
-            <Plus size={16} className="mr-2" />
-            New Page
-          </Button>
-        } 
       />
       <div className="mt-2 sm:mt-3">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">

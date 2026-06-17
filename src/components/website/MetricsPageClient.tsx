@@ -21,6 +21,7 @@ export default function MetricsPageClient({
   kpis: KpiItem[];
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const ddRef = useRef<HTMLDivElement>(null);
 
   const programTabKeys = ['health', 'social', 'development', 'admin'];
@@ -99,20 +100,20 @@ export default function MetricsPageClient({
                   const variant = getCardVariant(content.name);
                   const programSlug = tabKeyToSlug[s.tab_key] || s.tab_key;
                   return (
-                    <Link
+                    <button
                       key={s.id}
-                      href={`/programs#${programSlug}`}
+                      type="button"
                       className={`rm-card rm-${variant}`}
-                      onClick={closeDropdown}
-                      aria-label={`View ${content.name} programs`}
+                      onClick={() => setSelectedProgram(programSlug)}
+                      aria-label={`View ${content.name} programs impact`}
                     >
                       <div className="rm-card-icon">
                         <i className={`fa-solid ${content.icon}`} aria-hidden></i>
                       </div>
                       <div className="rm-card-name">{content.name}</div>
                       <div className="rm-card-desc">{content.description}</div>
-                      <div className="rm-card-arrow"><i className="fa-solid fa-arrow-right" aria-hidden></i> View programme</div>
-                    </Link>
+                      <div className="rm-card-arrow"><i className="fa-solid fa-arrow-right" aria-hidden></i> View impact stats</div>
+                    </button>
                   );
                 })}
               </div>
@@ -120,6 +121,33 @@ export default function MetricsPageClient({
           </div>
         </div>
       )}
+      {/* ── Bubbles Modal ── */}
+      <div id="bubblesModal" className={`bubbles-modal ${selectedProgram ? 'open' : ''}`} role="dialog" aria-modal="true" aria-label="Impact at a Glance" onClick={(e) => { if (e.target === e.currentTarget) setSelectedProgram(null); }}>
+        <div className="bm-card">
+          <button className="bm-close" onClick={() => setSelectedProgram(null)} aria-label="Close"><i className="fa-solid fa-xmark"></i></button>
+          <div className="bm-label">&#9654; Impact at a Glance &#9654;</div>
+          <div className="bm-title">Caritas Rwanda by the <span>Numbers</span></div>
+          <div className="bm-bubbles">
+            {kpis.slice(0, 6).map((kpi, i) => {
+              // Map index to bm sizing: xs, sm, lg, xl, lg, sm
+              const classes = ['bm-xs', 'bm-sm', 'bm-lg', 'bm-xl', 'bm-lg', 'bm-sm'];
+              return (
+                <div key={kpi.id} className={`bm-bubble ${classes[i] || 'bm-sm'}`}>
+                  <div className="bm-val">{kpi.value}</div>
+                  <div className="bm-lbl">{kpi.label}</div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="bm-footer">
+            {selectedProgram && (
+              <Link href={`/programs#${selectedProgram}`} className="bm-view-btn" onClick={() => setSelectedProgram(null)}>
+                Continue to Programme <i className="fa-solid fa-arrow-right"></i>
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

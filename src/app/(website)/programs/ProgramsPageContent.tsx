@@ -62,7 +62,15 @@ export default function ProgramsPageContent({ chrome, programs, categories, succ
               className="prog-partner-btn-primary"
               onClick={() => openModal()}
             >
-              Donate Now
+              <i className="fa-solid fa-heart" aria-hidden /> Donate Now
+            </button>
+            <button
+              type="button"
+              className="prog-partner-btn-primary"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              style={{ background: "#111111" }}
+            >
+              <i className="fa-solid fa-arrow-up" aria-hidden /> Back to Top
             </button>
             <a href="/contact" className="prog-partner-btn-outline">
               <i className="fa-solid fa-envelope" aria-hidden />

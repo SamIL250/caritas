@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { faSolidIconClass } from "@/lib/fontawesome";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -102,16 +103,19 @@ function VideoThumb({
   }, [video.thumbnail]);
 
   if (active) {
+    // Return a regular thumb state even when active, because the modal handles playback.
     return (
       <div className={`vg-frame vg-frame--${variant} is-playing`}>
-        <iframe
-          className="vg-iframe"
-          src={youTubeEmbedUrl(video.videoId, { autoplay: true })}
-          title={video.title}
+        <img
+          className="vg-thumb"
+          src={imgSrc}
+          alt=""
           loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
+          onError={() => setImgSrc(FALLBACK_THUMB)}
         />
+        <span className="vg-frame-overlay" aria-hidden />
+        <PlayBadge size={variant === "hero" ? "lg" : variant === "card" ? "md" : "sm"} />
+        {video.duration ? <span className="vg-duration">{video.duration}</span> : null}
       </div>
     );
   }
@@ -175,6 +179,15 @@ export default function VideoGallerySection({
   useEffect(() => {
     setPlayingId(null);
   }, [layout]);
+
+  useEffect(() => {
+    if (!playingId) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [playingId]);
 
   if (!items.length) return null;
 
@@ -397,6 +410,73 @@ export default function VideoGallerySection({
           </div>
         ) : null}
       </div>
+
+      {/* ─── FULL SCREEN VIDEO MODAL ──────────────────────────────── */}
+      {playingId && typeof document !== 'undefined' ? createPortal(
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 999999,
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem',
+            animation: 'fadeIn 0.3s ease'
+          }}
+          onClick={() => setPlayingId(null)}
+        >
+          <button 
+            type="button"
+            onClick={() => setPlayingId(null)}
+            style={{
+              position: 'absolute',
+              top: '2rem',
+              right: '3rem',
+              background: 'transparent',
+              border: 'none',
+              color: '#fff',
+              fontSize: '3rem',
+              cursor: 'pointer',
+              zIndex: 10
+            }}
+            aria-label="Close video"
+          >
+            &times;
+          </button>
+          
+          <div 
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '1200px',
+              height: '80vh',
+              maxHeight: '100%',
+              backgroundColor: '#000',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {(() => {
+              const playingVideo = items.find(v => v.key === playingId);
+              if (!playingVideo) return null;
+              return (
+                <iframe
+                  style={{ width: '100%', height: '100%', border: 'none' }}
+                  src={youTubeEmbedUrl(playingVideo.videoId, { autoplay: true })}
+                  title={playingVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              );
+            })()}
+          </div>
+        </div>,
+        document.body
+      ) : null}
     </section>
   );
 }

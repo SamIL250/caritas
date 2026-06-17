@@ -4,12 +4,15 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 async function revalidatePathsForPage(pageId: string | null | undefined) {
+  // Always revalidate home and the shared public pages that embed contact sections
   revalidatePath('/');
+  revalidatePath('/contact');
+  revalidatePath('/about');
   if (!pageId) return;
   const supabase = await createClient();
   const { data } = await supabase.from('pages').select('slug').eq('id', pageId).maybeSingle();
   const slug = data?.slug as string | undefined;
-  if (!slug || slug === 'home') return;
+  if (!slug || slug === 'home' || slug === 'contact' || slug === 'about') return;
   revalidatePath(`/${slug}`);
 }
 

@@ -30,7 +30,7 @@ export default async function NewCommunityCampaignPage() {
 
   if (!catRows.length) {
     return (
-      <div className="w-full max-w-5xl space-y-6">
+      <div className="w-full max-w-full space-y-6">
         <Topbar title="New campaign" subtitle="You need at least one category first." />
         <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-6 text-sm text-amber-950">
           <p className="mb-3">Add a category under the Categories tab, then return here.</p>
@@ -46,7 +46,7 @@ export default async function NewCommunityCampaignPage() {
   }
 
   return (
-    <div className="w-full max-w-5xl space-y-6">
+    <div className="w-full max-w-full space-y-6">
       <Topbar title="New campaign" subtitle="Create a campaign story and optionally enable donations." />
       <CampaignForm mode="create" categories={catRows} homeFeaturedEditorHref={editorHref} />
       <p className="text-center text-xs text-stone-400">

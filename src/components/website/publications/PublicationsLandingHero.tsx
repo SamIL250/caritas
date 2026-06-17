@@ -1,4 +1,4 @@
-import PageHeroSection from "@/components/website/sections/PageHeroSection";
+import Link from "next/link";
 
 export type PublicationsLandingHeroProps = {
   eyebrow: string;
@@ -15,13 +15,26 @@ export default function PublicationsLandingHero({
 }: PublicationsLandingHeroProps) {
   // original-website/publications.html uses img/slide2.jpg for the hero background
   return (
-    <PageHeroSection
-      imageUrl="/img/slide2.webp"
-      eyebrow={eyebrow || "Resources & Research"}
-      heading={`${(headlinePrefix || "Publications &").trim()} ${(headlineAccent || "Resources").trim()}`}
-      headingAccent={(headlineAccent || "Resources").trim()}
-      subheading={intro}
-      breadcrumbLabel="Publications"
-    />
+    <section className="pub-hero">
+      <div className="pub-hero-container">
+        <div className="pub-hero-inner">
+          {eyebrow ? (
+            <div className="pub-hero-eyebrow">
+              <i className="fa-solid fa-circle-info" aria-hidden />
+              {eyebrow}
+            </div>
+          ) : null}
+          <h1>
+            {(headlinePrefix || "Publications &").trim()} <span>{(headlineAccent || "Resources").trim()}</span>
+          </h1>
+          {intro ? <p className="pub-hero-intro">{intro}</p> : null}
+          <nav className="pub-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden>›</span>
+            <span>Publications</span>
+          </nav>
+        </div>
+      </div>
+    </section>
   );
 }

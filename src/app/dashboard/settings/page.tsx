@@ -17,15 +17,15 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-full">
       <Topbar title="Settings" />
 
-      <p className="text-sm text-[var(--color-text-muted)] max-w-4xl mt-2">
+      <p className="text-sm text-[var(--color-text-muted)] max-w-full mt-2">
         Footer content, contact row, and legal links are stored in the database and shown on the public
         site immediately after save.
       </p>
 
-      <section className="mt-8 max-w-4xl">
+      <section className="mt-8 max-w-full">
         <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">Integrations (placeholders)</h2>
         <Card className="space-y-4">
           <div className="flex items-center justify-between p-4 border border-[var(--color-border-default)] rounded-md">

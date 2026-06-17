@@ -254,21 +254,23 @@ export default function DioceseMapSectionClient(raw: Props) {
       id={c.anchor_id || undefined}
       aria-label="Diocesan network map"
     >
+      <div className="diocese-map-header">
+        <div className="diocese-map-eyebrow">
+          <span className="diocese-map-eyebrow-dot" aria-hidden />
+          {c.eyebrow}
+        </div>
+        <h2 className="diocese-map-title">
+          {c.title_prefix} <span>{c.title_highlight}</span> {c.title_suffix}
+        </h2>
+        <p className="diocese-map-desc">
+          {c.description}
+        </p>
+      </div>
+
       <div className="diocese-map-inner">
         <div className="diocese-map-sidebar">
-          <div>
-            <div className="diocese-map-eyebrow">
-              <span className="diocese-map-eyebrow-dot" aria-hidden />
-              {c.eyebrow}
-            </div>
-            <h2 className="diocese-map-title" style={{ marginTop: "0.7rem" }}>
-              {c.title_prefix} <span>{c.title_highlight}</span>
-              <br />
-              {c.title_suffix}
-            </h2>
-            <p className="diocese-map-desc" style={{ marginTop: "0.8rem" }}>
-              {c.description}
-            </p>
+          <div className="diocese-sidebar-title">
+            <i className="fa-solid fa-church" aria-hidden /> Select a Diocese
           </div>
           <ul className="diocese-list">
             {c.dioceses.map((d, idx) => (

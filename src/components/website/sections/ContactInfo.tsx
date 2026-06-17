@@ -55,7 +55,7 @@ function mergeLegacy(p: ContactInfoProps) {
     heading_line2: (p.heading_line2 || "Work Together").trim(),
     subtext:
       (p.subtext || "").trim() ||
-      "Have a question, want to partner with us, or simply want to learn more about our work across Rwanda? We'd love to hear from you.",
+      "Please reach out to us with any questions, partnership opportunities, or to learn more about our initiatives across Rwanda.",
     headquarters_label: (p.headquarters_label || "Headquarters").trim(),
     headquarters,
     phone_label: (p.phone_label || "Phone").trim(),

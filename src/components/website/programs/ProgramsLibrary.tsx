@@ -56,17 +56,49 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
     return () => window.removeEventListener("hashchange", syncFromHash);
   }, [sortedCategories]);
 
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
   // Toggle sticky class on tab bar
   useEffect(() => {
     const bar = tabBarRef.current;
-    if (!bar) return;
+    const sentinel = sentinelRef.current;
+    if (!bar || !sentinel) return;
+
+    let isFixed = false;
+
     function handleSticky() {
-      const top = bar.getBoundingClientRect().top;
-      bar.classList.toggle("is-stuck", top <= 70);
+      const hdr = document.querySelector("header");
+      const hdrH = hdr ? hdr.getBoundingClientRect().height : 70;
+      const sentTop = sentinel!.getBoundingClientRect().top;
+
+      if (!isFixed && sentTop <= hdrH) {
+        bar!.style.position = "fixed";
+        bar!.style.top = hdrH + "px";
+        bar!.style.left = "0";
+        bar!.style.right = "0";
+        bar!.style.width = "100%";
+        bar!.style.zIndex = "900";
+        sentinel!.style.height = bar!.offsetHeight + "px";
+        bar!.classList.add("is-stuck");
+        isFixed = true;
+      } else if (isFixed && sentTop > hdrH) {
+        bar!.style.position = "";
+        bar!.style.top = "";
+        bar!.style.left = "";
+        bar!.style.right = "";
+        bar!.style.width = "";
+        sentinel!.style.height = "0px";
+        bar!.classList.remove("is-stuck");
+        isFixed = false;
+      }
     }
     handleSticky();
     window.addEventListener("scroll", handleSticky, { passive: true });
-    return () => window.removeEventListener("scroll", handleSticky);
+    window.addEventListener("resize", handleSticky, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleSticky);
+      window.removeEventListener("resize", handleSticky);
+    };
   }, []);
 
   // Close drawers on Escape
@@ -105,6 +137,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
   return (
     <>
       {/* ── Sticky Tab Bar ── */}
+      <div ref={sentinelRef} style={{ height: 0, margin: 0, padding: 0, border: 0 }} />
       <div className="prog-tab-bar" ref={tabBarRef}>
         <div className="prog-tab-inner">
           {sortedCategories.map((cat) => {
@@ -173,18 +206,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             <div className="prog-ref-section">
               <RwandaMapBackground />
               <div className="prog-ref-inner">
-
-
-                <div className="prog-ref-list">
-                  {items.map((p, idx) => (
-                    <ProgramCardMinimal
-                      key={p.id}
-                      row={p}
-                      index={idx}
-                      onClick={() => setActiveProgram(p)}
-                    />
-                  ))}
-                </div>
+                <ProgramBubbleGallery items={items} onClick={(p) => setActiveProgram(p)} />
               </div>
             </div>
 
@@ -264,60 +286,54 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
 }
 
 /* ------------------------------------------------------------------ */
-/* Minimal Program Card                                                */
+/* Bubble Circle Gallery                                                */
 /* ------------------------------------------------------------------ */
-function ProgramCardMinimal({ row, index, onClick }: { row: any; index: number; onClick: () => void }) {
-  const imageUrl = row.cover_image_url?.trim()
-    ? encodeProgramAssetUrl(row.cover_image_url)
-    : null;
+function ProgramBubbleGallery({ items, onClick }: { items: any[]; onClick: (p: any) => void }) {
+  const [showAll, setShowAll] = useState(false);
 
-  const isLeft = index % 2 === 0;
+  // If not showing all, show maximum 3 items (one slide)
+  const displayItems = showAll ? items : items.slice(0, 3);
 
   return (
-    <div className={`prog-card-min-wrap ${isLeft ? "align-left" : "align-right"}`}>
-      <div
-        className="prog-card-min"
-        onClick={onClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && onClick()}
-        aria-label={`View details for ${row.title}`}
-      >
-        <div className="prog-card-min-top">
-          {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={imageUrl}
-              alt={row.cover_image_alt || row.title}
-              className="prog-card-min-img"
-            />
-          ) : (
-            <div className="prog-card-min-img prog-card-min-img-placeholder" />
-          )}
-          <div className="prog-card-min-header">
-            <h3 className="prog-card-min-title">{row.title}</h3>
-            {row.subtitle ? (
-              <p className="prog-card-min-tagline">&ldquo;{row.subtitle}&rdquo;</p>
-            ) : null}
+    <div className={`bubble-slider-container ${showAll ? "show-all" : ""}`}>
+      <div className="bubble-slider">
+        <div className="bs-track-wrap">
+          <div className="bs-track" style={{ flexWrap: showAll ? "wrap" : "nowrap", gap: "2rem", justifyContent: "center" }}>
+            {displayItems.map((p, idx) => {
+              const BUBBLE_COLORS = ["bubble-blue", "bubble-tan", "bubble-green"];
+              const colorClass = BUBBLE_COLORS[idx % BUBBLE_COLORS.length];
+              const imageUrl = p.cover_image_url?.trim() ? encodeProgramAssetUrl(p.cover_image_url) : "";
+              
+              return (
+                <div 
+                  key={p.id}
+                  className={`bubble-circle ${colorClass}`}
+                  style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }}
+                  onClick={() => onClick(p)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === "Enter" && onClick(p)}
+                >
+                  <h4 className="bubble-title">{p.title}</h4>
+                  {p.subtitle && <p className="bubble-tagline">{p.subtitle}</p>}
+                  <div className="bubble-sep"></div>
+                  <p className="bubble-desc">{p.excerpt}</p>
+                  <div className="bubble-loc">
+                    <i className="fa-solid fa-location-dot"></i> {p.location || "Rwanda"}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-
-        {row.excerpt ? (
-          <p className="prog-card-min-desc">{row.excerpt}</p>
-        ) : null}
-
-        <div className="prog-card-min-meta">
-          <span className="prog-card-min-meta-item">
-            <span className="prog-card-min-meta-label">Location</span>
-            <span className="prog-card-min-meta-value">{row.location || "TBD"}</span>
-          </span>
-          <span className="prog-card-min-meta-divider" />
-          <span className="prog-card-min-meta-item">
-            <span className="prog-card-min-meta-label">Contact</span>
-            <span className="prog-card-min-meta-value">{row.contact_phone || "TBD"}</span>
-          </span>
-        </div>
       </div>
+      {items.length > 3 && (
+        <div className="bubble-viewall-wrap">
+          <button className={`bubble-viewall-btn ${showAll ? "active" : ""}`} onClick={() => setShowAll(!showAll)}>
+            <i className={`fa-solid fa-${showAll ? "compress" : "expand"}`}></i> {showAll ? "Show Less" : "View All Programs"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

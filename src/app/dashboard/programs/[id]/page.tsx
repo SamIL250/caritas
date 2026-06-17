@@ -24,10 +24,11 @@ export default async function EditProgramPage({ params }: PageProps) {
   const categories = (catRows ?? []) as ProgramCategoryRow[];
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <Topbar
-        title="Edit program"
+        title="Edit program article"
         subtitle="Update the article body, cover or category."
+        backUrl="/dashboard/programs"
       />
       <ProgramForm mode="edit" program={program} categories={categories} />
     </div>

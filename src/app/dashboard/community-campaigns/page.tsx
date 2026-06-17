@@ -43,7 +43,7 @@ export default async function CommunityCampaignsPage() {
   const homePageHref = "/";
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Campaigns"
         subtitle={

@@ -24,8 +24,8 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+  const modalContent = (
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/50 p-4">
       <div className="relative w-full max-w-lg rounded-xl bg-white shadow-lg flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between border-b border-[var(--color-border-default)] p-4">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
@@ -42,4 +42,11 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       </div>
     </div>
   );
+
+  if (typeof window !== "undefined") {
+    const { createPortal } = require("react-dom");
+    return createPortal(modalContent, document.body);
+  }
+
+  return modalContent;
 }

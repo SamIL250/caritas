@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <NextTopLoader color="#a5280d" showSpinner={false} zIndex={99999} />
+        <NextTopLoader color="#a5280d" height={4} showSpinner={false} zIndex={99999} />
         <GoogleTranslateBootstrap />
         {children}
       </body>

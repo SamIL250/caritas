@@ -2,7 +2,7 @@ import PublicationCategoryForm from "@/components/dashboard/publications/Publica
 
 export default function NewPublicationCategoryPage() {
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-full">
       <PublicationCategoryForm mode="create" />
     </div>
   );

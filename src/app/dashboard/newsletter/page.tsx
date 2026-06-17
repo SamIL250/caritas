@@ -42,7 +42,7 @@ export default async function DashboardNewsletterPage() {
   const siteOrigin = resolveSiteOrigin();
 
   return (
-    <div className="w-full max-w-6xl">
+    <div className="w-full max-w-full">
       <Topbar
         title="Newsletter"
         subtitle={

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight, Home, ArrowLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
@@ -11,9 +11,10 @@ interface TopbarProps {
   /** Short line under the title — keeps intro copy inside the sticky header band. */
   subtitle?: React.ReactNode;
   actions?: React.ReactNode;
+  backUrl?: string;
 }
 
-export function Topbar({ title, subtitle, actions }: TopbarProps) {
+export function Topbar({ title, subtitle, actions, backUrl }: TopbarProps) {
   const pathname = usePathname();
   
   // Advanced breadcrumb generation
@@ -60,9 +61,19 @@ export function Topbar({ title, subtitle, actions }: TopbarProps) {
             ))}
           </nav>
 
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-stone-900 sm:text-2xl">
-            {displayTitle}
-          </h1>
+          <div className="flex items-center gap-3">
+            {backUrl && (
+              <Link
+                href={backUrl}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition-colors"
+              >
+                <ArrowLeft size={18} />
+              </Link>
+            )}
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-stone-900 sm:text-2xl">
+              {displayTitle}
+            </h1>
+          </div>
 
           {subtitle != null && subtitle !== false && (
             <div className="max-w-2xl text-sm leading-relaxed text-stone-500">{subtitle}</div>

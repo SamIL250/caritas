@@ -362,3 +362,88 @@
 .program-related-card-cta .fa-arrow-right {
   font-size: 0.6rem;
 }
+
+/* -------------------------------------------------------------
+   Program Article Hero (Restored)
+   ------------------------------------------------------------- */
+.prog-article-hero {
+  position: relative;
+  background: #0d1b2a;
+  color: #fff;
+  overflow: hidden;
+}
+
+.prog-article-hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 3.25rem 2rem 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.prog-article-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.prog-article-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+}
+
+.prog-article-hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(13, 27, 42, 0.85), rgba(165, 40, 13, 0.45));
+}
+
+.prog-article-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 1.25rem;
+}
+
+.prog-article-h1 {
+  font-size: clamp(1.9rem, 4vw, 2.85rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  max-width: 760px;
+  color: #fff;
+}
+
+.prog-article-deck {
+  margin-top: 1.1rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 720px;
+}
+
+.prog-article-meta-row {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.prog-article-meta-row i {
+  color: #f5a55c;
+  margin-right: 0.4rem;
+}
