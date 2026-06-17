@@ -476,16 +476,6 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
       { name: "Kigali City", color: "#911313", dioceses: 1, beneficiaries: "180,000+", districts: 3 }
     ]
   },
-  faq_section: {
-    eyebrow: "FAQ",
-    title: "Frequently Asked Questions",
-    faqs: [
-      {
-        q: "How can I donate to Caritas Rwanda?",
-        a: "You can donate by contacting our office directly via phone at +250 252 574 344 or email at info@caritasrwanda.org."
-      }
-    ]
-  }
 };
 
 export const SECTION_ICONS: Record<string, any> = {
@@ -551,7 +541,6 @@ export const SECTION_LABELS: Record<string, string> = {
   publications_library: "Publications library",
   news_footer: "News footer strip",
   video_gallery: "Video gallery (YouTube)",
-  faq_section: "FAQ accordion",
   metrics_kpis: "Metrics KPIs Strip",
   metrics_stat_cards: "Metrics Stat Cards",
   metrics_overview: "Metrics Overview Tab",
