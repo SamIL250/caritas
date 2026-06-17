@@ -35,7 +35,22 @@ const FAQS = [
   }
 ];
 
-export default function FaqSection() {
+export type FaqItem = {
+  q: string;
+  a: React.ReactNode;
+};
+
+export type FaqSectionProps = {
+  eyebrow?: string;
+  title?: string;
+  faqs?: FaqItem[];
+};
+
+export default function FaqSection({ 
+  eyebrow = "FAQ", 
+  title = "Frequently Asked Questions", 
+  faqs = FAQS 
+}: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {
@@ -46,11 +61,11 @@ export default function FaqSection() {
     <div className="ct-faq-section">
         <div className="ct-faq-inner">
             <div className="ct-faq-head">
-                <div className="ct-faq-eyebrow"><i className="fa-solid fa-circle-question" aria-hidden></i> FAQ</div>
-                <div className="ct-faq-title">Frequently Asked Questions</div>
+                <div className="ct-faq-eyebrow"><i className="fa-solid fa-circle-question" aria-hidden></i> {eyebrow}</div>
+                <div className="ct-faq-title">{title}</div>
             </div>
             <div className="ct-faq-list">
-                {FAQS.map((faq, idx) => {
+                {faqs.map((faq, idx) => {
                   const isOpen = openIndex === idx;
                   return (
                     <div key={idx} className={`ct-faq-item ${isOpen ? 'open' : ''}`}>

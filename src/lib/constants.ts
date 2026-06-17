@@ -28,6 +28,7 @@ import {
   Activity,
   Presentation,
   TrendingUp,
+  HelpCircle
 } from "lucide-react";
 import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
@@ -455,6 +456,16 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     provinces: [
       { name: "Kigali City", color: "#911313", dioceses: 1, beneficiaries: "180,000+", districts: 3 }
     ]
+  },
+  faq_section: {
+    eyebrow: "FAQ",
+    title: "Frequently Asked Questions",
+    faqs: [
+      {
+        q: "How can I donate to Caritas Rwanda?",
+        a: "You can donate by contacting our office directly via phone at +250 252 574 344 or email at info@caritasrwanda.org."
+      }
+    ]
   }
 };
 
@@ -490,6 +501,7 @@ export const SECTION_ICONS: Record<string, any> = {
   metrics_overview: Presentation,
   metrics_program: TrendingUp,
   metrics_reach: Map,
+  faq_section: HelpCircle,
 };
 
 export const SECTION_LABELS: Record<string, string> = {
@@ -524,4 +536,5 @@ export const SECTION_LABELS: Record<string, string> = {
   metrics_overview: "Metrics Overview Tab",
   metrics_program: "Metrics Program Tab",
   metrics_reach: "Metrics Reach Tab",
+  faq_section: "FAQ Section",
 };

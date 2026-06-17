@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { faSolidIconClass } from "@/lib/fontawesome";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -178,6 +179,15 @@ export default function VideoGallerySection({
   useEffect(() => {
     setPlayingId(null);
   }, [layout]);
+
+  useEffect(() => {
+    if (!playingId) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [playingId]);
 
   if (!items.length) return null;
 
@@ -402,13 +412,13 @@ export default function VideoGallerySection({
       </div>
 
       {/* ─── FULL SCREEN VIDEO MODAL ──────────────────────────────── */}
-      {playingId && (
+      {playingId && typeof document !== 'undefined' ? createPortal(
         <div 
           style={{
             position: 'fixed',
             inset: 0,
-            zIndex: 99999,
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 999999,
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -422,12 +432,12 @@ export default function VideoGallerySection({
             onClick={() => setPlayingId(null)}
             style={{
               position: 'absolute',
-              top: '1.5rem',
-              right: '2rem',
+              top: '2rem',
+              right: '3rem',
               background: 'transparent',
               border: 'none',
               color: '#fff',
-              fontSize: '2rem',
+              fontSize: '3rem',
               cursor: 'pointer',
               zIndex: 10
             }}
@@ -440,10 +450,11 @@ export default function VideoGallerySection({
             style={{
               position: 'relative',
               width: '100%',
-              maxWidth: '1000px',
-              aspectRatio: '16/9',
+              maxWidth: '1200px',
+              height: '80vh',
+              maxHeight: '100%',
               backgroundColor: '#000',
-              borderRadius: '8px',
+              borderRadius: '12px',
               overflow: 'hidden',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
@@ -463,8 +474,9 @@ export default function VideoGallerySection({
               );
             })()}
           </div>
-        </div>
-      )}
+        </div>,
+        document.body
+      ) : null}
     </section>
   );
 }

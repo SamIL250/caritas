@@ -88,6 +88,7 @@ import LeadershipGridSection from '@/components/website/sections/LeadershipGridS
 import AboutSection from '@/components/website/sections/AboutSection';
 import VideoGallerySection from '@/components/website/sections/VideoGallerySection';
 import DioceseMapSection from '@/components/website/sections/DioceseMapSection';
+import FaqSection from '@/components/website/sections/FaqSection';
 import MetricsKpiStrip from '@/components/website/sections/MetricsKpiStrip';
 import MetricsStatCards from '@/components/website/sections/MetricsStatCards';
 import MetricsProgramCard from '@/components/website/sections/MetricsProgramCard';
@@ -662,6 +663,7 @@ export default function PageEditorClient({
     switch (section.type) {
       case 'text_block': return <TextBlock {...props} />;
       case 'home_about': return <AboutSection {...props} />;
+      case 'faq_section': return <FaqSection {...props} />;
       case 'image_grid': return <ImageGrid {...props} />;
       case 'testimonial': return <Testimonial {...props} />;
       case 'cta': return <CTA {...props} />;
@@ -1818,6 +1820,19 @@ function SectionForm({
           {renderField('Heading', 'heading', 'text')}
           {renderField('Body Content', 'body', 'textarea', { rows: 8 })}
           {renderField('Alignment', 'alignment', 'alignment')}
+        </div>
+      );
+    case 'faq_section':
+      return (
+        <div className="space-y-6">
+          {renderField('Eyebrow', 'eyebrow', 'text')}
+          {renderField('Title', 'title', 'text')}
+          {renderField('FAQs List', 'faqs', 'list', {
+            itemSchema: [
+              { name: 'q', label: 'Question', type: 'text' },
+              { name: 'a', label: 'Answer', type: 'textarea' }
+            ]
+          })}
         </div>
       );
     case 'home_about': {

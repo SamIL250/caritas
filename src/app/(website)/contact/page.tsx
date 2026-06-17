@@ -161,9 +161,10 @@ export default async function ContactPage() {
 
       <ContactMapToggleSection contactProps={contactProps} mapProps={mapProps} />
 
-      <FaqSection />
-
-      {otherSections.map(renderWebsiteSection)}
+      {otherSections.map((section: any) => {
+        // We render other sections natively via public-page-sections
+        return renderWebsiteSection(section);
+      })}
     </>
   );
 }
