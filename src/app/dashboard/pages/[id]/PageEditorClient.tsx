@@ -3296,6 +3296,53 @@ function SectionForm({
               />
             </div>
           </div>
+
+          {/* Tab button labels */}
+          <div className="space-y-2 pt-1 border-t border-stone-100">
+            <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Tab button labels</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" htmlFor="nc-news-tab-label">
+                  News tab label
+                </label>
+                <input
+                  id="nc-news-tab-label"
+                  type="text"
+                  value={state.news_tab_label ?? ''}
+                  onChange={(e) => onChange('news_tab_label', e.target.value)}
+                  className="w-full border border-stone-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515] outline-none"
+                  placeholder="Click to see News"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" htmlFor="nc-video-tab-label">
+                  Video tab label
+                </label>
+                <input
+                  id="nc-video-tab-label"
+                  type="text"
+                  value={state.video_tab_label ?? ''}
+                  onChange={(e) => onChange('video_tab_label', e.target.value)}
+                  className="w-full border border-stone-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515] outline-none"
+                  placeholder="Click to see Video"
+                />
+              </div>
+            </div>
+            <div className="pt-3">
+              <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" htmlFor="nc-yt-channel-url">
+                YouTube Channel URL (for View More button)
+              </label>
+              <input
+                id="nc-yt-channel-url"
+                type="text"
+                value={state.youtube_channel_url ?? ''}
+                onChange={(e) => onChange('youtube_channel_url', e.target.value)}
+                className="w-full border border-stone-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515] outline-none mt-1"
+                placeholder="e.g. https://youtube.com/@caritasrwanda"
+              />
+            </div>
+          </div>
+
           <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" id="nc-stories-list-label">
             Stories
           </p>
@@ -5160,6 +5207,11 @@ function SectionForm({
             <div className="grid grid-cols-2 gap-3">
               {renderField('CTA label (optional)', 'cta_label', 'text')}
               {renderField('CTA URL (optional)', 'cta_url', 'text')}
+            </div>
+            <div className="pt-2 border-t border-stone-100 space-y-3">
+              <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Tab button links</p>
+              {renderField('News & Stories URL', 'news_url', 'text')}
+              {renderField('YouTube Channel URL', 'youtube_channel_url', 'text')}
             </div>
           </div>
 

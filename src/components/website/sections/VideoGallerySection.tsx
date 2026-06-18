@@ -36,6 +36,8 @@ export type VideoGallerySectionProps = {
   all_label?: string;
   cta_label?: string;
   cta_url?: string;
+  youtube_channel_url?: string;
+  news_url?: string;
   videos?: VideoGalleryItem[];
 };
 
@@ -153,8 +155,12 @@ export default function VideoGallerySection({
   all_label,
   cta_label,
   cta_url,
+  youtube_channel_url,
+  news_url,
   videos,
 }: VideoGallerySectionProps) {
+  const ytUrl = youtube_channel_url || "https://www.youtube.com/@caritasrwanda5681";
+  const newsLink = news_url || "/news";
   const items = useMemo(() => normalize(videos), [videos]);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -206,46 +212,90 @@ export default function VideoGallerySection({
 
     >
       <div className="vg-shell">
-        {/* ── Header block (left-aligned) ── */}
+        {/* ── Heading block — only when heading content is provided ── */}
         {(eyebrow || heading_lead || heading_accent || subtitle) && (
           <header className="vg-header">
-            {eyebrow && (
-              <div className="vg-eyebrow">
-                {eyebrowIc ? <i className={eyebrowIc} aria-hidden /> : null}
-                <span>{eyebrow}</span>
+            {/* Top row: eyebrow/title left + media-hub tab buttons right */}
+            <div className="vg-header-top">
+              <div className="vg-header-left">
+                {eyebrow && (
+                  <div className="vg-eyebrow">
+                    {eyebrowIc ? <i className={eyebrowIc} aria-hidden /> : null}
+                    <span>{eyebrow}</span>
+                  </div>
+                )}
+                {(heading_lead || heading_accent) && (
+                  <h2 className="vg-title">
+                    {heading_lead && <span className="vg-title--lead">{heading_lead}</span>}
+                    {heading_accent && <span className="vg-title--accent">{heading_accent}</span>}
+                  </h2>
+                )}
+                {subtitle && <p className="vg-subtitle">{subtitle}</p>}
               </div>
-            )}
-            {(heading_lead || heading_accent) && (
-              <h2 className="vg-title">
-                {heading_lead && <span className="vg-title--lead">{heading_lead}</span>}
-                {heading_accent && <span className="vg-title--accent">{heading_accent}</span>}
-              </h2>
-            )}
-            {subtitle && <p className="vg-subtitle">{subtitle}</p>}
 
-            {show_categories && categories.length > 0 && (
-              <div className="vg-categories">
-                <button
-                  type="button"
-                  onClick={() => setActiveCategory(null)}
-                  className={`vg-cat-chip${activeCategory === null ? " is-active" : ""}`}
+              {/* Tab buttons — News & Stories + Videos */}
+              <div className="vg-media-tabs" aria-label="Media type">
+                <a
+                  href={newsLink}
+                  className="vg-media-tab"
+                  aria-label="Go to News & Stories"
                 >
-                  {all_label || "All"}
-                </button>
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setActiveCategory(cat)}
-                    className={`vg-cat-chip${activeCategory === cat ? " is-active" : ""}`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                  <i className="fa-solid fa-newspaper" aria-hidden />
+                  <span>News &amp; Stories</span>
+                </a>
+                <a
+                  href={ytUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="vg-media-tab vg-media-tab--yt is-active"
+                  aria-label="View Videos on YouTube"
+                >
+                  <i className="fa-brands fa-youtube" aria-hidden />
+                  <span>Videos</span>
+                </a>
               </div>
-            )}
+            </div>
           </header>
         )}
+
+        {/* ── Categories + View More — ALWAYS rendered ── */}
+        <div className="vg-header-actions" style={{ marginBottom: '1.5rem' }}>
+          {show_categories && categories.length > 0 ? (
+            <div className="vg-categories">
+              <button
+                type="button"
+                onClick={() => setActiveCategory(null)}
+                className={`vg-cat-chip${activeCategory === null ? " is-active" : ""}`}
+              >
+                {all_label || "All"}
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveCategory(cat)}
+                  className={`vg-cat-chip${activeCategory === cat ? " is-active" : ""}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          ) : <div />}
+
+          {/* View More YouTube — always shown */}
+          <a
+            href={ytUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vg-view-more-yt"
+            aria-label="View more on YouTube"
+          >
+            <span>View More</span>
+            <i className="fa-brands fa-youtube" aria-hidden />
+          </a>
+        </div>
+
+
 
         {/* ─── SPOTLIGHT ─────────────────────────────────────────── */}
         {layout === "spotlight" && featured ? (

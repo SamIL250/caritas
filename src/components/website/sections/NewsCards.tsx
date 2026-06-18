@@ -24,6 +24,12 @@ export interface NewsCardsProps {
   subtitle?: string;
   view_all_url?: string;
   view_all_label?: string;
+  /** Label for the News tab button */
+  news_tab_label?: string;
+  /** Label for the Video tab button */
+  video_tab_label?: string;
+  /** YouTube Channel URL for the View More button */
+  youtube_channel_url?: string;
   articles?: NewsArticle[];
   videoGalleryProps?: Record<string, unknown>;
 }
@@ -98,10 +104,13 @@ const StoryLink: React.FC<{
 export default function NewsCards({
   eyebrow = "Latest from Caritas Rwanda",
   heading = "News &",
-  heading_highlight = "Stories",
+  heading_highlight = "Media",
   subtitle = "Inspiring stories from the communities we serve",
   view_all_url = "/news",
   view_all_label = "View All News & Stories",
+  news_tab_label = "Click to see News",
+  video_tab_label = "Click to see Video",
+  youtube_channel_url,
   articles: articlesProp,
   videoGalleryProps
 }: NewsCardsProps) {
@@ -142,45 +151,49 @@ export default function NewsCards({
             {/* ── SLIDE 1: Full News & Stories section ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 0 : 'auto', overflow: showVideos ? 'hidden' : 'visible' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-3 mb-2">
-                  {eyebrow ? (
-                    <div className="section-eyebrow" style={{ marginBottom: 0 }}>
+                {/* Header row: eyebrow left + two tab buttons right */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    {eyebrow ? (
+                      <div className="section-eyebrow" style={{ marginBottom: '0.75rem' }}>
+                        <i className="fa-solid fa-rss" aria-hidden />
+                        {eyebrow}
+                      </div>
+                    ) : <div />}
+                    <h2 className="section-title" id="stories-section-title" style={{ marginBottom: subtitle ? '0.4rem' : 0 }}>
+                      {heading} <span>{heading_highlight}</span>
+                    </h2>
+                    {subtitle ? <p className="section-subtitle" style={{ marginBottom: 0 }}>{subtitle}</p> : null}
+                  </div>
+
+                  {/* Two tab buttons — matching legacy mh-tab style */}
+                  <div className="mh-tabs" role="tablist" style={{ flexShrink: 0, alignSelf: 'flex-start' }}>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={!showVideos}
+                      aria-controls="mhPanelNews"
+                      onClick={() => setShowVideos(false)}
+                      className={`mh-tab${!showVideos ? ' active' : ''}`}
+                    >
                       <i className="fa-solid fa-newspaper" aria-hidden />
-                      {eyebrow}
-                    </div>
-                  ) : <div />}
-                  <button
-                    type="button"
-                    onClick={() => setShowVideos(true)}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      border: '1px solid rgba(145,19,19,0.25)',
-                      borderRadius: '9999px',
-                      padding: '6px 14px',
-                      background: 'transparent',
-                      color: '#911313',
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      letterSpacing: '0.03em',
-                      transition: 'all 0.25s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(145,19,19,0.06)'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    <i className="fa-solid fa-play" style={{ fontSize: '10px' }} />
-                    Stories in Motion
-                    <i className="fa-solid fa-chevron-right" style={{ fontSize: '9px' }} />
-                  </button>
+                      {news_tab_label}
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={showVideos}
+                      aria-controls="mhPanelVideos"
+                      onClick={() => setShowVideos(true)}
+                      className={`mh-tab${showVideos ? ' active' : ''}`}
+                    >
+                      <i className="fa-brands fa-youtube" aria-hidden />
+                      {video_tab_label}
+                    </button>
+                  </div>
                 </div>
-                <h2 className="section-title" id="stories-section-title">
-                  {heading} <span>{heading_highlight}</span>
-                </h2>
-                {subtitle ? <p className="section-subtitle">{subtitle}</p> : null}
               </div>
+
               <div
                 className={
                   showSides
@@ -340,39 +353,43 @@ export default function NewsCards({
             {/* ── SLIDE 2: Full Stories in Motion section (white background) ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 'auto' : 0, overflow: showVideos ? 'visible' : 'hidden' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-3 mb-2">
-                  <div className="section-eyebrow" style={{ marginBottom: 0 }}>
-                    <i className="fa-solid fa-play" aria-hidden />
-                    Caritas Rwanda
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <div className="section-eyebrow" style={{ marginBottom: '0.75rem' }}>
+                      <i className="fa-solid fa-rss" aria-hidden />
+                      Stay Informed
+                    </div>
+                    <h2 className="section-title">
+                      Stories in <span>Motion</span>
+                    </h2>
+                    <p className="section-subtitle" style={{ marginBottom: 0 }}>Watch our impactful work across communities</p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowVideos(false)}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      border: '1px solid #911313',
-                      borderRadius: '9999px',
-                      padding: '6px 14px',
-                      background: '#911313',
-                      color: '#ffffff',
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      letterSpacing: '0.03em',
-                      transition: 'all 0.25s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    <i className="fa-solid fa-chevron-left" style={{ fontSize: '9px' }} />
-                    News & Stories
-                  </button>
+
+                  <div className="mh-tabs" role="tablist" style={{ flexShrink: 0, alignSelf: 'flex-start' }}>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={false}
+                      aria-controls="mhPanelNews"
+                      onClick={() => setShowVideos(false)}
+                      className="mh-tab"
+                    >
+                      <i className="fa-solid fa-newspaper" aria-hidden />
+                      {news_tab_label}
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={true}
+                      aria-controls="mhPanelVideos"
+                      onClick={() => setShowVideos(true)}
+                      className="mh-tab active"
+                    >
+                      <i className="fa-brands fa-youtube" aria-hidden />
+                      {video_tab_label}
+                    </button>
+                  </div>
                 </div>
-                <h2 className="section-title">
-                  Stories in <span>Motion</span>
-                </h2>
-                <p className="section-subtitle">Watch our impactful work across communities</p>
               </div>
 
               {videoGalleryProps ? (
@@ -383,6 +400,7 @@ export default function NewsCards({
                     heading_lead="" 
                     heading_accent="" 
                     subtitle="" 
+                    youtube_channel_url={youtube_channel_url || (videoGalleryProps as any).youtube_channel_url}
                   />
                 </div>
               ) : (

@@ -93,20 +93,53 @@
   margin-bottom: 0.5rem;
 }
 .page-editor-section-preview .stories-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  max-width: 42rem;
-  margin-left: auto;
-  margin-right: auto;
+  text-align: left;
+  margin-bottom: 1.25rem;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
 }
 .page-editor-section-preview .stories-header .section-eyebrow {
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0;
+  margin-right: 0;
 }
 .page-editor-section-preview .stories-header .section-title,
 .page-editor-section-preview .stories-header .section-subtitle {
-  text-align: center;
+  text-align: left;
 }
+/* Media-hub tab buttons in dashboard preview */
+.page-editor-section-preview .mh-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.page-editor-section-preview .mh-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid rgba(145, 19, 19, 0.3);
+  background: transparent;
+  color: #911313;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+.page-editor-section-preview .mh-tab.active {
+  background: #911313;
+  color: #fff;
+  border-color: #911313;
+}
+.page-editor-section-preview .mh-tab:last-child.active {
+  background: #c0392b;
+  border-color: #c0392b;
+}
+.page-editor-section-preview .mh-tab i { font-size: 0.85em; }
 .page-editor-section-preview .stories-magazine {
   display: grid;
   grid-template-columns: 1fr;

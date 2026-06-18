@@ -28,6 +28,99 @@
   margin-bottom: 2.5rem;
   text-align: left;
 }
+
+/* Top row: title left + tab buttons right */
+.vg-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.vg-header-left {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+/* Category chips row + "View More" right-aligned — always rendered */
+.vg-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+/* Media-hub tab buttons — legacy style */
+.vg-media-tabs {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: center;
+}
+.vg-media-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: 1.5px solid rgba(13, 27, 42, 0.12);
+  background: #fff;
+  color: #5a6a7a;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  white-space: nowrap;
+}
+.vg-media-tab:hover {
+  border-color: #7a1515;
+  color: #7a1515;
+  background: rgba(122, 21, 21, 0.04);
+}
+/* YouTube tab — active / highlighted */
+.vg-media-tab--yt.is-active {
+  background: #ff0000;
+  color: #fff;
+  border-color: #ff0000;
+  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.25);
+}
+.vg-media-tab--yt.is-active:hover {
+  background: #cc0000;
+  border-color: #cc0000;
+  box-shadow: 0 4px 18px rgba(255, 0, 0, 0.35);
+}
+.vg-media-tab i { font-size: 0.9em; }
+
+/* "View More" YouTube channel link */
+.vg-view-more-yt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1rem 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  background: transparent;
+  color: #7a1515;
+  border: 1.5px solid rgba(122, 21, 21, 0.25);
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.vg-view-more-yt i { color: #ff0000; font-size: 1em; }
+.vg-view-more-yt:hover {
+  background: #ff0000;
+  color: #fff;
+  border-color: #ff0000;
+}
+.vg-view-more-yt:hover i { color: #fff; }
+
 .vg-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -481,6 +574,8 @@
   .vg-queue-list { max-height: none; }
   .vg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .vg-carousel-nav { display: none; }
+  .vg-header-top { flex-direction: column; align-items: flex-start; }
+  .vg-media-tabs { align-self: flex-start; }
 }
 @media (max-width: 640px) {
   .vg-section { padding: 3rem 1rem; }
@@ -491,4 +586,7 @@
   .vg-queue { padding: 1rem; }
   .vg-queue-item { grid-template-columns: 88px 1fr; }
   .vg-queue-thumb { width: 88px; }
+  .vg-media-tab { font-size: 0.72rem; padding: 0.42rem 0.85rem; }
+  .vg-view-more-yt { font-size: 0.72rem; }
+  .vg-header-actions { flex-direction: column; align-items: flex-start; }
 }

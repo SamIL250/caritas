@@ -2017,21 +2017,69 @@
         }
         .stories .section-subtitle { color: #5a6a7a !important; margin-bottom: 0.5rem; }
         .stories-header {
-            text-align: center;
-            margin-bottom: 3.5rem;
+            text-align: left;
+            margin-bottom: 0;
             position: relative;
             z-index: 2;
-            max-width: 42rem;
+            max-width: 1280px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0 1.5rem;
         }
         .stories-header .section-eyebrow {
-            margin-left: auto;
-            margin-right: auto;
+            margin-left: 0;
+            margin-right: 0;
         }
         .stories-header .section-title,
         .stories-header .section-subtitle {
-            text-align: center;
+            text-align: left;
+        }
+
+        /* ── Media-hub tab buttons (News / Video toggle) ── */
+        .mh-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .mh-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.35rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            border: 1.5px solid rgba(145, 19, 19, 0.3);
+            background: transparent;
+            color: #911313;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+        .mh-tab:hover {
+            background: rgba(145, 19, 19, 0.07);
+            border-color: #911313;
+        }
+        .mh-tab.active {
+            background: #911313;
+            color: #fff;
+            border-color: #911313;
+            box-shadow: 0 4px 18px rgba(145, 19, 19, 0.28);
+        }
+        /* YouTube tab gets YouTube-red when active */
+        .mh-tab:has(.fa-youtube).active,
+        .mh-tab.active:last-child {
+            background: #c0392b;
+            border-color: #c0392b;
+            box-shadow: 0 4px 18px rgba(192, 57, 43, 0.3);
+        }
+        .mh-tab i { font-size: 0.9em; }
+
+        @media (max-width: 640px) {
+            .mh-tabs { gap: 0.4rem; }
+            .mh-tab { font-size: 0.74rem; padding: 0.5rem 1rem; }
         }
 
         /* Magazine grid */
