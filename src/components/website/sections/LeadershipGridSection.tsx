@@ -96,21 +96,6 @@ function LeaderNode({
           {featured ? <span className="ldr-current-badge">Current</span> : null}
         </div>
       </div>
-      <div className="ldr-tooltip" role="tooltip">
-        <div className="ldr-tooltip-arrow" />
-        <div className="ldr-tooltip-body">
-          <div className="ldr-tooltip-photo">
-            {src ? (
-              <img src={src} alt={name.trim() ? name : "Portrait"} loading="lazy" />
-            ) : (
-              <div className="ldr-tooltip-photo-placeholder">
-                <i className="fa-solid fa-user-tie" aria-hidden />
-              </div>
-            )}
-          </div>
-          <div className="ldr-tooltip-role">{role}</div>
-        </div>
-      </div>
       <div className="ldr-stem" aria-hidden />
       <div className="ldr-dot" aria-hidden />
       <div className="ldr-year-tag">{year}</div>
