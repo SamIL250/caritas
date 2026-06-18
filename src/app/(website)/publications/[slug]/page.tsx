@@ -3,6 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { fetchDepartmentRelatedContent } from "@/lib/department-related";
+import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
+import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
 import {
   encodePublicationAssetUrl,
   publicationCategoryLabel,
@@ -13,6 +16,7 @@ import {
 } from "@/lib/publications";
 import type { ProgramCategoryRow } from "@/lib/programs";
 import "../publications-page.css";
+import "../../programs/program-detail-page.css";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -80,35 +84,48 @@ export default async function PublicationDetailPage({ params }: PageProps) {
     ? publicationPrimaryHref(publication)
     : publication.external_url?.trim() || "";
 
+  let relatedSections: any = null;
+  if (department) {
+    const supabase = await createClient();
+    const relatedRows = await fetchDepartmentRelatedContent(supabase, {
+      departmentId: department.id,
+      excludePublicationId: publication.id,
+      limit: 12,
+      publicationCategorySlugs: ["success_story", "recent_update", "newsletter"],
+    });
+    relatedSections = groupDepartmentRowsForProgramPage(relatedRows);
+  }
+
   return (
-    <div className="pub-article-page">
-      <header className="pub-article-hero">
-        <div className="pub-article-hero-bg" aria-hidden>
+    <div className="pub-article-page program-detail-flush">
+      <header className="prog-article-hero">
+        <div className="prog-article-hero-bg" aria-hidden>
           {publication.cover_image_url.trim() ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={encodePublicationAssetUrl(publication.cover_image_url)} alt="" />
           ) : null}
         </div>
-        <div className="pub-article-hero-inner">
-          <nav className="pub-breadcrumb" aria-label="Breadcrumb">
+        <div className="prog-article-hero-inner">
+          <nav className="campaign-hero-breadcrumb" aria-label="Breadcrumb">
             <Link href="/publications">Publications</Link>
             <span aria-hidden> / </span>
-            <span>{publication.title}</span>
+            <span className="campaign-hero-bc-current">{publication.title}</span>
           </nav>
-          <span className="pub-article-eyebrow">
+          <span className="prog-article-eyebrow">
             {category ? category.label : publication.category}
             {department ? ` · ${department.label}` : ""}
           </span>
-          <h1 className="pub-article-h1">{publication.title}</h1>
-          {publication.excerpt ? <p className="pub-article-deck">{publication.excerpt}</p> : null}
+          <h1 className="prog-article-h1">{publication.title}</h1>
+          {publication.excerpt ? <p className="prog-article-deck">{publication.excerpt}</p> : null}
           {href ? (
-            <div className="pub-article-actions">
+            <div className="prog-article-meta-row" style={{ marginTop: '1.5rem' }}>
               <a
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pub-article-action-btn"
+                className="pub-btn-download"
               >
+                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden />
                 {publicationHasPdf(publication) ? "Download PDF" : "Open external link"}
               </a>
             </div>
@@ -126,6 +143,13 @@ export default async function PublicationDetailPage({ params }: PageProps) {
           </div>
         </div>
       </article>
+
+      {department && relatedSections && (
+        <ProgramRelatedHub
+          pillarLabel={department.label}
+          sections={relatedSections}
+        />
+      )}
     </div>
   );
 }

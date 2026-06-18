@@ -16,7 +16,7 @@ const DEFAULTS = {
   headquarters_label: "Headquarters",
   headquarters: "Kigali, Rwanda",
   phone_label: "Phone",
-  phone: "(+250) 252 574 34",
+  phone: "(+250) 252 574 344",
   email_label: "Email",
   email: "info@caritasrwanda.org",
   hours_label: "Office Hours",

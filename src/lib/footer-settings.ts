@@ -111,7 +111,7 @@ export const FOOTER_DEFAULTS: FooterSettings = {
     addressLabel: "Headquarters",
     address: "Kigali, Rwanda",
     phoneLabel: "Phone",
-    phone: "(+250) 252 574 34",
+    phone: "(+250) 252 574 344",
     emailLabel: "Email",
     email: "info@caritasrwanda.org",
   },

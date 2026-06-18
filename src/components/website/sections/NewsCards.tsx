@@ -392,7 +392,7 @@ export default function NewsCards({
                 </div>
               </div>
 
-              <div style={{ marginTop: '-1rem' }}>
+              <div style={{ marginTop: '1.5rem' }}>
                 <VideoGallerySection 
                   isNested={true}
                   youtube_channel_url={youtube_channel_url || (videoGalleryProps as any)?.youtube_channel_url}

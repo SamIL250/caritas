@@ -10,6 +10,9 @@ import {
 import type { ProgramCategoryRow } from "@/lib/programs";
 import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
 import { CampaignFullStory } from "@/components/website/campaigns/CampaignFullStory";
+import { fetchDepartmentRelatedContent } from "@/lib/department-related";
+import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
+import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
 
 import "../../campaigns/campaign-detail-page.css";
 import "../../programs/programs-page.css";
@@ -76,6 +79,18 @@ export default async function NewsArticlePage({ params }: PageProps) {
     article.body?.trim() ? sanitizeStaffRichText(article.body.trim()) : "";
 
   const isExternalArticle = article.external_url?.trim() && /^https?:\/\//i.test(article.external_url);
+
+  let relatedSections: any = null;
+  if (department) {
+    const supabase = await createClient();
+    const relatedRows = await fetchDepartmentRelatedContent(supabase, {
+      departmentId: department.id,
+      excludeNewsId: article.id,
+      limit: 12,
+      publicationCategorySlugs: ["success_story", "recent_update", "newsletter"],
+    });
+    relatedSections = groupDepartmentRowsForProgramPage(relatedRows);
+  }
 
   return (
     <div className="campaign-detail-root program-detail-flush">
@@ -182,6 +197,13 @@ export default async function NewsArticlePage({ params }: PageProps) {
           </aside>
         </div>
       </article>
+
+      {department && relatedSections && (
+        <ProgramRelatedHub
+          pillarLabel={department.label}
+          sections={relatedSections}
+        />
+      )}
     </div>
   );
 }

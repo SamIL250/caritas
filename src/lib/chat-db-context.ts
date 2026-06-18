@@ -161,7 +161,7 @@ export async function buildChatDatabaseContext(): Promise<ChatDatabaseContext> {
   lines.push("Founded: 1959 (Le Secours Catholique Rwandais)");
   lines.push("Headquarters: Kigali, Rwanda");
   lines.push(`Contact email: ${contact?.contact_email || "info@caritasrwanda.org"}`);
-  lines.push(`Phone: (+250) 252 574 34`);
+  lines.push(`Phone: (+250) 252 574 344`);
   lines.push("Tagline: Faith. Charity. Justice.");
   lines.push("Key stats: 67+ years of service · 9 diocesan networks · ~500K+ beneficiaries reached");
 
@@ -270,7 +270,7 @@ export async function buildChatDatabaseContext(): Promise<ChatDatabaseContext> {
   lines.push("• Volunteer: Submit an application via the volunteer section on the website");
   lines.push("• Partner: Contact us via the Contact form at /contact");
   lines.push("• Subscribe: Newsletter sign-up in the website footer");
-  lines.push("• Contact: info@caritasrwanda.org | (+250) 252 574 34");
+  lines.push("• Contact: info@caritasrwanda.org | (+250) 252 574 344");
   lines.push("");
 
   return { summary: lines.join("\n") };

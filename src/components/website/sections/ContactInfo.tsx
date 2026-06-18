@@ -59,7 +59,7 @@ function mergeLegacy(p: ContactInfoProps) {
     headquarters_label: (p.headquarters_label || "Headquarters").trim(),
     headquarters,
     phone_label: (p.phone_label || "Phone").trim(),
-    phone: (p.phone || "(+250) 252 574 34").trim(),
+    phone: (p.phone || "(+250) 252 574 344").trim(),
     email_label: (p.email_label || "Email").trim(),
     email: (p.email || "info@caritasrwanda.org").trim(),
     hours_label: (p.hours_label || "Office Hours").trim(),

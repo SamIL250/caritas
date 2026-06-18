@@ -1,14 +1,14 @@
-import { 
-  Layers, 
-  AlignLeft, 
-  LayoutGrid, 
-  Quote, 
-  Megaphone, 
-  Handshake, 
-  Newspaper, 
-  MapPin, 
+import {
+  Layers,
+  AlignLeft,
+  LayoutGrid,
+  Quote,
+  Megaphone,
+  Handshake,
+  Newspaper,
+  MapPin,
   Map,
-  Images, 
+  Images,
   Minus,
   LayoutTemplate,
   BarChart3,
@@ -41,8 +41,8 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     cta_text: "Donate Now",
     cta_url: "#",
     image_url: "/img/bg_3.png",
-    options: { 
-      align: "left", 
+    options: {
+      align: "left",
       overlay_opacity: 0.4,
       text_color: "#ffffff",
       badge_text: "WELCOME TO CARITAS RWANDA",
@@ -200,7 +200,7 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     headquarters_label: "Headquarters",
     headquarters: "Kigali, Rwanda",
     phone_label: "Phone",
-    phone: "(+250) 252 574 34",
+    phone: "(+250) 252 574 344",
     email_label: "Email",
     email: "info@caritasrwanda.org",
     hours_label: "Office Hours",
@@ -511,7 +511,7 @@ export const SECTION_ICONS: Record<string, any> = {
   metrics_overview: Presentation,
   metrics_program: TrendingUp,
   metrics_reach: Map,
-  
+
 };
 
 export const SECTION_LABELS: Record<string, string> = {

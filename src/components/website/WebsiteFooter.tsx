@@ -113,7 +113,7 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
             </div>
             <div>
               <div className="ft-chip-label">Phone</div>
-              <div className="ft-chip-value">(+250) 252 574 34</div>
+              <div className="ft-chip-value">(+250) 252 574 344</div>
             </div>
           </div>
           <div className="ft-chip">
