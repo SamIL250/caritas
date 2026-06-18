@@ -116,7 +116,7 @@ export default function WebsiteHeader() {
                     }
                   }}
                 >
-                  About Us
+                  About Us <ChevronDown size={14} className="inline-block ml-1 opacity-60" />
                 </Link>
                 <button
                   type="button"
@@ -174,7 +174,7 @@ export default function WebsiteHeader() {
                     }
                   }}
                 >
-                  Programs
+                  Programs <ChevronDown size={14} className="inline-block ml-1 opacity-60" />
                 </Link>
                 <button
                   type="button"
@@ -220,18 +220,6 @@ export default function WebsiteHeader() {
               </Link>
             </li> */}
 
-            <li>
-              <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>
-                Metrics
-              </Link>
-            </li>
-
-            {/* <li>
-              <Link href="/get-involved" className={isActive('/get-involved') ? 'current' : ''} onClick={closeNav}>
-                Get Involved
-              </Link>
-            </li> */}
-
             <li className={['has-dropdown', openSub === 'publications' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
               <div className="nav-item-row">
                 <Link
@@ -246,7 +234,7 @@ export default function WebsiteHeader() {
                     }
                   }}
                 >
-                  Publications
+                  Publications <ChevronDown size={14} className="inline-block ml-1 opacity-60" />
                 </Link>
                 <button
                   type="button"
@@ -276,6 +264,12 @@ export default function WebsiteHeader() {
                   </Link>
                 </div>
               </div>
+            </li>
+
+            <li>
+              <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>
+                Impact Metrics
+              </Link>
             </li>
 
             <li>

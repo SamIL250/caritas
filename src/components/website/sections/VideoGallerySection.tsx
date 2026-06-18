@@ -39,6 +39,7 @@ export type VideoGallerySectionProps = {
   youtube_channel_url?: string;
   news_url?: string;
   videos?: VideoGalleryItem[];
+  isNested?: boolean;
 };
 
 type NormalizedVideo = {
@@ -158,6 +159,7 @@ export default function VideoGallerySection({
   youtube_channel_url,
   news_url,
   videos,
+  isNested,
 }: VideoGallerySectionProps) {
   const ytUrl = youtube_channel_url || "https://www.youtube.com/@caritasrwanda5681";
   const newsLink = news_url || "/news";
@@ -207,9 +209,9 @@ export default function VideoGallerySection({
 
   return (
     <section
-      className={`vg-section vg-section--${layout}`}
+      className={`vg-section vg-section--${layout} ${isNested ? 'vg-nested' : ''}`}
       id={anchor_id || undefined}
-
+      style={isNested ? { padding: 0, background: 'transparent' } : {}}
     >
       <div className="vg-shell">
         {/* ── Heading block — only when heading content is provided ── */}
@@ -259,7 +261,7 @@ export default function VideoGallerySection({
         )}
 
         {/* ── Categories + View More — ALWAYS rendered ── */}
-        <div className="vg-header-actions" style={{ marginBottom: '1.5rem' }}>
+        <div className="vg-header-actions" style={{ marginBottom: '0.5rem' }}>
           {show_categories && categories.length > 0 ? (
             <div className="vg-categories">
               <button
@@ -459,6 +461,20 @@ export default function VideoGallerySection({
             </a>
           </div>
         ) : null}
+
+        {/* ── Mobile View More (Hidden on Desktop) ── */}
+        <div className="vg-mobile-view-more">
+          <a
+            href={ytUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vg-view-more-yt"
+            aria-label="View more on YouTube"
+          >
+            <span>View More</span>
+            <i className="fa-brands fa-youtube" aria-hidden />
+          </a>
+        </div>
       </div>
 
       {/* ─── FULL SCREEN VIDEO MODAL ──────────────────────────────── */}

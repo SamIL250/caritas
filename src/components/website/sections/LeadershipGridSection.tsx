@@ -91,7 +91,9 @@ function LeaderNode({
         </div>
         <div className="ldr-card-text">
           <div className="ldr-name">{name}</div>
-          <div className="ldr-role">{role}</div>
+          {role && role !== "Chairperson" && role !== "Secretary General" ? (
+            <div className="ldr-role">{role}</div>
+          ) : null}
           {period ? <div className="ldr-period">{period}</div> : null}
           {featured ? <span className="ldr-current-badge">Current</span> : null}
         </div>
@@ -204,7 +206,38 @@ export default function LeadershipGridSection({
       setPopup(prev => prev.visible ? { ...prev, visible: false } : prev);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Auto-scroll to the current leader (right end) on mount
+    const animateScroll = (element: HTMLElement, target: number, duration: number) => {
+      const start = element.scrollLeft;
+      const change = target - start;
+      const startTime = performance.now();
+
+      const animateScrollFrame = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+        element.scrollLeft = start + change * ease;
+        if (elapsed < duration) {
+          requestAnimationFrame(animateScrollFrame);
+        }
+      };
+      requestAnimationFrame(animateScrollFrame);
+    };
+
+    const scrollTimeout = setTimeout(() => {
+      if (chairScrollRef.current) {
+        animateScroll(chairScrollRef.current, chairScrollRef.current.scrollWidth, 2000);
+      }
+      if (secScrollRef.current) {
+        animateScroll(secScrollRef.current, secScrollRef.current.scrollWidth, 2000);
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, src: string, name: string, role: string) => {
@@ -248,23 +281,23 @@ export default function LeadershipGridSection({
   };
 
   const chairpersonMembers: LeaderMember[] = [
-    { year: "1959", name: "Archbishop Perraudin", role: "Founding Chairperson", period: "1959 — 1972 · 13 yrs", duration: 13, photo_url: "img/Chairperson/perraudin.jpg" },
-    { year: "1972", name: "H.E. Mgr. Jean Baptiste Gahamanyi", role: "Chairperson", period: "1972 — 1997 · 25 yrs", duration: 25, photo_url: "img/Chairperson/gahamanyi.png" },
-    { year: "1997", name: "H.E. Mgr. Thaddée Ntihinyurwa", role: "Chairperson", period: "1997 — 2022 · 25 yrs", duration: 25 },
-    { year: "2022", name: "H.E. Mgr. Anaclet Mwumvaneza", role: "Chairperson — Nyundo Diocese", period: "2022 — Present", duration: 4, featured: true, photo_url: "img/Chairperson/anaclet.jpg" },
+    { year: "1959", name: "Archbishop Perraudin", role: "Founding Chairperson", period: "13 yrs", duration: 13, photo_url: "img/Chairperson/perraudin.jpg" },
+    { year: "1972", name: "H.E. Mgr. Jean Baptiste Gahamanyi", role: "Chairperson", period: "25 yrs", duration: 25, photo_url: "img/Chairperson/gahamanyi.png" },
+    { year: "1997", name: "H.E. Mgr. Thaddée Ntihinyurwa", role: "Chairperson", period: "25 yrs", duration: 25 },
+    { year: "2022", name: "H.E. Mgr. Anaclet Mwumvaneza", role: "Chairperson — Nyundo Diocese", period: "Present", duration: 4, featured: true, photo_url: "img/Chairperson/anaclet.jpg" },
   ];
 
   const secretaryMembers: LeaderMember[] = [
-    { year: "1961", name: "Father Arthur Dejemeppe", role: "Secretary General", period: "1961 — 1972 · 11 yrs", duration: 11, photo_url: "img/Secretary%20Generals/Arthur%20Dejemeppe.jpg" },
-    { year: "1972", name: "Father Roger Pien", role: "Secretary General", period: "1972 — 1973 · 1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Roger%20Pien.jpg" },
-    { year: "1973", name: "Father Cyriaque Munyansanga", role: "Secretary General", period: "1973 — 1977 · 4 yrs", duration: 4, photo_url: "img/Secretary%20Generals/Cyriaque%20Munyansanga.png" },
-    { year: "1977", name: "Father Carles Maria Giol", role: "Secretary General", period: "1977 — 1978 · 1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Carles%20Maria%20Giol.png" },
-    { year: "1978", name: "Father Michel Descombes", role: "Secretary General", period: "1978 — 1995 · 17 yrs", duration: 17, photo_url: "img/Secretary%20Generals/Descombers.jpg" },
-    { year: "1995", name: "Father Callixte Twagirayezu", role: "Secretary General", period: "1995 — 1996 · 1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Callixte%20Twagirayezu.jpg" },
-    { year: "1996", name: "Msgr. Oreste Incimatata", role: "Secretary General", period: "1996 — 2013 · 17 yrs", duration: 17, photo_url: "img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg" },
-    { year: "2013", name: "H.E. Mgr. Anaclet Mwumvaneza", role: "Secretary General", period: "2013 — 2016 · 3 yrs", duration: 3, photo_url: "img/Secretary%20Generals/anaclet.jpg" },
-    { year: "2016", name: "H.E. Mgr. Jean Marie Vianney Twagirayezu", role: "Secretary General", period: "2016 — 2023 · 7 yrs", duration: 7, photo_url: "img/Secretary%20Generals/JMV%20Twagirayezu.jpg" },
-    { year: "2023", name: "Father Oscar Kagimbura", role: "Secretary General", period: "2023 — Present", duration: 3, featured: true, photo_url: "img/Secretary%20Generals/Oscar%20Kagimbura.png" },
+    { year: "1961", name: "Father Arthur Dejemeppe", role: "Secretary General", period: "11 yrs", duration: 11, photo_url: "img/Secretary%20Generals/Arthur%20Dejemeppe.jpg" },
+    { year: "1972", name: "Father Roger Pien", role: "Secretary General", period: "1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Roger%20Pien.jpg" },
+    { year: "1973", name: "Father Cyriaque Munyansanga", role: "Secretary General", period: "4 yrs", duration: 4, photo_url: "img/Secretary%20Generals/Cyriaque%20Munyansanga.png" },
+    { year: "1977", name: "Father Carles Maria Giol", role: "Secretary General", period: "1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Carles%20Maria%20Giol.png" },
+    { year: "1978", name: "Father Michel Descombes", role: "Secretary General", period: "17 yrs", duration: 17, photo_url: "img/Secretary%20Generals/Descombers.jpg" },
+    { year: "1995", name: "Father Callixte Twagirayezu", role: "Secretary General", period: "1 yr", duration: 1, photo_url: "img/Secretary%20Generals/Callixte%20Twagirayezu.jpg" },
+    { year: "1996", name: "Msgr. Oreste Incimatata", role: "Secretary General", period: "17 yrs", duration: 17, photo_url: "img/Secretary%20Generals/Mgr.%20ORESTE%20INCIMATATA.jpg" },
+    { year: "2013", name: "H.E. Mgr. Anaclet Mwumvaneza", role: "Secretary General", period: "3 yrs", duration: 3, photo_url: "img/Secretary%20Generals/anaclet.jpg" },
+    { year: "2016", name: "H.E. Mgr. Jean Marie Vianney Twagirayezu", role: "Secretary General", period: "7 yrs", duration: 7, photo_url: "img/Secretary%20Generals/JMV%20Twagirayezu.jpg" },
+    { year: "2023", name: "Father Oscar Kagimbura", role: "Secretary General", period: "Present", duration: 3, featured: true, photo_url: "img/Secretary%20Generals/Oscar%20Kagimbura.png" },
   ];
 
   if (!groups || groups.length === 0) {
@@ -408,7 +441,15 @@ export default function LeadershipGridSection({
               </div>
               <LeaderScrollTimeline
                 group={group}
-                timelineNodes={timelineNodes}
+                timelineNodes={timelineNodes.map(m => {
+                  const fallback = [...chairpersonMembers, ...secretaryMembers].find(f => f.name === m.name);
+                  return {
+                    ...m,
+                    period: m.period || fallback?.period,
+                    duration: m.duration || fallback?.duration,
+                    photo_url: m.photo_url || fallback?.photo_url
+                  };
+                })}
                 ariaLabel={group.subgroup_label || "Leadership timeline"}
                 onNodeEnter={handleMouseEnter}
                 onNodeLeave={handleMouseLeave}

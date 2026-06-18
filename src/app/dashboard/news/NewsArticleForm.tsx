@@ -68,26 +68,30 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
     : "";
 
   return (
-    <form className="max-w-2xl space-y-6" onSubmit={handleSubmit} noValidate>
+    <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
       {msg && (
-        <p role="status" className={`text-sm ${msg.ok ? "text-emerald-700" : "text-red-600"}`}>
+        <p role="status" className={`rounded-lg px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}`}>
           {msg.text}
         </p>
       )}
 
-      <Card className="space-y-4 border-stone-200/90 p-4 sm:p-6">
-        <div className="space-y-1">
-          <label
-            className="text-xs font-semibold uppercase tracking-wider text-stone-500"
-            htmlFor="title"
-          >
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="lg:col-span-8 space-y-6">
+          <div className="space-y-6 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Basics</h3>
+
+            <div className="space-y-1">
+              <label
+                className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+                htmlFor="title"
+              >
             Title
           </label>
           <Input id="title" name="title" required defaultValue={article?.title ?? ""} placeholder="Headline" />
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="slug">
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="slug">
             URL slug
           </label>
           <Input
@@ -100,7 +104,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="excerpt">
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="excerpt">
             Excerpt
           </label>
           <textarea
@@ -115,7 +119,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
 
         <div className="space-y-2">
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">
               Full story
             </label>
             <p className="mt-0.5 text-[11px] text-stone-400">
@@ -131,13 +135,13 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1">
-            <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="category">
+            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="category">
               Category
             </label>
             <select
               id="category"
               name="category"
-              className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm"
+              className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm"
               defaultValue={article?.category ?? "development"}
             >
               {NEWS_CATEGORIES.map((c) => (
@@ -148,13 +152,13 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             </select>
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="status">
+            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="status">
               Status
             </label>
             <select
               id="status"
               name="status"
-              className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm"
+              className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm"
               defaultValue={article?.status ?? "draft"}
             >
               <option value="draft">Draft</option>
@@ -165,7 +169,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
 
         <div className="space-y-1">
           <label
-            className="text-xs font-semibold uppercase tracking-wider text-stone-500"
+            className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
             htmlFor="department_id"
           >
             Program area (department)
@@ -174,7 +178,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             id="department_id"
             name="department_id"
             defaultValue={article?.department_id ?? ""}
-            className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm"
+            className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm"
           >
             <option value="">Cross-cutting / not assigned</option>
             {departments.map((d) => (
@@ -198,10 +202,14 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
           />
           Feature this story on the News page hero
         </label>
+      </div>
+    </div>
 
+    <div className="lg:col-span-4 space-y-6">
+      <div className="space-y-6 rounded-2xl border border-stone-200/80 bg-stone-50/50 p-4 sm:p-6 shadow-sm">
         <div className="space-y-1">
-          <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="published_at">
-            Publish date / time (optional — defaults to now when publishing)
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="published_at">
+            Publish Date / Time
           </label>
           <Input
             id="published_at"
@@ -209,26 +217,26 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             type="datetime-local"
             defaultValue={publishedLocal}
           />
+          <p className="text-[11px] text-stone-400">Defaults to now when publishing.</p>
         </div>
 
         <div className="space-y-3">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
-              Featured image (media library)
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">
+              Featured image
             </span>
             <p className="mt-0.5 text-[11px] text-stone-400">
-              Used on the news grid, featured slot, and thumbnails — pick from uploaded media, or upload new
-              assets in the library first.
+              Used on the news grid, featured slot, and thumbnails.
             </p>
           </div>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-            <div className="relative aspect-[16/10] w-full max-w-[280px] shrink-0 overflow-hidden rounded-xl bg-stone-100">
+          <div className="flex flex-col gap-4">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-stone-100 border border-stone-200/50">
               {featuredUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- external / storage URLs
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={featuredUrl} alt="" className="size-full object-cover" />
               ) : (
-                <div className="flex size-full min-h-[140px] flex-col items-center justify-center gap-1 text-center text-[11px] text-stone-400">
-                  <ImagePlus className="size-9 stroke-1 text-stone-300" aria-hidden />
+                <div className="flex size-full flex-col items-center justify-center gap-1 text-[11px] text-stone-400">
+                  <ImagePlus className="size-8 stroke-1 text-stone-300" aria-hidden />
                   No image selected
                 </div>
               )}
@@ -237,7 +245,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                className="h-9"
+                className="h-9 flex-1"
                 onClick={() => setFeaturedPickerOpen(true)}
               >
                 Choose from library
@@ -246,7 +254,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
                 <Button
                   type="button"
                   variant="secondary"
-                  className="h-9 text-stone-500"
+                  className="h-9 text-stone-500 flex-none"
                   onClick={() => setFeaturedUrl("")}
                 >
                   Clear
@@ -257,15 +265,15 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="image_alt">
-            Featured image alt text
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="image_alt">
+            Image Alt Text
           </label>
           <Input id="image_alt" name="image_alt" defaultValue={article?.image_alt ?? ""} />
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="external_url">
-            Read-more link (optional)
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="external_url">
+            External Link (Optional)
           </label>
           <Input
             id="external_url"
@@ -275,10 +283,12 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             defaultValue={article?.external_url ?? ""}
           />
           <p className="text-[11px] text-stone-400">
-            If set, cards link here (e.g. full article elsewhere). Omit to use listing only + body in CMS.
+            If set, cards link directly here. Omit to use the internal story body.
           </p>
         </div>
-      </Card>
+      </div>
+    </div>
+  </div>
 
       <MediaPicker
         isOpen={featuredPickerOpen}

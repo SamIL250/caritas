@@ -353,7 +353,7 @@ export default function NewsCards({
             {/* ── SLIDE 2: Full Stories in Motion section (white background) ── */}
             <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 'auto' : 0, overflow: showVideos ? 'visible' : 'hidden' }}>
               <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '0.25rem' }}>
                   <div>
                     <div className="section-eyebrow" style={{ marginBottom: '0.75rem' }}>
                       <i className="fa-solid fa-rss" aria-hidden />
@@ -365,7 +365,7 @@ export default function NewsCards({
                     <p className="section-subtitle" style={{ marginBottom: 0 }}>Watch our impactful work across communities</p>
                   </div>
 
-                  <div className="mh-tabs" role="tablist" style={{ flexShrink: 0, alignSelf: 'flex-start' }}>
+                  <div className="mh-tabs" role="tablist" style={{ display: 'flex', gap: '0.75rem', flexShrink: 0, alignSelf: 'flex-start' }}>
                     <button
                       type="button"
                       role="tab"
@@ -392,129 +392,42 @@ export default function NewsCards({
                 </div>
               </div>
 
-              {videoGalleryProps ? (
-                <div style={{ marginTop: '-1rem' }}>
-                  <VideoGallerySection 
-                    {...(videoGalleryProps as any)} 
-                    eyebrow="" 
-                    heading_lead="" 
-                    heading_accent="" 
-                    subtitle="" 
-                    youtube_channel_url={youtube_channel_url || (videoGalleryProps as any).youtube_channel_url}
-                  />
-                </div>
-              ) : (
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                  gap: '1.25rem',
-                }}>
-                  {[
+              <div style={{ marginTop: '-1rem' }}>
+                <VideoGallerySection 
+                  isNested={true}
+                  youtube_channel_url={youtube_channel_url || (videoGalleryProps as any)?.youtube_channel_url}
+                  layout={(videoGalleryProps as any)?.layout || "grid"}
+                  videos={(videoGalleryProps as any)?.videos || [
                     {
+                      key: '1',
+                      youtube_id: 'dQw4w9WgXcQ',
                       title: 'Caritas Rwanda in Action',
-                      desc: 'See how our programs are transforming communities across Rwanda.',
-                      id: 'dQw4w9WgXcQ',
+                      description: 'See how our programs are transforming communities across Rwanda.',
+                      category: 'Highlights'
                     },
                     {
+                      key: '2',
+                      youtube_id: 'dQw4w9WgXcQ',
                       title: 'Community Health Outreach',
-                      desc: 'Bringing healthcare services to remote communities.',
-                      id: 'dQw4w9WgXcQ',
+                      description: 'Bringing healthcare services to remote communities.',
+                      category: 'Health'
                     },
                     {
+                      key: '3',
+                      youtube_id: 'dQw4w9WgXcQ',
                       title: 'Sustainable Development Goals',
-                      desc: 'Working towards a better future for all Rwandans.',
-                      id: 'dQw4w9WgXcQ',
-                    },
-                  ].map((video, i) => (
-                    <a
-                      key={i}
-                      href={`https://youtube.com/watch?v=${video.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'block',
-                        borderRadius: '14px',
-                        overflow: 'hidden',
-                        background: '#ffffff',
-                        border: '1px solid rgba(0,0,0,0.07)',
-                        textDecoration: 'none',
-                        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                        cursor: 'pointer',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-4px)';
-                        e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = 'none';
-                      }}
-                    >
-                      <div style={{
-                        position: 'relative',
-                        height: '180px',
-                        background: '#1a1a2e',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                        <img
-                          src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
-                          alt=""
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            display: 'block',
-                          }}
-                        />
-                        <div style={{
-                          position: 'absolute',
-                          inset: 0,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                          <div style={{
-                            width: '52px',
-                            height: '52px',
-                            borderRadius: '50%',
-                            background: 'rgba(255,255,255,0.15)',
-                            backdropFilter: 'blur(6px)',
-                            border: '2px solid rgba(255,255,255,0.5)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#ffffff',
-                            fontSize: '1.1rem',
-                          }}>
-                            <i className="fa-solid fa-play" style={{ marginLeft: '3px' }} />
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{ padding: '1.2rem 1.25rem 1.4rem' }}>
-                        <h4 style={{
-                          fontSize: '0.95rem',
-                          fontWeight: 800,
-                          color: '#0d1b2a',
-                          margin: '0 0 0.4rem',
-                          lineHeight: 1.3,
-                        }}>
-                          {video.title}
-                        </h4>
-                        <p style={{
-                          fontSize: '0.8rem',
-                          color: '#5a6a7a',
-                          margin: 0,
-                          lineHeight: 1.55,
-                        }}>
-                          {video.desc}
-                        </p>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              )}
+                      description: 'Working towards a better future for all Rwandans.',
+                      category: 'Development'
+                    }
+                  ]}
+                  {...(videoGalleryProps as any)}
+                  // Ensure these headings stay empty so we don't get duplicate titles inside NewsCards
+                  eyebrow={""}
+                  heading_lead={""}
+                  heading_accent={""}
+                  subtitle={""}
+                />
+              </div>
             </div>
           </div>
         </div>

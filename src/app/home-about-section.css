@@ -224,16 +224,41 @@ section.cr-home-about {
 
 .cr-info-box--left {
   left: 20px;
-  top: 210px;
-  width: 300px;
+  top: 250px;
+  width: 250px;
   background: #943a37;
 }
 
 .cr-info-box--right {
-  left: 980px;
-  top: 150px;
-  width: 300px;
+  left: 1030px;
+  top: 200px;
+  width: 250px;
   background: rgba(255, 255, 255, 0.1);
+}
+
+.cr-icon-overlap {
+  position: absolute;
+  z-index: 5;
+}
+
+.cr-icon-overlap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cr-icon-overlap--target {
+  width: 80px;
+  height: 94px;
+  right: -25px;
+  top: -30px;
+}
+
+.cr-icon-overlap--hand {
+  width: 68px;
+  height: 68px;
+  left: -20px;
+  top: -20px;
 }
 
 .cr-box-body {
@@ -315,10 +340,10 @@ section.cr-home-about {
 
 .cr-info-eye {
   position: absolute;
-  left: 615px;
+  left: 550px;
   top: 670px;
-  width: 70px;
-  height: 70px;
+  width: 200px;
+  height: 42px;
   z-index: 4;
   display: flex;
   justify-content: center;

@@ -7,9 +7,11 @@ import {
   type ProgramCategoryRow,
   type ProgramRow,
 } from "@/lib/programs";
+import Link from "next/link";
 import {
   encodePublicationAssetUrl,
   publicationHasPdf,
+  publicationDetailHref,
   type PublicationRow,
 } from "@/lib/publications";
 import { formatPublishedDate, type NewsArticleRow } from "@/lib/news";
@@ -38,8 +40,6 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
 
   const [activeTab, setActiveTab] = useState<string>(sortedCategories[0]?.slug || "");
   const [activeProgram, setActiveProgram] = useState<(ProgramRow & any) | null>(null);
-  const [activeStory, setActiveStory] = useState<PublicationRow | null>(null);
-  const [activeNews, setActiveNews] = useState<NewsArticleRow | null>(null);
   const tabBarRef = useRef<HTMLDivElement>(null);
 
   // Sync from hash on mount & hashchange
@@ -58,67 +58,24 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
 
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Toggle sticky class on tab bar
-  useEffect(() => {
-    const bar = tabBarRef.current;
-    const sentinel = sentinelRef.current;
-    if (!bar || !sentinel) return;
-
-    let isFixed = false;
-
-    function handleSticky() {
-      const hdr = document.querySelector("header");
-      const hdrH = hdr ? hdr.getBoundingClientRect().height : 70;
-      const sentTop = sentinel!.getBoundingClientRect().top;
-
-      if (!isFixed && sentTop <= hdrH) {
-        bar!.style.position = "fixed";
-        bar!.style.top = hdrH + "px";
-        bar!.style.left = "0";
-        bar!.style.right = "0";
-        bar!.style.width = "100%";
-        bar!.style.zIndex = "900";
-        sentinel!.style.height = bar!.offsetHeight + "px";
-        bar!.classList.add("is-stuck");
-        isFixed = true;
-      } else if (isFixed && sentTop > hdrH) {
-        bar!.style.position = "";
-        bar!.style.top = "";
-        bar!.style.left = "";
-        bar!.style.right = "";
-        bar!.style.width = "";
-        sentinel!.style.height = "0px";
-        bar!.classList.remove("is-stuck");
-        isFixed = false;
-      }
-    }
-    handleSticky();
-    window.addEventListener("scroll", handleSticky, { passive: true });
-    window.addEventListener("resize", handleSticky, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleSticky);
-      window.removeEventListener("resize", handleSticky);
-    };
-  }, []);
+  // Rely on native CSS `position: sticky` for the tab bar.
 
   // Close drawers on Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        if (activeStory) setActiveStory(null);
-        else if (activeNews) setActiveNews(null);
-        else if (activeProgram) setActiveProgram(null);
+        if (activeProgram) setActiveProgram(null);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [activeStory, activeNews, activeProgram]);
+  }, [activeProgram]);
 
   // Lock body scroll when any drawer is open
   useEffect(() => {
-    document.body.style.overflow = activeProgram || activeStory || activeNews ? "hidden" : "";
+    document.body.style.overflow = activeProgram ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [activeProgram, activeStory, activeNews]);
+  }, [activeProgram]);
 
   // Switch tab & update hash
   function switchTab(slug: string) {
@@ -214,12 +171,13 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             {activeStories.length > 0 && (
               <div className="prog-success-section">
                 <div className="prog-success-header">
-                  <span className="prog-success-label">
-                    {cat.label}
+                  <span className={`stories-eyebrow ${cat.slug}-peyebrow`}>
+                    <i className="fa-solid fa-star mr-2" />
+                    Success Stories
                   </span>
-                  <h3 className="prog-success-title">Success Stories</h3>
+                  <h3 className="prog-success-title">Lives Transformed Through {cat.label}</h3>
                   <p className="prog-success-sub">
-                    Real stories of lives transformed through the {cat.label.toLowerCase()} department.
+                    Real stories of dignity restored and lives rebuilt across Rwanda&apos;s communities.
                   </p>
                 </div>
 
@@ -228,7 +186,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
                     <SuccessStoryCard
                       key={story.id}
                       story={story}
-                      onClick={() => setActiveStory(story)}
+                      deptSlug={cat.slug}
                     />
                   ))}
                 </div>
@@ -253,7 +211,6 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
                     <NewsCard
                       key={article.id}
                       article={article}
-                      onClick={() => setActiveNews(article)}
                     />
                   ))}
                 </div>
@@ -268,18 +225,6 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
         program={activeProgram}
         categories={categories}
         onClose={() => setActiveProgram(null)}
-      />
-
-      {/* ── Success Story Drawer ── */}
-      <SuccessStoryDrawer
-        story={activeStory}
-        onClose={() => setActiveStory(null)}
-      />
-
-      {/* ── News Drawer ── */}
-      <NewsDrawer
-        article={activeNews}
-        onClose={() => setActiveNews(null)}
       />
     </>
   );
@@ -343,45 +288,56 @@ function ProgramBubbleGallery({ items, onClick }: { items: any[]; onClick: (p: a
 /* ------------------------------------------------------------------ */
 function SuccessStoryCard({
   story,
-  onClick,
+  deptSlug,
 }: {
   story: PublicationRow;
-  onClick: () => void;
+  deptSlug: string;
 }) {
   const imageUrl = story.cover_image_url?.trim()
     ? encodePublicationAssetUrl(story.cover_image_url)
     : null;
 
-  return (
-    <div
-      className="prog-success-card"
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onClick()}
-      aria-label={`Read story: ${story.title}`}
-    >
-      {imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imageUrl}
-          alt={story.cover_image_alt || story.title}
-          className="prog-success-image"
-        />
-      ) : (
-        <div className="prog-success-image" style={{ background: "#f3f4f6" }} />
-      )}
+  // Extract initials from title
+  const initials = story.title
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
 
-      <div className="prog-success-body">
-        <h4 className="prog-success-name">{story.title}</h4>
-        {story.excerpt ? (
-          <p className="prog-success-desc">{story.excerpt}</p>
-        ) : null}
-        <span className="prog-success-read">
-          Read full story
-        </span>
+  const customFields = story.custom_fields as Record<string, any> || {};
+  const href = publicationDetailHref(story);
+
+  return (
+    <Link
+      href={href}
+      className="story-card cursor-pointer"
+    >
+      <div className="story-img">
+        {imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={imageUrl} alt={story.cover_image_alt || story.title} />
+        ) : (
+          <div style={{ background: "#f3f4f6", width: "100%", height: "100%" }} />
+        )}
+        <div className="story-img-overlay"></div>
+        {story.tag_label ? <div className="story-img-tag">{story.tag_label}</div> : null}
       </div>
-    </div>
+      <div className="story-body">
+        {story.excerpt ? <p className="story-quote">{story.excerpt}</p> : null}
+        <div className="story-person">
+          <div className={`story-avatar ${deptSlug}-avatar`}>{initials}</div>
+          <div className="story-person-info">
+            <div className="story-name">{story.title}</div>
+            {story.period_label ? <div className="story-tag">{story.period_label}</div> : null}
+          </div>
+        </div>
+        {customFields.outcome ? (
+          <div className={`story-outcome ${deptSlug}-outcome`}>
+            <i className="fa-solid fa-arrow-trend-up"></i> {String(customFields.outcome)}
+          </div>
+        ) : null}
+      </div>
+    </Link>
   );
 }
 
@@ -495,18 +451,13 @@ function ProgramDrawer({
 /* ------------------------------------------------------------------ */
 function NewsCard({
   article,
-  onClick,
 }: {
   article: NewsArticleRow;
-  onClick: () => void;
 }) {
   return (
-    <div
+    <Link
+      href={`/news/${article.slug}`}
       className="prog-news-card"
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onClick()}
       aria-label={`Read article: ${article.title}`}
     >
       {article.image_url?.trim() ? (
@@ -532,175 +483,6 @@ function NewsCard({
           Read article
         </span>
       </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* News Drawer (Slide-in Panel)                                        */
-/* ------------------------------------------------------------------ */
-function NewsDrawer({
-  article,
-  onClose,
-}: {
-  article: NewsArticleRow | null;
-  onClose: () => void;
-}) {
-  const isOpen = Boolean(article);
-  const hasExternal = Boolean(article?.external_url?.trim());
-  const hasBody = Boolean(article?.body?.trim());
-
-  return (
-    <>
-      <div className={`drawer-backdrop${isOpen ? " open" : ""}`} onClick={onClose} aria-hidden />
-      <aside
-        className={`drawer-panel${isOpen ? " open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={article?.title || "News article"}
-      >
-        {article && (
-          <>
-            <button className="drawer-close" type="button" onClick={onClose} aria-label="Close">
-              &times;
-            </button>
-            {article.image_url?.trim() ? (
-              <div className="drawer-hero-img">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={article.image_url} alt={article.image_alt || article.title} />
-              </div>
-            ) : (
-              <div className="drawer-hero-placeholder" />
-            )}
-            <div className="drawer-content">
-              <div>
-                <span className="drawer-category-pill" style={{ color: "#1a1a1a", borderColor: "rgba(0,0,0,0.12)", background: "rgba(0,0,0,0.04)" }}>
-                  News
-                </span>
-                {article.published_at ? (
-                  <p className="drawer-meta-date">{formatPublishedDate(article.published_at)}</p>
-                ) : null}
-                <h2 className="drawer-title">{article.title}</h2>
-                {article.excerpt ? <p className="drawer-subtitle">{article.excerpt}</p> : null}
-              </div>
-              <div className="drawer-divider" />
-              {hasExternal && (
-                <div className="drawer-info-section" style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-                  <a href={article.external_url!} target="_blank" rel="noopener noreferrer" className="drawer-cta-btn" style={{ background: "#1a1a1a" }}>
-                    Read Full Article
-                  </a>
-                </div>
-              )}
-              {hasBody ? (
-                <div className="drawer-body-section">
-                  <h3 className="drawer-info-heading">Article</h3>
-                  <div className="drawer-body-html" dangerouslySetInnerHTML={{ __html: article.body! }} />
-                </div>
-              ) : !hasExternal ? (
-                <p className="drawer-desc" style={{ color: "#9ca3af", fontStyle: "italic" }}>
-                  Full article content coming soon.
-                </p>
-              ) : null}
-            </div>
-          </>
-        )}
-      </aside>
-    </>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Success Story Drawer                                                 */
-/* ------------------------------------------------------------------ */
-function SuccessStoryDrawer({
-  story,
-  onClose,
-}: {
-  story: PublicationRow | null;
-  onClose: () => void;
-}) {
-  const isOpen = Boolean(story);
-  const hasPdf = story ? publicationHasPdf(story) : false;
-  const hasExternal = Boolean(story?.external_url?.trim());
-  const hasBody = Boolean(story?.body?.trim());
-
-  return (
-    <>
-      <div className={`drawer-backdrop${isOpen ? " open" : ""}`} onClick={onClose} aria-hidden />
-      <aside
-        className={`drawer-panel${isOpen ? " open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={story?.title || "Success story"}
-      >
-        {story && (
-          <>
-            <button className="drawer-close" type="button" onClick={onClose} aria-label="Close">
-              &times;
-            </button>
-            {story.cover_image_url?.trim() ? (
-              <div className="drawer-hero-img">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={encodePublicationAssetUrl(story.cover_image_url)} alt={story.cover_image_alt || story.title} />
-              </div>
-            ) : (
-              <div className="drawer-hero-placeholder" />
-            )}
-            <div className="drawer-content">
-              <div>
-                <span className="drawer-category-pill" style={{ color: "#1a1a1a", borderColor: "rgba(0,0,0,0.12)", background: "rgba(0,0,0,0.04)" }}>
-                  Success Story
-                </span>
-                <h2 className="drawer-title">{story.title}</h2>
-                {story.excerpt ? <p className="drawer-subtitle">{story.excerpt}</p> : null}
-              </div>
-              <div className="drawer-divider" />
-              {(hasPdf || hasExternal) && (
-                <div className="drawer-info-section" style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-                  {hasPdf && (
-                    <a href={encodePublicationAssetUrl(story.file_url)} target="_blank" rel="noopener noreferrer" className="drawer-cta-btn" style={{ background: "#1a1a1a" }}>
-                      Open PDF
-                    </a>
-                  )}
-                  {hasExternal && (
-                    <a href={story.external_url!} target="_blank" rel="noopener noreferrer" className="drawer-cta-btn" style={{ background: "#111111" }}>
-                      Read Full Article
-                    </a>
-                  )}
-                </div>
-              )}
-              {hasBody ? (
-                <div className="drawer-body-section">
-                  <h3 className="drawer-info-heading">Story</h3>
-                  <div className="drawer-body-html" dangerouslySetInnerHTML={{ __html: story.body! }} />
-                </div>
-              ) : !hasPdf && !hasExternal ? (
-                <p className="drawer-desc" style={{ color: "#9ca3af", fontStyle: "italic" }}>
-                  Full story content coming soon.
-                </p>
-              ) : null}
-              {(story.meta_line || story.period_label) ? (
-                <div className="drawer-info-section">
-                  <div className="drawer-info-grid-2col">
-                    {story.meta_line ? (
-                      <div className="drawer-info-item">
-                        <span className="drawer-info-label">Details</span>
-                        <span className="drawer-info-value">{story.meta_line}</span>
-                      </div>
-                    ) : null}
-                    {story.period_label ? (
-                      <div className="drawer-info-item">
-                        <span className="drawer-info-label">Period</span>
-                        <span className="drawer-info-value">{story.period_label}</span>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </>
-        )}
-      </aside>
-    </>
+    </Link>
   );
 }

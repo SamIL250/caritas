@@ -497,70 +497,72 @@
 }
 
 .prog-success-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  display: flex;
-  flex-direction: column;
+  display: none;
 }
 
-.prog-success-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-  border-color: color-mix(in srgb, var(--dept-color, #1a1a1a) 15%, transparent);
-}
-
-.prog-success-image {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  display: block;
-  background: #f3f4f6;
-}
-
-.prog-success-body {
-  padding: 1.1rem 1.15rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 0.5rem;
-}
-
-.prog-success-name {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1.3;
-  margin: 0;
-}
-
-.prog-success-desc {
-  font-size: 0.8rem;
-  color: #4b5563;
-  line-height: 1.55;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex: 1;
-}
-
-.prog-success-read {
-  font-size: 0.75rem;
-  font-weight: 600;
+/* ── Legacy Story Card Implementation ── */
+.stories-eyebrow { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: .4rem; 
+  font-size: .63rem; 
+  font-weight: 800; 
+  letter-spacing: 2.5px; 
+  text-transform: uppercase; 
+  padding: .26rem .85rem; 
+  border-radius: 100px; 
+  margin-bottom: .6rem; 
+  background: color-mix(in srgb, var(--dept-color, #1a1a1a) 9%, transparent);
   color: var(--dept-color, #1a1a1a);
-  text-decoration: none;
-  display: inline-block;
-  margin-top: auto;
-  transition: color 0.2s ease;
 }
 
-.prog-success-read:hover {
-  color: #111111;
+.story-card { 
+  border-radius: 20px; 
+  overflow: hidden; 
+  background: #fff; 
+  box-shadow: 0 4px 24px rgba(0,0,0,.07); 
+  display: flex; 
+  flex-direction: column; 
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s; 
+  border: 1px solid #f3f4f6;
+  text-align: left;
+}
+.story-card:hover { transform: translateY(-7px); box-shadow: 0 18px 52px rgba(0,0,0,.13); }
+.story-img { height: 170px; position: relative; overflow: hidden; flex-shrink: 0; }
+.story-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.story-card:hover .story-img img { transform: scale(1.07); }
+.story-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 55%); }
+.story-img-tag { position: absolute; bottom: .75rem; left: .85rem; font-size: .6rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; background: rgba(0,0,0,.5); backdrop-filter: blur(8px); padding: .22rem .6rem; border-radius: 100px; }
+.story-body { padding: 1.35rem 1.35rem 1.15rem; flex: 1; display: flex; flex-direction: column; }
+.story-quote { font-size: .86rem; color: #4b5563; line-height: 1.75; margin-bottom: 1rem; flex: 1; font-style: italic; position: relative; padding-left: 1.1rem; }
+.story-quote::before { content: '"'; position: absolute; left: 0; top: -.1rem; font-size: 1.9rem; line-height: 1; font-style: normal; color: #e5e7eb; }
+.story-person { display: flex; align-items: center; gap: .7rem; margin-bottom: .85rem; }
+.story-avatar { 
+  width: 38px; 
+  height: 38px; 
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: .85rem; 
+  font-weight: 800; 
+  color: #fff; 
+  flex-shrink: 0; 
+  background: linear-gradient(135deg, var(--dept-color, #1a1a1a), color-mix(in srgb, var(--dept-color, #1a1a1a) 60%, #000));
+}
+.story-name { font-size: .86rem; font-weight: 800; color: #111; }
+.story-tag { font-size: .7rem; color: #9ca3af; }
+.story-outcome { 
+  display: flex; 
+  align-items: center; 
+  gap: .5rem; 
+  padding: .55rem .8rem; 
+  border-radius: 10px; 
+  font-size: .76rem; 
+  font-weight: 700; 
+  line-height: 1.4; 
+  background: color-mix(in srgb, var(--dept-color, #1a1a1a) 8%, transparent);
+  color: var(--dept-color, #1a1a1a);
 }
 
 /* ==================== DRAWER (Slide-in Panel) ==================== */

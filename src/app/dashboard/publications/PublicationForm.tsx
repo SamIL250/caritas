@@ -127,7 +127,7 @@ export function PublicationForm({
     : "";
 
   return (
-    <form className="max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
+    <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
       <div className="flex items-center gap-3">
         <Link
           href={category ? `/dashboard/publications?tab=${encodeURIComponent(category.slug)}` : "/dashboard/publications"}
@@ -161,285 +161,297 @@ export function PublicationForm({
         </p>
       ) : null}
 
-      <section className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="category">
-              Type
-            </label>
-            <select
-              id="category"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
-              disabled={mode === "edit"}
-            >
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.label} ({c.kind})
-                </option>
-              ))}
-            </select>
-            {mode === "edit" ? (
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="lg:col-span-8 space-y-6">
+          <div className="space-y-6 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Basics</h3>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="category">
+                  Type
+                </label>
+                <select
+                  id="category"
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
+                  className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
+                  disabled={mode === "edit"}
+                >
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.label} ({c.kind})
+                    </option>
+                  ))}
+                </select>
+                {mode === "edit" ? (
+                  <p className="text-[11px] text-stone-400">
+                    Type is locked after creation. Delete and recreate if you need to move it.
+                  </p>
+                ) : null}
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="status">
+                  Status
+                </label>
+                <select
+                  id="status"
+                  name="status"
+                  defaultValue={publication?.status ?? "draft"}
+                  className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label
+                className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+                htmlFor="department_id"
+              >
+                Program area (department)
+              </label>
+              <select
+                id="department_id"
+                name="department_id"
+                defaultValue={publication?.department_id ?? ""}
+                className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
+              >
+                <option value="">Cross-cutting / not assigned</option>
+                {departments.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
               <p className="text-[11px] text-stone-400">
-                Type is locked after creation. Delete and recreate if you need to move it.
+                Links this item to a pillar for related content and filtering on the public site.
               </p>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="title">
+                Title
+              </label>
+              <Input id="title" name="title" required defaultValue={publication?.title ?? ""} />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="slug">
+                URL slug
+              </label>
+              <Input id="slug" name="slug" defaultValue={publication?.slug ?? ""} placeholder="auto from title if empty" />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="excerpt">
+                Summary / excerpt
+              </label>
+              <textarea
+                id="excerpt"
+                name="excerpt"
+                rows={3}
+                defaultValue={publication?.excerpt ?? ""}
+                className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
+              />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="published_at">
+                  Publish date / time
+                </label>
+                <Input id="published_at" name="published_at" type="datetime-local" defaultValue={publishedLocal} />
+                <p className="text-[11px] text-stone-400">Defaults to now when published.</p>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="period_label">
+                  Period / year badge
+                </label>
+                <Input
+                  id="period_label"
+                  name="period_label"
+                  placeholder="e.g. 2025 or Q4 2025"
+                  defaultValue={publication?.period_label ?? ""}
+                />
+              </div>
+            </div>
+
+            {showFeatured ? (
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-sm font-medium text-amber-900">
+                <input
+                  type="checkbox"
+                  name="featured"
+                  value="on"
+                  defaultChecked={publication?.featured ?? false}
+                  className="size-4 rounded border-amber-400 accent-[#b45309]"
+                />
+                <Star className="size-4" aria-hidden />
+                <span className="flex-1">
+                  Featured slot — shown as the large hero card on /publications. Marking another row featured will
+                  clear this one.
+                </span>
+              </label>
             ) : null}
           </div>
-          <div className="space-y-1">
-            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="status">
-              Status
-            </label>
-            <select
-              id="status"
-              name="status"
-              defaultValue={publication?.status ?? "draft"}
-              className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
-          </div>
-        </div>
 
-        <div className="space-y-1">
-          <label
-            className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
-            htmlFor="department_id"
-          >
-            Program area (department)
-          </label>
-          <select
-            id="department_id"
-            name="department_id"
-            defaultValue={publication?.department_id ?? ""}
-            className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
-          >
-            <option value="">Cross-cutting / not assigned</option>
-            {departments.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.label}
-              </option>
-            ))}
-          </select>
-          <p className="text-[11px] text-stone-400">
-            Links this item to a pillar for related content and filtering on the public site.
-          </p>
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="title">
-            Title
-          </label>
-          <Input id="title" name="title" required defaultValue={publication?.title ?? ""} />
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="slug">
-            URL slug
-          </label>
-          <Input id="slug" name="slug" defaultValue={publication?.slug ?? ""} placeholder="auto from title if empty" />
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="excerpt">
-            Summary / excerpt
-          </label>
-          <textarea
-            id="excerpt"
-            name="excerpt"
-            rows={3}
-            defaultValue={publication?.excerpt ?? ""}
-            className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
-          />
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="published_at">
-              Publish date / time
-            </label>
-            <Input id="published_at" name="published_at" type="datetime-local" defaultValue={publishedLocal} />
-            <p className="text-[11px] text-stone-400">Defaults to now when published.</p>
-          </div>
-          <div className="space-y-1">
-            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="period_label">
-              Period / year badge
-            </label>
-            <Input
-              id="period_label"
-              name="period_label"
-              placeholder="e.g. 2025 or Q4 2025"
-              defaultValue={publication?.period_label ?? ""}
-            />
-          </div>
-        </div>
-
-        {showFeatured ? (
-          <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-sm font-medium text-amber-900">
-            <input
-              type="checkbox"
-              name="featured"
-              value="on"
-              defaultChecked={publication?.featured ?? false}
-              className="size-4 rounded border-amber-400 accent-[#b45309]"
-            />
-            <Star className="size-4" aria-hidden />
-            <span className="flex-1">
-              Featured slot — shown as the large hero card on /publications. Marking another row featured will
-              clear this one.
-            </span>
-          </label>
-        ) : null}
-      </section>
-
-      {showStoryBody ? (
-        <section className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6">
-          <header>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Story body</h3>
-            <p className="mt-1 text-xs text-stone-500">
-              HTML body shown when this publication is opened from a story card. Leave blank to use the excerpt only.
-            </p>
-          </header>
-          <textarea
-            id="body"
-            name="body"
-            rows={10}
-            defaultValue={publication?.body ?? ""}
-            className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 font-mono text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
-          />
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_label">
-                Tag label
-              </label>
-              <Input id="tag_label" name="tag_label" defaultValue={publication?.tag_label ?? ""} />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_icon">
-                Tag icon class
-              </label>
-              <Input
-                id="tag_icon"
-                name="tag_icon"
-                placeholder="fa-solid fa-seedling"
-                defaultValue={publication?.tag_icon ?? ""}
+          {showStoryBody ? (
+            <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+              <header>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Story body</h3>
+                <p className="mt-1 text-xs text-stone-500">
+                  HTML body shown when this publication is opened from a story card. Leave blank to use the excerpt only.
+                </p>
+              </header>
+              <textarea
+                id="body"
+                name="body"
+                rows={10}
+                defaultValue={publication?.body ?? ""}
+                className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 font-mono text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
               />
-            </div>
-          </div>
-        </section>
-      ) : (
-        <>
-          <input type="hidden" name="body" value={publication?.body ?? ""} />
-          <input type="hidden" name="tag_label" value={publication?.tag_label ?? ""} />
-          <input type="hidden" name="tag_icon" value={publication?.tag_icon ?? ""} />
-        </>
-      )}
-
-      <section className="grid gap-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:grid-cols-2 sm:p-6">
-        {showPdf ? (
-          <div className="space-y-3 sm:col-span-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">PDF document</h3>
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex min-h-[44px] flex-1 items-center rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600">
-                {pdfUrl ? (
-                  <a
-                    href={encodePublicationAssetUrl(pdfUrl)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="truncate font-mono hover:underline"
-                  >
-                    {pdfUrl}
-                  </a>
-                ) : (
-                  <span className="text-stone-400">No PDF selected</span>
-                )}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_label">
+                    Tag label
+                  </label>
+                  <Input id="tag_label" name="tag_label" defaultValue={publication?.tag_label ?? ""} />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_icon">
+                    Tag icon class
+                  </label>
+                  <Input
+                    id="tag_icon"
+                    name="tag_icon"
+                    placeholder="fa-solid fa-seedling"
+                    defaultValue={publication?.tag_icon ?? ""}
+                  />
+                </div>
               </div>
-              <Button type="button" variant="secondary" className="h-9 shrink-0 gap-2" onClick={() => setPdfPickerOpen(true)}>
-                <FileText className="size-4" aria-hidden />
-                Pick PDF
-              </Button>
-              {pdfUrl ? (
-                <Button type="button" variant="secondary" className="h-9 shrink-0" onClick={() => setPdfUrl("")}>
-                  Clear
-                </Button>
-              ) : null}
             </div>
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="meta_line">
-                Meta line (file size, language, etc.)
-              </label>
-              <Input
-                id="meta_line"
-                name="meta_line"
-                placeholder="PDF · EN / FR"
-                defaultValue={publication?.meta_line ?? ""}
-              />
-            </div>
-          </div>
-        ) : (
-          <input type="hidden" name="meta_line" value={publication?.meta_line ?? ""} />
-        )}
+          ) : (
+            <>
+              <input type="hidden" name="body" value={publication?.body ?? ""} />
+              <input type="hidden" name="tag_label" value={publication?.tag_label ?? ""} />
+              <input type="hidden" name="tag_icon" value={publication?.tag_icon ?? ""} />
+            </>
+          )}
 
-        {showExternalUrl ? (
-          <div className="space-y-1 sm:col-span-2">
-            <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="external_url">
-              External link
-            </label>
-            <Input
-              id="external_url"
-              name="external_url"
-              type="url"
-              placeholder="https://…"
-              defaultValue={publication?.external_url ?? ""}
-            />
-            <p className="text-[11px] text-stone-400">
-              Card opens this URL in a new tab. Required for the “External link” kind.
-            </p>
+          <div className="rounded-2xl border border-stone-200/80 bg-white shadow-sm overflow-hidden">
+             <PublicationCustomFields fields={fieldSchema} initialValues={initialCustomFields} />
           </div>
-        ) : (
-          <input type="hidden" name="external_url" value={publication?.external_url ?? ""} />
-        )}
 
-        {showCover ? (
-          <div className="space-y-3 sm:col-span-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Cover image</h3>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-              <div className="relative aspect-[16/10] w-full max-w-[260px] shrink-0 overflow-hidden rounded-xl bg-stone-100">
-                {coverUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={encodePublicationAssetUrl(coverUrl)} alt="" className="size-full object-cover" />
-                ) : (
-                  <div className="flex size-full min-h-[140px] flex-col items-center justify-center gap-1 text-center text-[11px] text-stone-400">
-                    <ImagePlus className="size-9 stroke-1 text-stone-300" aria-hidden />
-                    No cover
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-1 flex-col gap-3">
-                <div className="flex flex-wrap gap-2">
-                  <Button type="button" variant="secondary" className="h-9" onClick={() => setCoverPickerOpen(true)}>
-                    Choose cover
-                  </Button>
+        </div>
+
+        <div className="lg:col-span-4 space-y-6">
+          {showCover ? (
+            <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+              <header>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Cover image</h3>
+              </header>
+              <div className="flex flex-col gap-4">
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-stone-100">
                   {coverUrl ? (
-                    <Button type="button" variant="secondary" className="h-9 text-stone-500" onClick={() => setCoverUrl("")}>
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={encodePublicationAssetUrl(coverUrl)} alt="" className="size-full object-cover" />
+                  ) : (
+                    <div className="flex size-full min-h-[140px] flex-col items-center justify-center gap-1 text-center text-[11px] text-stone-400">
+                      <ImagePlus className="size-9 stroke-1 text-stone-300" aria-hidden />
+                      No cover
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-wrap gap-2">
+                    <Button type="button" variant="secondary" className="h-9 w-full" onClick={() => setCoverPickerOpen(true)}>
+                      Choose cover
+                    </Button>
+                    {coverUrl ? (
+                      <Button type="button" variant="secondary" className="h-9 text-stone-500 w-full" onClick={() => setCoverUrl("")}>
+                        Clear
+                      </Button>
+                    ) : null}
+                  </div>
+                  <Input
+                    id="cover_image_alt"
+                    name="cover_image_alt"
+                    placeholder="Alt text (describes the cover for screen readers)"
+                    defaultValue={publication?.cover_image_alt ?? ""}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {showPdf ? (
+            <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">PDF document</h3>
+              <div className="flex flex-col gap-3">
+                <div className="flex min-h-[44px] flex-1 items-center rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600 w-full overflow-hidden">
+                  {pdfUrl ? (
+                    <a
+                      href={encodePublicationAssetUrl(pdfUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="truncate font-mono hover:underline block max-w-full"
+                    >
+                      {pdfUrl}
+                    </a>
+                  ) : (
+                    <span className="text-stone-400">No PDF selected</span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <Button type="button" variant="secondary" className="h-9 shrink-0 gap-2 flex-1" onClick={() => setPdfPickerOpen(true)}>
+                    <FileText className="size-4" aria-hidden />
+                    Pick PDF
+                  </Button>
+                  {pdfUrl ? (
+                    <Button type="button" variant="secondary" className="h-9 shrink-0" onClick={() => setPdfUrl("")}>
                       Clear
                     </Button>
                   ) : null}
                 </div>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="meta_line">
+                  Meta line (file size, language, etc.)
+                </label>
                 <Input
-                  id="cover_image_alt"
-                  name="cover_image_alt"
-                  placeholder="Alt text (describes the cover for screen readers)"
-                  defaultValue={publication?.cover_image_alt ?? ""}
+                  id="meta_line"
+                  name="meta_line"
+                  placeholder="PDF · EN / FR"
+                  defaultValue={publication?.meta_line ?? ""}
                 />
               </div>
             </div>
-          </div>
-        ) : null}
-      </section>
+          ) : (
+            <input type="hidden" name="meta_line" value={publication?.meta_line ?? ""} />
+          )}
 
-      <PublicationCustomFields fields={fieldSchema} initialValues={initialCustomFields} />
+          {showExternalUrl ? (
+            <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-stone-500 block" htmlFor="external_url">
+                External link
+              </label>
+              <Input
+                id="external_url"
+                name="external_url"
+                type="url"
+                placeholder="https://…"
+                defaultValue={publication?.external_url ?? ""}
+              />
+              <p className="text-[11px] text-stone-400">
+                Card opens this URL in a new tab. Required for the “External link” kind.
+              </p>
+            </div>
+          ) : (
+            <input type="hidden" name="external_url" value={publication?.external_url ?? ""} />
+          )}
+        </div>
+      </div>
 
       <MediaPicker
         isOpen={coverPickerOpen}
@@ -460,14 +472,14 @@ export function PublicationForm({
         }}
       />
 
-      <div className="sticky bottom-2 flex justify-end gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur">
+      <div className="sticky bottom-4 flex justify-end gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur z-50 shadow-lg mt-8">
         <Link
           href={category ? `/dashboard/publications?tab=${encodeURIComponent(category.slug)}` : "/dashboard/publications"}
-          className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
+          className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50 flex-1 lg:flex-none"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving}>
+        <Button type="submit" variant="primary" disabled={saving} className="h-10 flex-1 lg:flex-none">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
