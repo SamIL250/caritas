@@ -443,7 +443,7 @@ export default function OverviewDashboardClient({
       </div>
 
       {/* ── Bottom row ─────────────────────────────────────────── */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Engagement stats */}
         <Card className="border-stone-200/80 p-4 sm:p-5">
           <div className="mb-4 flex items-center gap-2">
@@ -480,22 +480,22 @@ export default function OverviewDashboardClient({
           </div>
         </Card>
 
-        {/* Quick actions */}
+        {/* Quick actions & mini cards */}
         <div className="space-y-4">
           <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] text-stone-400 px-0.5">
             Quick actions
           </h4>
-          <div className="grid gap-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             <Link
               href="/dashboard/pages"
               className="group flex items-center gap-3 rounded-lg border border-stone-200/80 bg-white px-4 py-3 transition-[border-color] duration-200 hover:border-[var(--color-primary)]/25"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
                 <FileText size={16} />
               </div>
-              <div>
-                <p className="text-sm font-bold text-stone-800">Create a page</p>
-                <p className="text-[10px] font-medium text-stone-400">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-stone-800">Create a page</p>
+                <p className="truncate text-[10px] font-medium text-stone-400">
                   Add content to the website
                 </p>
               </div>
@@ -504,12 +504,12 @@ export default function OverviewDashboardClient({
               href="/dashboard/community-campaigns/new"
               className="group flex items-center gap-3 rounded-lg border border-stone-200/80 bg-white px-4 py-3 transition-[border-color] duration-200 hover:border-[var(--color-primary)]/25"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
                 <Megaphone size={16} />
               </div>
-              <div>
-                <p className="text-sm font-bold text-stone-800">New campaign</p>
-                <p className="text-[10px] font-medium text-stone-400">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-stone-800">New campaign</p>
+                <p className="truncate text-[10px] font-medium text-stone-400">
                   Start a fundraising campaign
                 </p>
               </div>
@@ -518,12 +518,12 @@ export default function OverviewDashboardClient({
               href="/dashboard/users"
               className="group flex items-center gap-3 rounded-lg border border-stone-200/80 bg-white px-4 py-3 transition-[border-color] duration-200 hover:border-[var(--color-primary)]/25"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
                 <Users size={16} />
               </div>
-              <div>
-                <p className="text-sm font-bold text-stone-800">Manage users</p>
-                <p className="text-[10px] font-medium text-stone-400">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-stone-800">Manage users</p>
+                <p className="truncate text-[10px] font-medium text-stone-400">
                   Invite editors &amp; admins
                 </p>
               </div>
@@ -532,62 +532,64 @@ export default function OverviewDashboardClient({
               href="/dashboard/settings"
               className="group flex items-center gap-3 rounded-lg border border-stone-200/80 bg-white px-4 py-3 transition-[border-color] duration-200 hover:border-[var(--color-primary)]/25"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stone-100 bg-stone-50 text-stone-400 transition-colors group-hover:border-[var(--color-primary)]/15 group-hover:bg-[var(--color-primary)]/5 group-hover:text-[var(--color-primary)]">
                 <Settings size={16} />
               </div>
-              <div>
-                <p className="text-sm font-bold text-stone-800">Site settings</p>
-                <p className="text-[10px] font-medium text-stone-400">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-stone-800">Site settings</p>
+                <p className="truncate text-[10px] font-medium text-stone-400">
                   Site name, logo, email config
                 </p>
               </div>
             </Link>
           </div>
 
-          {/* Donation summary mini card */}
-          <Card className="border-stone-200/80 p-4">
-            <div className="mb-3 flex items-center gap-2">
-              <Heart size={14} className="text-rose-600" />
-              <h4 className="text-xs font-bold text-stone-800">Donation details</h4>
-            </div>
-            <DonationMiniStats summary={donationSummary} />
-            <div className="mt-3 flex items-center justify-between border-t border-stone-100 pt-3 text-xs">
-              <span className="text-stone-500">Avg. gift</span>
-              <span className="font-bold text-stone-800 tabular-nums">
-                {donationSummary.averageAmount.toLocaleString()} RWF
-              </span>
-            </div>
-            <div className="mt-1.5 flex items-center justify-between text-xs">
-              <span className="text-stone-500">Unique donors</span>
-              <span className="font-bold text-stone-800 tabular-nums">
-                {donationSummary.donorCount}
-              </span>
-            </div>
-            <Link
-              href="/dashboard/donations"
-              className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-800"
-            >
-              View all donations
-              <ExternalLink size={12} />
-            </Link>
-          </Card>
-
-          {/* Support card */}
-          <div className="rounded-xl border border-stone-200 bg-stone-50 p-4 sm:p-5">
-            <div className="flex items-center gap-2">
-              <Settings size={14} className="text-stone-400" />
-              <h4 className="text-xs font-bold text-stone-700">Need help?</h4>
-            </div>
-            <p className="mt-1.5 text-xs leading-relaxed text-stone-500">
-              Questions about your dashboard or content management? 
-              Reach out to us at{" "}
-              <a
-                href="mailto:info@lerony.com"
-                className="font-semibold text-[var(--color-primary)] underline decoration-[var(--color-primary)]/20 underline-offset-2 hover:decoration-[var(--color-primary)]/60"
+          <div className="grid gap-3 sm:grid-cols-2">
+            {/* Donation summary mini card */}
+            <Card className="border-stone-200/80 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Heart size={14} className="text-rose-600" />
+                <h4 className="text-xs font-bold text-stone-800">Donation details</h4>
+              </div>
+              <DonationMiniStats summary={donationSummary} />
+              <div className="mt-3 flex items-center justify-between border-t border-stone-100 pt-3 text-xs">
+                <span className="text-stone-500">Avg. gift</span>
+                <span className="font-bold text-stone-800 tabular-nums">
+                  {donationSummary.averageAmount.toLocaleString()} RWF
+                </span>
+              </div>
+              <div className="mt-1.5 flex items-center justify-between text-xs">
+                <span className="text-stone-500">Unique donors</span>
+                <span className="font-bold text-stone-800 tabular-nums">
+                  {donationSummary.donorCount}
+                </span>
+              </div>
+              <Link
+                href="/dashboard/donations"
+                className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-800"
               >
-                info@lerony.com
-              </a>
-            </p>
+                View all donations
+                <ExternalLink size={12} />
+              </Link>
+            </Card>
+
+            {/* Support card */}
+            <div className="rounded-xl border border-stone-200 bg-stone-50 p-4 sm:p-5">
+              <div className="flex items-center gap-2">
+                <Settings size={14} className="text-stone-400" />
+                <h4 className="text-xs font-bold text-stone-700">Need help?</h4>
+              </div>
+              <p className="mt-1.5 text-xs leading-relaxed text-stone-500">
+                Questions about your dashboard or content management? 
+                Reach out to us at{" "}
+                <a
+                  href="mailto:info@lerony.com"
+                  className="font-semibold text-[var(--color-primary)] underline decoration-[var(--color-primary)]/20 underline-offset-2 hover:decoration-[var(--color-primary)]/60"
+                >
+                  info@lerony.com
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -231,60 +231,55 @@ export function ContactMessageForm({
       ) : null}
 
       <form id="contactForm" onSubmit={handleSubmit}>
-        {formFields.map((field, idx) => {
-          if (field.type === "textarea" || field.type === "select") {
-            return (
-              <FormFieldInput
-                key={field.key}
-                field={field}
-                value={fieldValues[field.key] ?? ""}
-                onChange={(v) => setField(field.key, v)}
-                disabled={pending}
-              />
-            );
-          }
-          const nextIsNewRow = idx < formFields.length - 1 && (isLast(field, idx) || (
-            idx % 2 === 0 && idx < formFields.length - 1 &&
-            formFields[idx + 1].type !== "textarea" &&
-            formFields[idx + 1].type !== "select"
-          ));
-          if (nextIsNewRow && idx % 2 === 0) {
-            const next = formFields[idx + 1];
-            return (
-              <div className="cf-row" key={`row-${field.key}`}>
+        {(() => {
+          const rows = [];
+          for (let i = 0; i < formFields.length; i++) {
+            const field = formFields[i];
+            if (field.type === "textarea" || field.type === "select") {
+              rows.push(
                 <FormFieldInput
+                  key={field.key}
                   field={field}
                   value={fieldValues[field.key] ?? ""}
                   onChange={(v) => setField(field.key, v)}
                   disabled={pending}
                 />
-                <FormFieldInput
-                  field={next}
-                  value={fieldValues[next.key] ?? ""}
-                  onChange={(v) => setField(next.key, v)}
-                  disabled={pending}
-                />
-              </div>
-            );
+              );
+            } else {
+              const next = formFields[i + 1];
+              if (next && next.type !== "textarea" && next.type !== "select") {
+                rows.push(
+                  <div className="cf-row" key={`row-${field.key}`}>
+                    <FormFieldInput
+                      field={field}
+                      value={fieldValues[field.key] ?? ""}
+                      onChange={(v) => setField(field.key, v)}
+                      disabled={pending}
+                    />
+                    <FormFieldInput
+                      field={next}
+                      value={fieldValues[next.key] ?? ""}
+                      onChange={(v) => setField(next.key, v)}
+                      disabled={pending}
+                    />
+                  </div>
+                );
+                i++; // Skip the paired field
+              } else {
+                rows.push(
+                  <FormFieldInput
+                    key={field.key}
+                    field={field}
+                    value={fieldValues[field.key] ?? ""}
+                    onChange={(v) => setField(field.key, v)}
+                    disabled={pending}
+                  />
+                );
+              }
+            }
           }
-          if (idx % 2 === 0) return null;
-          return (
-            <div className="cf-row" key={`row-${field.key}`}>
-              <FormFieldInput
-                field={formFields[idx - 1]}
-                value={fieldValues[formFields[idx - 1].key] ?? ""}
-                onChange={(v) => setField(formFields[idx - 1].key, v)}
-                disabled={pending}
-              />
-              <FormFieldInput
-                field={field}
-                value={fieldValues[field.key] ?? ""}
-                onChange={(v) => setField(field.key, v)}
-                disabled={pending}
-              />
-            </div>
-          );
-        })}
+          return rows;
+        })()}
 
         <button type="submit" className="cf-submit" disabled={pending}>
           {pending ? (

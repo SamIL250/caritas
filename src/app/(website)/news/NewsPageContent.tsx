@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
 
 import type { NewsCmsSection, NewsPageChrome } from "./get-news-data";
@@ -19,6 +19,7 @@ type Props = {
   featuredArticle: PublishedNewsArticle | null;
   gridArticles: PublishedNewsArticle[];
   departmentPillars: ProgramDepartmentOption[];
+  initialTopic?: string;
 };
 
 export default function NewsPageContent({
@@ -27,9 +28,18 @@ export default function NewsPageContent({
   featuredArticle,
   gridArticles,
   departmentPillars,
+  initialTopic,
 }: Props) {
-  const [departmentFilter, setDepartmentFilter] = useState<string | "all">("all");
+  const [departmentFilter, setDepartmentFilter] = useState<string | "all">(initialTopic || "all");
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    if (initialTopic) {
+      setDepartmentFilter(initialTopic);
+    } else {
+      setDepartmentFilter("all");
+    }
+  }, [initialTopic]);
 
   // original-website/news.html has no dedicated hero image — use slide4 (community) which fits the news context
   const heroImage =

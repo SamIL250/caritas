@@ -4226,11 +4226,12 @@
         }
 
         .contact-heading span {
-            color: #8c2208;
-            -webkit-text-fill-color: #8c2208;
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
+            background: linear-gradient(90deg, #d32f2f, #943a37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-style: normal;
         }
 
         .contact-subtext {
@@ -4337,7 +4338,7 @@
         .contact-form-title {
             font-size: 1.35rem;
             font-weight: 800;
-            color: var(--primary-dark);
+            color: #000;
             margin-bottom: 0.4rem;
             letter-spacing: -0.02em;
         }

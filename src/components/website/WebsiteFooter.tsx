@@ -103,8 +103,8 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
               <i className="fa-solid fa-location-dot" />
             </div>
             <div>
-              <div className="ft-chip-label">Headquarters</div>
-              <div className="ft-chip-value">Kigali, Rwanda</div>
+              <div className="ft-chip-label">{s.contact.addressLabel}</div>
+              <div className="ft-chip-value">{s.contact.address}</div>
             </div>
           </div>
           <div className="ft-chip">
@@ -112,8 +112,8 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
               <i className="fa-solid fa-phone" />
             </div>
             <div>
-              <div className="ft-chip-label">Phone</div>
-              <div className="ft-chip-value">(+250) 252 574 344</div>
+              <div className="ft-chip-label">{s.contact.phoneLabel}</div>
+              <div className="ft-chip-value">{s.contact.phone}</div>
             </div>
           </div>
           <div className="ft-chip">
@@ -121,8 +121,8 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
               <i className="fa-solid fa-envelope" />
             </div>
             <div>
-              <div className="ft-chip-label">Email</div>
-              <div className="ft-chip-value">info@caritasrwanda.org</div>
+              <div className="ft-chip-label">{s.contact.emailLabel}</div>
+              <div className="ft-chip-value">{s.contact.email}</div>
             </div>
           </div>
         </div>

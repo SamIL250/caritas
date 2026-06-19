@@ -24,7 +24,7 @@ section.cr-home-about {
    ════════════════════════════════════════════════════ */
 
 .cr-about-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
 }
 
 .cr-about-title {
@@ -51,7 +51,7 @@ section.cr-home-about {
   width: 48px;
   height: 1px;
   background: #B5272D;
-  margin: 20px 0 48px 0;
+  margin: 20px 0 10px 0;
 }
 
 /* ════════════════════════════════════════════════════
@@ -103,7 +103,7 @@ section.cr-home-about {
   border: 7px solid #ffffff;
   border-radius: 50%;
   left: 400px;
-  top: 150px;
+  top: 140px;
   z-index: 2;
 }
 

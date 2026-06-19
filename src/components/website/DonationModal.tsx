@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import { createDonationSession } from "@/app/actions/stripe";
@@ -12,6 +12,8 @@ import {
   ChevronRight,
   Check,
   ChevronLeft,
+  ChevronUp,
+  ChevronDown,
   Calendar,
   ImageIcon,
   Landmark,
@@ -144,6 +146,24 @@ export default function DonationModal({
   const [paymentMethod, setPaymentMethod] = useState<DonationPaymentMethod>("stripe");
   const [error, setError] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const formAreaRef = useRef<HTMLDivElement>(null);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+
+  function handleScroll() {
+    if (!formAreaRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = formAreaRef.current;
+    setIsScrolledToBottom(scrollHeight - scrollTop <= clientHeight + 10);
+  }
+
+  function handleCloseClick() {
+    if (amount || donorName || donorEmail || organizationName || phone || address || donorMessage) {
+      setShowCloseConfirm(true);
+    } else {
+      onClose();
+    }
+  }
 
   const flowSteps = useMemo((): FlowStep[] => {
     const showDetail = Boolean(selectedCampaign && selectedCampaign.id);
@@ -486,7 +506,7 @@ export default function DonationModal({
           exit={{ opacity: 0 }}
         >
           <div className="donation-modal-container">
-            <button type="button" className="donation-modal-close" onClick={onClose} aria-label="Close modal">
+            <button type="button" className="donation-modal-close" onClick={handleCloseClick} aria-label="Close modal">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
             <div className="donation-modal-content">
@@ -567,36 +587,104 @@ export default function DonationModal({
               </div>
 
               {/* ─── Form Area (Right 40%) ─── */}
-              <div className="donation-modal-form-area">
-                <div className="form-steps-indicator donation-form-steps-wide">
-                  {Array.from({ length: stepDisplayTotal }, (_, i) => {
-                    const canClick = i < stepDisplayIndex - 1;
-                    return (
-                      <div
-                        key={i}
-                        className={`donation-step-track${canClick ? " is-clickable" : ""}`}
-                        onClick={canClick ? () => goToStep(flowSteps[i]) : undefined}
-                        role={canClick ? "button" : undefined}
-                        tabIndex={canClick ? 0 : undefined}
-                        onKeyDown={
-                          canClick
-                            ? (e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.preventDefault();
-                                  goToStep(flowSteps[i]);
-                                }
-                              }
-                            : undefined
-                        }
-                        aria-label={canClick ? `Go back to step ${i + 1}` : undefined}
-                      >
-                        <div className={`step-dot ${stepDisplayIndex >= i + 1 ? "active" : ""}`}>
-                          {i + 1}
+              <div 
+                className="donation-modal-form-area" 
+                ref={formAreaRef} 
+                onScroll={handleScroll}
+              >
+                {/* Confirmation Modal */}
+                <AnimatePresence>
+                  {showCloseConfirm && (
+                    <motion.div 
+                      className="absolute inset-0 z-[50] flex flex-col items-center justify-center bg-black/50 px-6 text-center backdrop-blur-sm rounded-r-3xl"
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    >
+                      <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center max-w-sm">
+                        <div className="mb-4 rounded-full bg-red-50 p-3 text-red-600">
+                          <X size={32} />
                         </div>
-                        {i < stepDisplayTotal - 1 ? <div className="step-line" /> : null}
+                        <h3 className="mb-2 text-xl font-bold text-stone-800">Cancel donation?</h3>
+                        <p className="mb-6 text-sm text-stone-500">
+                          You have entered some information. Are you sure you want to leave? Your progress will be lost.
+                        </p>
+                        <div className="flex w-full flex-col gap-3">
+                          <button
+                            type="button"
+                            className="w-full rounded-lg bg-black py-3 font-bold text-white transition-colors hover:bg-stone-800"
+                            onClick={() => {
+                              setShowCloseConfirm(false);
+                              onClose();
+                            }}
+                          >
+                            Yes, cancel donation
+                          </button>
+                          <button
+                            type="button"
+                            className="w-full rounded-lg border-2 border-stone-200 bg-transparent py-3 font-bold text-stone-700 transition-colors hover:bg-stone-50"
+                            onClick={() => setShowCloseConfirm(false)}
+                          >
+                            No, continue giving
+                          </button>
+                        </div>
                       </div>
-                    );
-                  })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="w-full flex justify-center mb-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/img/logo_caritas.webp" alt="Caritas Rwanda Logo" className="h-[40px] object-contain opacity-90" />
+                </div>
+
+                <div className="flex items-center justify-between mb-8 pb-4 border-b border-stone-100">
+                  {/* Left: Back Button */}
+                  <div className="w-[80px]">
+                    {phase !== "pick" && (
+                      <button 
+                        type="button" 
+                        className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-stone-400 hover:text-stone-800 transition-colors" 
+                        onClick={goBack}
+                      >
+                        <ChevronLeft size={16} />
+                        Back
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Center: Step Indicator */}
+                  <div className="form-steps-indicator donation-form-steps-wide" style={{ marginBottom: 0, marginTop: 0 }}>
+                    {Array.from({ length: stepDisplayTotal }, (_, i) => {
+                      const canClick = i < stepDisplayIndex - 1;
+                      return (
+                        <div
+                          key={i}
+                          className={`donation-step-track${canClick ? " is-clickable" : ""}`}
+                          onClick={canClick ? () => goToStep(flowSteps[i]) : undefined}
+                          role={canClick ? "button" : undefined}
+                          tabIndex={canClick ? 0 : undefined}
+                          onKeyDown={
+                            canClick
+                              ? (e) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    goToStep(flowSteps[i]);
+                                  }
+                                }
+                              : undefined
+                          }
+                          aria-label={canClick ? `Go back to step ${i + 1}` : undefined}
+                        >
+                          <div className={`step-dot ${stepDisplayIndex >= i + 1 ? "active" : ""}`}>
+                            {i + 1}
+                          </div>
+                          {i < stepDisplayTotal - 1 ? <div className="step-line" /> : null}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Right spacer for centering */}
+                  <div className="w-[80px]"></div>
                 </div>
 
                 {phase === "pick" && (
@@ -691,10 +779,6 @@ export default function DonationModal({
                     animate={{ opacity: 1, x: 0 }}
                     key="detail"
                   >
-                    <button type="button" className="back-link" onClick={goBack}>
-                      <ChevronLeft size={16} className="inline mr-1" />
-                      Back
-                    </button>
                     <h2 className="step-title">
                       <span>{String(selectedCampaign.name)}</span>
                     </h2>
@@ -809,10 +893,6 @@ export default function DonationModal({
                     animate={{ opacity: 1, x: 0 }}
                     key="pay"
                   >
-                    <button type="button" className="back-link" onClick={goBack}>
-                      <ChevronLeft size={16} className="inline mr-1" />
-                      Back
-                    </button>
                     <h2 className="step-title">
                       Your <span>Gift</span>
                     </h2>
@@ -1108,6 +1188,35 @@ export default function DonationModal({
                   </motion.div>
                 )}
               </div>
+              
+              {/* Floating scroll indicator (bottom right) */}
+              <AnimatePresence>
+                {phase !== "pick" && (
+                  <motion.button 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    type="button" 
+                    className="absolute bottom-6 right-6 z-[45] flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-transform hover:scale-110"
+                    onClick={() => {
+                      if (formAreaRef.current) {
+                        if (isScrolledToBottom) {
+                          formAreaRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          formAreaRef.current.scrollTo({ top: formAreaRef.current.scrollHeight, behavior: 'smooth' });
+                        }
+                      }
+                    }}
+                    aria-label={isScrolledToBottom ? "Scroll to top" : "Scroll to bottom"}
+                  >
+                    {isScrolledToBottom ? (
+                      <ChevronUp size={24} className="animate-bounce" />
+                    ) : (
+                      <ChevronDown size={24} className="animate-bounce" />
+                    )}
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>

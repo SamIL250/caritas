@@ -133,51 +133,35 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
                   <stop offset="0%" stopColor="rgba(255,255,255,0.8)" />
                   <stop offset="100%" stopColor="rgba(255,255,255,0)" />
                 </linearGradient>
+                <linearGradient id="fadeLineVerticalBoth" x1="650" y1="640" x2="650" y2="690" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="rgba(255,255,255,0)" />
+                  <stop offset="50%" stopColor="rgba(255,255,255,0.9)" />
+                  <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                </linearGradient>
                 <filter id="lineShadow" x="-20%" y="-20%" width="140%" height="140%">
                   <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="rgba(0,0,0,0.3)" />
                 </filter>
               </defs>
 
-              {/* ── Lines from left panel (target icon) → OUR MISSION ── */}
-              <line x1="260" y1="240" x2="565" y2="375" stroke="url(#fadeLineLeft)" strokeWidth="3" filter="url(#lineShadow)" />
-              <circle cx="565" cy="375" r="5" fill="#fff" filter="url(#lineShadow)" />
+              {/* ── White Lines from outer text boxes to big white circle border ── */}
+              <line x1="295" y1="260" x2="416" y2="304" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" filter="url(#lineShadow)" />
+              <line x1="1010" y1="230" x2="879" y2="289" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" filter="url(#lineShadow)" />
+              <line x1="650" y1="690" x2="650" y2="640" stroke="url(#fadeLineVerticalBoth)" strokeWidth="2.5" filter="url(#lineShadow)" />
 
-              {/* ── Lines from right panel (hand icon) → OUR VALUES ── */}
-              <line x1="1040" y1="200" x2="745" y2="375" stroke="url(#fadeLineRight)" strokeWidth="3" filter="url(#lineShadow)" />
-              <circle cx="745" cy="375" r="5" fill="#fff" filter="url(#lineShadow)" />
+              {/* ── White dots on the big circle border ── */}
+              <circle cx="416" cy="304" r="5" fill="#fff" filter="url(#lineShadow)" />
+              <circle cx="879" cy="289" r="5" fill="#fff" filter="url(#lineShadow)" />
+              <circle cx="650" cy="640" r="5" fill="#fff" filter="url(#lineShadow)" />
 
-              {/* ── Bottom vertical line from eye icon → OUR VISION ── */}
-              <line x1="655" y1="690" x2="655" y2="555" stroke="url(#fadeLineDown)" strokeWidth="3" filter="url(#lineShadow)" />
-              <circle cx="655" cy="555" r="5" fill="#fff" filter="url(#lineShadow)" />
+              {/* ── White Lines inside the big circle to the inner circles ── */}
+              <line x1="416" y1="304" x2="490" y2="304" stroke="rgba(255,255,255,0.9)" strokeWidth="3" />
+              <line x1="879" y1="289" x2="800" y2="305" stroke="rgba(255,255,255,0.9)" strokeWidth="3" />
+              <line x1="650" y1="640" x2="650" y2="550" stroke="rgba(255,255,255,0.9)" strokeWidth="3" />
 
-              {/* ── Inner circle MISSION → node 1 (top-left) ── */}
-              <line x1="556" y1="316" x2="565" y2="165" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <circle cx="565" cy="165" r="4" fill="rgba(148,58,55,0.8)" />
-
-              {/* ── Inner circle VALUES → node 10 (top-right) ── */}
-              <line x1="736" y1="316" x2="735" y2="165" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <circle cx="735" cy="165" r="4" fill="rgba(148,58,55,0.8)" />
-
-              {/* ── Inner circle VALUES → node 229 (right) ── */}
-              <line x1="736" y1="316" x2="900" y2="400" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <circle cx="900" cy="400" r="4" fill="rgba(148,58,55,0.8)" />
-
-              {/* ── Inner circle VISION → node 882 (bottom-right) ── */}
-              <line x1="646" y1="496" x2="775" y2="616" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <circle cx="775" cy="616" r="4" fill="rgba(148,58,55,0.8)" />
-
-              {/* ── Inner circle VISION → node 29,141 (bottom-left) ── */}
-              <line x1="646" y1="496" x2="525" y2="616" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <circle cx="525" cy="616" r="4" fill="rgba(148,58,55,0.8)" />
-
-              {/* ── Inner circle MISSION → node 56,345+ (left) ── */}
-              <line x1="556" y1="316" x2="400" y2="400" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <circle cx="400" cy="400" r="4" fill="rgba(148,58,55,0.8)" />
-
-              {/* ── Lines connecting the central concepts ── */}
-              <line x1="560" y1="345" x2="740" y2="345" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <line x1="740" y1="345" x2="650" y2="525" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
-              <line x1="650" y1="525" x2="560" y2="345" stroke="rgba(148,58,55,0.8)" strokeWidth="2" />
+              {/* ── Perpendicular T-Junction caps at the inner circles ── */}
+              <line x1="490" y1="295" x2="490" y2="313" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" />
+              <line x1="800" y1="296" x2="800" y2="314" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" />
+              <line x1="641" y1="550" x2="659" y2="550" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" />
             </svg>
 
             {/* ─── Center big circle ─── */}

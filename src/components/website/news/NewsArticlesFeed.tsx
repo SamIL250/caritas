@@ -160,28 +160,46 @@ export default function NewsArticlesFeed({
                   <h2>{featuredVisible ? "Trending Now" : "Top Stories"}</h2>
                 </div>
                 <div className="news-mag-grid">
-                  {/* Left: Large Featured */}
-                  {filteredGrid[0] && (
-                    <Link
-                      href={`/news/${filteredGrid[0].slug}`}
-                      className="news-mag-large"
-                    >
-                      <div className="news-mag-large-img">
-                        <img src={filteredGrid[0].image_url} alt={filteredGrid[0].title} />
-                        <div className="news-mag-large-tag">{tagLabel(filteredGrid[0])}</div>
-                      </div>
-                      <h3 className="news-mag-large-title">{filteredGrid[0].title}</h3>
-                      <div className="news-mag-large-meta">
-                        <span>{formatPublishedDate(filteredGrid[0].published_at)}</span>
-                        <span>•</span>
-                        <span>{filteredGrid[0].excerpt?.substring(0, 80)}...</span>
-                      </div>
-                    </Link>
-                  )}
+                  {/* Left Column: Large Featured + Wide Article */}
+                  <div className="flex flex-col gap-6 w-full h-full">
+                    {filteredGrid[0] && (
+                      <Link
+                        href={`/news/${filteredGrid[0].slug}`}
+                        className="news-mag-large"
+                      >
+                        <div className="news-mag-large-img">
+                          <img src={filteredGrid[0].image_url} alt={filteredGrid[0].title} />
+                          <div className="news-mag-large-tag">{tagLabel(filteredGrid[0])}</div>
+                        </div>
+                        <h3 className="news-mag-large-title">{filteredGrid[0].title}</h3>
+                        <div className="news-mag-large-meta">
+                          <span>{formatPublishedDate(filteredGrid[0].published_at)}</span>
+                          <span>•</span>
+                          <span>{filteredGrid[0].excerpt?.substring(0, 80)}...</span>
+                        </div>
+                      </Link>
+                    )}
+                    
+                    {filteredGrid[1] && (
+                      <Link
+                        href={`/news/${filteredGrid[1].slug}`}
+                        className="flex items-center gap-4 group text-inherit no-underline border border-stone-200 rounded-2xl p-3 hover:border-[var(--primary-orange)] transition-colors bg-white mt-auto"
+                      >
+                        <div className="w-1/3 aspect-[4/3] rounded-xl overflow-hidden relative shrink-0">
+                          <img src={filteredGrid[1].image_url} alt={filteredGrid[1].title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                        </div>
+                        <div className="w-2/3 flex flex-col justify-center">
+                          <div className="text-[10px] font-bold text-[#a5280d] mb-1 uppercase tracking-wider">{tagLabel(filteredGrid[1])}</div>
+                          <h4 className="text-[15px] font-bold text-stone-900 group-hover:text-[#a5280d] transition-colors mb-1 line-clamp-2 leading-tight">{filteredGrid[1].title}</h4>
+                          <div className="text-[11px] text-stone-500">{formatPublishedDate(filteredGrid[1].published_at)}</div>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
 
                   {/* Right: Vertical List */}
                   <div className="news-mag-list">
-                    {filteredGrid.slice(1, 5).map((a) => (
+                    {filteredGrid.slice(2, 6).map((a) => (
                       <Link
                         key={a.id}
                         href={`/news/${a.slug}`}
@@ -205,13 +223,13 @@ export default function NewsArticlesFeed({
             )}
 
             {/* Standard Grid for Remaining Stories */}
-            {(currentPage > 1 || filteredGrid.length > 5) && (
+            {(currentPage > 1 || filteredGrid.length > 6) && (
               <>
                 <div className="news-section-divider">
                   <h2>{currentPage === 1 ? "More Stories" : "Stories"}</h2>
                 </div>
                 <div className="news-grid">
-                  {(currentPage === 1 ? paginatedGrid.slice(5) : paginatedGrid).map((a) => (
+                  {(currentPage === 1 ? paginatedGrid.slice(6) : paginatedGrid).map((a) => (
                     <Link
                       key={a.id}
                       href={`/news/${a.slug}`}

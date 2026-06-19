@@ -11,7 +11,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function NewsPage() {
+export default async function NewsPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const topic = typeof searchParams.topic === "string" ? searchParams.topic : undefined;
+
   const { chrome, cmsSections, featuredArticle, gridArticles, departmentPillars } =
     await resolveNewsPublicPagePayload();
 
@@ -22,6 +25,7 @@ export default async function NewsPage() {
       featuredArticle={featuredArticle}
       gridArticles={gridArticles}
       departmentPillars={departmentPillars}
+      initialTopic={topic}
     />
   );
 }
