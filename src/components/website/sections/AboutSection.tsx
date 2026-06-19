@@ -146,7 +146,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
               {/* ── White Lines from outer text boxes to big white circle border ── */}
               <line x1="295" y1="260" x2="416" y2="304" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" filter="url(#lineShadow)" />
               <line x1="1010" y1="230" x2="879" y2="289" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" filter="url(#lineShadow)" />
-              <line x1="650" y1="690" x2="650" y2="640" stroke="url(#fadeLineVerticalBoth)" strokeWidth="2.5" filter="url(#lineShadow)" />
+              <line x1="650" y1="690" x2="650" y2="640" stroke="rgba(255,255,255,0.8)" strokeWidth="2.5" filter="url(#lineShadow)" />
 
               {/* ── White dots on the big circle border ── */}
               <circle cx="416" cy="304" r="5" fill="#fff" filter="url(#lineShadow)" />
@@ -154,14 +154,14 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
               <circle cx="650" cy="640" r="5" fill="#fff" filter="url(#lineShadow)" />
 
               {/* ── White Lines inside the big circle to the inner circles ── */}
-              <line x1="416" y1="304" x2="490" y2="304" stroke="rgba(255,255,255,0.9)" strokeWidth="3" />
-              <line x1="879" y1="289" x2="800" y2="305" stroke="rgba(255,255,255,0.9)" strokeWidth="3" />
-              <line x1="650" y1="640" x2="650" y2="550" stroke="rgba(255,255,255,0.9)" strokeWidth="3" />
+              <line x1="416" y1="304" x2="490" y2="304" stroke="#a5280d" strokeWidth="2.5" />
+              <line x1="879" y1="289" x2="800" y2="305" stroke="#a5280d" strokeWidth="2.5" />
+              <line x1="650" y1="640" x2="650" y2="550" stroke="#a5280d" strokeWidth="2.5" />
 
               {/* ── Perpendicular T-Junction caps at the inner circles ── */}
-              <line x1="490" y1="295" x2="490" y2="313" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" />
-              <line x1="800" y1="296" x2="800" y2="314" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" />
-              <line x1="641" y1="550" x2="659" y2="550" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" />
+              <line x1="490" y1="295" x2="490" y2="313" stroke="#a5280d" strokeWidth="3" />
+              <line x1="800" y1="296" x2="800" y2="314" stroke="#a5280d" strokeWidth="3" />
+              <line x1="641" y1="550" x2="659" y2="550" stroke="#a5280d" strokeWidth="3" />
             </svg>
 
             {/* ─── Center big circle ─── */}
@@ -191,6 +191,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
                   height: n.size,
                   left: n.left,
                   top: n.top,
+                  fontWeight: 500, // Not bold
                 }}
               >
                 {n.label}
@@ -214,7 +215,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
 
             {/* ─── Left text box (Mission) ─── */}
             <div className="cr-info-box cr-info-box--left">
-              <div className="cr-icon-overlap cr-icon-overlap--target">
+              <div className="cr-icon-overlap cr-icon-overlap--target" style={{ width: '45px', height: '45px', right: '-15px', top: '-15px' }}>
                 <img src="/img/image.png" alt="" />
               </div>
               <p className="cr-box-body" style={{ textAlign: 'center' }}>{content.missionText}</p>

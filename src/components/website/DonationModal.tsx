@@ -506,9 +506,6 @@ export default function DonationModal({
           exit={{ opacity: 0 }}
         >
           <div className="donation-modal-container">
-            <button type="button" className="donation-modal-close" onClick={handleCloseClick} aria-label="Close modal">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
             <div className="donation-modal-content">
               {/* ─── Image Panel (Left 60%) ─── */}
               <div className="donation-modal-image-panel">
@@ -588,53 +585,22 @@ export default function DonationModal({
 
               {/* ─── Form Area (Right 40%) ─── */}
               <div 
-                className="donation-modal-form-area" 
+                className="donation-modal-form-area relative" 
                 ref={formAreaRef} 
                 onScroll={handleScroll}
+                style={{ padding: 0 }}
               >
-                {/* Confirmation Modal */}
-                <AnimatePresence>
-                  {showCloseConfirm && (
-                    <motion.div 
-                      className="absolute inset-0 z-[50] flex flex-col items-center justify-center bg-black/50 px-6 text-center backdrop-blur-sm rounded-r-3xl"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    >
-                      <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center max-w-sm">
-                        <div className="mb-4 rounded-full bg-red-50 p-3 text-red-600">
-                          <X size={32} />
-                        </div>
-                        <h3 className="mb-2 text-xl font-bold text-stone-800">Cancel donation?</h3>
-                        <p className="mb-6 text-sm text-stone-500">
-                          You have entered some information. Are you sure you want to leave? Your progress will be lost.
-                        </p>
-                        <div className="flex w-full flex-col gap-3">
-                          <button
-                            type="button"
-                            className="w-full rounded-lg bg-black py-3 font-bold text-white transition-colors hover:bg-stone-800"
-                            onClick={() => {
-                              setShowCloseConfirm(false);
-                              onClose();
-                            }}
-                          >
-                            Yes, cancel donation
-                          </button>
-                          <button
-                            type="button"
-                            className="w-full rounded-lg border-2 border-stone-200 bg-transparent py-3 font-bold text-stone-700 transition-colors hover:bg-stone-50"
-                            onClick={() => setShowCloseConfirm(false)}
-                          >
-                            No, continue giving
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <div className="w-full flex justify-center mb-6">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/img/logo_caritas.webp" alt="Caritas Rwanda Logo" className="h-[40px] object-contain opacity-90" />
+                {/* Sticky Header with Logo and Close */}
+                <div className="sticky top-0 z-[60] flex w-full items-center justify-between border-b border-stone-100 bg-white/95 backdrop-blur-md px-8 py-5 md:px-10">
+                  <img src="/img/logo_bg.webp" alt="Caritas Rwanda Logo" className="h-[48px] object-contain" />
+                  <button type="button" className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-50 text-stone-600 transition-transform hover:scale-110 hover:bg-[#7A1515] hover:text-white" onClick={handleCloseClick} aria-label="Close modal">
+                    <X size={24} strokeWidth={2.5} />
+                  </button>
                 </div>
+
+
+
+                <div className="px-8 py-8 md:px-10 md:py-10">
 
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-stone-100">
                   {/* Left: Back Button */}
@@ -1187,6 +1153,7 @@ export default function DonationModal({
                     )}
                   </motion.div>
                 )}
+                </div>
               </div>
               
               {/* Floating scroll indicator (bottom right) */}
@@ -1219,6 +1186,55 @@ export default function DonationModal({
               </AnimatePresence>
             </div>
           </div>
+
+          {/* Confirmation Modal */}
+          <AnimatePresence>
+            {showCloseConfirm && (
+              <motion.div 
+                className="absolute inset-0 z-[99999] flex flex-col items-center justify-center bg-black/60 p-4 md:p-6 backdrop-blur-sm"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              >
+                <div 
+                  className="w-full max-w-md rounded-3xl bg-white shadow-2xl flex flex-col overflow-hidden text-left"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center justify-between border-b border-stone-100 px-8 py-6 bg-stone-50/50">
+                    <h2 className="text-xl font-bold text-stone-900">Cancel donation?</h2>
+                    <button 
+                      onClick={() => setShowCloseConfirm(false)} 
+                      className="rounded-full p-2 hover:bg-stone-200 text-stone-500 transition-colors"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                  <div className="px-8 py-8 flex flex-col space-y-6">
+                    <p className="text-base text-stone-600 leading-relaxed">
+                      You have entered some information. Are you sure you want to leave? Your progress will be lost.
+                    </p>
+                    <div className="flex w-full gap-3 pt-2">
+                      <button
+                        type="button"
+                        className="flex-1 inline-flex h-12 items-center justify-center rounded-xl border border-stone-200 bg-white px-5 text-sm font-bold text-stone-700 transition-colors hover:bg-stone-50"
+                        onClick={() => setShowCloseConfirm(false)}
+                      >
+                        Continue giving
+                      </button>
+                      <button
+                        type="button"
+                        className="flex-1 inline-flex h-12 items-center justify-center rounded-xl bg-red-600 px-5 text-sm font-bold text-white transition-colors hover:bg-red-700 shadow-sm"
+                        onClick={() => {
+                          setShowCloseConfirm(false);
+                          onClose();
+                        }}
+                      >
+                        Yes, cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
