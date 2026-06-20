@@ -61,7 +61,7 @@ export default async function PageEditor({
 
   // 5. Fetch Metrics Sections for the metrics page (needed for Impact at a Glance preview)
   const { data: metricsSections } = page.slug === 'metrics'
-    ? await supabase
+    ? await (supabase as any)
         .from('metrics_sections')
         .select('*')
         .eq('page_id', id)

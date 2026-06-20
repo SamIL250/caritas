@@ -51,7 +51,7 @@ export default async function MetricsPage() {
   const headingAccent = 'heading_accent' in options ? String(options.heading_accent) : '& Programme Data';
 
   // Fetch KPIs from sections table (impact_at_glance)
-  const { data: impactSection } = await supabase
+  const { data: impactSection } = await (supabase as any)
     .from('sections')
     .select('content')
     .eq('page_id', page.id)
