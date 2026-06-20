@@ -96,6 +96,7 @@ import MetricsKpiStrip from '@/components/website/sections/MetricsKpiStrip';
 import MetricsStatCards from '@/components/website/sections/MetricsStatCards';
 import MetricsProgramCard from '@/components/website/sections/MetricsProgramCard';
 import MetricsReachGrid from '@/components/website/sections/MetricsReachGrid';
+import ImpactAtGlanceSection from '@/components/website/sections/ImpactAtGlanceSection';
 import NewsLandingHero from '@/components/website/news/NewsLandingHero';
 import NewsNewsletterFooter from '@/components/website/news/NewsNewsletterFooter';
 import NewsFeedSectionPreview from '@/components/dashboard/pages/NewsFeedSectionPreview';
@@ -175,6 +176,8 @@ interface PageEditorProps {
   } | null;
   /** Deep-link from Campaigns dashboard: select this section UUID on load (e.g. Featured campaign). */
   initialSelectedSectionId?: string;
+  /** Metrics sections data for Impact at a Glance preview on the metrics page. */
+  initialMetricsSections?: any[];
 }
 
 export default function PageEditorClient({
@@ -185,11 +188,13 @@ export default function PageEditorClient({
   newsFeedPreview = null,
   publicationsFeedPreview = null,
   initialSelectedSectionId,
+  initialMetricsSections = [],
 }: PageEditorProps) {
   const [page, setPage] = useState(initialPage);
   const [hero, setHero] = useState(initialHero);
   const [sections, setSections] = useState(initialSections);
   const [slides, setSlides] = useState(initialSlides);
+  const [metricsSections] = useState(initialMetricsSections);
 
   const deepLinked = resolveDeepLinkedSection(initialSelectedSectionId, initialSections);
 
@@ -780,6 +785,22 @@ export default function PageEditorClient({
         );
       case 'metrics_program': return <div className="p-6"><MetricsProgramCard content={props} /></div>;
       case 'metrics_reach': return <div className="p-6"><MetricsReachGrid content={props} /></div>;
+      case 'impact_at_glance': {
+        const programTabKeys = ['health', 'social', 'development', 'admin'];
+        const allProgramSections = (metricsSections || [])
+          .filter((s: any) => programTabKeys.includes(s.tab_key))
+          .map((s: any) => ({
+            tab_key: s.tab_key,
+            tab_label: s.tab_label,
+            tab_icon: s.tab_icon || 'fa-chart-bar',
+            content: s.content || {},
+          }));
+        return (
+          <div className="max-w-[1100px] mx-auto px-4 py-6">
+            <ImpactAtGlanceSection {...props} allProgramSections={allProgramSections} />
+          </div>
+        );
+      }
       default: return <div>Unknown section type: {section.type}</div>;
     }
   };
@@ -5933,6 +5954,294 @@ function SectionForm({
               onClick={() => onChange('provinces', [...(state.provinces || []), { name: '', color: '#911313', dioceses: 0, beneficiaries: '', districts: 0 }])}
             >
               + Add Province
+            </button>
+          </div>
+        </div>
+      );
+    case 'impact_at_glance':
+      return (
+        <div className="space-y-6">
+          <p className="text-[10px] text-stone-500 leading-relaxed">
+            Impact at a Glance — bubble banner with KPI numbers. Edit the label, title, and individual KPI items below.
+          </p>
+          {renderField('Badge label', 'label', 'text')}
+          {renderField('Title prefix', 'title', 'text')}
+          {renderField('Title accent word', 'title_accent', 'text')}
+          <div className="space-y-1">
+            <p className="text-[10px] font-bold uppercase text-stone-400">KPI Items</p>
+            {(state.kpis || []).map((kpi: any, idx: number) => (
+              <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
+                <p className="text-[10px] font-bold text-stone-500 uppercase">KPI {idx + 1}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                    placeholder="Value (e.g. 500K+)"
+                    value={kpi.value || ''}
+                    onChange={(e) => {
+                      const list = [...(state.kpis || [])];
+                      list[idx] = { ...list[idx], value: e.target.value };
+                      onChange('kpis', list);
+                    }}
+                  />
+                  <input
+                    className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                    placeholder="Label"
+                    value={kpi.label || ''}
+                    onChange={(e) => {
+                      const list = [...(state.kpis || [])];
+                      list[idx] = { ...list[idx], label: e.target.value };
+                      onChange('kpis', list);
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-bold text-stone-400 uppercase">Color</span>
+                    <input
+                      type="color"
+                      className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
+                      value={kpi.color || '#ff9a6c'}
+                      onChange={(e) => {
+                        const list = [...(state.kpis || [])];
+                        list[idx] = { ...list[idx], color: e.target.value };
+                        onChange('kpis', list);
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-bold text-stone-400 uppercase">Size</span>
+                    <select
+                      className="rounded-lg border border-stone-200 p-2 text-xs bg-white"
+                      value={kpi.size || 'sm'}
+                      onChange={(e) => {
+                        const list = [...(state.kpis || [])];
+                        list[idx] = { ...list[idx], size: e.target.value };
+                        onChange('kpis', list);
+                      }}
+                    >
+                      <option value="xs">XS</option>
+                      <option value="sm">SM</option>
+                      <option value="lg">LG</option>
+                      <option value="xl">XL</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="w-full py-2 border-2 border-dashed border-stone-200 rounded-xl text-xs font-bold text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515] transition-all"
+              onClick={() => onChange('kpis', [...(state.kpis || []), { value: '', label: '', color: '#ff9a6c', size: 'sm' }])}
+            >
+              + Add KPI
+            </button>
+          </div>
+
+          {/* Programs (Read More section) */}
+          <div className="space-y-1">
+            <p className="text-[10px] font-bold uppercase text-stone-400">Programs (Read More Cards)</p>
+            <p className="text-[9px] text-stone-400 leading-relaxed -mt-0.5">
+              Each program appears as a card in the "Read More" dropdown. Add descriptions and stats for each program pillar.
+            </p>
+            {(state.programs || []).map((prog: any, idx: number) => (
+              <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] font-bold text-stone-500 uppercase">Program {idx + 1}</p>
+                  <button
+                    type="button"
+                    className="text-[9px] text-red-400 hover:text-red-600 font-bold uppercase"
+                    onClick={() => {
+                      const list = [...(state.programs || [])];
+                      list.splice(idx, 1);
+                      onChange('programs', list);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                    placeholder="Program name"
+                    value={prog.name || ''}
+                    onChange={(e) => {
+                      const list = [...(state.programs || [])];
+                      list[idx] = { ...list[idx], name: e.target.value };
+                      onChange('programs', list);
+                    }}
+                  />
+                  <input
+                    className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                    placeholder="Icon (e.g. fa-heart-pulse)"
+                    value={prog.icon || ''}
+                    onChange={(e) => {
+                      const list = [...(state.programs || [])];
+                      list[idx] = { ...list[idx], icon: e.target.value };
+                      onChange('programs', list);
+                    }}
+                  />
+                </div>
+                <textarea
+                  className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                  rows={3}
+                  placeholder="Program description"
+                  value={prog.description || ''}
+                  onChange={(e) => {
+                    const list = [...(state.programs || [])];
+                    list[idx] = { ...list[idx], description: e.target.value };
+                    onChange('programs', list);
+                  }}
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                    placeholder="Slug (e.g. health)"
+                    value={prog.slug || ''}
+                    onChange={(e) => {
+                      const list = [...(state.programs || [])];
+                      list[idx] = { ...list[idx], slug: e.target.value, tab_key: e.target.value };
+                      onChange('programs', list);
+                    }}
+                  />
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-bold text-stone-400 uppercase">Color</span>
+                    <input
+                      type="color"
+                      className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
+                      value={prog.accent_color || '#911313'}
+                      onChange={(e) => {
+                        const list = [...(state.programs || [])];
+                        list[idx] = { ...list[idx], accent_color: e.target.value };
+                        onChange('programs', list);
+                      }}
+                    />
+                    <span className="text-[9px] font-mono text-stone-400 uppercase">{prog.accent_color || '#911313'}</span>
+                  </div>
+                </div>
+                {/* Per-program stats */}
+                <div className="pt-1 space-y-1.5">
+                  <p className="text-[9px] font-bold text-stone-400 uppercase">Stats (drag handle to reorder)</p>
+                  {(prog.stats || []).map((st: any, si: number) => (
+                    <div
+                      key={si}
+                      className="flex items-center gap-1.5 p-1.5 rounded-lg bg-white border border-stone-100"
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('text/plain', String(si));
+                        e.dataTransfer.effectAllowed = 'move';
+                        (e.currentTarget as HTMLElement).style.opacity = '0.4';
+                      }}
+                      onDragEnd={(e) => {
+                        (e.currentTarget as HTMLElement).style.opacity = '';
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+                        if (isNaN(fromIdx) || fromIdx === si) return;
+                        const list = [...(state.programs || [])];
+                        const stats = [...(list[idx].stats || [])];
+                        const [moved] = stats.splice(fromIdx, 1);
+                        stats.splice(si, 0, moved);
+                        list[idx] = { ...list[idx], stats };
+                        onChange('programs', list);
+                      }}
+                    >
+                      <i className="fa-solid fa-grip-vertical text-stone-300 text-[11px] cursor-grab"></i>
+                      <input
+                        className="w-[70px] rounded border border-stone-200 p-1 text-[11px]"
+                        placeholder="Value"
+                        value={st.value || ''}
+                        onChange={(e) => {
+                          const list = [...(state.programs || [])];
+                          const stats = [...(list[idx].stats || [])];
+                          stats[si] = { ...stats[si], value: e.target.value };
+                          list[idx] = { ...list[idx], stats };
+                          onChange('programs', list);
+                        }}
+                      />
+                      <input
+                        className="flex-1 rounded border border-stone-200 p-1 text-[11px]"
+                        placeholder="Label"
+                        value={st.label || ''}
+                        onChange={(e) => {
+                          const list = [...(state.programs || [])];
+                          const stats = [...(list[idx].stats || [])];
+                          stats[si] = { ...stats[si], label: e.target.value };
+                          list[idx] = { ...list[idx], stats };
+                          onChange('programs', list);
+                        }}
+                      />
+                      <select
+                        className="rounded border border-stone-200 p-1 text-[10px] bg-white w-14"
+                        value={st.size || 'sm'}
+                        onChange={(e) => {
+                          const list = [...(state.programs || [])];
+                          const stats = [...(list[idx].stats || [])];
+                          stats[si] = { ...stats[si], size: e.target.value };
+                          list[idx] = { ...list[idx], stats };
+                          onChange('programs', list);
+                        }}
+                      >
+                        <option value="xs">XS</option>
+                        <option value="sm">SM</option>
+                        <option value="lg">LG</option>
+                        <option value="xl">XL</option>
+                      </select>
+                      <button
+                        type="button"
+                        className="text-red-400 hover:text-red-600 text-[11px]"
+                        onClick={() => {
+                          const list = [...(state.programs || [])];
+                          const stats = [...(list[idx].stats || [])];
+                          stats.splice(si, 1);
+                          list[idx] = { ...list[idx], stats };
+                          onChange('programs', list);
+                        }}
+                      >
+                        <i className="fa-solid fa-xmark"></i>
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="text-[9px] font-bold text-stone-400 hover:text-[#7A1515]"
+                    onClick={() => {
+                      const list = [...(state.programs || [])];
+                      const stats = [...(list[idx].stats || []), { value: '', label: '', size: 'sm' }];
+                      list[idx] = { ...list[idx], stats };
+                      onChange('programs', list);
+                    }}
+                  >
+                    + Add Stat
+                  </button>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="w-full py-2 border-2 border-dashed border-stone-200 rounded-xl text-xs font-bold text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515] transition-all"
+              onClick={() =>
+                onChange('programs', [
+                  ...(state.programs || []),
+                  {
+                    tab_key: '',
+                    tab_label: '',
+                    tab_icon: 'fa-chart-bar',
+                    name: '',
+                    description: '',
+                    icon: 'fa-chart-bar',
+                    accent_color: '#911313',
+                    slug: '',
+                    stats: [],
+                  },
+                ])
+              }
+            >
+              + Add Program
             </button>
           </div>
         </div>

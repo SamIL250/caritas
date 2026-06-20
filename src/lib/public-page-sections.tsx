@@ -24,6 +24,7 @@ import AboutSection from "@/components/website/sections/AboutSection";
 import VideoGallerySection from "@/components/website/sections/VideoGallerySection";
 import DioceseMapSection from "@/components/website/sections/DioceseMapSection";
 import FaqSection from "@/components/website/sections/FaqSection";
+import ImpactAtGlanceSection from "@/components/website/sections/ImpactAtGlanceSection";
 
 export type PublicSectionRow = {
   id: string;
@@ -55,6 +56,7 @@ const SECTION_COMPONENTS: Record<string, React.ComponentType<any>> = {
   video_gallery: VideoGallerySection,
   diocese_map_section: DioceseMapSection,
   faq_section: FaqSection,
+  impact_at_glance: ImpactAtGlanceSection,
 };
 
 export function renderWebsiteSection(section: PublicSectionRow) {

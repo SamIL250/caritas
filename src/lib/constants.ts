@@ -28,7 +28,8 @@ import {
   Activity,
   Presentation,
   TrendingUp,
-  HelpCircle
+  HelpCircle,
+  Eye
 } from "lucide-react";
 import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
@@ -484,6 +485,80 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
       { name: "Kigali City", color: "#911313", dioceses: 1, beneficiaries: "180,000+", districts: 3 }
     ]
   },
+  impact_at_glance: {
+    label: "Impact at a Glance",
+    title: "Caritas Rwanda by the",
+    title_accent: "Numbers",
+    kpis: [
+      { value: "500K+", label: "Beneficiaries Reached Annually", color: "#ff9a6c", size: "xl" },
+      { value: "9", label: "Diocesan Caritas Offices Nationwide", color: "#4ade80", size: "lg" },
+      { value: "50+", label: "Active Programmes", color: "#60a5fa", size: "sm" },
+      { value: "12+", label: "Global Partners", color: "#c084fc", size: "lg" },
+      { value: "120K+", label: "Families Supported", color: "#fbbf24", size: "sm" },
+    ],
+    programs: [
+      {
+        tab_key: 'health',
+        tab_label: 'Health & ECD',
+        tab_icon: 'fa-heart-pulse',
+        name: 'Health & ECD',
+        description: 'Early Childhood Development & community health',
+        icon: 'fa-heart-pulse',
+        accent_color: '#dc2626',
+        slug: 'health',
+        stats: [
+          { value: '15,000+', label: 'Children Reached' },
+          { value: '7', label: 'Dioceses Active' },
+          { value: '340+', label: 'ECD Centres' },
+        ],
+      },
+      {
+        tab_key: 'social',
+        tab_label: 'Social Welfare',
+        tab_icon: 'fa-people-roof',
+        name: 'Social Welfare',
+        description: 'Savings groups, family support & community care',
+        icon: 'fa-people-roof',
+        accent_color: '#2563eb',
+        slug: 'social-welfare',
+        stats: [
+          { value: '4,500+', label: 'Households' },
+          { value: '35%', label: 'Income Growth' },
+          { value: '12M+', label: 'RWF Saved' },
+        ],
+      },
+      {
+        tab_key: 'development',
+        tab_label: 'Development',
+        tab_icon: 'fa-seedling',
+        name: 'Development',
+        description: 'Livelihoods, agriculture & youth entrepreneurship',
+        icon: 'fa-seedling',
+        accent_color: '#16a34a',
+        slug: 'development',
+        stats: [
+          { value: '3,500+', label: 'Households' },
+          { value: '24', label: 'PSPs Graduated' },
+          { value: '5', label: 'Districts Covered' },
+        ],
+      },
+      {
+        tab_key: 'admin',
+        tab_label: 'Administration',
+        tab_icon: 'fa-building-columns',
+        name: 'Administration & Finance',
+        description: 'Governance, capacity building & resource management',
+        icon: 'fa-building-columns',
+        accent_color: '#7c3aed',
+        slug: 'finance-administration',
+        stats: [
+          { value: '9', label: 'Dioceses Aligned' },
+          { value: '29th', label: 'General Assembly' },
+          { value: '100%', label: 'Audit Compliance' },
+        ],
+      },
+    ],
+  },
 };
 
 export const SECTION_ICONS: Record<string, any> = {
@@ -519,6 +594,7 @@ export const SECTION_ICONS: Record<string, any> = {
   metrics_overview: Presentation,
   metrics_program: TrendingUp,
   metrics_reach: Map,
+  impact_at_glance: Eye,
 
 };
 
@@ -555,4 +631,5 @@ export const SECTION_LABELS: Record<string, string> = {
   metrics_program: "Metrics Program Tab",
   metrics_reach: "Metrics Reach Tab",
   faq_section: "FAQ Section",
+  impact_at_glance: "Impact at a Glance",
 };

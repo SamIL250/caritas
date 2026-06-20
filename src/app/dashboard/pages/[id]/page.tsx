@@ -59,6 +59,15 @@ export default async function PageEditor({
     .eq('page_id', id)
     .order('order', { ascending: true });
 
+  // 5. Fetch Metrics Sections for the metrics page (needed for Impact at a Glance preview)
+  const { data: metricsSections } = page.slug === 'metrics'
+    ? await supabase
+        .from('metrics_sections')
+        .select('*')
+        .eq('page_id', id)
+        .order('sort_order', { ascending: true })
+    : { data: null };
+
   return (
     <PageEditorClient 
       initialPage={page}
@@ -77,6 +86,7 @@ export default async function PageEditor({
       initialSelectedSectionId={
         typeof sp.section === "string" && sp.section.length ? sp.section : undefined
       }
+      initialMetricsSections={metricsSections || []}
     />
   );
 }

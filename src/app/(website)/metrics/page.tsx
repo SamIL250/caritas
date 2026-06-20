@@ -50,12 +50,15 @@ export default async function MetricsPage() {
   const badgeText = 'badge_text' in options ? String(options.badge_text) : 'Data & Transparency';
   const headingAccent = 'heading_accent' in options ? String(options.heading_accent) : '& Programme Data';
 
-  // Fetch KPIs from dedicated table (cast to bypass type generation)
-  const { data: kpiRows } = await (supabase as any)
-    .from('metrics_kpis')
-    .select('*')
+  // Fetch KPIs from sections table (impact_at_glance)
+  const { data: impactSection } = await supabase
+    .from('sections')
+    .select('content')
     .eq('page_id', page.id)
-    .order('sort_order', { ascending: true });
+    .eq('section_key', 'impact_at_glance')
+    .single();
+
+  const impactContent = (impactSection?.content as Record<string, any>) || {};
 
   // Fetch Tab Sections from dedicated table (cast to bypass type generation)
   const { data: sectionRows } = await (supabase as any)
@@ -63,8 +66,6 @@ export default async function MetricsPage() {
     .select('*')
     .eq('page_id', page.id)
     .order('sort_order', { ascending: true });
-
-  const kpis = (kpiRows as any[]) || [];
 
   // Map tab sections to the expected format
   const sections = (sectionRows || []).map(s => ({
@@ -93,7 +94,7 @@ export default async function MetricsPage() {
         <div className="metrics-tabs-section-inner">
           <MetricsPageClient
             sections={(sections as any) || []}
-            kpis={(kpis as any) || []}
+            impactContent={impactContent}
           />
         </div>
       </section>

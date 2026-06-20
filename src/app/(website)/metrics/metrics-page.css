@@ -258,23 +258,33 @@
   transform: translateX(0);
 }
 
-/* Card variants */
-.rm-sw  { border-color: rgba(145,19,19,0.12); }
-.rm-sw:hover  { border-color: rgba(145,19,19,0.28); background: rgba(145,19,19,0.03); }
-.rm-sw  .rm-card-icon { background: rgba(145,19,19,0.09); color: #911313; }
-.rm-sw  .rm-card-name { color: #911313; } .rm-sw  .rm-card-arrow { color: #911313; }
-.rm-health { border-color: rgba(31,140,170,0.12); }
-.rm-health:hover { border-color: rgba(31,140,170,0.28); background: rgba(31,140,170,0.03); }
-.rm-health .rm-card-icon { background: rgba(31,140,170,0.09); color: #1F8CAA; }
-.rm-health .rm-card-name { color: #1F8CAA; } .rm-health .rm-card-arrow { color: #1F8CAA; }
-.rm-dev { border-color: rgba(31,122,110,0.12); }
-.rm-dev:hover { border-color: rgba(31,122,110,0.28); background: rgba(31,122,110,0.03); }
-.rm-dev .rm-card-icon { background: rgba(31,122,110,0.09); color: #1F7A6E; }
-.rm-dev .rm-card-name { color: #1F7A6E; } .rm-dev .rm-card-arrow { color: #1F7A6E; }
-.rm-admin { border-color: rgba(184,134,11,0.12); }
-.rm-admin:hover { border-color: rgba(184,134,11,0.28); background: rgba(184,134,11,0.03); }
-.rm-admin .rm-card-icon { background: rgba(184,134,11,0.09); color: #B8860B; }
-.rm-admin .rm-card-name { color: #B8860B; } .rm-admin .rm-card-arrow { color: #B8860B; }
+/* Program stats in card */
+.rm-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+.rm-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  background: rgba(0,0,0,0.04);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.65rem;
+  line-height: 1.4;
+}
+.rm-stat-val {
+  font-weight: 800;
+  color: #1f2937;
+}
+.rm-stat-lbl {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Card colors driven by accent_color via inline styles */
 
 /* ════════════════════════════════════════════════════════════
    RESPONSIVE — Bubble sizing
@@ -431,7 +441,7 @@
 }
 
 .bm-footer {
-  display: flex; justify-content: center;
+  display: flex; justify-content: center; gap: 1rem;
   margin-top: 2rem; position: relative; z-index: 3;
 }
 .bm-view-btn {
