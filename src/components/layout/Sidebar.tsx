@@ -23,6 +23,7 @@ import {
   CalendarDays,
   Mail,
   MessageSquare,
+  ShieldCheck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
@@ -48,6 +49,7 @@ const navGroups = [
       { name: "Events", href: "/dashboard/events", icon: CalendarDays },
       { name: "Newsletter", href: "/dashboard/newsletter", icon: Mail },
       { name: "Contact inbox", href: "/dashboard/contact", icon: MessageSquare },
+      { name: "Policy Pages", href: "/dashboard/policy-pages", icon: FileText },
     ],
   },
   {
@@ -56,6 +58,7 @@ const navGroups = [
       { name: "Profile", href: "/dashboard/profile", icon: UserCircle },
       { name: "Users", href: "/dashboard/users", icon: Users },
       { name: "Settings", href: "/dashboard/settings", icon: Settings },
+      { name: "Cookies & Privacy", href: "/dashboard/cookies-privacy", icon: ShieldCheck },
     ],
   },
 ];

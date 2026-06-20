@@ -1,0 +1,316 @@
+/* ════════════════════════════════════════════════════════════
+   COOKIE CONSENT BANNER — Caritas Rwanda brand theme
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Overlay ── */
+.ccb-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+.ccb-overlay-open { background: rgba(0,0,0,0.45); }
+.ccb-overlay-visible { pointer-events: all; }
+
+/* ── Banner ── */
+.ccb-banner {
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
+  max-width: 820px;
+  width: calc(100% - 2rem);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.12);
+}
+.ccb-banner-open {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Banner positions */
+.ccb-bottom { bottom: 1.5rem; }
+.ccb-top { top: 1.5rem; }
+.ccb-bottom-left { left: 1.5rem; right: auto; transform: translateY(120%); }
+.ccb-bottom-left.ccb-banner-open { transform: translateY(0); }
+.ccb-bottom-right { right: 1.5rem; left: auto; transform: translateY(120%); }
+.ccb-bottom-right.ccb-banner-open { transform: translateY(0); }
+
+/* ── Dark theme (matches footer #0d1b2a) ── */
+.ccb-dark {
+  background: linear-gradient(135deg, #0d1b2a 0%, #13273e 100%);
+  color: #cbd5e1;
+  border: 1px solid rgba(145,19,19,0.2);
+}
+.ccb-dark .ccb-title { color: #ffffff; }
+.ccb-dark .ccb-desc { color: #94a3b8; }
+.ccb-dark .ccb-icon { background: rgba(140,34,8,0.12); color: #8c2208; }
+.ccb-dark .ccb-link { color: #cbd5e1; }
+.ccb-dark .ccb-link:hover { color: #ffffff; }
+.ccb-dark .ccb-btn-deny { background: rgba(255,255,255,0.07); color: #cbd5e1; }
+.ccb-dark .ccb-btn-deny:hover { background: rgba(255,255,255,0.12); }
+.ccb-dark .ccb-btn-customize { background: rgba(255,255,255,0.05); color: #cbd5e1; }
+.ccb-dark .ccb-btn-customize:hover { background: rgba(255,255,255,0.1); }
+.ccb-dark .ccb-link { border-bottom: 1px dotted rgba(255,255,255,0.15); }
+.ccb-dark .ccb-link:hover { border-bottom-color: #8c2208; }
+
+/* ── Light theme ── */
+.ccb-light {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+.ccb-light .ccb-title { color: #0d1b2a; }
+.ccb-light .ccb-desc { color: #475569; }
+.ccb-light .ccb-icon { background: rgba(140,34,8,0.08); color: #8c2208; }
+.ccb-light .ccb-link { color: #8c2208; }
+.ccb-light .ccb-link:hover { color: #6b1a05; }
+.ccb-light .ccb-btn-deny { background: rgba(0,0,0,0.05); color: #475569; }
+.ccb-light .ccb-btn-deny:hover { background: rgba(0,0,0,0.09); }
+.ccb-light .ccb-btn-customize { background: rgba(0,0,0,0.04); color: #475569; }
+.ccb-light .ccb-btn-customize:hover { background: rgba(0,0,0,0.08); }
+
+.ccb-content { display: flex; flex-direction: column; gap: 0.85rem; }
+
+.ccb-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+.ccb-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.ccb-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+.ccb-desc {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  margin: 0.2rem 0 0 0;
+}
+
+.ccb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.ccb-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.ccb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+.ccb-btn:hover { transform: translateY(-1px); }
+.ccb-btn:active { transform: translateY(0); }
+
+/* Accept button — brand primary #8c2208 */
+.ccb-btn-accept {
+  background: linear-gradient(135deg, #8c2208 0%, #7a1d06 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(140,34,8,0.25);
+}
+.ccb-btn-accept:hover {
+  box-shadow: 0 4px 14px rgba(140,34,8,0.35);
+}
+
+.ccb-btn-deny {
+  background: rgba(100,116,139,0.12);
+  color: inherit;
+}
+
+.ccb-btn-customize {
+  background: rgba(129,140,248,0.1);
+  color: inherit;
+}
+
+.ccb-links {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.ccb-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+
+/* ── Customize Modal ── */
+.ccb-modal {
+  position: fixed; inset: 0; z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+.ccb-modal-open { pointer-events: all; }
+.ccb-modal-card {
+  background: #fff;
+  border-radius: 20px;
+  max-width: 520px;
+  width: 100%;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+  transform: scale(0.88) translateY(30px);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+}
+.ccb-modal-open .ccb-modal-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+.ccb-modal-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.05);
+  color: #64748b;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.ccb-modal-close:hover { background: rgba(0,0,0,0.1); }
+.ccb-modal-title {
+  font-size: 1.1rem; font-weight: 800;
+  color: #0d1b2a;
+  margin: 0 0 0.3rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.ccb-modal-title i { color: #8c2208; }
+.ccb-modal-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.ccb-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.ccb-category {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+}
+.ccb-category-disabled {
+  background: #f1f5f9;
+  opacity: 0.7;
+}
+.ccb-category-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.ccb-category-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ccb-category-name i { color: #8c2208; }
+.ccb-category-desc {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 0.15rem;
+  line-height: 1.35;
+}
+.ccb-category-toggle {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.ccb-toggle-on {
+  background: rgba(140,34,8,0.12);
+  color: #8c2208;
+}
+.ccb-toggle-off {
+  background: rgba(100,116,139,0.08);
+  color: #94a3b8;
+}
+
+.ccb-modal-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+.ccb-modal-actions .ccb-btn {
+  flex: 1;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .ccb-banner {
+    border-radius: 12px 12px 0 0;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 100%;
+    width: 100%;
+    top: auto !important;
+    transform: translateY(120%);
+  }
+  .ccb-banner-open { transform: translateY(0); }
+  .ccb-bottom-left,
+  .ccb-bottom-right {
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 12px 12px 0 0;
+  }
+  .ccb-actions { flex-direction: column; align-items: stretch; }
+  .ccb-buttons { flex-direction: column; }
+  .ccb-btn { justify-content: center; }
+  .ccb-links { justify-content: center; }
+}

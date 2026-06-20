@@ -68,9 +68,10 @@ import DonationModalWrapper from "@/components/website/DonationModalWrapper";
 import VolunteerModalWrapper from "@/components/website/VolunteerModalWrapper";
 import EventsWidget from "@/components/website/EventsWidget";
 import ChatbotFab from "@/components/website/ChatbotFab";
+import CookieConsentBanner from "@/components/website/CookieConsentBanner";
 import { DonationProvider } from "@/context/DonationContext";
 import { VolunteerProvider } from "@/context/VolunteerContext";
-import { getMergedFooterSettings } from "@/lib/site-settings";
+import { getMergedFooterSettings, getCookieConsentSettings } from "@/lib/site-settings";
 
 import { Poppins, Inter, Playfair_Display } from "next/font/google";
 
@@ -100,7 +101,10 @@ export default async function WebsiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const footerSettings = await getMergedFooterSettings();
+  const [footerSettings, cookieSettings] = await Promise.all([
+    getMergedFooterSettings(),
+    getCookieConsentSettings(),
+  ]);
   return (
     <VolunteerProvider>
       <DonationProvider>
@@ -115,6 +119,8 @@ export default async function WebsiteLayout({
           <WebsiteHeader />
           <main>{children}</main>
           <WebsiteFooter settings={footerSettings} />
+
+          {cookieSettings && <CookieConsentBanner settings={cookieSettings} />}
 
           <DonationModalWrapper />
           <VolunteerModalWrapper />

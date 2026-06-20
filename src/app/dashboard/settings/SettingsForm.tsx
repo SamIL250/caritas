@@ -508,7 +508,7 @@ function LinkListEditor({
             variant="secondary"
             className="h-9 w-fit"
             onClick={() =>
-              onChange([...legal, { label: "New page", href: "/privacy" }] as unknown as FooterNavLink[])
+              onChange([...legal, { label: "New page", href: "/privacy-policy" }] as unknown as FooterNavLink[])
             }
           >
             <Plus className="w-4 h-4 mr-1" />

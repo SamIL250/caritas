@@ -1,0 +1,105 @@
+/* ════════════════════════════════════════════════════════════
+   POLICY PAGES — Privacy Policy & Cookie Policy
+   ════════════════════════════════════════════════════════════ */
+
+.policy-page {
+  min-height: 60vh;
+  background: #fff;
+}
+
+.policy-page-hero {
+  background: linear-gradient(135deg, #0d1b2a 0%, #1a2d4a 100%);
+  padding: 11rem 1.5rem 5rem;
+  text-align: center;
+}
+
+.policy-page-hero-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.policy-page-hero h1 {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.policy-page-date {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  margin: 0;
+}
+
+.policy-page-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.policy-page-body {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.policy-page-body h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(140,34,8,0.15);
+}
+
+.policy-page-body h2:first-child {
+  margin-top: 0;
+}
+
+.policy-page-body h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 1.8rem 0 0.6rem;
+}
+
+.policy-page-body p {
+  margin: 0 0 1rem;
+}
+
+.policy-page-body ul,
+.policy-page-body ol {
+  margin: 0 0 1.2rem;
+  padding-left: 1.5rem;
+}
+
+.policy-page-body li {
+  margin-bottom: 0.4rem;
+}
+
+.policy-page-body a {
+  color: #8c2208;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.policy-page-body a:hover {
+  color: #6b1a05;
+}
+
+.policy-page-body strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.policy-page-body blockquote {
+  border-left: 4px solid #8c2208;
+  padding: 0.75rem 1.25rem;
+  margin: 1.2rem 0;
+  background: #f8fafc;
+  border-radius: 0 8px 8px 0;
+  color: #475569;
+  font-style: italic;
+}

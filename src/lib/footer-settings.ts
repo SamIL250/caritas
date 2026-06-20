@@ -121,9 +121,9 @@ export const FOOTER_DEFAULTS: FooterSettings = {
     developerCredit: "Lerony",
   },
   legalLinks: [
-    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Cookie Policy", href: "/cookie-policy" },
   ],
 };
 

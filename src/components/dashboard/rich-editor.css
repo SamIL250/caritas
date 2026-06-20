@@ -1,0 +1,63 @@
+/* ════════════════════════════════════════════════════════════
+   RICH TEXT EDITOR — ContentEditable-based toolbar editor
+   ════════════════════════════════════════════════════════════ */
+
+.rich-editor-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.12s ease;
+}
+.rich-editor-btn:hover {
+  background: rgba(122,21,21,0.08);
+  color: #7A1515;
+}
+
+.rich-editor-content {
+  line-height: 1.7;
+  overflow-y: auto;
+}
+.rich-editor-content:empty::before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+  pointer-events: none;
+}
+.rich-editor-content h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin: 1.5rem 0 0.75rem;
+  line-height: 1.3;
+}
+.rich-editor-content h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 1.2rem 0 0.5rem;
+}
+.rich-editor-content p {
+  margin: 0 0 0.75rem;
+}
+.rich-editor-content ul,
+.rich-editor-content ol {
+  margin: 0 0 0.75rem;
+  padding-left: 1.5rem;
+}
+.rich-editor-content li {
+  margin-bottom: 0.3rem;
+}
+.rich-editor-content a {
+  color: #7A1515;
+  text-decoration: underline;
+}
+.rich-editor-content strong {
+  font-weight: 700;
+}
