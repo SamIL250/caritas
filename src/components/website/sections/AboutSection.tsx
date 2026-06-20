@@ -9,21 +9,36 @@ import '@/app/home-about-section.css';
 
 /* ─── Data ─── */
 
-interface NodeSpec {
+interface NetworkNode {
+  value: string;
   label: string;
-  desc: string;
-  size: number;
-  left: number;
-  top: number;
 }
 
-const NODES: NodeSpec[] = [
-  { label: '1',      desc: 'Caritas Rwanda',                 size: 90,  left: 520, top: 120 },
-  { label: '10',     desc: 'Diocesan Caritas',               size: 90,  left: 690, top: 120 },
-  { label: '229',    desc: 'Parish Caritas',                 size: 90,  left: 855, top: 355 },
-  { label: '882',    desc: 'Sub-Parish Caritas',             size: 90,  left: 730, top: 571 },
-  { label: '29,141', desc: 'Basic Christian Community Caritas', size: 100, left: 475, top: 566 },
-  { label: '56,345+', desc: 'Volunteers',                     size: 110, left: 345, top: 345 },
+const NODE_LAYOUTS = [
+  { size: 90,  left: 520, top: 120 },
+  { size: 90,  left: 690, top: 120 },
+  { size: 90,  left: 855, top: 355 },
+  { size: 90,  left: 730, top: 571 },
+  { size: 100, left: 475, top: 566 },
+  { size: 110, left: 345, top: 345 },
+];
+
+const LABEL_LAYOUTS = [
+  { left: 515, top: 75,  width: 120, align: 'center' as const },
+  { left: 665, top: 75,  width: 160, align: 'center' as const },
+  { left: 910, top: 355, width: 100, align: 'center' as const },
+  { left: 910, top: 585, width: 110, align: 'center' as const },
+  { left: 270, top: 570, width: 120, align: 'right' as const },
+  { left: 225, top: 355, width: 110, align: 'center' as const },
+];
+
+const DEFAULT_NETWORK_NODES: NetworkNode[] = [
+  { value: '1',       label: 'Caritas Rwanda' },
+  { value: '10',      label: 'Diocesan Caritas' },
+  { value: '229',     label: 'Parish Caritas' },
+  { value: '882',     label: 'Sub-Parish Caritas' },
+  { value: '29,141',  label: 'Basic Christian Community Caritas' },
+  { value: '56,345+', label: 'Volunteers' },
 ];
 
 const MISSION_TEXT =
@@ -43,6 +58,7 @@ interface AboutContent {
   missionText?: string;
   values?: string[];
   visionText?: string;
+  networkNodes?: NetworkNode[];
 }
 
 const DEFAULT_CONTENT: AboutContent = {
@@ -51,26 +67,8 @@ const DEFAULT_CONTENT: AboutContent = {
   missionText: MISSION_TEXT,
   values: DEFAULT_VALUES,
   visionText: 'Promoting Human<br />Dignity for All',
+  networkNodes: DEFAULT_NETWORK_NODES,
 };
-
-/* ─── Labels (plain text, no containers) ─── */
-
-interface LabelData {
-  text: string;
-  left: number;
-  top: number;
-  width: number;
-  align?: 'center' | 'right';
-}
-
-const LABELS: LabelData[] = [
-  { text: 'Caritas Rwanda',          left: 515, top: 75,  width: 120, align: 'center' },
-  { text: 'Diocesan Caritas',         left: 665, top: 75,  width: 160, align: 'center' },
-  { text: 'Parish Caritas',           left: 910, top: 355, width: 100, align: 'center' },
-  { text: 'Sub-Parish Caritas',       left: 910, top: 585, width: 110, align: 'center' },
-  { text: 'Basic Christian\nCommunity\nCaritas', left: 270, top: 570, width: 120, align: 'right' },
-  { text: 'Volunteers',               left: 225, top: 355, width: 110, align: 'center' },
-];
 
 /* ─── Component ─── */
 
@@ -81,7 +79,21 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
     missionText: (props.missionText as string) || DEFAULT_CONTENT.missionText,
     values: Array.isArray(props.values) ? (props.values as string[]) : DEFAULT_CONTENT.values,
     visionText: (props.visionText as string) || DEFAULT_CONTENT.visionText,
+    networkNodes: Array.isArray(props.networkNodes)
+      ? (props.networkNodes as NetworkNode[])
+      : DEFAULT_CONTENT.networkNodes,
   };
+
+  const nodes = content.networkNodes!.map((n, i) => ({
+    label: n.value,
+    desc: n.label,
+    ...NODE_LAYOUTS[i] || NODE_LAYOUTS[NODE_LAYOUTS.length - 1],
+  }));
+
+  const labels = content.networkNodes!.map((n, i) => ({
+    text: n.label,
+    ...LABEL_LAYOUTS[i] || LABEL_LAYOUTS[LABEL_LAYOUTS.length - 1],
+  }));
   const wrapperRef = useRef<HTMLDivElement>(null);
   const infographicRef = useRef<HTMLDivElement>(null);
 
@@ -182,7 +194,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
             </div>
 
             {/* ─── Satellite nodes ─── */}
-            {NODES.map((n) => (
+            {nodes.map((n) => (
               <div
                 key={n.label}
                 className="cr-info-node"
@@ -191,7 +203,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
                   height: n.size,
                   left: n.left,
                   top: n.top,
-                  fontWeight: 500, // Not bold
+                  fontWeight: 500,
                 }}
               >
                 {n.label}
@@ -199,7 +211,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
             ))}
 
             {/* ─── Labels (plain text, no containers) ─── */}
-            {LABELS.map((l, i) => (
+            {labels.map((l, i) => (
               <div
                 key={i}
                 className="cr-info-label"

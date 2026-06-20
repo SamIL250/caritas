@@ -1958,6 +1958,7 @@ function SectionForm({
     case 'home_about': {
       const def = DEFAULT_SECTION_CONTENT.home_about as Record<string, unknown>;
       const defValues = (def.values as string[]) || [];
+      const defNodes = (def.networkNodes as { value: string; label: string }[]) || [];
 
       const ensureValues = (): string[] => {
         const cur = [...(state.values || [])];
@@ -1967,13 +1968,27 @@ function SectionForm({
         return cur.slice(0, 11);
       };
 
+      const ensureNetworkNodes = (): { value: string; label: string }[] => {
+        const cur = [...((state.networkNodes as { value: string; label: string }[]) || [])];
+        for (let i = 0; i < 6; i++) {
+          cur[i] = cur[i] ?? defNodes[i] ?? { value: '', label: '' };
+        }
+        return cur.slice(0, 6);
+      };
+
       const values = ensureValues();
+      const networkNodes = ensureNetworkNodes();
+
+      const patchNetworkNode = (idx: number, key: 'value' | 'label', val: string) => {
+        const list = ensureNetworkNodes();
+        list[idx] = { ...list[idx], [key]: val };
+        onChange('networkNodes', list);
+      };
 
       return (
         <div className="space-y-5">
           <p className="text-[10px] leading-relaxed text-stone-500">
-            Homepage about infographic: heading, subtitle, mission text, values list, and vision tagline.
-            The radial network diagram (nodes, labels, layout) is fixed.
+            Homepage about infographic: heading, subtitle, mission text, values list, vision tagline, and the radial network diagram nodes.
           </p>
           {renderField('Title', 'title', 'text')}
           {renderField('Subtitle', 'subtitle', 'text')}
@@ -2014,6 +2029,36 @@ function SectionForm({
                   }}
                   placeholder={`Value ${idx + 1}`}
                 />
+              </li>
+            ))}
+          </ul>
+          <hr className="border-stone-200" />
+          <p className="text-[10px] font-bold uppercase text-stone-400">
+            Network Diagram Nodes (6)
+          </p>
+          <p className="text-[9px] leading-relaxed text-stone-400">
+            Each node has a number/value shown in the circle and a label displayed next to it.
+          </p>
+          <ul className="space-y-3">
+            {networkNodes.map((n: { value: string; label: string }, idx: number) => (
+              <li key={idx} className="rounded-lg border border-stone-200 bg-stone-50 p-3">
+                <div className="mb-1 text-[9px] font-bold uppercase text-stone-400">
+                  Node {idx + 1}
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    className="w-24 rounded-lg border border-stone-200 p-2 text-xs font-bold text-center"
+                    value={n.value}
+                    onChange={(e) => patchNetworkNode(idx, 'value', e.target.value)}
+                    placeholder="e.g. 1"
+                  />
+                  <input
+                    className="flex-1 rounded-lg border border-stone-200 p-2 text-xs"
+                    value={n.label}
+                    onChange={(e) => patchNetworkNode(idx, 'label', e.target.value)}
+                    placeholder="e.g. Caritas Rwanda"
+                  />
+                </div>
               </li>
             ))}
           </ul>

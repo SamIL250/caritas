@@ -246,6 +246,14 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
       "Subsidiarity and Partnership",
     ],
     visionText: "Promoting Human<br />Dignity for All",
+    networkNodes: [
+      { value: "1",       label: "Caritas Rwanda" },
+      { value: "10",      label: "Diocesan Caritas" },
+      { value: "229",     label: "Parish Caritas" },
+      { value: "882",     label: "Sub-Parish Caritas" },
+      { value: "29,141",  label: "Basic Christian Community Caritas" },
+      { value: "56,345+", label: "Volunteers" },
+    ],
   },
   map_section: {
     eyebrow: "Find Us",
