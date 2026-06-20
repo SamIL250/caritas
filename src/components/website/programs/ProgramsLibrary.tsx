@@ -24,11 +24,6 @@ type Props = {
   news: NewsArticleRow[];
 };
 
-function pillarSlugFromHash(): string {
-  if (typeof window === "undefined") return "";
-  return window.location.hash.replace(/^#/, "").trim();
-}
-
 export default function ProgramsLibrary({ programs, categories, successStories, news }: Props) {
   const sortedCategories = useMemo(
     () =>
@@ -42,18 +37,43 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
   const [activeProgram, setActiveProgram] = useState<(ProgramRow & any) | null>(null);
   const tabBarRef = useRef<HTMLDivElement>(null);
 
-  // Sync from hash on mount & hashchange
+  // Sync tab from URL hash
   useEffect(() => {
-    function syncFromHash() {
-      const raw = pillarSlugFromHash();
-      if (!raw) return;
-      if (sortedCategories.some((c) => c.slug === raw)) {
-        setActiveTab(raw);
+    const syncFromHash = () => {
+      const raw = window.location.hash.replace(/^#/, "").trim();
+      if (raw && sortedCategories.some((c) => c.slug === raw)) {
+        setTimeout(() => setActiveTab(raw), 0);
       }
-    }
-    syncFromHash();
+    };
+
+    // hashchange — catches native hash changes and synthetic events
     window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
+    // popstate — catches browser back/forward
+    window.addEventListener("popstate", syncFromHash);
+    // Initial sync
+    syncFromHash();
+
+    // Intercept history methods so that Next.js Link navigation (pushState/replaceState)
+    // dispatches a hashchange event — these methods do NOT fire it natively.
+    const origPush = history.pushState.bind(history);
+    const origReplace = history.replaceState.bind(history);
+
+    history.pushState = ((data: any, unused: string, url?: string | URL | null) => {
+      origPush(data, unused, url);
+      setTimeout(() => window.dispatchEvent(new HashChangeEvent("hashchange")), 0);
+    }) as typeof history.pushState;
+
+    history.replaceState = ((data: any, unused: string, url?: string | URL | null) => {
+      origReplace(data, unused, url);
+      setTimeout(() => window.dispatchEvent(new HashChangeEvent("hashchange")), 0);
+    }) as typeof history.replaceState;
+
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("popstate", syncFromHash);
+      history.pushState = origPush;
+      history.replaceState = origReplace;
+    };
   }, [sortedCategories]);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
