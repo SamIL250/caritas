@@ -259,25 +259,25 @@ export default function NewsArticlesFeed({
             )}
 
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-4 mt-12">
+              <div className="news-pagination">
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 rounded-lg text-sm font-bold bg-stone-100 text-stone-600 hover:bg-[#7A1515] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="news-pagination-btn"
                 >
-                  <i className="fa-solid fa-chevron-left mr-2" />
+                  <i className="fa-solid fa-chevron-left" />
                   Previous
                 </button>
-                <span className="text-sm font-medium text-stone-500">
+                <span className="news-pagination-info">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 rounded-lg text-sm font-bold bg-stone-100 text-stone-600 hover:bg-[#7A1515] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="news-pagination-btn"
                 >
                   Next
-                  <i className="fa-solid fa-chevron-right ml-2" />
+                  <i className="fa-solid fa-chevron-right" />
                 </button>
               </div>
             )}

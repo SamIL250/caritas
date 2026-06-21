@@ -192,7 +192,6 @@ export default function PublicationsLibrary({ publications, categories }: Props)
 
         {sortedCategories.map((cat) => {
           const items = publications.filter((p) => p.category === cat.slug);
-          if (!items.length) return null;
           const behavior = readCategoryBehavior(cat);
           const anchor = behavior.site_anchor || cat.slug.replace(/_/g, "-");
           const visible = showSection(cat.slug);
@@ -327,11 +326,21 @@ function CategorySection({
           </h2>
         </div>
       </div>
-      <div className={gridClass}>
-        {items.map((p) => (
-          <CategoryCard key={p.id} cat={cat} row={p} onOpenDrawer={onOpenDrawer} onLockedClick={onLockedClick} />
-        ))}
-      </div>
+      {items.length > 0 ? (
+        <div className={gridClass}>
+          {items.map((p) => (
+            <CategoryCard key={p.id} cat={cat} row={p} onOpenDrawer={onOpenDrawer} onLockedClick={onLockedClick} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 py-16 text-center">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-stone-100 text-stone-400">
+            <i className={cat.icon || "fa-solid fa-file"} aria-hidden />
+          </div>
+          <p className="text-sm font-semibold text-stone-600">No {cat.plural_label?.toLowerCase() || cat.label?.toLowerCase() || "items"} yet</p>
+          <p className="mt-1 text-xs text-stone-400">Check back later for updates.</p>
+        </div>
+      )}
     </section>
   );
 }

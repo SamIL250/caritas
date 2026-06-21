@@ -179,6 +179,7 @@ export const PUBLICATION_BUILTIN_SLUGS = [
   "success_story",
   "recent_update",
   "caritas_contact",
+  "policies",
 ] as const;
 
 export type PublicationBuiltinSlug = (typeof PUBLICATION_BUILTIN_SLUGS)[number];
@@ -199,4 +200,5 @@ export const PUBLICATION_BUILTIN_LABELS: Record<PublicationBuiltinSlug, string> 
   success_story: "Success Story",
   recent_update: "Recent Update",
   caritas_contact: "Caritas Contact",
+  policies: "Policy",
 };
