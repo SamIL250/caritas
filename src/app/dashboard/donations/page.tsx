@@ -122,6 +122,8 @@ export default function DonationsPage() {
   const [galleryItems, setGalleryItems] = useState<{ url: string; alt?: string }[]>([]);
   const [galleryPickerOpen, setGalleryPickerOpen] = useState(false);
   const [gallerySaving, setGallerySaving] = useState(false);
+  /** Holds the campaign while the gallery modal is hidden behind the MediaPicker. */
+  const [pendingGalleryCampaign, setPendingGalleryCampaign] = useState<any | null>(null);
 
   useEffect(() => {
     void loadData();
@@ -872,7 +874,11 @@ export default function DonationsPage() {
               type="button"
               variant="secondary"
               className="h-9 text-xs"
-              onClick={() => setGalleryPickerOpen(true)}
+              onClick={() => {
+                setPendingGalleryCampaign(galleryCampaign);
+                setGalleryCampaign(null);
+                setGalleryPickerOpen(true);
+              }}
               disabled={gallerySaving}
             >
               <ImagePlus size={16} className="mr-1.5" />
@@ -908,7 +914,13 @@ export default function DonationsPage() {
       {/* ── Gallery MediaPicker ──────────────────────────────── */}
       <MediaPicker
         isOpen={galleryPickerOpen}
-        onClose={() => setGalleryPickerOpen(false)}
+        onClose={() => {
+          setGalleryPickerOpen(false);
+          if (pendingGalleryCampaign) {
+            setGalleryCampaign(pendingGalleryCampaign);
+            setPendingGalleryCampaign(null);
+          }
+        }}
         multi
         onSelect={(m) => {
           const items = Array.isArray(m) ? m : [m];

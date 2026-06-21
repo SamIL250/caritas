@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { Topbar } from "@/components/layout/Topbar";
+import { Copy } from "lucide-react";
 import { CampaignForm } from "@/components/dashboard/community-campaigns/CampaignForm";
 import type { Database } from "@/types/database.types";
 
@@ -36,6 +38,15 @@ export default async function EditCommunityCampaignPage({ params }: { params: Pr
   return (
     <div className="w-full max-w-full space-y-6">
       <Topbar title="Edit campaign" subtitle={row.title} />
+      <div className="flex justify-end">
+        <Link
+          href={`/dashboard/community-campaigns/new?duplicate=${row.id}`}
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-stone-500 transition-colors hover:bg-stone-100 hover:text-[#7A1515]"
+        >
+          <Copy size={13} aria-hidden />
+          Duplicate this campaign
+        </Link>
+      </div>
       <CampaignForm mode="edit" campaign={row} categories={catRows} homeFeaturedEditorHref={editorHref} />
     </div>
   );

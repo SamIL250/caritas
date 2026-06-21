@@ -12,7 +12,7 @@ import {
   upsertCommunityCampaignCategory,
 } from "@/app/actions/community-campaigns";
 import { CampaignModerationQueues } from "@/components/dashboard/community-campaigns/CampaignModerationQueues";
-import { ExternalLink, Pencil, Star } from "lucide-react";
+import { Copy, ExternalLink, Pencil, Star } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -356,6 +356,15 @@ function CampaignsTab({
                           >
                             <Pencil className="size-3.5 shrink-0 opacity-70" aria-hidden />
                             Edit
+                          </Link>
+                          <span className="h-6 w-px shrink-0 bg-stone-200" aria-hidden />
+                          <Link
+                            href={`/dashboard/community-campaigns/new?duplicate=${c.id}`}
+                            title="Duplicate campaign"
+                            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-semibold text-stone-500 transition-colors hover:bg-white hover:text-[#7A1515]"
+                          >
+                            <Copy className="size-3.5 shrink-0 opacity-70" aria-hidden />
+                            Copy
                           </Link>
                           {published ? (
                             <>

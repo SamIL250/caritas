@@ -57,6 +57,17 @@ function parseGoalAmount(raw: FormDataEntryValue | null): number | null {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
+function parseGalleryImages(raw: FormDataEntryValue | null): Json {
+  const s = String(raw || "").trim();
+  if (!s) return null;
+  try {
+    const arr = JSON.parse(s);
+    return Array.isArray(arr) ? arr : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Clears home-featured flag from every campaign, then optionally sets one published row. */
 export async function setFeaturedCampaignOnHome(formData: FormData) {
   const { supabase } = await requireStaff();
@@ -132,6 +143,8 @@ export async function createCommunityCampaign(form: FormData): Promise<{ error?:
     const donation_modal_description_html =
       typeof modalHtmlRaw === "string" && modalHtmlRaw.trim() ? modalHtmlRaw.trim() : null;
 
+    const gallery_images = parseGalleryImages(form.get("gallery_images_json"));
+
     const { data: inserted, error } = await supabase
       .from("community_campaigns")
       .insert({
@@ -161,6 +174,7 @@ export async function createCommunityCampaign(form: FormData): Promise<{ error?:
         frequency_monthly,
         donation_modal_description_html,
         created_by: user.id,
+        gallery_images,
       })
       .select("id")
       .single();
@@ -237,6 +251,8 @@ export async function updateCommunityCampaign(
     const donation_modal_description_html =
       typeof modalHtmlRaw === "string" && modalHtmlRaw.trim() ? modalHtmlRaw.trim() : null;
 
+    const gallery_images = parseGalleryImages(form.get("gallery_images_json"));
+
     const { error } = await supabase
       .from("community_campaigns")
       .update({
@@ -265,6 +281,7 @@ export async function updateCommunityCampaign(
         frequency_weekly,
         frequency_monthly,
         donation_modal_description_html,
+        gallery_images,
       })
       .eq("id", campaignId);
 
