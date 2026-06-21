@@ -1396,6 +1396,36 @@ export interface Database {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          id: string
+          page_type: string
+          page_id: string
+          view_date: string
+          count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          page_type: string
+          page_id: string
+          view_date?: string
+          count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          page_type?: string
+          page_id?: string
+          view_date?: string
+          count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -1447,6 +1477,14 @@ export interface Database {
           link_anchor: string | null
           meta_label: string | null
         }[]
+      }
+      increment_page_view: {
+        Args: {
+          p_page_type: string
+          p_page_id: string
+          p_view_date: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

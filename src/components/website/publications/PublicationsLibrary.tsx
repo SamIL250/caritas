@@ -12,6 +12,7 @@ import {
   readCategoryBehavior,
 } from "@/lib/publications";
 import { PublicationLockModal } from "./PublicationLockModal";
+import { ViewTracker } from "@/components/website/ViewTracker";
 
 type FilterKey = "all" | string;
 
@@ -488,6 +489,7 @@ function PublicationDrawer({
       >
         {publication && (
           <>
+            <ViewTracker pageType="publication" pageId={publication.id} />
             {/* Close button */}
             <button className="pub-drawer-close" type="button" onClick={onClose} aria-label="Close">
               <i className="fa-solid fa-xmark" aria-hidden />

@@ -15,6 +15,7 @@ import {
   type PublicationRow,
 } from "@/lib/publications";
 import type { ProgramCategoryRow } from "@/lib/programs";
+import { ViewTracker } from "@/components/website/ViewTracker";
 import { PublicationDetailWrapper } from "@/components/website/publications/PublicationDetailWrapper";
 import "../publications-page.css";
 import "../../programs/program-detail-page.css";
@@ -158,6 +159,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
             sections={relatedSections}
           />
         )}
+        <ViewTracker pageType="publication" pageId={publication.id} />
       </div>
     </PublicationDetailWrapper>
   );

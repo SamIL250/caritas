@@ -25,6 +25,7 @@ import {
   MessageSquare,
   ShieldCheck,
   Lock,
+  BarChart3,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
@@ -43,6 +44,7 @@ const navGroups: {
     label: "Main",
     items: [
       { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
+      { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
       { name: "Pages", href: "/dashboard/pages", icon: FileText },
     ],
   },

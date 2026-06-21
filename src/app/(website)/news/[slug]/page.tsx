@@ -14,6 +14,7 @@ import { fetchDepartmentRelatedContent } from "@/lib/department-related";
 import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
 import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
 
+import { ViewTracker } from "@/components/website/ViewTracker";
 import "../../campaigns/campaign-detail-page.css";
 import "../../programs/programs-page.css";
 import "../../programs/program-detail-page.css";
@@ -204,6 +205,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
           sections={relatedSections}
         />
       )}
+      <ViewTracker pageType="news_article" pageId={article.id} />
     </div>
   );
 }

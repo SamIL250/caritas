@@ -14,6 +14,7 @@ import { CampaignFullStory } from "@/components/website/campaigns/CampaignFullSt
 import { ProgramPillarAside } from "@/components/website/programs/ProgramPillarAside";
 import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
 
+import { ViewTracker } from "@/components/website/ViewTracker";
 import "../../campaigns/campaign-detail-page.css";
 import "../program-detail-page.css";
 import "../programs-page.css";
@@ -138,6 +139,7 @@ export default async function ProgramArticlePage({ params }: PageProps) {
         pillarLabel={category?.label ?? pillarSlug}
         sections={relatedSections}
       />
+      <ViewTracker pageType="program" pageId={program.id} />
     </div>
   );
 }
