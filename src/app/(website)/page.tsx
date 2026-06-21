@@ -50,6 +50,14 @@ export default async function LandingPage() {
     .eq('visible', true)
     .order('order', { ascending: true });
 
+  // 5. Fetch published news articles for the news_cards section
+  const { data: newsArticles } = await supabase
+    .from("news_articles")
+    .select("id, title, excerpt, image_url, slug, category, published_at, created_at")
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(6);
+
   const enrichedSections = await enrichCtaSectionsWithFeaturedCampaigns(
     supabase,
     (sections ?? []) as PublicSectionRow[],
@@ -134,6 +142,32 @@ export default async function LandingPage() {
               content: {
                 ...(nc.content && typeof nc.content === 'object' && !Array.isArray(nc.content) ? nc.content : {}),
                 videoGalleryProps: videoGalleryRow.content,
+              }
+            };
+          }
+        }
+
+        // Inject real news articles into the news_cards section
+        if (newsArticles && newsArticles.length > 0) {
+          const ncIndex = finalOtherSections.findIndex((s: any) => s.type === 'news_cards');
+          if (ncIndex !== -1) {
+            const nc = finalOtherSections[ncIndex];
+            const mapped = (newsArticles as any[]).map((a) => ({
+              title: a.title,
+              excerpt: a.excerpt || "",
+              date: a.published_at
+                ? new Date(a.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+                : new Date(a.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }),
+              image_url: a.image_url || "",
+              link_url: `/news/${a.slug}`,
+              tag: a.category,
+              open_in_new: false,
+            }));
+            finalOtherSections[ncIndex] = {
+              ...nc,
+              content: {
+                ...(nc.content && typeof nc.content === 'object' && !Array.isArray(nc.content) ? nc.content : {}),
+                articles: mapped,
               }
             };
           }

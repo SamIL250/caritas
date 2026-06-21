@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import VideoGallerySection from "@/components/website/sections/VideoGallerySection";
 
 export type NewsArticle = {
@@ -101,6 +102,20 @@ const StoryLink: React.FC<{
   );
 };
 
+function dbArticlesToNewsArticles(rows: any[]): NewsArticle[] {
+  return rows.map((a) => ({
+    title: a.title,
+    excerpt: a.excerpt || "",
+    date: a.published_at
+      ? new Date(a.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+      : new Date(a.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }),
+    image_url: a.image_url || "",
+    link_url: `/news/${a.slug}`,
+    tag: a.category,
+    open_in_new: false,
+  }));
+}
+
 export default function NewsCards({
   eyebrow = "Latest from Caritas Rwanda",
   heading = "News &",
@@ -114,8 +129,34 @@ export default function NewsCards({
   articles: articlesProp,
   videoGalleryProps
 }: NewsCardsProps) {
+  const [dbArticles, setDbArticles] = useState<NewsArticle[] | null>(null);
+
+  useEffect(() => {
+    if (articlesProp && articlesProp.length > 0) {
+      setDbArticles(null);
+      return;
+    }
+    let cancelled = false;
+    const supabase = createClient();
+    supabase
+      .from("news_articles")
+      .select("title, excerpt, image_url, slug, category, published_at, created_at")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(6)
+      .then(({ data }) => {
+        if (cancelled || !data) return;
+        setDbArticles(dbArticlesToNewsArticles(data));
+      });
+    return () => { cancelled = true; };
+  }, [articlesProp]);
+
   const list =
-    articlesProp && articlesProp.length > 0 ? articlesProp : DEFAULT_ARTICLES;
+    articlesProp && articlesProp.length > 0
+      ? articlesProp
+      : dbArticles && dbArticles.length > 0
+        ? dbArticles
+        : DEFAULT_ARTICLES;
   const slides = list.slice(0, Math.min(3, list.length));
   const [active, setActive] = useState(0);
   const [showVideos, setShowVideos] = useState(false);

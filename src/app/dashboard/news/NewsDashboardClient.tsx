@@ -13,6 +13,8 @@ import {
   LayoutTemplate,
   Newspaper,
   FileText,
+  Search,
+  Filter,
 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -51,6 +53,9 @@ function NewsDashboardClient({
 }) {
   const router = useRouter();
   const [delId, setDelId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const counts = useMemo(() => {
     const list = articles ?? [];
@@ -59,6 +64,31 @@ function NewsDashboardClient({
     const featured = list.filter((a) => a.featured).length;
     return { total: list.length, published, drafts, featured };
   }, [articles]);
+
+  const categories = useMemo(() => {
+    const seen = new Set<string>();
+    for (const a of articles ?? []) {
+      if (a.category) seen.add(a.category);
+    }
+    return Array.from(seen).sort();
+  }, [articles]);
+
+  const filtered = useMemo(() => {
+    let list = articles ?? [];
+    if (statusFilter !== "all") {
+      list = list.filter((a) => a.status === statusFilter);
+    }
+    if (categoryFilter !== "all") {
+      list = list.filter((a) => a.category === categoryFilter);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      list = list.filter((a) =>
+        a.title.toLowerCase().includes(q) || a.excerpt?.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [articles, statusFilter, categoryFilter, searchQuery]);
 
   async function handleDelete(id: string) {
     const r = await deleteNewsArticle(id);
@@ -195,17 +225,60 @@ function NewsDashboardClient({
         </div>
       ) : (
         <div>
-          <div className="mb-5 flex items-baseline justify-between gap-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400">
-              All stories
-            </h3>
+          <div className="mb-5 flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" size={16} aria-hidden />
+              <input
+                type="text"
+                placeholder="Search by title or excerpt…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-[#7A1515] focus:ring-2 focus:ring-[#7A1515]/15"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <Filter size={16} className="text-stone-400" aria-hidden />
+              {(["all", "published", "draft"] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setStatusFilter(s)}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    statusFilter === s
+                      ? "bg-[#7A1515] text-white"
+                      : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                  }`}
+                >
+                  {s === "all" ? "All" : s === "published" ? "Published" : "Draft"}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-600 outline-none focus:border-[#7A1515] focus:ring-2 focus:ring-[#7A1515]/15"
+              >
+                <option value="all">All categories</option>
+                {categories.map((c) => (
+                  <option key={c} value={c}>{categoryLabel(c as any)}</option>
+                ))}
+              </select>
+            </div>
             <p className="text-xs tabular-nums text-stone-400">
-              {counts.total} {counts.total === 1 ? "item" : "items"}
+              {filtered.length} of {counts.total} {counts.total === 1 ? "item" : "items"}
             </p>
           </div>
 
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 py-16 text-center">
+              <Search size={28} className="mb-3 text-stone-300" aria-hidden />
+              <p className="text-sm font-semibold text-stone-600">No stories match your filters</p>
+              <p className="mt-1 text-xs text-stone-400">Try adjusting your search or filter criteria.</p>
+            </div>
+          ) : (
           <div className="flex flex-col gap-3">
-            {(articles ?? []).map((row) => (
+            {filtered.map((row) => (
               <article
                 key={row.id}
                 className="group flex flex-col gap-4 rounded-xl px-2 py-3 transition-colors hover:bg-stone-100/65 sm:flex-row sm:items-center sm:gap-5 sm:py-4 sm:pr-4"
@@ -269,6 +342,7 @@ function NewsDashboardClient({
               </article>
             ))}
           </div>
+        )}
         </div>
       )}
 

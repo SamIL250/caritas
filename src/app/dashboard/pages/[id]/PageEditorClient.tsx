@@ -19,7 +19,8 @@ import {
   X,
   Home,
   Layers,
-  LayoutGrid
+  LayoutGrid,
+  Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
@@ -3258,29 +3259,6 @@ function SectionForm({
       );
     }
     case 'news_cards': {
-      const patchArticle = (idx: number, field: string, value: unknown) => {
-        const next = [...(state.articles || [])];
-        next[idx] = { ...next[idx], [field]: value };
-        onChange('articles', next);
-      };
-      const addArticle = () => {
-        onChange('articles', [
-          ...(state.articles || []),
-          {
-            title: 'New story',
-            excerpt: '',
-            date: new Date().toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }),
-            image_url: '',
-            link_url: '/news',
-            tag: '',
-            open_in_new: false
-          }
-        ]);
-      };
       return (
         <div className="space-y-6">
           <div className="space-y-2">
@@ -3338,7 +3316,7 @@ function SectionForm({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" htmlFor="nc-view-label">
-                “View all” label
+                "View all" label
               </label>
               <input
                 id="nc-view-label"
@@ -3350,7 +3328,7 @@ function SectionForm({
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" htmlFor="nc-view-url">
-                “View all” URL
+                "View all" URL
               </label>
               <input
                 id="nc-view-url"
@@ -3362,8 +3340,6 @@ function SectionForm({
               />
             </div>
           </div>
-
-          {/* Tab button labels */}
           <div className="space-y-2 pt-1 border-t border-stone-100">
             <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Tab button labels</p>
             <div className="grid grid-cols-2 gap-3">
@@ -3408,116 +3384,20 @@ function SectionForm({
               />
             </div>
           </div>
-
-          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" id="nc-stories-list-label">
-            Stories
-          </p>
-          <p className="text-[9px] text-stone-400 -mt-2">
-            First story drives the featured carousel; 2nd and 3rd appear as side cards. At least 3 items shows the full magazine layout.
-          </p>
-          <ul className="space-y-4" aria-labelledby="nc-stories-list-label">
-            {state.articles?.map((item: any, idx: number) => (
-              <li key={idx} className="p-4 bg-stone-50 rounded-2xl border border-stone-100 space-y-3 relative list-none">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newItems = state.articles.filter((_: any, i: number) => i !== idx);
-                    onChange('articles', newItems);
-                  }}
-                  className="absolute top-2 right-2 text-stone-300 hover:text-red-500 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#7A1515] focus:ring-offset-1"
-                  aria-label={`Remove story ${idx + 1}`}
-                >
-                  <X size={16} aria-hidden />
-                </button>
-                {item.image_url || item.thumbnail ? (
-                  <div className="relative w-full h-32 rounded-lg overflow-hidden bg-stone-200">
-                    <img
-                      src={item.image_url || item.thumbnail}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      className="absolute bottom-2 right-2 text-xs py-1"
-                      onClick={() => setShowMediaPicker(`news_img_${idx}`)}
-                    >
-                      Change image
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="w-full h-24 border-dashed"
-                    onClick={() => setShowMediaPicker(`news_img_${idx}`)}
-                  >
-                    Select image
-                  </Button>
-                )}
-                {showMediaPicker === `news_img_${idx}` && (
-                  <MediaPicker
-                    isOpen
-                    onClose={() => setShowMediaPicker(null)}
-                    onSelect={(m: any) => {
-                      patchArticle(idx, 'image_url', m.url);
-                      setShowMediaPicker(null);
-                    }}
-                  />
-                )}
-                <input
-                  type="text"
-                  value={item.title ?? ''}
-                  onChange={(e) => patchArticle(idx, 'title', e.target.value)}
-                  className="w-full border border-stone-200 rounded-lg p-2 text-sm font-semibold focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515] outline-none"
-                  placeholder="Title"
-                />
-                <textarea
-                  value={item.excerpt ?? ''}
-                  onChange={(e) => patchArticle(idx, 'excerpt', e.target.value)}
-                  rows={3}
-                  className="w-full border border-stone-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515] outline-none"
-                  placeholder="Short description (shown on card)"
-                />
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    value={item.date ?? ''}
-                    onChange={(e) => patchArticle(idx, 'date', e.target.value)}
-                    className="w-full border border-stone-200 rounded-lg p-2 text-xs"
-                    placeholder="Date"
-                  />
-                  <input
-                    type="text"
-                    value={item.tag ?? ''}
-                    onChange={(e) => patchArticle(idx, 'tag', e.target.value)}
-                    className="w-full border border-stone-200 rounded-lg p-2 text-xs"
-                    placeholder="Tag (e.g. News)"
-                  />
-                </div>
-                <input
-                  type="text"
-                  value={item.link_url ?? ''}
-                  onChange={(e) => patchArticle(idx, 'link_url', e.target.value)}
-                  className="w-full border border-stone-200 rounded-lg p-2 text-xs"
-                  placeholder="Link URL (article or external)"
-                />
-                <label className="flex items-center gap-2 text-xs text-stone-600 select-none">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(item.open_in_new)}
-                    onChange={(e) => patchArticle(idx, 'open_in_new', e.target.checked)}
-                    className="rounded border-stone-300 text-[#7A1515] focus:ring-[#7A1515]"
-                  />
-                  Open link in new tab
-                </label>
-              </li>
-            ))}
-          </ul>
-          <Button type="button" variant="secondary" className="w-full" onClick={addArticle}>
-            <Plus size={14} className="mr-2" />
-            Add story
-          </Button>
+          <div className="rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 p-6 text-center">
+            <Newspaper size={32} className="mx-auto mb-3 text-stone-300" aria-hidden />
+            <p className="text-sm font-semibold text-stone-700">Articles are pulled from the News database</p>
+            <p className="mt-1 text-xs text-stone-500">
+              The preview below shows your most recent published articles. To add, edit, or remove articles, go to the news manager.
+            </p>
+            <Link
+              href="/dashboard/news"
+              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#7A1515] px-4 py-2 text-sm font-bold text-white hover:bg-[#7A1515]/90 transition-colors"
+            >
+              <Newspaper size={16} aria-hidden />
+              Manage news articles
+            </Link>
+          </div>
         </div>
       );
     }
