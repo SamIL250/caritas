@@ -27,6 +27,7 @@ export type DioceseMapSectionContent = {
   map_center_lng: number;
   map_zoom: number;
   empty_hint: string;
+  select_label: string;
   dioceses: DioceseMapMarker[];
 };
 
@@ -42,6 +43,7 @@ export const DEFAULT_DIOCESE_MAP_SECTION_CONTENT: DioceseMapSectionContent = {
   map_center_lng: 29.87,
   map_zoom: 8,
   empty_hint: "Click a marker on the map or select a diocese from the list",
+  select_label: "Select a Caritas",
   dioceses: [
     {
       id: "kigali",
@@ -208,6 +210,7 @@ export function normalizeDioceseMapContent(
       : base.map_center_lng,
     map_zoom: Number.isFinite(Number(raw.map_zoom)) ? Number(raw.map_zoom) : base.map_zoom,
     empty_hint: typeof raw.empty_hint === "string" ? raw.empty_hint : base.empty_hint,
+    select_label: typeof raw.select_label === "string" ? raw.select_label : base.select_label,
     dioceses,
   };
 }

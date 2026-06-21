@@ -5305,6 +5305,7 @@ function SectionForm({
           {renderField('Intro paragraph', 'description', 'textarea', { rows: 4 })}
           {renderField('Anchor id', 'anchor_id', 'text')}
           {renderField('Empty selection hint', 'empty_hint', 'text')}
+          {renderField('Sidebar select label', 'select_label', 'text')}
           <div className="grid grid-cols-3 gap-2">
             <div className="space-y-1">
               <label className="text-[10px] font-bold uppercase text-stone-400">Map center lat</label>

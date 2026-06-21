@@ -270,7 +270,7 @@ export default function DioceseMapSectionClient(raw: Props) {
       <div className="diocese-map-inner">
         <div className="diocese-map-sidebar">
           <div className="diocese-sidebar-title">
-            <i className="fa-solid fa-church" aria-hidden /> Select a Diocese
+            <i className="fa-solid fa-church" aria-hidden /> {c.select_label}
           </div>
           <ul className="diocese-list">
             {c.dioceses.map((d, idx) => (
