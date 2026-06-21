@@ -730,3 +730,241 @@
   color: #9ca3af;
   font-style: italic;
 }
+
+/* ── Lock modal inner content ──────────────────────────── */
+
+.pub-lock-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.pub-lock-icon-inner {
+  display: flex;
+  height: 4rem;
+  width: 4rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(145,19,19,0.10), rgba(145,19,19,0.05));
+}
+
+.pub-lock-icon-inner svg {
+  color: #911313;
+  width: 26px;
+  height: 26px;
+}
+
+.pub-lock-heading {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #1c1917;
+  margin-bottom: 0.375rem;
+}
+
+.pub-lock-subtitle {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #737373;
+  line-height: 1.625;
+  max-width: 20rem;
+  margin: 0 auto 2rem;
+}
+
+.pub-lock-tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  border: 1px solid #e7e5e4;
+  background: #fafaf9;
+  padding: 0.25rem;
+}
+
+.pub-lock-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  background: transparent;
+  color: #737373;
+}
+
+.pub-lock-tab:hover {
+  color: #44403c;
+}
+
+.pub-lock-tab.active {
+  background: #fff;
+  color: #911313;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.pub-lock-tab svg {
+  width: 15px;
+  height: 15px;
+}
+
+.pub-lock-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pub-lock-input {
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #e7e5e4;
+  background: #fafaf9;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #1c1917;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.pub-lock-input::placeholder {
+  color: #a8a29e;
+}
+
+.pub-lock-input:focus {
+  border-color: #911313;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(145,19,19,0.10);
+}
+
+.pub-lock-input-icon {
+  padding-left: 2.75rem;
+}
+
+.pub-lock-input-icon-wrap {
+  position: relative;
+}
+
+.pub-lock-input-icon-wrap svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a8a29e;
+  width: 15px;
+  height: 15px;
+}
+
+.pub-lock-error {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: #dc2626;
+  background: #fef2f2;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+}
+
+.pub-lock-error svg {
+  width: 12px;
+  height: 12px;
+}
+
+.pub-lock-btn {
+  width: 100%;
+  border-radius: 10px;
+  background: #911313;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.pub-lock-btn:hover {
+  background: #7a0f0f;
+}
+
+.pub-lock-btn:active {
+  transform: scale(0.98);
+}
+
+.pub-lock-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pub-lock-btn:disabled:active {
+  transform: none;
+}
+
+.pub-lock-btn .spin {
+  animation: pub-lock-spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes pub-lock-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.pub-lock-hint {
+  font-size: 0.75rem;
+  color: #a8a29e;
+  line-height: 1.625;
+}
+
+.pub-lock-sent-card {
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ecfdf5, rgba(236,253,245,0.50));
+  border: 1px solid rgba(167,243,208,0.60);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.pub-lock-sent-icon {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #d1fae5;
+  margin: 0 auto 0.75rem;
+}
+
+.pub-lock-sent-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #059669;
+}
+
+.pub-lock-sent-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #064e3b;
+}
+
+.pub-lock-sent-desc {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #047857;
+  line-height: 1.625;
+  max-width: 16rem;
+  margin-left: auto;
+  margin-right: auto;
+}
