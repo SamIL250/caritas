@@ -11,6 +11,7 @@ const nextConfigBase = {
     serverActions: {
       bodySizeLimit: "30mb",
     },
+    proxyClientMaxBodySize: "30mb",
   },
   ...(process.env.NODE_ENV !== "production" && process.env.NEXT_DEV_DISTDIR
     ? { distDir: process.env.NEXT_DEV_DISTDIR }

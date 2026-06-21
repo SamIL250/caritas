@@ -186,6 +186,64 @@ export async function restoreMedia(mediaId: string, folderId: string | null) {
   revalidatePath("/dashboard/media");
 }
 
+/* ------------------------------------------------------------------ */
+/* Direct Cloudinary upload (bypass server action FormData limit)      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Returns signed parameters the client needs to upload directly to
+ * Cloudinary from the browser.
+ */
+export async function getCloudinaryUploadSignature(): Promise<
+  import("@/lib/cloudinary").CloudinaryUploadSignature
+> {
+  const { getCloudinaryUploadSignature: sign } = await import(
+    "@/lib/cloudinary"
+  );
+  return sign();
+}
+
+/**
+ * Save a media record after the file was uploaded directly to Cloudinary
+ * from the browser (no file in the request — just metadata).
+ */
+export async function saveDirectUploadedMedia(data: {
+  url: string;
+  storage_path: string;
+  bytes: number;
+  filename: string;
+  mime_type: string;
+  folder_id?: string | null;
+}): Promise<MediaRow> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const row = {
+    filename: data.filename,
+    storage_path: data.storage_path,
+    url: data.url,
+    size_bytes: data.bytes,
+    mime_type: data.mime_type,
+    uploaded_by: user?.id ?? null,
+    folder_id: data.folder_id ?? null,
+    deleted_at: null as string | null,
+  };
+
+  const { data: mediaData, error: mediaError } = await supabase
+    .from("media")
+    .insert(row)
+    .select()
+    .single();
+
+  if (mediaError) throw new Error(mediaError.message);
+
+  revalidatePath("/dashboard/media");
+  return mediaData as MediaRow;
+}
+
 export async function purgeMedia(mediaId: string) {
   const supabase = await createClient();
 

@@ -258,6 +258,9 @@ export default function WebsiteHeader() {
                   <Link href="/publications#newsletters" onClick={closeNav}>
                     <i className="fa-solid fa-newspaper"></i> Newsletters
                   </Link>
+                  <Link href="/publications#caritas-contact" onClick={closeNav}>
+                    <i className="fa-solid fa-download"></i> Caritas Contact
+                  </Link>
                   <div className="nav-dropdown-divider"></div>
                   <Link href="/publications#strategic" onClick={closeNav}>
                     <i className="fa-solid fa-map"></i> Strategic Plan

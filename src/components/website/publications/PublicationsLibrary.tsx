@@ -41,6 +41,7 @@ function gridClassForKind(kind: string, slug: string): string {
   if (kind === "pdf") return "pub-card-grid";
   if (kind === "story") return "pub-card-grid";
   if (kind === "external") return "pub-card-grid";
+  if (kind === "file") return "pub-card-grid";
   return "pub-card-grid";
 }
 
@@ -341,7 +342,7 @@ function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: Publicat
   const imageUrl = row.cover_image_url.trim()
     ? encodePublicationAssetUrl(row.cover_image_url)
     : null;
-  const isPdfKind = cat.slug === "annual_report" || cat.slug === "newsletter" || cat.kind === "pdf";
+  const isPdfKind = cat.slug === "annual_report" || cat.slug === "newsletter" || cat.kind === "pdf" || cat.kind === "file";
 
   /* 1. Determine meta line (date / period / tag) */
   const metaLine = row.period_label?.trim()
@@ -354,7 +355,11 @@ function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: Publicat
 
   /* 2. Build action text */
   const actionIcon = hasPdf ? "fa-download" : "fa-arrow-right";
-  const actionText = hasPdf ? "Download PDF" : "Read more";
+  const actionText = hasPdf
+    ? cat.kind === "file"
+      ? "Download file"
+      : "Download PDF"
+    : "Read more";
 
   /* 3. Card content (image + body, same structure for all types) */
   const cardContent = (

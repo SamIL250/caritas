@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Copy,
   Check,
+  FileText,
   FolderPlus,
   Folder as FolderIcon,
   ImageIcon,
@@ -138,9 +139,18 @@ function DraggableFileCard({
       onContextMenu={(e) => onCtx(e, item)}
     >
       <div className="relative overflow-hidden rounded-2xl border border-stone-100 bg-white p-2 transition-all hover:border-[var(--color-primary)]/40">
-      <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-xl bg-stone-50">
-        {/* eslint-disable-next-line @next/next/no-img-element -- library thumbnails */}
-        <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt={item.filename} className="h-full w-full object-cover" />
+      <div className={`relative mb-3 w-full overflow-hidden rounded-xl bg-stone-50 ${item.mime_type?.startsWith("image/") ? "aspect-square" : "aspect-[4/3]"}`}>
+        {item.mime_type?.startsWith("image/") ? (
+          // eslint-disable-next-line @next/next/no-img-element -- library thumbnails
+          <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt={item.filename} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center">
+            <div className="flex size-12 items-center justify-center rounded-xl bg-stone-200 text-stone-500">
+              <FileText className="size-6" />
+            </div>
+            <span className="max-w-full truncate text-xs font-medium text-stone-600">{item.filename}</span>
+          </div>
+        )}
 
         <div className="pointer-events-none absolute inset-0 bg-black/55 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
           <div className="flex h-full items-center justify-center gap-2">
@@ -424,7 +434,7 @@ export default function MediaLibraryClient({
 
   const uploadTrigger = (
     <label className="cursor-pointer">
-      <input type="file" multiple className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading || trashMode} />
+      <input type="file" multiple className="hidden" onChange={handleUpload} disabled={uploading || trashMode} />
       <Button variant="primary" className="pointer-events-none h-9 gap-2" disabled={uploading || trashMode}>
         {uploading ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <Upload size={16} aria-hidden />}
         {uploading ? "Uploading…" : "Upload"}
@@ -518,9 +528,18 @@ export default function MediaLibraryClient({
               <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {items.map((item) => (
                   <Card key={item.id} className="relative bg-white p-2">
-                    <div className="relative mb-3 aspect-square overflow-hidden rounded-xl bg-stone-50">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt="" className="h-full w-full object-cover opacity-70" />
+                    <div className={`relative mb-3 overflow-hidden rounded-xl bg-stone-50 ${item.mime_type?.startsWith("image/") ? "aspect-square" : "aspect-[4/3]"}`}>
+                      {item.mime_type?.startsWith("image/") ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt="" className="h-full w-full object-cover opacity-70" />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center opacity-70">
+                          <div className="flex size-10 items-center justify-center rounded-lg bg-stone-200 text-stone-500">
+                            <FileText className="size-5" />
+                          </div>
+                          <span className="max-w-full truncate text-xs font-medium text-stone-600">{item.filename}</span>
+                        </div>
+                      )}
                     </div>
                     <p className="truncate px-1 text-xs font-bold text-stone-700">{item.filename}</p>
                     <div className="mt-3 flex flex-wrap gap-2 px-1">

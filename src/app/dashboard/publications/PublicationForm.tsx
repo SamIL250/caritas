@@ -92,7 +92,7 @@ export function PublicationForm({
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
-  const showPdf = kind === "pdf" || kind === "hybrid";
+  const showPdf = kind === "pdf" || kind === "hybrid" || kind === "file";
   const showStoryBody = kind === "story" || kind === "hybrid";
   const showExternalUrl = kind === "external" || kind === "hybrid";
   const showCover = kind !== "external" || kind === "external" || true; // always show cover; non-PDF kinds also benefit
@@ -393,7 +393,7 @@ export function PublicationForm({
 
           {showPdf ? (
             <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">PDF document</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">{kind === "file" ? "File" : "PDF document"}</h3>
               <div className="flex flex-col gap-3">
                 <div className="flex min-h-[44px] flex-1 items-center rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600 w-full overflow-hidden">
                   {pdfUrl ? (
@@ -412,7 +412,7 @@ export function PublicationForm({
                 <div className="flex gap-2">
                   <Button type="button" variant="secondary" className="h-9 shrink-0 gap-2 flex-1" onClick={() => setPdfPickerOpen(true)}>
                     <FileText className="size-4" aria-hidden />
-                    Pick PDF
+                    {kind === "file" ? "Pick file" : "Pick PDF"}
                   </Button>
                   {pdfUrl ? (
                     <Button type="button" variant="secondary" className="h-9 shrink-0" onClick={() => setPdfUrl("")}>

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { X, Upload, Search, Check, Loader2, ChevronRight, Folder as FolderIcon } from "lucide-react";
+import { X, Upload, Search, Check, Loader2, ChevronRight, Folder as FolderIcon, FileText } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { getMedia, uploadMedia, listMediaFolders } from "@/app/actions/media";
+import { getMedia, listMediaFolders } from "@/app/actions/media";
 import type { MediaFolderRow } from "@/app/actions/media";
 import { cloudinaryUrl } from "@/lib/cloudinary-url";
 
@@ -12,6 +12,7 @@ interface MediaItem {
   url: string;
   filename: string;
   size_bytes: number;
+  mime_type: string | null;
 }
 
 interface MediaPickerProps {
@@ -109,29 +110,37 @@ export function MediaPicker({
     const files = Array.from(e.target.files || []);
     e.target.value = "";
     if (files.length === 0) return;
-    
+
     setUploading(true);
     setUploadError(null);
     try {
-      const uploadPromises = files.map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        if (uploadIntoId) {
-          formData.append("folder_id", uploadIntoId);
-        }
-        return await uploadMedia(formData);
-      });
-      
-      const uploadedMedia = await Promise.all(uploadPromises);
-      
-      setMedia((prev) => [...(uploadedMedia as MediaItem[]), ...prev]);
-      
+      const uploadedItems = await Promise.all(
+        files.map(async (file) => {
+          const fd = new FormData();
+          fd.append("file", file);
+          if (uploadIntoId) {
+            fd.append("folder_id", uploadIntoId);
+          }
+
+          const res = await fetch("/api/upload", { method: "POST", body: fd });
+          if (!res.ok) {
+            const body = await res.json().catch(() => null);
+            throw new Error(body?.error || `Upload failed (${res.status})`);
+          }
+
+          const saved = await res.json();
+          return saved;
+        }),
+      );
+
+      setMedia((prev) => [...(uploadedItems as MediaItem[]), ...prev]);
+
       if (!multi) {
-        setSelectedIds([uploadedMedia[0].id]);
+        setSelectedIds([uploadedItems[0].id]);
       } else {
-        setSelectedIds((prev) => [...prev, ...uploadedMedia.map(m => m.id)]);
+        setSelectedIds((prev) => [...prev, ...uploadedItems.map((m) => m.id)]);
       }
-      
+
       void loadFoldersAndMedia();
     } catch (error: unknown) {
       setUploadError(error instanceof Error ? error.message : "Upload failed.");
@@ -209,7 +218,7 @@ export function MediaPicker({
               />
             </div>
             <label className="cursor-pointer">
-              <input type="file" multiple className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
+              <input type="file" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
               <div
                 className={`flex items-center gap-2 rounded-xl border-2 border-dashed border-stone-200 px-6 py-2 font-medium text-stone-500 hover:border-[#7A1515] hover:text-[#7A1515] ${uploading ? "opacity-50" : ""}`}
               >
@@ -252,26 +261,44 @@ export function MediaPicker({
                 </div>
               ) : null}
 
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-stone-400">Images here</p>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-stone-400">Files</p>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                {filteredMedia.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => toggleSelect(item.id)}
-                    className={`group relative aspect-square overflow-hidden rounded-xl border-4 transition-all ${
-                      selectedIds.includes(item.id) ? "border-[#7A1515]" : "border-transparent"
-                    }`}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })} alt="" className="h-full w-full object-cover" />
-                    {selectedIds.includes(item.id) ? (
-                      <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#7A1515] text-white">
-                        <Check size={14} aria-hidden />
-                      </div>
-                    ) : null}
-                  </button>
-                ))}
+                {filteredMedia.map((item) => {
+                  const isImage = item.mime_type?.startsWith("image/");
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => toggleSelect(item.id)}
+                      className={`group relative overflow-hidden rounded-xl border-4 transition-all ${
+                        selectedIds.includes(item.id) ? "border-[#7A1515]" : "border-transparent"
+                      } ${!isImage ? "aspect-auto min-h-[120px]" : "aspect-square"}`}
+                    >
+                      {isImage ? (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={cloudinaryUrl(item.url, { width: 300, height: 300, crop: "fill", quality: "auto", format: "auto" })}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        </>
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-2 bg-stone-50 p-3 text-center">
+                          <div className="flex size-10 items-center justify-center rounded-lg bg-stone-200 text-stone-500">
+                            <FileText className="size-5" />
+                          </div>
+                          <span className="max-w-full truncate text-xs font-medium text-stone-700">{item.filename}</span>
+                        </div>
+                      )}
+                      {selectedIds.includes(item.id) ? (
+                        <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#7A1515] text-white">
+                          <Check size={14} aria-hidden />
+                        </div>
+                      ) : null}
+                    </button>
+                  );
+                })}
               </div>
 
               {!filteredMedia.length && !filteredFolders.length ? (

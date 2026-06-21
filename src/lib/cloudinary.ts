@@ -2,6 +2,37 @@ import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({ cloudinary_url: process.env.CLOUDINARY_URL });
 
+export type CloudinaryUploadSignature = {
+  cloudName: string;
+  apiKey: string;
+  timestamp: number;
+  signature: string;
+  folder: string;
+};
+
+/**
+ * Generate signed parameters for a direct browser-to-Cloudinary upload.
+ * The client uses these to POST the file directly, avoiding server-action
+ * multipart parsing limits.
+ */
+export function getCloudinaryUploadSignature(): CloudinaryUploadSignature {
+  const config = cloudinary.config();
+  const timestamp = Math.round(Date.now() / 1000);
+  const folder = "caritas_media";
+  const params: Record<string, string | number> = { timestamp, folder };
+  const signature = cloudinary.utils.api_sign_request(
+    params,
+    config.api_secret!,
+  );
+  return {
+    cloudName: config.cloud_name!,
+    apiKey: config.api_key!,
+    timestamp,
+    signature,
+    folder,
+  };
+}
+
 export interface CloudinaryUploadResult {
   publicId: string;
   url: string;
@@ -14,17 +45,23 @@ export interface CloudinaryUploadResult {
  *
  * @param file  The browser-originated File from a FormData upload.
  * @param folder  Optional subfolder inside Cloudinary (default `caritas_media`).
+ * @param resourceType  Cloudinary resource type. Use `"raw"` for non-image files
+ *   (PDFs, docs) to get the 100 MB free-plan limit instead of the 10 MB image cap.
+ *   Defaults to `"image"` for images, `"raw"` for everything else.
  */
 export async function uploadToCloudinary(
   file: File,
   folder = "caritas_media",
+  resourceType?: "image" | "raw" | "video" | "auto",
 ): Promise<CloudinaryUploadResult> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
+  const rt = resourceType ?? (file.type.startsWith("image/") ? "image" : "raw");
+
   return new Promise<CloudinaryUploadResult>((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder, resource_type: "auto" },
+      { folder, resource_type: rt },
       (error, result) => {
         if (error || !result) {
           reject(error ?? new Error("Cloudinary upload returned no result"));

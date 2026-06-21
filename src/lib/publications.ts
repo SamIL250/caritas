@@ -29,6 +29,11 @@ export const PUBLICATION_CATEGORY_KINDS: { value: PublicationCategoryKind; label
     label: "Hybrid",
     help: "Show PDF, story body, and external link together.",
   },
+  {
+    value: "file",
+    label: "File download",
+    help: "Upload any file type for public download. Cover image and meta line are shown.",
+  },
 ];
 
 export function publicationKindLabel(kind: PublicationCategoryKind): string {
@@ -173,6 +178,7 @@ export const PUBLICATION_BUILTIN_SLUGS = [
   "newsletter",
   "success_story",
   "recent_update",
+  "caritas_contact",
 ] as const;
 
 export type PublicationBuiltinSlug = (typeof PUBLICATION_BUILTIN_SLUGS)[number];
@@ -192,4 +198,5 @@ export const PUBLICATION_BUILTIN_LABELS: Record<PublicationBuiltinSlug, string> 
   newsletter: "Newsletter",
   success_story: "Success Story",
   recent_update: "Recent Update",
+  caritas_contact: "Caritas Contact",
 };

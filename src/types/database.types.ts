@@ -924,7 +924,7 @@ export interface Database {
           description: string
           icon: string
           accent: string
-          kind: "pdf" | "story" | "external" | "hybrid"
+          kind: "pdf" | "story" | "external" | "hybrid" | "file"
           behavior: Json
           field_schema: Json
           is_system: boolean
@@ -941,7 +941,7 @@ export interface Database {
           description?: string
           icon?: string
           accent?: string
-          kind?: "pdf" | "story" | "external" | "hybrid"
+          kind?: "pdf" | "story" | "external" | "hybrid" | "file"
           behavior?: Json
           field_schema?: Json
           is_system?: boolean
@@ -958,7 +958,7 @@ export interface Database {
           description?: string
           icon?: string
           accent?: string
-          kind?: "pdf" | "story" | "external" | "hybrid"
+          kind?: "pdf" | "story" | "external" | "hybrid" | "file"
           behavior?: Json
           field_schema?: Json
           is_system?: boolean
@@ -1462,7 +1462,7 @@ export interface Database {
         | 'social'
       news_article_status: 'draft' | 'published'
       publication_status: 'draft' | 'published'
-      publication_category_kind: 'pdf' | 'story' | 'external' | 'hybrid'
+      publication_category_kind: 'pdf' | 'story' | 'external' | 'hybrid' | 'file'
       program_status: 'draft' | 'published'
       community_campaign_comment_status: 'pending' | 'approved' | 'rejected'
       contact_message_status: 'new' | 'read' | 'replied' | 'archived'
