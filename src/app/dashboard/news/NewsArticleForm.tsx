@@ -21,14 +21,17 @@ type Props = {
   mode: "create" | "edit";
   article?: NewsArticleRow;
   departments: ProgramDepartmentOption[];
+  /** Pre-fill defaults from an existing article when duplicating (create mode only). */
+  duplicateFrom?: NewsArticleRow | null;
 };
 
-export function NewsArticleForm({ mode, article, departments }: Props) {
+export function NewsArticleForm({ mode, article, departments, duplicateFrom }: Props) {
   const router = useRouter();
   const bodyRef = useRef<NewsRichTextEditorHandle>(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
-  const [featuredUrl, setFeaturedUrl] = useState(article?.image_url ?? "");
+  const source = mode === "edit" ? article : duplicateFrom ?? null;
+  const [featuredUrl, setFeaturedUrl] = useState(source?.image_url ?? "");
   const [featuredPickerOpen, setFeaturedPickerOpen] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -63,8 +66,8 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
     }
   }
 
-  const publishedLocal = article?.published_at
-    ? isoToDatetimeLocalValue(article.published_at)
+  const publishedLocal = source?.published_at
+    ? isoToDatetimeLocalValue(source?.published_at)
     : "";
 
   return (
@@ -87,7 +90,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
               >
             Title
           </label>
-          <Input id="title" name="title" required defaultValue={article?.title ?? ""} placeholder="Headline" />
+          <Input id="title" name="title" required defaultValue={source?.title ?? ""} placeholder="Headline" />
         </div>
 
         <div className="space-y-1">
@@ -97,7 +100,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
           <Input
             id="slug"
             name="slug"
-            defaultValue={article?.slug ?? ""}
+            defaultValue={source?.slug ?? ""}
             placeholder="auto-generated from title if empty"
           />
           <p className="text-[11px] text-stone-400">Lowercase, hyphens. Leave blank to derive from the title.</p>
@@ -113,7 +116,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             required
             rows={4}
             className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
-            defaultValue={article?.excerpt ?? ""}
+            defaultValue={source?.excerpt ?? ""}
           />
         </div>
 
@@ -127,9 +130,9 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             </p>
           </div>
           <NewsRichTextEditor
-            key={article?.id ?? "new"}
+            key={source?.id ? `${source.id}-${duplicateFrom ? "copy" : "edit"}` : "new"}
             ref={bodyRef}
-            initialHtml={article?.body ?? ""}
+            initialHtml={source?.body ?? ""}
           />
         </div>
 
@@ -142,7 +145,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
               id="category"
               name="category"
               className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm"
-              defaultValue={article?.category ?? "development"}
+              defaultValue={source?.category ?? "development"}
             >
               {NEWS_CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>
@@ -159,7 +162,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
               id="status"
               name="status"
               className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm"
-              defaultValue={article?.status ?? "draft"}
+              defaultValue={source?.status ?? "draft"}
             >
               <option value="draft">Draft</option>
               <option value="published">Published</option>
@@ -177,7 +180,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
           <select
             id="department_id"
             name="department_id"
-            defaultValue={article?.department_id ?? ""}
+            defaultValue={source?.department_id ?? ""}
             className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm"
           >
             <option value="">Cross-cutting / not assigned</option>
@@ -197,7 +200,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             type="checkbox"
             name="featured"
             value="on"
-            defaultChecked={article?.featured ?? false}
+            defaultChecked={source?.featured ?? false}
             className="h-4 w-4 rounded border-stone-300 text-[#7A1515] accent-[#7A1515]"
           />
           Feature this story on the News page hero
@@ -268,7 +271,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
           <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="image_alt">
             Image Alt Text
           </label>
-          <Input id="image_alt" name="image_alt" defaultValue={article?.image_alt ?? ""} />
+          <Input id="image_alt" name="image_alt" defaultValue={source?.image_alt ?? ""} />
         </div>
 
         <div className="space-y-1">
@@ -280,7 +283,7 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             name="external_url"
             type="url"
             placeholder="https://…"
-            defaultValue={article?.external_url ?? ""}
+            defaultValue={source?.external_url ?? ""}
           />
           <p className="text-[11px] text-stone-400">
             If set, cards link directly here. Omit to use the internal story body.
@@ -312,8 +315,10 @@ export function NewsArticleForm({ mode, article, departments }: Props) {
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
             </>
-          ) : mode === "create" ? (
+          ) : mode === "create" && !duplicateFrom ? (
             "Create story"
+          ) : mode === "create" ? (
+            "Duplicate story"
           ) : (
             "Save changes"
           )}
