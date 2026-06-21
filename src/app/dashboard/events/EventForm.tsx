@@ -19,6 +19,8 @@ import type { EventRow } from "@/lib/events";
 type Props = {
   mode: "create" | "edit";
   event?: EventRow;
+  /** Pre-fill defaults from an existing event when duplicating (create mode only). */
+  duplicateFrom?: EventRow | null;
 };
 
 const STATUSES = ["draft", "published", "cancelled"] as const;
@@ -31,21 +33,23 @@ function isoToDatetimeLocal(iso: string | null | undefined): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export default function EventForm({ mode, event }: Props) {
+export default function EventForm({ mode, event, duplicateFrom }: Props) {
   const router = useRouter();
   const bodyRef = useRef<NewsRichTextEditorHandle>(null);
 
+  const source = mode === "edit" ? event : duplicateFrom ?? null;
+
   const [featuredPickerOpen, setFeaturedPickerOpen] = useState(false);
-  const [featuredUrl, setFeaturedUrl] = useState(event?.featured_image_url ?? "");
+  const [featuredUrl, setFeaturedUrl] = useState(source?.featured_image_url ?? "");
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
-  const [title, setTitle] = useState(event?.title ?? "");
-  const [slug, setSlug] = useState(event?.slug ?? "");
-  const [slugTouched, setSlugTouched] = useState(Boolean(event?.slug));
+  const [title, setTitle] = useState(source?.title ?? "");
+  const [slug, setSlug] = useState(source?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(Boolean(source?.slug));
 
   function handleTitleBlur() {
-    if (!slugTouched && mode === "create") {
+    if (!slugTouched && (mode === "create" && !duplicateFrom)) {
       const s = slugify(title);
       if (s) setSlug(s);
     }
@@ -87,9 +91,9 @@ export default function EventForm({ mode, event }: Props) {
     }
   }
 
-  const startsLocal = isoToDatetimeLocal(event?.starts_at);
-  const endsLocal = isoToDatetimeLocal(event?.ends_at);
-  const publishedLocal = isoToDatetimeLocal(event?.published_at);
+  const startsLocal = isoToDatetimeLocal(source?.starts_at);
+  const endsLocal = isoToDatetimeLocal(source?.ends_at);
+  const publishedLocal = isoToDatetimeLocal(source?.published_at);
 
   return (
     <form onSubmit={(ev) => void handleSubmit(ev)} className="space-y-6">
@@ -101,7 +105,7 @@ export default function EventForm({ mode, event }: Props) {
           <ArrowLeft size={18} />
         </Link>
         <h2 className="text-lg font-bold text-stone-900">
-          {mode === "create" ? "New event" : "Edit event"}
+          {duplicateFrom ? "Duplicate event" : mode === "create" ? "New event" : "Edit event"}
         </h2>
       </div>
 
@@ -153,7 +157,7 @@ export default function EventForm({ mode, event }: Props) {
             <Input
               id="ev-category"
               name="category_label"
-              defaultValue={event?.category_label ?? ""}
+              defaultValue={source?.category_label ?? ""}
               placeholder="Training · Outreach · Fundraiser…"
             />
           </div>
@@ -164,7 +168,7 @@ export default function EventForm({ mode, event }: Props) {
             <select
               id="ev-status"
               name="status"
-              defaultValue={event?.status ?? "draft"}
+              defaultValue={source?.status ?? "draft"}
               className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
             >
               {STATUSES.map((s) => (
@@ -185,7 +189,7 @@ export default function EventForm({ mode, event }: Props) {
             name="summary"
             rows={2}
             maxLength={1000}
-            defaultValue={event?.summary ?? ""}
+            defaultValue={source?.summary ?? ""}
             placeholder="One-sentence description shown in the events list."
             className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
           />
@@ -196,9 +200,9 @@ export default function EventForm({ mode, event }: Props) {
             Full description (rich text)
           </label>
           <NewsRichTextEditor
-            key={`ev-body-${event?.id ?? "new"}`}
+            key={`ev-body-${source?.id ?? "new"}-${duplicateFrom ? "copy" : "edit"}`}
             ref={bodyRef}
-            initialHtml={event?.description_html ?? ""}
+            initialHtml={source?.description_html ?? ""}
           />
         </div>
       </Card>
@@ -236,7 +240,7 @@ export default function EventForm({ mode, event }: Props) {
             <input
               type="checkbox"
               name="is_all_day"
-              defaultChecked={Boolean(event?.is_all_day)}
+              defaultChecked={Boolean(source?.is_all_day)}
               className="h-4 w-4 accent-[var(--color-primary)]"
             />
             <span className="text-sm text-stone-800">All-day event</span>
@@ -248,7 +252,7 @@ export default function EventForm({ mode, event }: Props) {
             <Input
               id="ev-tz"
               name="timezone"
-              defaultValue={event?.timezone ?? "Africa/Kigali"}
+              defaultValue={source?.timezone ?? "Africa/Kigali"}
               placeholder="Africa/Kigali"
             />
           </div>
@@ -262,7 +266,7 @@ export default function EventForm({ mode, event }: Props) {
             <Input
               id="ev-loc"
               name="location_label"
-              defaultValue={event?.location_label ?? ""}
+              defaultValue={source?.location_label ?? ""}
               placeholder="Caritas HQ · Kacyiru"
             />
           </div>
@@ -274,7 +278,7 @@ export default function EventForm({ mode, event }: Props) {
               id="ev-loc-url"
               name="location_url"
               type="url"
-              defaultValue={event?.location_url ?? ""}
+              defaultValue={source?.location_url ?? ""}
               placeholder="https://maps.google.com/…"
             />
           </div>
@@ -288,7 +292,7 @@ export default function EventForm({ mode, event }: Props) {
             id="ev-loc-addr"
             name="location_address"
             rows={2}
-            defaultValue={event?.location_address ?? ""}
+            defaultValue={source?.location_address ?? ""}
             className="w-full rounded-lg border border-stone-200 px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/15"
           />
         </div>
@@ -334,7 +338,7 @@ export default function EventForm({ mode, event }: Props) {
           <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="ev-alt">
             Image alt text
           </label>
-          <Input id="ev-alt" name="image_alt" defaultValue={event?.image_alt ?? ""} />
+          <Input id="ev-alt" name="image_alt" defaultValue={source?.image_alt ?? ""} />
         </div>
       </Card>
 
@@ -351,7 +355,7 @@ export default function EventForm({ mode, event }: Props) {
               id="ev-reg"
               name="registration_url"
               type="url"
-              defaultValue={event?.registration_url ?? ""}
+              defaultValue={source?.registration_url ?? ""}
               placeholder="https://forms.gle/…"
             />
           </div>
@@ -362,7 +366,7 @@ export default function EventForm({ mode, event }: Props) {
             <Input
               id="ev-cap"
               name="capacity_label"
-              defaultValue={event?.capacity_label ?? ""}
+              defaultValue={source?.capacity_label ?? ""}
               placeholder="Limited to 30 volunteers"
             />
           </div>
@@ -374,21 +378,21 @@ export default function EventForm({ mode, event }: Props) {
               id="ev-email"
               name="contact_email"
               type="email"
-              defaultValue={event?.contact_email ?? ""}
+              defaultValue={source?.contact_email ?? ""}
             />
           </div>
           <div className="space-y-1">
             <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="ev-phone">
               Contact phone
             </label>
-            <Input id="ev-phone" name="contact_phone" defaultValue={event?.contact_phone ?? ""} />
+            <Input id="ev-phone" name="contact_phone" defaultValue={source?.contact_phone ?? ""} />
           </div>
         </div>
         <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-stone-200 bg-stone-50/60 px-3 py-2.5">
           <input
             type="checkbox"
             name="featured"
-            defaultChecked={Boolean(event?.featured)}
+            defaultChecked={Boolean(source?.featured)}
             className="h-4 w-4 accent-[var(--color-primary)]"
           />
           <span className="text-sm text-stone-800">Mark as featured event</span>

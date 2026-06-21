@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2, Calendar, MapPin, Star } from "lucide-react";
+import { Pencil, Trash2, Calendar, MapPin, Star, Copy } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deleteEvent } from "@/app/actions/events";
@@ -114,6 +114,13 @@ export default function EventsDashboardClient({ events }: { events: EventRow[] }
                       >
                         <Pencil size={12} aria-hidden />
                         Edit
+                      </Link>
+                      <Link
+                        href={`/dashboard/events/new?duplicate=${e.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-stone-500 transition-colors hover:bg-white hover:text-[#7A1515]"
+                      >
+                        <Copy size={12} aria-hidden />
+                        Duplicate
                       </Link>
                       <button
                         type="button"
