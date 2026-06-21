@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { updateSiteSettings } from "@/app/actions/site-settings";
-import type { FooterSettings, FooterNavLink, FooterProgramLink, FooterLegalLink } from "@/lib/footer-settings";
+import type { FooterSettings, FooterNavLink, FooterProgramLink, FooterSystemLink, FooterLegalLink } from "@/lib/footer-settings";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 
 export type SettingsFormInitial = {
@@ -376,6 +376,27 @@ export function SettingsForm({ initial }: { initial: SettingsFormInitial }) {
         </Card>
       </section>
 
+      <section>
+        <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">Footer — systems</h2>
+        <Card className="space-y-3 p-4 sm:p-6">
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Column heading</label>
+            <Input
+              value={footer.systems.heading}
+              onChange={(e) =>
+                setFooter((f) => ({ ...f, systems: { ...f.systems, heading: e.target.value } }))
+              }
+            />
+          </div>
+          <SystemLinkList
+            items={footer.systems.links}
+            onChange={(links) =>
+              setFooter((f) => ({ ...f, systems: { ...f.systems, links } }))
+            }
+          />
+        </Card>
+      </section>
+
       <LinkListEditor
         title="Footer — legal links"
         items={footer.legalLinks as unknown as FooterNavLink[]}
@@ -446,6 +467,67 @@ function ProgramLinkList({
       >
         <Plus className="w-4 h-4 mr-1" />
         Add program link
+      </Button>
+    </div>
+  );
+}
+
+function SystemLinkList({
+  items,
+  onChange,
+}: {
+  items: FooterSystemLink[];
+  onChange: (l: FooterSystemLink[]) => void;
+}) {
+  function update(i: number, field: keyof FooterSystemLink, value: string) {
+    const next = items.map((row, j) => (j === i ? { ...row, [field]: value } : row));
+    onChange(next);
+  }
+  return (
+    <div className="space-y-2">
+      {items.map((row, i) => (
+        <div key={i} className="flex flex-col gap-2 border-b border-[var(--color-border-default)] pb-3 last:border-0">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input
+              className="flex-1"
+              value={row.label}
+              onChange={(e) => update(i, "label", e.target.value)}
+              placeholder="System name"
+            />
+            <Input
+              className="flex-1"
+              value={row.href}
+              onChange={(e) => update(i, "href", e.target.value)}
+              placeholder="https://..."
+            />
+          </div>
+          <div className="flex gap-2">
+            <Input
+              className="flex-1"
+              value={row.description ?? ""}
+              onChange={(e) => update(i, "description", e.target.value)}
+              placeholder="Short description (optional)"
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-9 px-2 shrink-0"
+              onClick={() => onChange(items.filter((_, j) => j !== i))}
+              aria-label="Remove row"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      ))}
+      <Button
+        type="button"
+        variant="secondary"
+        className="h-9 w-fit"
+        onClick={() => onChange([...items, { label: "New system", href: "#", description: "" }])}
+      >
+        <Plus className="w-4 h-4 mr-1" />
+        Add system
       </Button>
     </div>
   );
