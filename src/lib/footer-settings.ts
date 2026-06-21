@@ -13,6 +13,7 @@ export type FooterNavLink = {
 export type FooterProgramLink = { label: string; href: string };
 
 export type FooterLegalLink = { label: string; href: string };
+export type FooterSystemLink = { label: string; href: string; description?: string };
 
 export type FooterSettings = {
   banner: {
@@ -59,6 +60,10 @@ export type FooterSettings = {
     developerCredit: string;
   };
   legalLinks: FooterLegalLink[];
+  systems: {
+    heading: string;
+    links: FooterSystemLink[];
+  };
 };
 
 export const FOOTER_DEFAULTS: FooterSettings = {
@@ -125,6 +130,13 @@ export const FOOTER_DEFAULTS: FooterSettings = {
     { label: "Terms of Service", href: "/terms" },
     { label: "Cookie Policy", href: "/cookie-policy" },
   ],
+  systems: {
+    heading: "Systems",
+    links: [
+      { label: "HR Management", href: "#", description: "Staff portal & payroll" },
+      { label: "ECD Portal", href: "#", description: "Early Childhood Development" },
+    ],
+  },
 };
 
 function isObj(x: unknown): x is Record<string, unknown> {
@@ -268,6 +280,20 @@ function mergeLegal(patch: unknown, fallback: FooterLegalLink[]): FooterLegalLin
   return out.length ? out : [...fallback];
 }
 
+function mergeSystemLinks(patch: unknown, fallback: FooterSystemLink[]): FooterSystemLink[] {
+  if (!Array.isArray(patch)) return [...fallback];
+  const out: FooterSystemLink[] = [];
+  for (const item of patch) {
+    if (!isObj(item)) continue;
+    const label = typeof item.label === "string" ? item.label : "";
+    const href = typeof item.href === "string" ? item.href : "#";
+    const description = typeof item.description === "string" ? item.description : undefined;
+    if (!label) continue;
+    out.push({ label, href, description });
+  }
+  return out.length ? out : [...fallback];
+}
+
 /** Merge stored json (or unknown) onto defaults. */
 export function mergeFooterSettings(stored: unknown): FooterSettings {
   const d = FOOTER_DEFAULTS;
@@ -290,6 +316,15 @@ export function mergeFooterSettings(stored: unknown): FooterSettings {
     contact: mergeContact(d.contact, stored.contact),
     bottom: mergeBottom(d.bottom, stored.bottom),
     legalLinks: mergeLegal(stored.legalLinks, d.legalLinks),
+    systems: isObj(stored.systems)
+      ? {
+        heading:
+          typeof stored.systems.heading === "string"
+            ? stored.systems.heading
+            : d.systems.heading,
+        links: mergeSystemLinks(stored.systems.links, d.systems.links),
+      }
+      : { ...d.systems, links: [...d.systems.links] },
   };
 }
 

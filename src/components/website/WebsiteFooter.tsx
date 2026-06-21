@@ -53,6 +53,8 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
     { key: 'flickr', icon: 'fab fa-flickr', label: 'Flickr' },
   ];
 
+  const hasSystems = s.systems.links.length > 0;
+
   return (
     <footer className="website-footer">
       <div className="ft-blob-1" />
@@ -126,6 +128,22 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
             </div>
           </div>
         </div>
+
+        {hasSystems && (
+          <div className="footer-col">
+            <div className="ft-col-heading">{s.systems.heading}</div>
+            <ul className="ft-links">
+              {s.systems.links.map((link, i) => (
+                <li key={`sys-${i}`}>
+                  <a href={link.href} target="_blank" rel="noopener noreferrer">
+                    <span className="ft-sys-name">{link.label}</span>
+                    {link.description && <span className="ft-sys-desc">{link.description}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="footer-col">
           <div className="ft-col-heading">Stay Updated</div>
