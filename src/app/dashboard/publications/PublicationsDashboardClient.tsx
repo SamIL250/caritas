@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   BookOpen,
   LayoutTemplate,
+  Lock,
   Plus,
   Settings2,
 } from "lucide-react";
@@ -45,6 +46,7 @@ function PublicationsDashboardClient({
 
   const [delId, setDelId] = useState<string | null>(null);
   const [deletingPending, startDeleting] = useTransition();
+  const [showLockedOnly, setShowLockedOnly] = useState(false);
 
   const sortedCategories = useMemo(
     () =>
@@ -68,11 +70,12 @@ function PublicationsDashboardClient({
     const published = items.filter((p) => p.status === "published").length;
     const drafts = items.filter((p) => p.status === "draft").length;
     const featured = items.filter((p) => p.featured).length;
+    const locked = items.filter((p) => (p as any).is_locked).length;
     const byCategory: Record<string, number> = {};
     items.forEach((p) => {
       byCategory[p.category] = (byCategory[p.category] ?? 0) + 1;
     });
-    return { total, published, drafts, featured, byCategory };
+    return { total, published, drafts, featured, locked, byCategory };
   }, [items]);
 
   const categoryById = useMemo(() => {
@@ -106,9 +109,10 @@ function PublicationsDashboardClient({
   const activeCategory =
     activeTab.kind === "category" ? activeTab.category : null;
 
-  const filteredItems = activeCategory
+  const filteredItems = (activeCategory
     ? items.filter((r) => r.category === activeCategory.slug)
-    : items;
+    : items
+  ).filter((r) => (showLockedOnly ? (r as any).is_locked : true));
 
   const newPublicationHref = activeCategory
     ? `/dashboard/publications/new?category=${encodeURIComponent(activeCategory.slug)}`
@@ -193,57 +197,75 @@ function PublicationsDashboardClient({
               <Stat label="Live" value={counts.published} tone="emerald" />
               <Stat label="Drafts" value={counts.drafts} tone="amber" />
               <Stat label="Featured" value={counts.featured} />
+              <Stat label="Locked" value={counts.locked} />
               <Stat label="Categories" value={categories.length} />
             </dl>
           ) : null}
         </div>
       </section>
 
-      <div className="-mx-1 overflow-x-auto">
-        <div className="flex min-w-max flex-wrap gap-1 border-b border-stone-200 px-1 pb-px">
-          {tabs.map((t) => {
-            const active = t.key === activeTab.key;
-            const showBadge = t.kind === "category" || t.kind === "all";
-            const badgeCount =
-              t.kind === "all"
-                ? counts.total
-                : t.kind === "category"
-                  ? counts.byCategory[t.category.slug] ?? 0
-                  : 0;
-            return (
-              <button
-                key={t.key}
-                type="button"
-                onClick={() => setTab(t.key)}
-                className={`relative -mb-px inline-flex items-center gap-2 rounded-t-lg px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                  active
-                    ? "border border-b-0 border-stone-200 bg-white text-[#7A1515]"
-                    : "border border-transparent text-stone-500 hover:bg-stone-50 hover:text-stone-800"
-                }`}
-              >
-                {t.kind === "settings" ? <Settings2 className="size-3.5" aria-hidden /> : null}
-                {t.kind === "category" ? (
-                  <PublicationCategoryIcon
-                    icon={t.category.icon}
-                    accent={t.category.accent}
-                    size={18}
-                    className="!rounded-md"
-                  />
-                ) : null}
-                {t.label}
-                {showBadge ? (
-                  <span
-                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-extrabold ${
-                      active ? "bg-[#7A1515]/10 text-[#7A1515]" : "bg-stone-100 text-stone-500"
-                    }`}
-                  >
-                    {badgeCount}
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
+      <div className="flex items-center justify-between">
+        <div className="-mx-1 overflow-x-auto flex-1">
+          <div className="flex min-w-max flex-wrap gap-1 border-b border-stone-200 px-1 pb-px">
+            {tabs.map((t) => {
+              const active = t.key === activeTab.key;
+              const showBadge = t.kind === "category" || t.kind === "all";
+              const badgeCount =
+                t.kind === "all"
+                  ? counts.total
+                  : t.kind === "category"
+                    ? counts.byCategory[t.category.slug] ?? 0
+                    : 0;
+              return (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => setTab(t.key)}
+                  className={`relative -mb-px inline-flex items-center gap-2 rounded-t-lg px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                    active
+                      ? "border border-b-0 border-stone-200 bg-white text-[#7A1515]"
+                      : "border border-transparent text-stone-500 hover:bg-stone-50 hover:text-stone-800"
+                  }`}
+                >
+                  {t.kind === "settings" ? <Settings2 className="size-3.5" aria-hidden /> : null}
+                  {t.kind === "category" ? (
+                    <PublicationCategoryIcon
+                      icon={t.category.icon}
+                      accent={t.category.accent}
+                      size={18}
+                      className="!rounded-md"
+                    />
+                  ) : null}
+                  {t.label}
+                  {showBadge ? (
+                    <span
+                      className={`rounded-full px-1.5 py-0.5 text-[10px] font-extrabold ${
+                        active ? "bg-[#7A1515]/10 text-[#7A1515]" : "bg-stone-100 text-stone-500"
+                      }`}
+                    >
+                      {badgeCount}
+                    </span>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {counts.locked > 0 ? (
+          <button
+            type="button"
+            onClick={() => setShowLockedOnly((v) => !v)}
+            className={`ml-4 inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
+              showLockedOnly
+                ? "bg-[#8c2208]/10 text-[#8c2208]"
+                : "bg-stone-100 text-stone-500 hover:bg-stone-200"
+            }`}
+          >
+            <Lock size={13} aria-hidden />
+            {showLockedOnly ? "Showing locked" : "Show locked"}
+          </button>
+        ) : null}
       </div>
 
       {activeTab.kind === "settings" ? (

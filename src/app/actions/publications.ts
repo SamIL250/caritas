@@ -129,6 +129,9 @@ export async function createPublication(form: FormData): Promise<{ error?: strin
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
+    const is_locked = form.get("is_locked") === "on";
+    const access_password_raw = String(form.get("access_password") || "").trim();
+    const access_password = is_locked && access_password_raw ? access_password_raw : null;
     const status = (String(form.get("status") || "draft") as Status) === "published" ? "published" : "draft";
     const department_id = parseDepartmentIdField(form);
 
@@ -150,7 +153,7 @@ export async function createPublication(form: FormData): Promise<{ error?: strin
 
     const custom_fields = parseCustomFieldsFromForm(form, schema);
 
-    const { error } = await supabase.from("publications").insert({
+    const { error } = await (supabase as any).from("publications").insert({
       title,
       slug,
       category_id,
@@ -166,6 +169,8 @@ export async function createPublication(form: FormData): Promise<{ error?: strin
       tag_label,
       tag_icon,
       featured,
+      is_locked,
+      access_password,
       status,
       published_at,
       sort_order,
@@ -216,6 +221,9 @@ export async function updatePublication(
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
+    const is_locked = form.get("is_locked") === "on";
+    const access_password_raw = String(form.get("access_password") || "").trim();
+    const access_password = is_locked && access_password_raw ? access_password_raw : null;
     const status = (String(form.get("status") || "draft") as Status) === "published" ? "published" : "draft";
     const department_id = parseDepartmentIdField(form);
 
@@ -229,7 +237,7 @@ export async function updatePublication(
 
     const custom_fields = parseCustomFieldsFromForm(form, schema);
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("publications")
       .update({
         title,
@@ -247,6 +255,8 @@ export async function updatePublication(
         tag_label,
         tag_icon,
         featured,
+        is_locked,
+        access_password,
         status,
         published_at,
         custom_fields: custom_fields as Json,

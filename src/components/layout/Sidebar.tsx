@@ -24,11 +24,21 @@ import {
   Mail,
   MessageSquare,
   ShieldCheck,
+  Lock,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
 
-const navGroups = [
+const navGroups: {
+  label: string;
+  items: ({
+    name: string;
+    href: string;
+    icon: any;
+    badge?: number | string;
+    children?: { name: string; href: string; icon: any }[];
+  })[];
+}[] = [
   {
     label: "Main",
     items: [
@@ -41,7 +51,10 @@ const navGroups = [
     items: [
       { name: "News", href: "/dashboard/news", icon: Newspaper },
       { name: "Programs", href: "/dashboard/programs", icon: Grid3x3 },
-      { name: "Publications", href: "/dashboard/publications", icon: BookOpen },
+      { name: "Publications", href: "/dashboard/publications", icon: BookOpen, children: [
+        { name: "All Publications", href: "/dashboard/publications", icon: BookOpen },
+        { name: "Access Requests", href: "/dashboard/publications/access-requests", icon: Lock },
+      ] },
       { name: "Campaigns", href: "/dashboard/community-campaigns", icon: Megaphone },
       { name: "Media", href: "/dashboard/media", icon: ImageIcon },
       { name: "Donations", href: "/dashboard/donations", icon: Heart },
@@ -75,6 +88,13 @@ export function Sidebar({ profile, initialPagesCount = 0, isOpen, setIsOpen }: S
   const pathname = usePathname();
   const supabase = useMemo(() => createClient(), []);
   const [pagesCount, setPagesCount] = useState<number>(initialPagesCount);
+  const [expanded, setExpanded] = useState<string | null>(() => {
+    // Auto-expand Publications if on access-requests page
+    if (typeof window !== "undefined" && window.location.pathname.includes("/dashboard/publications/access-requests")) {
+      return "Publications";
+    }
+    return null;
+  });
 
   useEffect(() => {
     if (!pathname?.startsWith("/dashboard")) return;
@@ -137,6 +157,58 @@ export function Sidebar({ profile, initialPagesCount = 0, isOpen, setIsOpen }: S
             </h4>
             <nav className="space-y-0.5">
               {group.items.map((item) => {
+                if (item.children) {
+                  const isExpanded = expanded === item.name;
+                  const parentActive = isDashboardNavActive(pathname, item.href);
+                  return (
+                    <div key={item.name}>
+                      <button
+                        type="button"
+                        onClick={() => setExpanded(isExpanded ? null : item.name)}
+                        className={`group flex min-h-10 w-full items-center justify-between rounded-lg px-3 py-2.5 text-[13px] leading-tight transition-[background-color,color,transform] duration-200 motion-reduce:transition-none ${
+                          parentActive
+                            ? "bg-[var(--color-primary)] text-white ring-1 ring-[var(--color-primary)]/90"
+                            : "text-stone-600 hover:bg-stone-50/90 hover:text-[var(--color-primary)] active:scale-[0.99]"
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <item.icon 
+                            size={18} 
+                            className={`mr-3 transition-colors ${parentActive ? "text-white" : "text-stone-400 group-hover:text-[var(--color-primary)]"}`} 
+                          />
+                          <span className="font-medium">{item.name}</span>
+                        </div>
+                        <ChevronRight
+                          size={14}
+                          className={`transition-transform ${isExpanded ? "rotate-90" : ""} ${parentActive ? "text-white/50" : "text-stone-400"}`}
+                        />
+                      </button>
+                      {isExpanded && (
+                        <div className="ml-3 mt-0.5 space-y-0.5 border-l-2 border-stone-100 pl-2">
+                          {item.children.map((child) => {
+                            const childActive = isDashboardNavActive(pathname, child.href);
+                            return (
+                              <Link
+                                key={child.name}
+                                href={child.href}
+                                onClick={() => setIsOpen(false)}
+                                className={`group flex min-h-9 items-center rounded-lg px-3 py-2 text-[12.5px] leading-tight transition-[background-color,color,transform] duration-200 motion-reduce:transition-none ${
+                                  childActive
+                                    ? "bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-bold"
+                                    : "text-stone-500 hover:bg-stone-50/90 hover:text-[var(--color-primary)] active:scale-[0.99]"
+                                }`}
+                              >
+                                <child.icon size={15} className={`mr-2.5 ${childActive ? "text-[var(--color-primary)]" : "text-stone-400"}`} />
+                                {child.name}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 const isActive = isDashboardNavActive(pathname, item.href);
                 const badge =
                   item.href === "/dashboard/pages"

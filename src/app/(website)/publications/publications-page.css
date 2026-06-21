@@ -251,6 +251,7 @@
   grid-template-columns: 340px 1fr;
   margin-bottom: 1.5rem;
   transition: box-shadow 0.3s, transform 0.3s;
+  position: relative;
 }
 
 .pub-featured:hover {
@@ -259,7 +260,6 @@
 }
 
 .pub-feat-img {
-  position: relative;
   overflow: hidden;
   min-height: 240px;
   background: linear-gradient(135deg, #f0ece8, #e8e3de);
@@ -274,16 +274,24 @@
 
 .pub-feat-badge {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   background: #a5280d;
   color: #fff;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 0.3rem 0.8rem;
-  border-radius: 100px;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0 8px 8px 0;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 2;
+  line-height: 1.1;
 }
 
 .pub-feat-body {
@@ -423,6 +431,10 @@
 }
 
 /* Image */
+.pub-card-image-wrap {
+  position: relative;
+}
+
 .pub-card-image {
   width: 100%;
   height: 160px;
@@ -432,6 +444,21 @@
 
 .pub-card-image-placeholder {
   background: #f3f4f6;
+}
+
+.pub-card-lock-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(140,34,8,0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
 }
 
 /* Body */

@@ -11,6 +11,7 @@ import {
   publicationPrimaryHref,
   readCategoryBehavior,
 } from "@/lib/publications";
+import { PublicationLockModal } from "./PublicationLockModal";
 
 type FilterKey = "all" | string;
 
@@ -46,6 +47,7 @@ function gridClassForKind(kind: string, slug: string): string {
 export default function PublicationsLibrary({ publications, categories }: Props) {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [activePublication, setActivePublication] = useState<PublicationRow | null>(null);
+  const [lockedPub, setLockedPub] = useState<PublicationRow | null>(null);
 
   const sortedCategories = useMemo(
     () =>
@@ -89,6 +91,16 @@ export default function PublicationsLibrary({ publications, categories }: Props)
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  function handleLockUnlock(pub: PublicationRow) {
+    const hasPdf = publicationHasPdf(pub);
+    if (hasPdf) {
+      window.open(publicationPrimaryHref(pub), '_blank', 'noopener');
+    } else {
+      setActivePublication(pub);
+    }
+    setLockedPub(null);
+  }
 
   return (
     <>
@@ -136,35 +148,46 @@ export default function PublicationsLibrary({ publications, categories }: Props)
       </div>
 
       <main className="pub-main">
-        {strategicFeatured && strategicCat && showSection("strategic_plan") ? (
-          <section
-            className="pub-section"
-            id={readCategoryBehavior(strategicCat).site_anchor || "strategic"}
-            aria-labelledby="pub-strategic-heading"
-          >
-            {publicationHasPdf(strategicFeatured) ? (
-              <a
-                href={publicationPrimaryHref(strategicFeatured)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pub-featured"
-              >
-                <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
-              </a>
-            ) : (
-              <div
-                className="pub-featured"
-                role="button"
-                tabIndex={0}
-                onClick={() => setActivePublication(strategicFeatured)}
-                onKeyDown={(e) => e.key === "Enter" && setActivePublication(strategicFeatured)}
-                style={{ cursor: "pointer" }}
-              >
-                <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
-              </div>
-            )}
-          </section>
-        ) : null}
+          {strategicFeatured && strategicCat && showSection("strategic_plan") ? (
+            <section
+              className="pub-section"
+              id={readCategoryBehavior(strategicCat).site_anchor || "strategic"}
+              aria-labelledby="pub-strategic-heading"
+            >
+              {(strategicFeatured as any).is_locked ? (
+                <div
+                  className="pub-featured"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setLockedPub(strategicFeatured)}
+                  onKeyDown={(e) => e.key === "Enter" && setLockedPub(strategicFeatured)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
+                </div>
+              ) : publicationHasPdf(strategicFeatured) ? (
+                <a
+                  href={publicationPrimaryHref(strategicFeatured)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pub-featured"
+                >
+                  <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
+                </a>
+              ) : (
+                <div
+                  className="pub-featured"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setActivePublication(strategicFeatured)}
+                  onKeyDown={(e) => e.key === "Enter" && setActivePublication(strategicFeatured)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
+                </div>
+              )}
+            </section>
+          ) : null}
 
         {sortedCategories.map((cat) => {
           const items = publications.filter((p) => p.category === cat.slug);
@@ -180,9 +203,10 @@ export default function PublicationsLibrary({ publications, categories }: Props)
               anchor={anchor}
               visible={visible}
               onOpenDrawer={setActivePublication}
+              onLockedClick={setLockedPub}
             />
           );
-        })}
+        }        )}
       </main>
 
       <PublicationDrawer
@@ -190,13 +214,23 @@ export default function PublicationsLibrary({ publications, categories }: Props)
         categories={categories}
         onClose={() => setActivePublication(null)}
       />
+
+      <PublicationLockModal
+        publication={lockedPub}
+        onUnlock={() => lockedPub && handleLockUnlock(lockedPub)}
+        onClose={() => setLockedPub(null)}
+      />
     </>
   );
 }
 
 function FeaturedContent({ cat, pub }: { cat: PublicationCategoryRow; pub: PublicationRow }) {
+  const isLocked = Boolean((pub as any).is_locked);
   return (
     <>
+      <div className="pub-feat-badge">
+        <i className="fa-solid fa-star" aria-hidden /> Featured
+      </div>
       <div className="pub-feat-img">
         {pub.cover_image_url.trim() ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -205,9 +239,11 @@ function FeaturedContent({ cat, pub }: { cat: PublicationCategoryRow; pub: Publi
             alt={pub.cover_image_alt || pub.title}
           />
         ) : null}
-        <div className="pub-feat-badge">
-          <i className="fa-solid fa-star" aria-hidden /> Featured
-        </div>
+        {isLocked ? (
+          <div className="pub-card-lock-badge" style={{ top: '0.5rem', right: '0.5rem' }}>
+            <i className="fa-solid fa-lock" aria-hidden />
+          </div>
+        ) : null}
       </div>
       <div className="pub-feat-body">
         <div className="pub-feat-tag">
@@ -262,12 +298,14 @@ function CategorySection({
   anchor,
   visible,
   onOpenDrawer,
+  onLockedClick,
 }: {
   cat: PublicationCategoryRow;
   items: PublicationRow[];
   anchor: string;
   visible: boolean;
   onOpenDrawer: (row: PublicationRow) => void;
+  onLockedClick: (row: PublicationRow) => void;
 }) {
   const headingId = `pub-${cat.slug}-heading`;
   const gridClass = gridClassForKind(cat.kind, cat.slug);
@@ -290,7 +328,7 @@ function CategorySection({
       </div>
       <div className={gridClass}>
         {items.map((p) => (
-          <CategoryCard key={p.id} cat={cat} row={p} onOpenDrawer={onOpenDrawer} />
+          <CategoryCard key={p.id} cat={cat} row={p} onOpenDrawer={onOpenDrawer} onLockedClick={onLockedClick} />
         ))}
       </div>
     </section>
@@ -298,7 +336,7 @@ function CategorySection({
 }
 
 /* ── Unified card design matching the success story / news card pattern from the programs page ── */
-function CategoryCard({ cat, row, onOpenDrawer }: { cat: PublicationCategoryRow; row: PublicationRow; onOpenDrawer: (row: PublicationRow) => void }) {
+function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: PublicationCategoryRow; row: PublicationRow; onOpenDrawer: (row: PublicationRow) => void; onLockedClick: (row: PublicationRow) => void }) {
   const hasPdf = publicationHasPdf(row);
   const imageUrl = row.cover_image_url.trim()
     ? encodePublicationAssetUrl(row.cover_image_url)
@@ -322,12 +360,19 @@ function CategoryCard({ cat, row, onOpenDrawer }: { cat: PublicationCategoryRow;
   const cardContent = (
     <>
       {/* Image */}
-      {imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={imageUrl} alt={row.cover_image_alt || row.title} className="pub-card-image" />
-      ) : (
-        <div className="pub-card-image pub-card-image-placeholder" />
-      )}
+      <div className="pub-card-image-wrap">
+        {imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={imageUrl} alt={row.cover_image_alt || row.title} className="pub-card-image" />
+        ) : (
+          <div className="pub-card-image pub-card-image-placeholder" />
+        )}
+        {(row as any).is_locked ? (
+          <div className="pub-card-lock-badge">
+            <i className="fa-solid fa-lock" aria-hidden />
+          </div>
+        ) : null}
+      </div>
 
       {/* Body */}
       <div className="pub-card-body">
@@ -348,7 +393,24 @@ function CategoryCard({ cat, row, onOpenDrawer }: { cat: PublicationCategoryRow;
     </>
   );
 
-  /* 4. Wrap in <a> for PDF/external, <div> for drawer */
+  /* 4. Check if locked — locked pubs always go to detail page */
+  const isLocked = Boolean((row as any).is_locked);
+
+  /* 5. Wrap in <a> for PDF/external, <div> for drawer, <Link> for locked */
+  if (isLocked) {
+    return (
+      <div
+        className="pub-card"
+        role="button"
+        tabIndex={0}
+        onClick={() => onLockedClick(row)}
+        onKeyDown={(e) => e.key === "Enter" && onLockedClick(row)}
+      >
+        {cardContent}
+      </div>
+    );
+  }
+
   if (hasPdf) {
     return (
       <a

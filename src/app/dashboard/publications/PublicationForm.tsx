@@ -21,6 +21,7 @@ import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import { PublicationCategoryIcon } from "@/components/dashboard/publications/PublicationCategoryIcon";
 import { PublicationCustomFields } from "@/components/dashboard/publications/PublicationCustomFields";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
+import { Lock, EyeOff } from "lucide-react";
 
 type Props = {
   mode: "create" | "edit";
@@ -450,6 +451,36 @@ export function PublicationForm({
           ) : (
             <input type="hidden" name="external_url" value={publication?.external_url ?? ""} />
           )}
+
+          {/* ── Access control ── */}
+          <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 sm:p-6 shadow-sm">
+            <label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-stone-800">
+              <input
+                type="checkbox"
+                name="is_locked"
+                value="on"
+                defaultChecked={publication ? (publication as any).is_locked : false}
+                className="size-4 rounded border-stone-300 accent-[#8c2208]"
+              />
+              <Lock className="size-4 text-[#8c2208]" aria-hidden />
+              <span className="flex-1">Require password to access this publication</span>
+            </label>
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="access_password">
+                Access password
+              </label>
+              <Input
+                id="access_password"
+                name="access_password"
+                type="text"
+                placeholder="Set a password that approved users will receive"
+                defaultValue={publication ? (publication as any).access_password ?? "" : ""}
+              />
+              <p className="text-[11px] text-stone-400">
+                Users request access via email. Grant their request from the Access Requests page.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
