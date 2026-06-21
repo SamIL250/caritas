@@ -29,6 +29,8 @@ type Props = {
   categories: PublicationCategoryRow[];
   initialCategorySlug?: string | null;
   departments: ProgramDepartmentOption[];
+  /** Pre-fill defaults from an existing publication when duplicating (create mode only). */
+  duplicateFrom?: PublicationRow | null;
 };
 
 function isoToDatetimeLocalValue(iso: string): string {
@@ -60,11 +62,14 @@ export function PublicationForm({
   categories,
   initialCategorySlug,
   departments,
+  duplicateFrom,
 }: Props) {
   const router = useRouter();
 
+  const source = mode === "edit" ? publication : duplicateFrom ?? null;
+
   const [categoryId, setCategoryId] = useState<string>(
-    pickInitialCategory(categories, publication, initialCategorySlug)?.id ?? "",
+    pickInitialCategory(categories, source ?? undefined, initialCategorySlug)?.id ?? "",
   );
   const category = useMemo(
     () => categories.find((c) => c.id === categoryId) ?? null,
@@ -73,14 +78,14 @@ export function PublicationForm({
   const behavior = useMemo(() => (category ? readCategoryBehavior(category) : {}), [category]);
   const fieldSchema = useMemo(() => (category ? readFieldSchema(category) : []), [category]);
   const initialCustomFields = useMemo(
-    () => (publication ? readCustomFields(publication) : {}),
-    [publication],
+    () => (source ? readCustomFields(source) : {}),
+    [source],
   );
 
   const kind: PublicationCategoryKind = category?.kind ?? "pdf";
 
-  const [coverUrl, setCoverUrl] = useState(publication?.cover_image_url ?? "");
-  const [pdfUrl, setPdfUrl] = useState(publication?.file_url ?? "");
+  const [coverUrl, setCoverUrl] = useState(source?.cover_image_url ?? "");
+  const [pdfUrl, setPdfUrl] = useState(source?.file_url ?? "");
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
   const [pdfPickerOpen, setPdfPickerOpen] = useState(false);
 
@@ -123,8 +128,8 @@ export function PublicationForm({
     }
   }
 
-  const publishedLocal = publication?.published_at
-    ? isoToDatetimeLocalValue(publication.published_at)
+  const publishedLocal = source?.published_at
+    ? isoToDatetimeLocalValue(source?.published_at)
     : "";
 
   return (
@@ -138,7 +143,7 @@ export function PublicationForm({
         </Link>
         <div>
           <h2 className="text-lg font-bold text-stone-900">
-            {mode === "create" ? "New publication" : "Edit publication"}
+            {mode === "create" && !duplicateFrom ? "New publication" : mode === "create" ? "Duplicate publication" : "Edit publication"}
           </h2>
           {category ? (
             <p className="mt-0.5 inline-flex items-center gap-2 text-xs font-medium text-stone-500">
@@ -176,7 +181,7 @@ export function PublicationForm({
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
                   className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
-                  disabled={mode === "edit"}
+                  disabled={mode === "edit" && !duplicateFrom}
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -197,7 +202,7 @@ export function PublicationForm({
                 <select
                   id="status"
                   name="status"
-                  defaultValue={publication?.status ?? "draft"}
+                  defaultValue={source?.status ?? "draft"}
                   className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
                 >
                   <option value="draft">Draft</option>
@@ -216,7 +221,7 @@ export function PublicationForm({
               <select
                 id="department_id"
                 name="department_id"
-                defaultValue={publication?.department_id ?? ""}
+                defaultValue={source?.department_id ?? ""}
                 className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
               >
                 <option value="">Cross-cutting / not assigned</option>
@@ -235,14 +240,14 @@ export function PublicationForm({
               <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="title">
                 Title
               </label>
-              <Input id="title" name="title" required defaultValue={publication?.title ?? ""} />
+              <Input id="title" name="title" required defaultValue={source?.title ?? ""} />
             </div>
 
             <div className="space-y-1">
               <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="slug">
                 URL slug
               </label>
-              <Input id="slug" name="slug" defaultValue={publication?.slug ?? ""} placeholder="auto from title if empty" />
+              <Input id="slug" name="slug" defaultValue={source?.slug ?? ""} placeholder="auto from title if empty" />
             </div>
 
             <div className="space-y-1">
@@ -253,7 +258,7 @@ export function PublicationForm({
                 id="excerpt"
                 name="excerpt"
                 rows={3}
-                defaultValue={publication?.excerpt ?? ""}
+                defaultValue={source?.excerpt ?? ""}
                 className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
               />
             </div>
@@ -274,7 +279,7 @@ export function PublicationForm({
                   id="period_label"
                   name="period_label"
                   placeholder="e.g. 2025 or Q4 2025"
-                  defaultValue={publication?.period_label ?? ""}
+                  defaultValue={source?.period_label ?? ""}
                 />
               </div>
             </div>
@@ -285,7 +290,7 @@ export function PublicationForm({
                   type="checkbox"
                   name="featured"
                   value="on"
-                  defaultChecked={publication?.featured ?? false}
+                  defaultChecked={source?.featured ?? false}
                   className="size-4 rounded border-amber-400 accent-[#b45309]"
                 />
                 <Star className="size-4" aria-hidden />
@@ -309,7 +314,7 @@ export function PublicationForm({
                 id="body"
                 name="body"
                 rows={10}
-                defaultValue={publication?.body ?? ""}
+                defaultValue={source?.body ?? ""}
                 className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 font-mono text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
               />
               <div className="grid gap-4 sm:grid-cols-2">
@@ -317,7 +322,7 @@ export function PublicationForm({
                   <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_label">
                     Tag label
                   </label>
-                  <Input id="tag_label" name="tag_label" defaultValue={publication?.tag_label ?? ""} />
+                  <Input id="tag_label" name="tag_label" defaultValue={source?.tag_label ?? ""} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_icon">
@@ -327,16 +332,16 @@ export function PublicationForm({
                     id="tag_icon"
                     name="tag_icon"
                     placeholder="fa-solid fa-seedling"
-                    defaultValue={publication?.tag_icon ?? ""}
+                    defaultValue={source?.tag_icon ?? ""}
                   />
                 </div>
               </div>
             </div>
           ) : (
             <>
-              <input type="hidden" name="body" value={publication?.body ?? ""} />
-              <input type="hidden" name="tag_label" value={publication?.tag_label ?? ""} />
-              <input type="hidden" name="tag_icon" value={publication?.tag_icon ?? ""} />
+              <input type="hidden" name="body" value={source?.body ?? ""} />
+              <input type="hidden" name="tag_label" value={source?.tag_label ?? ""} />
+              <input type="hidden" name="tag_icon" value={source?.tag_icon ?? ""} />
             </>
           )}
 
@@ -379,7 +384,7 @@ export function PublicationForm({
                     id="cover_image_alt"
                     name="cover_image_alt"
                     placeholder="Alt text (describes the cover for screen readers)"
-                    defaultValue={publication?.cover_image_alt ?? ""}
+                    defaultValue={source?.cover_image_alt ?? ""}
                   />
                 </div>
               </div>
@@ -424,12 +429,12 @@ export function PublicationForm({
                   id="meta_line"
                   name="meta_line"
                   placeholder="PDF · EN / FR"
-                  defaultValue={publication?.meta_line ?? ""}
+                  defaultValue={source?.meta_line ?? ""}
                 />
               </div>
             </div>
           ) : (
-            <input type="hidden" name="meta_line" value={publication?.meta_line ?? ""} />
+            <input type="hidden" name="meta_line" value={source?.meta_line ?? ""} />
           )}
 
           {showExternalUrl ? (
@@ -442,14 +447,14 @@ export function PublicationForm({
                 name="external_url"
                 type="url"
                 placeholder="https://…"
-                defaultValue={publication?.external_url ?? ""}
+                defaultValue={source?.external_url ?? ""}
               />
               <p className="text-[11px] text-stone-400">
                 Card opens this URL in a new tab. Required for the “External link” kind.
               </p>
             </div>
           ) : (
-            <input type="hidden" name="external_url" value={publication?.external_url ?? ""} />
+            <input type="hidden" name="external_url" value={source?.external_url ?? ""} />
           )}
 
           {/* ── Access control ── */}
@@ -459,7 +464,7 @@ export function PublicationForm({
                 type="checkbox"
                 name="is_locked"
                 value="on"
-                defaultChecked={publication ? (publication as any).is_locked : false}
+                defaultChecked={source ? (source as any).is_locked : false}
                 className="size-4 rounded border-stone-300 accent-[#8c2208]"
               />
               <Lock className="size-4 text-[#8c2208]" aria-hidden />
@@ -474,7 +479,7 @@ export function PublicationForm({
                 name="access_password"
                 type="text"
                 placeholder="Set a password that approved users will receive"
-                defaultValue={publication ? (publication as any).access_password ?? "" : ""}
+                defaultValue={source ? (source as any).access_password ?? "" : ""}
               />
               <p className="text-[11px] text-stone-400">
                 Users request access via email. Grant their request from the Access Requests page.
@@ -515,8 +520,10 @@ export function PublicationForm({
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
             </>
-          ) : mode === "create" ? (
+          ) : mode === "create" && !duplicateFrom ? (
             "Create publication"
+          ) : mode === "create" ? (
+            "Duplicate publication"
           ) : (
             "Save changes"
           )}

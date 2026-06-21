@@ -6,6 +6,7 @@ import {
   Trash2,
   ExternalLink,
   FileText,
+  Copy,
   Star,
   Newspaper,
   Image as ImageIcon,
@@ -138,6 +139,13 @@ export function PublicationRowItem({ row, category, onDelete }: Props) {
           aria-label={`Edit ${row.title}`}
         >
           <Pencil size={17} />
+        </Link>
+        <Link
+          href={`/dashboard/publications/new?duplicate=${row.id}`}
+          className="rounded-lg p-2.5 text-stone-400 transition-colors hover:bg-white/75 hover:text-[#7A1515]"
+          aria-label={`Duplicate ${row.title}`}
+        >
+          <Copy size={17} />
         </Link>
         <button
           type="button"
