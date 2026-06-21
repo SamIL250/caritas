@@ -5,6 +5,7 @@ import {
   Pencil,
   Trash2,
   ExternalLink,
+  Copy,
   Newspaper,
   Star,
 } from "lucide-react";
@@ -100,6 +101,13 @@ export function ProgramRowItem({ row, category, onDelete }: Props) {
           aria-label={`Edit ${row.title}`}
         >
           <Pencil size={17} />
+        </Link>
+        <Link
+          href={`/dashboard/programs/new?duplicate=${row.id}`}
+          className="rounded-lg p-2.5 text-stone-400 transition-colors hover:bg-white/75 hover:text-[#7A1515]"
+          aria-label={`Duplicate ${row.title}`}
+        >
+          <Copy size={17} />
         </Link>
         <button
           type="button"

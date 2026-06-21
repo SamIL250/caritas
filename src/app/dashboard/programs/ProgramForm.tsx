@@ -25,6 +25,8 @@ type Props = {
   program?: ProgramRow;
   categories: ProgramCategoryRow[];
   initialCategorySlug?: string | null;
+  /** Pre-fill defaults from an existing program when duplicating (create mode only). */
+  duplicateFrom?: ProgramRow | null;
 };
 
 function isoToDatetimeLocalValue(iso: string): string {
@@ -50,19 +52,21 @@ function pickInitialCategory(
   return categories[0] ?? null;
 }
 
-function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) {
+function ProgramForm({ mode, program, categories, initialCategorySlug, duplicateFrom }: Props) {
   const router = useRouter();
   const bodyRef = useRef<ProgramRichTextEditorHandle>(null);
 
+  const source = mode === "edit" ? program : duplicateFrom ?? null;
+
   const [categoryId, setCategoryId] = useState<string>(
-    pickInitialCategory(categories, program, initialCategorySlug)?.id ?? "",
+    pickInitialCategory(categories, source ?? undefined, initialCategorySlug)?.id ?? "",
   );
   const category = useMemo(
     () => categories.find((c) => c.id === categoryId) ?? null,
     [categories, categoryId],
   );
 
-  const [coverUrl, setCoverUrl] = useState(program?.cover_image_url ?? "");
+  const [coverUrl, setCoverUrl] = useState(source?.cover_image_url ?? "");
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
 
   const [saving, setSaving] = useState(false);
@@ -100,8 +104,8 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
     }
   }
 
-  const publishedLocal = program?.published_at
-    ? isoToDatetimeLocalValue(program.published_at)
+  const publishedLocal = source?.published_at
+    ? isoToDatetimeLocalValue(source?.published_at)
     : "";
 
   return (
@@ -152,7 +156,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                 <select
                   id="status"
                   name="status"
-                  defaultValue={program?.status ?? "draft"}
+                  defaultValue={source?.status ?? "draft"}
                   className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
                 >
                   <option value="draft">Draft</option>
@@ -168,7 +172,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
               >
                 Title
               </label>
-              <Input id="title" name="title" required defaultValue={program?.title ?? ""} placeholder="A clear, descriptive title" />
+              <Input id="title" name="title" required defaultValue={source?.title ?? ""} placeholder="A clear, descriptive title" />
             </div>
 
             <div className="space-y-1">
@@ -181,7 +185,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
               <Input
                 id="slug"
                 name="slug"
-                defaultValue={program?.slug ?? ""}
+                defaultValue={source?.slug ?? ""}
                 placeholder="auto-generated from title if empty"
               />
               <p className="text-[11px] text-stone-400">
@@ -200,7 +204,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                 id="excerpt"
                 name="excerpt"
                 rows={3}
-                defaultValue={program?.excerpt ?? ""}
+                defaultValue={source?.excerpt ?? ""}
                 placeholder="One or two sentences shown on the program card and the article hero."
                 className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
               />
@@ -213,7 +217,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
               >
                 Subtitle (Optional)
               </label>
-              <Input id="subtitle" name="subtitle" defaultValue={(program as any)?.subtitle ?? ""} placeholder="e.g. Be Resilient, Be Self Reliant" />
+              <Input id="subtitle" name="subtitle" defaultValue={(source as any)?.subtitle ?? ""} placeholder="e.g. Be Resilient, Be Self Reliant" />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -224,7 +228,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                 >
                   Location
                 </label>
-                <Input id="location" name="location" defaultValue={(program as any)?.location ?? ""} placeholder="e.g. Karongi, Nyamasheke" />
+                <Input id="location" name="location" defaultValue={(source as any)?.location ?? ""} placeholder="e.g. Karongi, Nyamasheke" />
               </div>
               <div className="space-y-1">
                 <label
@@ -233,7 +237,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                 >
                   Contact Phone
                 </label>
-                <Input id="contact_phone" name="contact_phone" defaultValue={(program as any)?.contact_phone ?? ""} placeholder="e.g. +250 078X XXX XXX" />
+                <Input id="contact_phone" name="contact_phone" defaultValue={(source as any)?.contact_phone ?? ""} placeholder="e.g. +250 078X XXX XXX" />
               </div>
             </div>
 
@@ -264,7 +268,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                   id="tag_label"
                   name="tag_label"
                   placeholder="e.g. Livelihoods"
-                  defaultValue={program?.tag_label ?? ""}
+                  defaultValue={source?.tag_label ?? ""}
                 />
               </div>
               <div className="space-y-1 sm:col-span-2">
@@ -278,7 +282,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                   id="tag_icon"
                   name="tag_icon"
                   placeholder="fa-solid fa-tag"
-                  defaultValue={program?.tag_icon ?? ""}
+                  defaultValue={source?.tag_icon ?? ""}
                 />
               </div>
             </div>
@@ -288,7 +292,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                 type="checkbox"
                 name="featured"
                 value="on"
-                defaultChecked={program?.featured ?? false}
+                defaultChecked={source?.featured ?? false}
                 className="size-4 rounded border-amber-400 accent-[#b45309]"
               />
               <Star className="size-4" aria-hidden />
@@ -310,9 +314,9 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
               </p>
             </header>
             <ProgramRichTextEditor
-              key={program?.id ?? "new"}
+              key={source?.id ? `${source.id}-${duplicateFrom ? "copy" : "edit"}` : "new"}
               ref={bodyRef}
-              initialHtml={program?.body ?? ""}
+              initialHtml={source?.body ?? ""}
             />
           </Card>
         </div>
@@ -368,7 +372,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
                   id="cover_image_alt"
                   name="cover_image_alt"
                   placeholder="Alt text — describes the image for screen readers."
-                  defaultValue={program?.cover_image_alt ?? ""}
+                  defaultValue={source?.cover_image_alt ?? ""}
                 />
               </div>
             </div>
@@ -388,7 +392,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
               name="external_url"
               type="url"
               placeholder="https://…"
-              defaultValue={program?.external_url ?? ""}
+              defaultValue={source?.external_url ?? ""}
             />
           </Card>
         </div>
@@ -420,8 +424,10 @@ function ProgramForm({ mode, program, categories, initialCategorySlug }: Props) 
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
             </>
-          ) : mode === "create" ? (
+          ) : mode === "create" && !duplicateFrom ? (
             "Create program"
+          ) : mode === "create" ? (
+            "Duplicate program"
           ) : (
             "Save changes"
           )}
