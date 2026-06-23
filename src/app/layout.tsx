@@ -5,6 +5,10 @@ import NextTopLoader from 'nextjs-toploader';
 export const metadata = {
   title: "Caritas Rwanda CMS",
   description: "Content Management System for Caritas Rwanda",
+  icons: {
+    icon: '/img/fav.png',
+    apple: '/img/fav.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
