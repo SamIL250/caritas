@@ -1,5 +1,5 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -24,10 +24,13 @@ import {
   BarChart3,
   RefreshCw,
   Loader2,
+  ArrowLeft,
+  Globe,
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import type { TopItem, ViewsByDay, CategoryBreakdown } from "@/lib/page-analytics";
+import type { TopItem, ViewsByDay, CategoryBreakdown, LocationBreakdown } from "@/lib/page-analytics";
+import { getRegionsForCountry } from "@/app/actions/analytics";
 
 /* ────── Props ────── */
 
@@ -40,6 +43,7 @@ type Props = {
   newsCatBreakdown: CategoryBreakdown[];
   pubCatBreakdown: CategoryBreakdown[];
   progCatBreakdown: CategoryBreakdown[];
+  viewsByCountry: LocationBreakdown[];
 };
 
 /* ────── Helpers ────── */
@@ -73,10 +77,30 @@ export function AnalyticsDashboardClient({
   newsCatBreakdown,
   pubCatBreakdown,
   progCatBreakdown,
+  viewsByCountry,
 }: Props) {
   const router = useRouter();
   const [isRefreshing, startTransition] = useTransition();
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [regionData, setRegionData] = useState<LocationBreakdown[] | null>(null);
+  const [loadingRegion, setLoadingRegion] = useState(false);
   const grandTotal = totalViews.reduce((acc, r) => acc + r.total, 0);
+
+  async function handleSelectCountry(country: string) {
+    if (country === selectedCountry) {
+      setSelectedCountry(null);
+      setRegionData(null);
+      return;
+    }
+    setSelectedCountry(country);
+    setLoadingRegion(true);
+    try {
+      const regions = await getRegionsForCountry(country);
+      setRegionData(regions);
+    } finally {
+      setLoadingRegion(false);
+    }
+  }
 
   const totalByType = [
     { name: "News", value: totalViews.find((r) => r.page_type === "news_article")?.total ?? 0, color: "#7A1515" },
@@ -87,22 +111,58 @@ export function AnalyticsDashboardClient({
   return (
     <div className="w-full space-y-8">
       {/* ── Header ── */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-stone-900">Content Analytics</h1>
           <p className="mt-1 text-sm text-stone-500">
             Track reader engagement across news, publications, and programs.
           </p>
         </div>
-        <Button
-          variant="secondary"
-          className="h-9 gap-2"
-          disabled={isRefreshing}
-          onClick={() => startTransition(() => router.refresh())}
-        >
-          {isRefreshing ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <RefreshCw size={16} aria-hidden />}
-          {isRefreshing ? "Refreshing…" : "Refresh"}
-        </Button>
+        <div className="flex items-center gap-3">
+          {viewsByCountry.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Globe size={16} className="text-stone-400 shrink-0" aria-hidden />
+              <select
+                className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/30"
+                value={selectedCountry || ""}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val) handleSelectCountry(val);
+                  else {
+                    setSelectedCountry(null);
+                    setRegionData(null);
+                  }
+                }}
+                aria-label="Filter by country"
+              >
+                <option value="">All countries</option>
+                {viewsByCountry.map((c) => (
+                  <option key={c.name} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+              {selectedCountry && regionData && regionData.length > 0 && (
+                <select
+                  className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/30"
+                  aria-label="Filter by region"
+                >
+                  <option value="">All regions</option>
+                  {regionData.map((r) => (
+                    <option key={r.name} value={r.name}>{r.name} ({r.views})</option>
+                  ))}
+                </select>
+              )}
+            </div>
+          )}
+          <Button
+            variant="secondary"
+            className="h-9 gap-2"
+            disabled={isRefreshing}
+            onClick={() => startTransition(() => router.refresh())}
+          >
+            {isRefreshing ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <RefreshCw size={16} aria-hidden />}
+            {isRefreshing ? "Refreshing…" : "Refresh"}
+          </Button>
+        </div>
       </div>
 
       {/* ── Summary Cards ── */}
@@ -130,6 +190,28 @@ export function AnalyticsDashboardClient({
             </Card>
           );
         })}
+      </div>
+
+      {/* ── Location Breakdown ── */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {selectedCountry ? (
+          <LocationCard
+            title={`Regions in ${selectedCountry}`}
+            data={regionData || []}
+            emptyMessage={loadingRegion ? "Loading…" : "No region data available."}
+            loading={loadingRegion}
+            onBack={() => {
+              setSelectedCountry(null);
+              setRegionData(null);
+            }}
+          />
+        ) : (
+          <LocationCard
+            title="Views by country"
+            data={viewsByCountry}
+            emptyMessage="No location data yet — will populate as readers visit content."
+          />
+        )}
       </div>
 
       {/* ── Views Over Time ── */}
@@ -226,6 +308,75 @@ function TopViewedCard({
               </BarChart>
             </ResponsiveContainer>
           </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function LocationCard({
+  title,
+  data,
+  emptyMessage,
+  onSelect,
+  onBack,
+  loading,
+}: {
+  title: string;
+  data: LocationBreakdown[];
+  emptyMessage: string;
+  onSelect?: (name: string) => void;
+  onBack?: () => void;
+  loading?: boolean;
+}) {
+  return (
+    <Card className="p-5">
+      <div className="mb-4 flex items-center gap-2">
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="mr-1 rounded-md p-1 text-stone-400 hover:bg-stone-100 hover:text-stone-600 transition-colors"
+            title="Back to countries"
+          >
+            <ArrowLeft size={16} aria-hidden />
+          </button>
+        )}
+        <Globe size={18} className="text-[#7A1515]" aria-hidden />
+        <h3 className="text-sm font-bold text-stone-800">{title}</h3>
+      </div>
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 size={24} className="animate-spin text-stone-400" />
+        </div>
+      ) : data.length === 0 ? (
+        <p className="py-6 text-center text-xs text-stone-400">{emptyMessage}</p>
+      ) : (
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={data.map((d) => ({ name: d.name.length > 20 ? d.name.slice(0, 20) + "…" : d.name, views: d.views }))}
+              layout="vertical"
+              margin={{ top: 0, right: 10, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 10 }} />
+              <YAxis type="category" dataKey="name" width={110} tick={{ fontSize: 10 }} />
+              <Tooltip {...tooltipStyle} />
+              <Bar
+                dataKey="views"
+                radius={[0, 4, 4, 0]}
+                cursor={onSelect ? "pointer" : "default"}
+                onClick={(entry: any) => {
+                  if (onSelect && entry?.name) onSelect(entry.name);
+                }}
+              >
+                {data.map((_, idx) => (
+                  <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       )}
     </Card>

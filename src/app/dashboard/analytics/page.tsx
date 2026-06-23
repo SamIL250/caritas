@@ -6,6 +6,7 @@ import {
   getNewsCategoryBreakdown,
   getPublicationCategoryBreakdown,
   getProgramCategoryBreakdown,
+  getViewsByCountry,
 } from "@/lib/page-analytics";
 import { AnalyticsDashboardClient } from "./AnalyticsDashboardClient";
 
@@ -21,6 +22,7 @@ export default async function AnalyticsPage() {
     newsCatBreakdown,
     pubCatBreakdown,
     progCatBreakdown,
+    viewsByCountry,
   ] = await Promise.all([
     getTotalViews(supabase),
     getViewsByDay(supabase, 30),
@@ -30,6 +32,7 @@ export default async function AnalyticsPage() {
     getNewsCategoryBreakdown(supabase),
     getPublicationCategoryBreakdown(supabase),
     getProgramCategoryBreakdown(supabase),
+    getViewsByCountry(supabase),
   ]);
 
   return (
@@ -42,6 +45,7 @@ export default async function AnalyticsPage() {
       newsCatBreakdown={newsCatBreakdown}
       pubCatBreakdown={pubCatBreakdown}
       progCatBreakdown={progCatBreakdown}
+      viewsByCountry={viewsByCountry}
     />
   );
 }

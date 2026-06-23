@@ -8,6 +8,13 @@ export type PageViewRow = {
   page_id: string;
   view_date: string;
   count: number;
+  country: string;
+  region: string;
+};
+
+export type LocationBreakdown = {
+  name: string;
+  views: number;
 };
 
 export type TopItem = {
@@ -300,4 +307,101 @@ export async function getProgramCategoryBreakdown(
   return Object.entries(catIdCounts)
     .map(([id, views]) => ({ name: catLabelMap.get(id) ?? id, slug: id, views }))
     .sort((a, b) => b.views - a.views);
+}
+
+/* ────── Location analytics ────── */
+
+/**
+ * Total views grouped by country, sorted descending.
+ */
+export async function getViewsByCountry(
+  supabase: SupabaseClient,
+  pageType?: string,
+): Promise<LocationBreakdown[]> {
+  let query = supabase
+    .from("page_views")
+    .select("country, count");
+
+  if (pageType) {
+    query = query.eq("page_type", pageType);
+  }
+
+  const { data } = await query;
+  if (!data) return [];
+
+  const acc: Record<string, number> = {};
+  for (const row of data as { country: string; count: number }[]) {
+    const c = row.country || "Unknown";
+    acc[c] = (acc[c] ?? 0) + row.count;
+  }
+
+  return Object.entries(acc)
+    .map(([name, views]) => ({ name, views }))
+    .sort((a, b) => b.views - a.views);
+}
+
+/**
+ * Total views grouped by region for a given country, sorted descending.
+ */
+export async function getViewsByRegion(
+  supabase: SupabaseClient,
+  country: string,
+  pageType?: string,
+): Promise<LocationBreakdown[]> {
+  let query = supabase
+    .from("page_views")
+    .select("region, count")
+    .eq("country", country);
+
+  if (pageType) {
+    query = query.eq("page_type", pageType);
+  }
+
+  const { data } = await query;
+  if (!data) return [];
+
+  const acc: Record<string, number> = {};
+  for (const row of data as { region: string; count: number }[]) {
+    const r = row.region || "Unknown";
+    acc[r] = (acc[r] ?? 0) + row.count;
+  }
+
+  return Object.entries(acc)
+    .map(([name, views]) => ({ name, views }))
+    .sort((a, b) => b.views - a.views);
+}
+
+/**
+ * Views over the last N days, split by page type, filtered by country.
+ */
+export async function getViewsByDayByCountry(
+  supabase: SupabaseClient,
+  country: string,
+  periodDays = 30,
+): Promise<ViewsByDay[]> {
+  const keys = dayKeys(periodDays);
+
+  const { data } = await supabase
+    .from("page_views")
+    .select("page_type, view_date, count")
+    .gte("view_date", keys[0])
+    .eq("country", country)
+    .order("view_date", { ascending: true });
+
+  const acc: Record<string, ViewsByDay> = {};
+  for (const k of keys) {
+    acc[k] = { day: k, label: formatLabel(k), news_article: 0, publication: 0, program: 0 };
+  }
+
+  for (const row of (data ?? []) as { page_type: string; view_date: string; count: number }[]) {
+    const d = row.view_date.slice(0, 10);
+    if (acc[d]) {
+      const key = row.page_type === "news_article" ? "news_article"
+        : row.page_type === "publication" ? "publication"
+        : "program";
+      acc[d][key] += row.count;
+    }
+  }
+
+  return keys.map((k) => acc[k]);
 }
