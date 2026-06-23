@@ -6097,6 +6097,18 @@ function SectionForm({
                           onChange('programs', list);
                         }}
                       />
+                      <input
+                        type="color"
+                        className="w-6 h-6 p-0 border-0 rounded cursor-pointer shrink-0"
+                        value={st.color || prog.accent_color || '#911313'}
+                        onChange={(e) => {
+                          const list = [...(state.programs || [])];
+                          const stats = [...(list[idx].stats || [])];
+                          stats[si] = { ...stats[si], color: e.target.value };
+                          list[idx] = { ...list[idx], stats };
+                          onChange('programs', list);
+                        }}
+                      />
                       <select
                         className="rounded border border-stone-200 p-1 text-[10px] bg-white w-14"
                         value={st.size || 'sm'}
@@ -6133,7 +6145,7 @@ function SectionForm({
                     className="text-[9px] font-bold text-stone-400 hover:text-[#7A1515]"
                     onClick={() => {
                       const list = [...(state.programs || [])];
-                      const stats = [...(list[idx].stats || []), { value: '', label: '', size: 'sm' }];
+                      const stats = [...(list[idx].stats || []), { value: '', label: '', size: 'sm', color: '' }];
                       list[idx] = { ...list[idx], stats };
                       onChange('programs', list);
                     }}

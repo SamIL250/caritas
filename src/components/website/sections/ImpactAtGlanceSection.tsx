@@ -14,6 +14,7 @@ export type ProgramStat = {
   value: string;
   label: string;
   size?: 'xs' | 'sm' | 'lg' | 'xl';
+  color?: string;
 };
 
 export type ProgramLink = {
@@ -233,8 +234,16 @@ export default function ImpactAtGlanceSection({
                 {(selectedProgramData.stats || []).map((s, i) => {
                   const defaultClasses = ['bm-xl', 'bm-lg', 'bm-sm', 'bm-xs', 'bm-sm', 'bm-xs'];
                   const sizeClass = s.size ? `bm-${s.size}` : (defaultClasses[i] || 'bm-sm');
+                  const statColor = s.color || selectedProgramData.accent_color;
                   return (
-                    <div key={i} className={`bm-bubble ${sizeClass}`}>
+                    <div
+                      key={i}
+                      className={`bm-bubble ${sizeClass}`}
+                      style={statColor ? {
+                        background: hexToRgba(statColor, 0.45),
+                        borderColor: hexToRgba(statColor, 0.3),
+                      } : undefined}
+                    >
                       <div className="bm-val">{s.value}</div>
                       <div className="bm-lbl">{s.label}</div>
                     </div>
