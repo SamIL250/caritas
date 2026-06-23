@@ -5852,7 +5852,20 @@ function SectionForm({
             <p className="text-[10px] font-bold uppercase text-stone-400">KPI Items</p>
             {(state.kpis || []).map((kpi: any, idx: number) => (
               <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
-                <p className="text-[10px] font-bold text-stone-500 uppercase">KPI {idx + 1}</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] font-bold text-stone-500 uppercase">KPI {idx + 1}</p>
+                  <button
+                    type="button"
+                    className="text-[9px] text-red-400 hover:text-red-600 font-bold uppercase"
+                    onClick={() => {
+                      const list = [...(state.kpis || [])];
+                      list.splice(idx, 1);
+                      onChange('kpis', list);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     className="w-full rounded-lg border border-stone-200 p-2 text-xs"

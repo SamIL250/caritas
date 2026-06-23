@@ -66,8 +66,8 @@ export default function ImpactAtGlanceSection({
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const ddRef = useRef<HTMLDivElement>(null);
 
-  const bubbleKpis = (kpis || []).slice(0, 5);
-  const modalKpis = (kpis || []).slice(0, 6);
+  const bubbleKpis = kpis || [];
+  const modalKpis = kpis || [];
 
   const programLinks: ProgramLink[] =
     programs && programs.length > 0
@@ -133,11 +133,19 @@ export default function ImpactAtGlanceSection({
           </div>
           <div className="ig-bubbles">
             {bubbleKpis.map((kpi, i) => {
-              const sizeClasses = ['ig-bubble-sm', 'ig-bubble-lg', 'ig-bubble-xl', 'ig-bubble-lg', 'ig-bubble-sm'];
+              const defaultSizes = ['sm', 'lg', 'xl', 'lg', 'sm'];
+              const sizeClass = kpi.size ? `ig-bubble-${kpi.size}` : `ig-bubble-${defaultSizes[i] || 'sm'}`;
               const offsetClasses = ['ig-bubble-offset', '', '', '', 'ig-bubble-offset'];
-              const sizeClass = sizeClasses[i] || 'ig-bubble-sm';
+              const color = kpi.color || '#ff9a6c';
               return (
-                <div key={i} className={`ig-bubble ${sizeClass} ${offsetClasses[i] || ''}`}>
+                <div
+                  key={i}
+                  className={`ig-bubble ${sizeClass} ${offsetClasses[i] || ''}`}
+                  style={{
+                    background: hexToRgba(color, 0.35),
+                    borderColor: hexToRgba(color, 0.3),
+                  }}
+                >
                   <div className="ig-bubble-val">{kpi.value}</div>
                   <div className="ig-bubble-lbl">{kpi.label}</div>
                 </div>
@@ -222,7 +230,7 @@ export default function ImpactAtGlanceSection({
               <div className="bm-label">&#9654; {selectedProgramData.name} &#9654;</div>
               <div className="bm-title">{selectedProgramData.name}</div>
               <div className="bm-bubbles">
-                {(selectedProgramData.stats || []).slice(0, 6).map((s, i) => {
+                {(selectedProgramData.stats || []).map((s, i) => {
                   const defaultClasses = ['bm-xl', 'bm-lg', 'bm-sm', 'bm-xs', 'bm-sm', 'bm-xs'];
                   const sizeClass = s.size ? `bm-${s.size}` : (defaultClasses[i] || 'bm-sm');
                   return (
@@ -242,9 +250,18 @@ export default function ImpactAtGlanceSection({
               </div>
               <div className="bm-bubbles">
                 {modalKpis.map((kpi, i) => {
-                  const classes = ['bm-xs', 'bm-sm', 'bm-lg', 'bm-xl', 'bm-lg', 'bm-sm'];
+                  const defaultSizes = ['xs', 'sm', 'lg', 'xl', 'lg', 'sm'];
+                  const sizeClass = kpi.size ? `bm-${kpi.size}` : `bm-${defaultSizes[i] || 'sm'}`;
+                  const color = kpi.color || '#ff9a6c';
                   return (
-                    <div key={i} className={`bm-bubble ${classes[i] || 'bm-sm'}`}>
+                    <div
+                      key={i}
+                      className={`bm-bubble ${sizeClass}`}
+                      style={{
+                        background: hexToRgba(color, 0.45),
+                        borderColor: hexToRgba(color, 0.3),
+                      }}
+                    >
                       <div className="bm-val">{kpi.value}</div>
                       <div className="bm-lbl">{kpi.label}</div>
                     </div>

@@ -2,7 +2,7 @@
  * Canonical public origin for server-generated absolute URLs (emails, dashboard links,
  * newsletter unsubscribe, etc.).
  *
- * Configure **`NEXT_PUBLIC_SITE_URL`** (e.g. `https://lerony-caritas-revamp-2026-ten.vercel.app`
+ * Configure **`NEXT_PUBLIC_SITE_URL`** (e.g. `https://caritasrwanda.vercel.app`
  * or your custom domain) in Vercel env for a stable canonical host. If it is mistakenly set to
  * `http://localhost:3000`, that value is ignored while the app runs on Vercel so links in
  * production emails still use the deployed host (`VERCEL_URL`).
@@ -12,7 +12,7 @@
 
 import { isLoopbackOrigin } from "@/lib/site-origin-shared";
 
-const STAGING_FALLBACK_ORIGIN = "https://lerony-caritas-revamp-2026-ten.vercel.app";
+const STAGING_FALLBACK_ORIGIN = "https://caritasrwanda.vercel.app";
 
 function normalizeOrigin(raw: string | undefined): string | undefined {
   if (!raw?.trim()) return undefined;
