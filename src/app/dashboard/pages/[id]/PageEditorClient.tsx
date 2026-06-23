@@ -5849,11 +5849,39 @@ function SectionForm({
           {renderField('Title prefix', 'title', 'text')}
           {renderField('Title accent word', 'title_accent', 'text')}
           <div className="space-y-1">
-            <p className="text-[10px] font-bold uppercase text-stone-400">KPI Items</p>
+            <p className="text-[10px] font-bold uppercase text-stone-400">KPI Items (drag handle to reorder)</p>
             {(state.kpis || []).map((kpi: any, idx: number) => (
-              <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
+              <div
+                key={idx}
+                className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2"
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData('text/plain', String(idx));
+                  e.dataTransfer.effectAllowed = 'move';
+                  (e.currentTarget as HTMLElement).style.opacity = '0.4';
+                }}
+                onDragEnd={(e) => {
+                  (e.currentTarget as HTMLElement).style.opacity = '';
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'move';
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+                  if (isNaN(fromIdx) || fromIdx === idx) return;
+                  const list = [...(state.kpis || [])];
+                  const [moved] = list.splice(fromIdx, 1);
+                  list.splice(idx, 0, moved);
+                  onChange('kpis', list);
+                }}
+              >
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-bold text-stone-500 uppercase">KPI {idx + 1}</p>
+                  <div className="flex items-center gap-2">
+                    <i className="fa-solid fa-grip-vertical text-stone-300 text-[11px] cursor-grab"></i>
+                    <p className="text-[10px] font-bold text-stone-500 uppercase">KPI {idx + 1}</p>
+                  </div>
                   <button
                     type="button"
                     className="text-[9px] text-red-400 hover:text-red-600 font-bold uppercase"
