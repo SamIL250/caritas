@@ -310,6 +310,8 @@ export default function PageEditorClient({
 
   const effectivePreviewMode = previewDeviceOverride ?? autoPreviewMode;
 
+  const [previewZoom, setPreviewZoom] = useState(100);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const raw = window.localStorage.getItem(LS_SIDEBAR_WIDTH);
@@ -427,10 +429,20 @@ export default function PageEditorClient({
 
   const previewFrameWidthStyle = useMemo(() => {
     const w = previewCanvasWidth;
-    if (effectivePreviewMode === 'desktop') return '100%';
-    if (effectivePreviewMode === 'tablet') return `${Math.min(768, w)}px`;
-    return `${Math.min(375, w)}px`;
-  }, [previewCanvasWidth, effectivePreviewMode]);
+    let base: string;
+    if (effectivePreviewMode === 'desktop') {
+      base = '100%';
+    } else if (effectivePreviewMode === 'tablet') {
+      base = `${Math.min(768, w)}px`;
+    } else {
+      base = `${Math.min(375, w)}px`;
+    }
+    if (previewZoom !== 100) {
+      const basePx = effectivePreviewMode === 'desktop' ? w : parseInt(base);
+      return `${Math.round(basePx * previewZoom / 100)}px`;
+    }
+    return base;
+  }, [previewCanvasWidth, effectivePreviewMode, previewZoom]);
 
   // --- Handlers ---
 
@@ -1117,18 +1129,55 @@ export default function PageEditorClient({
                     ? `Auto (${autoPreviewMode}) · ${previewCanvasWidth}px`
                     : `Manual · column ${previewCanvasWidth}px`}
                 </span>
+                <div
+                  className="flex items-center gap-1 border-l border-stone-200 pl-3"
+                  role="toolbar"
+                  aria-label="Preview zoom"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setPreviewZoom((z) => Math.max(25, z - 10))}
+                    className="rounded-md px-1.5 py-1 text-[11px] font-bold text-stone-500 hover:bg-stone-100 hover:text-stone-700 transition-colors"
+                    title="Zoom out"
+                    aria-label="Zoom out"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[4.5ch] text-center text-[10px] font-bold tabular-nums text-stone-600">
+                    {previewZoom}%
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewZoom((z) => Math.min(200, z + 10))}
+                    className="rounded-md px-1.5 py-1 text-[11px] font-bold text-stone-500 hover:bg-stone-100 hover:text-stone-700 transition-colors"
+                    title="Zoom in"
+                    aria-label="Zoom in"
+                  >
+                    +
+                  </button>
+                  {previewZoom !== 100 && (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewZoom(100)}
+                      className="ml-1 rounded-md px-1.5 py-1 text-[9px] font-bold uppercase text-stone-400 hover:text-stone-600 transition-colors"
+                      title="Reset zoom to 100%"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
 
           <div
             ref={previewCanvasRef}
-            className={`relative flex min-h-0 flex-1 flex-col justify-start overflow-hidden ${isAboutPage ? 'page-editor-canvas-about' : ''
+            className={`relative flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto ${isAboutPage ? 'page-editor-canvas-about' : ''
               }`}
           >
             {activeTab === 'preview' ? (
               <div
-                className={`page-editor-preview-viewport mx-auto min-h-0 flex-1 max-w-full overflow-y-auto overflow-x-hidden rounded-xl border ${isAboutPage
+                className={`page-editor-preview-viewport my-4 min-h-0 shrink-0 max-w-full overflow-y-auto overflow-x-hidden rounded-xl border ${isAboutPage
                     ? 'border-[#dcd6cf] bg-[#f8f6f3]'
                     : isNewsPage || isPublicationsPage
                       ? 'border-[#dcd8d0] bg-[#eae5de]'
