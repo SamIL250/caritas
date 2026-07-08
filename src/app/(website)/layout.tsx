@@ -60,6 +60,11 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: "/img/fav.png",
+    apple: "/img/fav.png",
+    shortcut: "/img/fav.png",
+  },
 };
 
 import WebsiteHeader from "@/components/website/WebsiteHeader";
