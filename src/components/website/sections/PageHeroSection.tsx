@@ -16,6 +16,10 @@ type PageHeroSectionProps = {
   imageUrl?: string;
   breadcrumbLabel?: string;
   quickNav?: QuickNavItem[];
+  /** When "select", pills toggle sections instead of scrolling to anchors. */
+  quickNavMode?: "anchor" | "select";
+  activeQuickNavHref?: string | null;
+  onQuickNavSelect?: (href: string) => void;
   children?: React.ReactNode;
 };
 
@@ -59,6 +63,9 @@ export default function PageHeroSection({
   imageUrl = "/img/slide1.webp",
   breadcrumbLabel = "About Us",
   quickNav = [],
+  quickNavMode = "anchor",
+  activeQuickNavHref = null,
+  onQuickNavSelect,
   children,
 }: PageHeroSectionProps) {
   return (
@@ -96,8 +103,27 @@ export default function PageHeroSection({
                     ? `fa-solid ${ic.replace(/^fa-solid\s+/i, "")}`
                     : `fa-solid fa-${ic}`
                   : null;
+                const isActive =
+                  quickNavMode === "select" && activeQuickNavHref === item.href;
+                const pillClass = isActive ? "qnav-pill is-active" : "qnav-pill";
+
+                if (quickNavMode === "select" && onQuickNavSelect) {
+                  return (
+                    <button
+                      key={item.href}
+                      type="button"
+                      className={pillClass}
+                      aria-current={isActive ? "true" : undefined}
+                      onClick={() => onQuickNavSelect(item.href)}
+                    >
+                      {iconClass ? <i className={iconClass} aria-hidden /> : null}
+                      {item.label}
+                    </button>
+                  );
+                }
+
                 return (
-                  <a key={item.href} href={item.href} className="qnav-pill">
+                  <a key={item.href} href={item.href} className={pillClass}>
                     {iconClass ? <i className={iconClass} aria-hidden /> : null}
                     {item.label}
                   </a>

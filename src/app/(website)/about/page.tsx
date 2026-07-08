@@ -1,18 +1,17 @@
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
-import PageHeroSection from "@/components/website/sections/PageHeroSection";
-import ChairpersonSection from "@/components/website/sections/ChairpersonSection";
+import AboutPageSwitcher from "@/components/website/about/AboutPageSwitcher";
 import HistoryBentoSection from "@/components/website/sections/HistoryBentoSection";
 import MissionVisionValuesSection from "@/components/website/sections/MissionVisionValuesSection";
-import ContactWithMapSection from "@/components/website/sections/ContactWithMapSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
   const { data: page } = await supabase
     .from("pages")
-    .select("title, meta")  
+    .select("title, meta")
     .eq("slug", "about")
     .single();
 
@@ -27,16 +26,37 @@ export async function generateMetadata(): Promise<Metadata> {
       (page?.title ? `${page.title} — Caritas Rwanda` : "About Us — Caritas Rwanda"),
     description:
       meta.seo_description ||
-      "Discover Caritas Rwanda’s history, mission, values, and nationwide humanitarian network.",
+      "Discover Caritas Rwanda's history, mission, values, and nationwide humanitarian network.",
   };
 }
 
-function sectionContent(
-  content: unknown,
-): Record<string, unknown> {
+function sectionContent(content: unknown): Record<string, unknown> {
   return content && typeof content === "object" && !Array.isArray(content)
     ? (content as Record<string, unknown>)
     : {};
+}
+
+function anchorFromSection(section: { type: string; content?: unknown }): string | null {
+  const c = sectionContent(section.content);
+  if (typeof c.anchor_id === "string" && c.anchor_id.trim()) {
+    return c.anchor_id.trim();
+  }
+
+  switch (section.type) {
+    case "timeline":
+      return "history";
+    case "pillar_cards":
+      return "mission";
+    case "values_grid":
+      return "values";
+    case "network_section":
+    case "diocese_map_section":
+      return "network";
+    case "leadership_grid":
+      return "leadership";
+    default:
+      return null;
+  }
 }
 
 export default async function AboutPage() {
@@ -107,75 +127,61 @@ export default async function AboutPage() {
 
   const sectionsArr = sections ?? [];
 
-  const contactSections = sectionsArr.filter(
-    (s: any) => s.type === "contact_info" || s.type === "map_section"
-  );
-  const otherSections = sectionsArr.filter(
-    (s: any) => s.type !== "contact_info" && s.type !== "map_section"
-  );
+  const panels: Record<string, ReactNode> = {};
 
-  const contactRow = contactSections.find((s: any) => s.type === "contact_info");
-  const mapRow = contactSections.find((s: any) => s.type === "map_section");
+  for (const section of sectionsArr) {
+    const anchor = anchorFromSection(section);
+    if (!anchor || panels[anchor]) continue;
 
-  // Keep contact_info and map_section props separate so map fields
-  // never overwrite contact text fields (eyebrow, heading_line1, etc.)
-  const contactProps =
-    contactRow?.content && typeof contactRow.content === "object" && !Array.isArray(contactRow.content)
-      ? (contactRow.content as Record<string, unknown>)
-      : {};
-  const mapProps =
-    mapRow?.content && typeof mapRow.content === "object" && !Array.isArray(mapRow.content)
-      ? (mapRow.content as Record<string, unknown>)
-      : {};
+    switch (section.type) {
+      case "stats_banner":
+      case "featured_quote":
+      case "pillar_cards":
+      case "contact_info":
+      case "map_section":
+        break;
+      case "timeline":
+        panels[anchor] = <HistoryBentoSection key={section.id} />;
+        break;
+      case "values_grid":
+        panels[anchor] = (
+          <MissionVisionValuesSection key={section.id} showMissionVision={false} />
+        );
+        break;
+      case "network_section":
+      case "diocese_map_section":
+      case "leadership_grid":
+        panels[anchor] = renderWebsiteSection(section);
+        break;
+      default:
+        break;
+    }
+  }
 
-  const combinedProps = { ...contactProps, ...mapProps };
+  if (!panels.mission) {
+    panels.mission = (
+      <MissionVisionValuesSection key="mission-fallback" showValues={false} />
+    );
+  }
+
+  if (!panels.values) {
+    panels.values = (
+      <MissionVisionValuesSection key="values-fallback" showMissionVision={false} />
+    );
+  }
 
   return (
-    <div className="about-page-content">
-      <PageHeroSection
-        eyebrow={eyebrow}
-        heading={heading}
-        headingAccent={headingAccent}
-        subheading={subheading}
-        imageUrl={imageUrl}
-        breadcrumbLabel="About Us"
-        quickNav={quickNav}
-      />
-      {otherSections.flatMap((section) => {
-        switch (section.type) {
-          case "stats_banner":
-            return [];
-          case "featured_quote": {
-            const c = sectionContent(section.content);
-            return [
-              <ChairpersonSection
-                key={section.id}
-                name={c.name as string}
-                title={c.subtitle as string}
-                quote={c.quote as string}
-                meta={c.meta as string}
-                photoUrl={(c.photo_url as string) || "/img/Chairperson/anaclet.jpg"}
-              />,
-            ];
-          }
-          case "timeline":
-            return [<HistoryBentoSection key={section.id} />];
-          case "pillar_cards":
-            return [];
-          case "values_grid":
-            return [<MissionVisionValuesSection key={section.id} />];
-          case "network_section":
-            return [renderWebsiteSection(section)];
-          case "leadership_grid":
-            return [renderWebsiteSection(section)];
-          default:
-            return [renderWebsiteSection(section)];
-        }
-      })}
-
-      {contactRow || mapRow ? (
-        <ContactWithMapSection {...combinedProps} />
-      ) : null}
-    </div>
+    <AboutPageSwitcher
+      hero={{
+        eyebrow,
+        heading,
+        headingAccent,
+        subheading,
+        imageUrl,
+        breadcrumbLabel: "About Us",
+      }}
+      quickNav={quickNav}
+      panels={panels}
+    />
   );
 }

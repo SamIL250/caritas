@@ -5225,6 +5225,20 @@
             border-color: #8c2208;
             color: #fff;
         }
+        button.qnav-pill {
+            cursor: pointer;
+            font-family: inherit;
+            line-height: inherit;
+        }
+        .qnav-pill.is-active {
+            background: #8c2208;
+            border-color: #8c2208;
+            color: #fff;
+        }
+
+        .about-page-section-panel {
+            scroll-margin-top: 5rem;
+        }
 
         /* Key stats — white infographic card (about.html reference; layout "strip") */
         section.stats-banner {
@@ -6697,6 +6711,16 @@
             position: relative; overflow: hidden;
             background: #ffffff;
             padding: 6rem 0 0;
+        }
+        .about-mvv-section--values-only {
+            padding: 0;
+            background: transparent;
+        }
+        .about-mvv-section--values-only::before {
+            display: none;
+        }
+        .about-mvv-section--values-only .about-mvv-values-strip {
+            margin-top: 0;
         }
         .about-mvv-section::before {
             content: ''; position: absolute;

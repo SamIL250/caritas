@@ -21,9 +21,26 @@ const values: ValueItem[] = [
   { num: "11", icon: "fa-people-group", name: "Subsidiarity & Partnership", desc: "Empowering local action through collaboration" },
 ];
 
-export default function MissionVisionValuesSection() {
+type MissionVisionValuesSectionProps = {
+  showMissionVision?: boolean;
+  showValues?: boolean;
+};
+
+export default function MissionVisionValuesSection({
+  showMissionVision = true,
+  showValues = true,
+}: MissionVisionValuesSectionProps = {}) {
+  if (!showMissionVision && !showValues) return null;
+
+  const valuesOnly = showValues && !showMissionVision;
+
+  const sectionClass = valuesOnly
+    ? "about-mvv-section about-mvv-section--values-only"
+    : "about-mvv-section";
+
   return (
-    <section className="about-mvv-section" id="mission">
+    <section className={sectionClass} id={valuesOnly ? "values" : "mission"}>
+      {showMissionVision ? (
       <div className="container">
         <div className="head-center">
           <h2 className="sub-section-title">Mission, Vision &amp; Values</h2>
@@ -54,7 +71,9 @@ export default function MissionVisionValuesSection() {
           </div>
         </div>
       </div>
+      ) : null}
 
+      {showValues ? (
       <div className="about-mvv-values-strip" id="values">
         <div className="about-mvv-bg-slides">
           <div
@@ -88,6 +107,7 @@ export default function MissionVisionValuesSection() {
           ))}
         </div>
       </div>
+      ) : null}
     </section>
   );
 }
