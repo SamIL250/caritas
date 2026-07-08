@@ -10,7 +10,7 @@ import {
 } from "@/lib/googtrans-cookie-utils";
 
 export async function POST(request: NextRequest) {
-  let lang = PAGE_LANGUAGE;
+  let lang: string = PAGE_LANGUAGE;
   try {
     const body = (await request.json()) as { lang?: string };
     if (typeof body.lang === "string" && body.lang.trim()) {

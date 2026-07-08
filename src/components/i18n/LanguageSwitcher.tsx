@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
 import {
   PAGE_LANGUAGE,
@@ -125,7 +125,7 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
   }
 
   function handlePick(code: string) {
-    return (event: MouseEvent) => {
+    return (event: ReactMouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
       pick(code);
