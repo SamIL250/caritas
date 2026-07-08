@@ -80,7 +80,7 @@ export function Topbar({ title, subtitle, actions, backUrl }: TopbarProps) {
           )}
         </div>
 
-        <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
+        <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3 notranslate" translate="no">
           <LanguageSwitcher variant="compact" />
           {actions != null && actions !== false ? actions : null}
         </div>

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
 import {
   PAGE_LANGUAGE,
+  TRANSLATE_LOCALE_EVENT,
   applyTranslateLocale,
   canonicalTranslateLangCode,
   getActiveTranslateLocaleClient,
@@ -50,7 +51,14 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
 
   /* eslint-disable react-hooks/set-state-in-effect -- googtrans cookie is only available after mount */
   useEffect(() => {
-    setCurrentCode(getActiveTranslateLocaleClient());
+    const sync = () => setCurrentCode(getActiveTranslateLocaleClient());
+    sync();
+    window.addEventListener("pageshow", sync);
+    window.addEventListener(TRANSLATE_LOCALE_EVENT, sync);
+    return () => {
+      window.removeEventListener("pageshow", sync);
+      window.removeEventListener(TRANSLATE_LOCALE_EVENT, sync);
+    };
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
@@ -98,20 +106,30 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
 
   function pick(code: string) {
     const next = code.trim();
+    const active = getActiveTranslateLocaleClient();
     if (!next) {
       setOpen(false);
       return;
     }
-    if (next.toLowerCase() === PAGE_LANGUAGE && currentCode === PAGE_LANGUAGE) {
+    if (next.toLowerCase() === PAGE_LANGUAGE && active === PAGE_LANGUAGE) {
       setOpen(false);
       return;
     }
-    if (codesMatch(next, currentCode)) {
+    if (codesMatch(next, active)) {
       setOpen(false);
       return;
     }
     setBusy(true);
     applyTranslateLocale(next);
+    window.setTimeout(() => setBusy(false), 4000);
+  }
+
+  function handlePick(code: string) {
+    return (event: MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      pick(code);
+    };
   }
 
   const currentDisplay =
@@ -131,7 +149,10 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
         onClick={() =>
           setOpen((o) => {
             const next = !o;
-            if (next) setQuery("");
+            if (next) {
+              setQuery("");
+              setCurrentCode(getActiveTranslateLocaleClient());
+            }
             return next;
           })
         }
@@ -150,7 +171,7 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
       </button>
 
       {open ? (
-        <div className="lang-switch__popover">
+        <div className="lang-switch__popover notranslate" translate="no">
           <div className="lang-switch__search-row">
             <Search size={15} className="lang-switch__search-icon" aria-hidden />
             <input
@@ -173,7 +194,7 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
                 role="option"
                 className={`lang-switch__option ${currentCode === PAGE_LANGUAGE ? "is-active" : ""}`}
                 aria-selected={currentCode === PAGE_LANGUAGE}
-                onClick={() => pick(PAGE_LANGUAGE)}
+                onMouseDown={handlePick(PAGE_LANGUAGE)}
                 disabled={busy}
               >
                 <LangFlag code="en" />
@@ -199,7 +220,7 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
                   role="option"
                   className="lang-switch__option is-active"
                   aria-selected={true}
-                  onClick={() => pick(currentCode)}
+                  onMouseDown={handlePick(currentCode)}
                   disabled={busy}
                 >
                   <LangFlag code={currentCode} />
@@ -222,7 +243,7 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
                   role="option"
                   className="lang-switch__option lang-switch__option--accent"
                   aria-selected={false}
-                  onClick={() => pick(typedSuggestion)}
+                  onMouseDown={handlePick(typedSuggestion)}
                   disabled={busy}
                 >
                   <LangFlag code={typedSuggestion} />
@@ -247,7 +268,7 @@ export default function LanguageSwitcher({ variant = "header" }: { variant?: Var
                     role="option"
                     className={`lang-switch__option ${active ? "is-active" : ""}`}
                     aria-selected={active}
-                    onClick={() => pick(row.code)}
+                    onMouseDown={handlePick(row.code)}
                     disabled={busy}
                   >
                     <LangFlag code={row.code} />

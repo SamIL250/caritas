@@ -96,6 +96,7 @@
   top: calc(100% + 0.45rem);
   right: 0;
   z-index: 5000;
+  pointer-events: auto;
   width: min(100vw - 1.5rem, 22rem);
   background: #fff;
   border-radius: 0.9rem;

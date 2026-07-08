@@ -31,6 +31,7 @@ export function GoogleTranslateBootstrap() {
       try {
         const mount = document.getElementById("google_translate_element");
         if (!mount) return;
+        mount.innerHTML = "";
         const t = w.google?.translate;
         if (!t?.TranslateElement) return;
         const TE = t.TranslateElement;
@@ -47,15 +48,21 @@ export function GoogleTranslateBootstrap() {
       }
     };
 
-    if (!document.querySelector(LOADER_SELECTOR)) {
-      const script = document.createElement("script");
-      script.dataset.googleTranslateLoader = "1";
-      script.async = true;
-      script.src = "https://translate.google.com/translate_a/element.js?cb=__initGoogleTranslate";
-      document.body.appendChild(script);
-    } else if (w.google?.translate) {
-      queueMicrotask(() => w.__initGoogleTranslate?.());
-    }
+    const boot = () => {
+      if (!document.querySelector(LOADER_SELECTOR)) {
+        const script = document.createElement("script");
+        script.dataset.googleTranslateLoader = "1";
+        script.async = true;
+        script.src =
+          "https://translate.google.com/translate_a/element.js?cb=__initGoogleTranslate";
+        document.body.appendChild(script);
+      } else if (w.google?.translate) {
+        queueMicrotask(() => w.__initGoogleTranslate?.());
+      }
+    };
+
+    // Brief delay after reload so Set-Cookie from /api/translate-locale is applied first.
+    window.setTimeout(boot, 0);
   }, []);
 
   return (

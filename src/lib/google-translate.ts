@@ -1,5 +1,9 @@
 import { GOOGLE_TRANSLATE_LANGUAGE_CODES } from "@/lib/google-translate-language-codes";
 import { ISO_639_1_ALPHA2 } from "@/lib/iso-639-1-alpha2";
+import {
+  googTransCookieDomains,
+  googTransCookiePaths,
+} from "@/lib/googtrans-cookie-utils";
 
 /** Site source language for Google Translate (static UI + CMS copy). */
 export const PAGE_LANGUAGE = "en" as const;
@@ -57,19 +61,100 @@ export function getAllTranslateSearchRows(): TranslateLangRow[] {
   return cachedRows;
 }
 
-function parseGoogTransCookie(cookie: string): string | null {
-  const m = cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
-  if (!m) return null;
-  return decodeURIComponent(m[1].trim());
+function parseGoogTransCookie(
+  cookie: string,
+  preferredTarget?: string | null,
+): string | null {
+  const matches = [...cookie.matchAll(/(?:^|;\s*)googtrans=([^;]+)/g)];
+  if (matches.length === 0) return null;
+
+  const values = matches.map((m) => decodeURIComponent(m[1].trim()));
+  if (values.length === 1) return values[0];
+
+  if (preferredTarget) {
+    const wantEnglish = preferredTarget.toLowerCase() === PAGE_LANGUAGE;
+    for (const value of values) {
+      const parts = value.split("/").filter(Boolean);
+      const target = parts[parts.length - 1]?.toLowerCase() ?? "";
+      if (wantEnglish && (!target || target === PAGE_LANGUAGE)) return value;
+      if (!wantEnglish && target === preferredTarget.toLowerCase()) return value;
+    }
+  }
+
+  return values[values.length - 1];
+}
+
+/** Fired after locale is applied without a full reload (reserved for future use). */
+export const TRANSLATE_LOCALE_EVENT = "caritas-translate-locale";
+
+const TRANSLATE_RELOAD_KEY = "caritas-translate-next";
+
+function clearGoogTransCookiesClient(): void {
+  if (typeof document === "undefined" || typeof window === "undefined") return;
+  const expire = "Thu, 01 Jan 1970 00:00:00 GMT";
+  const secure = window.location.protocol === "https:" ? ";Secure" : "";
+  const hostname = window.location.hostname;
+  const pathname = window.location.pathname || "/";
+
+  for (const domain of googTransCookieDomains(hostname)) {
+    for (const path of googTransCookiePaths(pathname)) {
+      const domainPart = domain ? `;domain=${domain}` : "";
+      document.cookie = `googtrans=;expires=${expire};path=${path}${domainPart};SameSite=Lax${secure}`;
+      document.cookie = `googtrans=;Max-Age=0;path=${path}${domainPart};SameSite=Lax${secure}`;
+      document.cookie = `googtrans=;expires=${expire};path=${path}${domainPart};SameSite=None${secure}`;
+      document.cookie = `googtrans=;Max-Age=0;path=${path}${domainPart};SameSite=None${secure}`;
+    }
+  }
+}
+
+function writeGoogTransCookieClient(targetLang: string): void {
+  if (typeof document === "undefined" || typeof window === "undefined") return;
+  const value = `/${PAGE_LANGUAGE}/${targetLang}`;
+  const secure = window.location.protocol === "https:" ? ";Secure" : "";
+  const hostname = window.location.hostname;
+  const pathname = window.location.pathname || "/";
+
+  for (const path of googTransCookiePaths(pathname)) {
+    document.cookie = `googtrans=${value};path=${path};SameSite=Lax;Max-Age=31536000${secure}`;
+  }
+  for (const domain of googTransCookieDomains(hostname)) {
+    if (!domain) continue;
+    document.cookie = `googtrans=${value};path=/;domain=${domain};SameSite=Lax;Max-Age=31536000${secure}`;
+  }
+}
+
+function stripTranslateDocumentMarkup(): void {
+  document.documentElement.classList.remove("translated-ltr", "translated-rtl");
+  document.documentElement.lang = PAGE_LANGUAGE;
+}
+
+function hardReloadPreservingPath(): void {
+  window.location.replace(`${window.location.pathname}${window.location.search}`);
+}
+
+function applyTranslateLocaleClientFallback(langCode: string): void {
+  const normalized = langCode.trim() ? canonicalTranslateLangCode(langCode.trim()) : "";
+  const isEnglish = !normalized || normalized.toLowerCase() === PAGE_LANGUAGE;
+
+  clearGoogTransCookiesClient();
+  if (isEnglish) {
+    stripTranslateDocumentMarkup();
+  } else {
+    writeGoogTransCookieClient(normalized);
+  }
+  hardReloadPreservingPath();
 }
 
 /**
  * Active translation target from `googtrans` (`/en/fr`, `/auto/zh-CN`, …).
  * Returns `en` when absent or already English.
  */
-export function getActiveTranslateTargetFromCookie(cookieHeader: string | undefined): string {
+export function getActiveTranslateTargetFromCookie(
+  cookieHeader: string | undefined,
+  preferredTarget?: string | null,
+): string {
   if (!cookieHeader) return PAGE_LANGUAGE;
-  const raw = parseGoogTransCookie(cookieHeader);
+  const raw = parseGoogTransCookie(cookieHeader, preferredTarget);
   if (!raw) return PAGE_LANGUAGE;
   const parts = raw.split("/").filter(Boolean);
   const target = parts[parts.length - 1];
@@ -81,38 +166,71 @@ export function getActiveTranslateTargetFromCookie(cookieHeader: string | undefi
 
 export function getActiveTranslateLocaleClient(): string {
   if (typeof document === "undefined") return PAGE_LANGUAGE;
-  const target = getActiveTranslateTargetFromCookie(document.cookie);
-  return canonicalTranslateLangCode(target);
-}
-
-function clearGoogTransCookies(): void {
-  const expire = "Thu, 01 Jan 1970 00:00:00 GMT";
-  const pairs: string[] = [`googtrans=;expires=${expire};path=/`];
+  let pending: string | null = null;
   try {
-    const host = window.location.hostname;
-    if (host && host !== "localhost") {
-      pairs.push(`googtrans=;expires=${expire};path=/;domain=${host}`);
-      pairs.push(`googtrans=;expires=${expire};path=/;domain=.${host}`);
-    }
+    pending = sessionStorage.getItem(TRANSLATE_RELOAD_KEY);
   } catch {
     /* ignore */
   }
-  for (const p of pairs) {
-    document.cookie = p;
+  const target = getActiveTranslateTargetFromCookie(document.cookie, pending);
+  const resolved = canonicalTranslateLangCode(target);
+
+  if (pending && codesMatchLocale(resolved, pending)) {
+    try {
+      sessionStorage.removeItem(TRANSLATE_RELOAD_KEY);
+    } catch {
+      /* ignore */
+    }
   }
+
+  return resolved;
 }
 
-/** Set Google Translate cookie and reload so the widget applies page-wide translation. */
+function codesMatchLocale(a: string, b: string): boolean {
+  return canonicalTranslateLangCode(a).toLowerCase() === canonicalTranslateLangCode(b).toLowerCase();
+}
+
+
+/** Set Google Translate cookie via API (reliable on /dashboard) and reload. */
 export function applyTranslateLocale(langCode: string): void {
   if (typeof window === "undefined") return;
   const raw = langCode.trim();
-  if (!raw || raw.toLowerCase() === PAGE_LANGUAGE) {
-    clearGoogTransCookies();
-    window.location.reload();
-    return;
+  const normalized = raw ? canonicalTranslateLangCode(raw) : "";
+  const nextLang = !normalized || normalized.toLowerCase() === PAGE_LANGUAGE ? PAGE_LANGUAGE : normalized;
+
+  try {
+    sessionStorage.setItem(TRANSLATE_RELOAD_KEY, nextLang);
+  } catch {
+    /* ignore */
   }
-  document.cookie = `googtrans=/${PAGE_LANGUAGE}/${raw};path=/`;
-  window.location.reload();
+
+  clearGoogTransCookiesClient();
+  stripTranslateDocumentMarkup();
+
+  void fetch("/api/translate-locale", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    keepalive: true,
+    body: JSON.stringify({ lang: nextLang }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("translate-locale failed");
+      hardReloadPreservingPath();
+    })
+    .catch(() => {
+      applyTranslateLocaleClientFallback(nextLang);
+    });
+}
+
+/** Read pending locale written before reload (does not remove it). */
+export function consumePendingTranslateLocale(): string | null {
+  if (typeof sessionStorage === "undefined") return null;
+  try {
+    return sessionStorage.getItem(TRANSLATE_RELOAD_KEY);
+  } catch {
+    return null;
+  }
 }
 
 /** Legacy: widget-only targets (emails, constraints). Prefer {@link getAllTranslateSearchCodes} for UI. */
