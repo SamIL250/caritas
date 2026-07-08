@@ -6,6 +6,7 @@ import { renderWebsiteSection } from "@/lib/public-page-sections";
 import AboutPageSwitcher from "@/components/website/about/AboutPageSwitcher";
 import HistoryBentoSection from "@/components/website/sections/HistoryBentoSection";
 import MissionVisionValuesSection from "@/components/website/sections/MissionVisionValuesSection";
+import { ABOUT_SECTION_NAV, hrefToAboutAnchor } from "@/lib/about-section-nav";
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
@@ -170,6 +171,12 @@ export default async function AboutPage() {
     );
   }
 
+  const panelAnchors = new Set(Object.keys(panels));
+  const quickNavSource = quickNav.length > 0 ? quickNav : [...ABOUT_SECTION_NAV];
+  const filteredQuickNav = quickNavSource.filter((item) =>
+    panelAnchors.has(hrefToAboutAnchor(item.href)),
+  );
+
   return (
     <AboutPageSwitcher
       hero={{
@@ -180,7 +187,7 @@ export default async function AboutPage() {
         imageUrl,
         breadcrumbLabel: "About Us",
       }}
-      quickNav={quickNav}
+      quickNav={filteredQuickNav}
       panels={panels}
     />
   );

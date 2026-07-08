@@ -7,6 +7,7 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 
 import { useDonation } from '@/context/DonationContext';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+import { ABOUT_SECTION_NAV, aboutSectionPath, hrefToAboutAnchor } from '@/lib/about-section-nav';
 
 type SubKey = 'about' | 'programs' | 'publications';
 
@@ -60,6 +61,15 @@ export default function WebsiteHeader() {
 
   const toggleSub = (key: SubKey) => {
     setOpenSub((s) => (s === key ? null : key));
+  };
+
+  const goToAboutSection = (href: string) => {
+    closeNav();
+    const anchor = hrefToAboutAnchor(href);
+    if (pathname === '/about') {
+      window.location.hash = anchor;
+      return;
+    }
   };
 
   const headerClass = `site-header${scrolled ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}`;
@@ -137,25 +147,23 @@ export default function WebsiteHeader() {
                   <Link href="/about" className="md:hidden !font-bold text-[#8c2208]" onClick={closeNav}>
                     Explore All About Us
                   </Link>
-                  <Link href="/about#history" onClick={closeNav}>
-                    <i className="fa-solid fa-clock-rotate-left"></i> History
-                  </Link>
-                  <Link href="/about#mission" onClick={closeNav}>
-                    <i className="fa-solid fa-bullseye"></i> Mission
-                  </Link>
-                  <Link href="/about#vision" onClick={closeNav}>
-                    <i className="fa-solid fa-eye"></i> Vision
-                  </Link>
-                  <Link href="/about#values" onClick={closeNav}>
-                    <i className="fa-solid fa-star"></i> Values
-                  </Link>
-                  <div className="nav-dropdown-divider"></div>
-                  <Link href="/about#network" onClick={closeNav}>
-                    <i className="fa-solid fa-network-wired"></i> Network
-                  </Link>
-                  <Link href="/about#dioceses" onClick={closeNav}>
-                    <i className="fa-solid fa-church"></i> All Dioceses
-                  </Link>
+                  {ABOUT_SECTION_NAV.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={aboutSectionPath(item.href)}
+                      onClick={(e) => {
+                        if (pathname === '/about') {
+                          e.preventDefault();
+                          goToAboutSection(item.href);
+                        } else {
+                          closeNav();
+                        }
+                      }}
+                    >
+                      <i className={`fa-solid ${item.icon.replace(/^fa-solid\s+/i, '')}`}></i>{' '}
+                      {item.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </li>

@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
+import { ABOUT_SECTION_NAV, hrefToAboutAnchor } from "@/lib/about-section-nav";
 
 type QuickNavItem = {
   label: string;
@@ -25,7 +27,7 @@ type AboutPageSwitcherProps = {
 };
 
 function hrefToAnchor(href: string): string {
-  return href.startsWith("#") ? href.slice(1) : href;
+  return hrefToAboutAnchor(href);
 }
 
 function readHashAnchor(): string | null {
@@ -39,41 +41,52 @@ export default function AboutPageSwitcher({
   quickNav,
   panels,
 }: AboutPageSwitcherProps) {
+  const pathname = usePathname();
+
   const validAnchors = useMemo(
     () =>
-      quickNav
-        .map((item) => hrefToAnchor(item.href))
-        .filter((id) => Boolean(panels[id])),
-    [quickNav, panels],
+      ABOUT_SECTION_NAV.map((item) => hrefToAboutAnchor(item.href)).filter((id) =>
+        Boolean(panels[id]),
+      ),
+    [panels],
   );
 
   const [activeAnchor, setActiveAnchor] = useState<string | null>(null);
 
-  useEffect(() => {
+  const syncFromHash = useCallback(() => {
     const hashAnchor = readHashAnchor();
     if (hashAnchor && validAnchors.includes(hashAnchor)) {
       setActiveAnchor(hashAnchor);
+      requestAnimationFrame(() => {
+        document
+          .querySelector(".about-page-section-panel")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      return;
+    }
+    if (!hashAnchor) {
+      setActiveAnchor(null);
     }
   }, [validAnchors]);
+
+  useEffect(() => {
+    if (pathname !== "/about") return;
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, [pathname, syncFromHash]);
 
   const handleSelect = useCallback(
     (href: string) => {
       const anchor = hrefToAnchor(href);
       if (!validAnchors.includes(anchor)) return;
 
-      setActiveAnchor(anchor);
-
       const url = new URL(window.location.href);
       url.hash = anchor;
       window.history.replaceState(null, "", url.toString());
-
-      requestAnimationFrame(() => {
-        document
-          .querySelector(".about-page-section-panel")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+      syncFromHash();
     },
-    [validAnchors],
+    [validAnchors, syncFromHash],
   );
 
   const activeHref = activeAnchor ? `#${activeAnchor}` : null;
