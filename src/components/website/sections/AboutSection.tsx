@@ -23,14 +23,70 @@ const NODE_LAYOUTS = [
   { size: 110, left: 345, top: 345 },
 ];
 
-const LABEL_LAYOUTS = [
-  { left: 515, top: 75,  width: 120, align: 'center' as const },
-  { left: 665, top: 75,  width: 160, align: 'center' as const },
-  { left: 910, top: 355, width: 100, align: 'center' as const },
-  { left: 910, top: 585, width: 110, align: 'center' as const },
-  { left: 270, top: 570, width: 120, align: 'right' as const },
-  { left: 225, top: 355, width: 110, align: 'center' as const },
+type LabelPlacement = 'above' | 'below' | 'left' | 'right';
+
+const LABEL_PLACEMENTS: LabelPlacement[] = [
+  'above',
+  'above',
+  'right',
+  'right',
+  'left',
+  'left',
 ];
+
+function labelLayoutForNode(
+  node: { left: number; top: number; size: number },
+  placement: LabelPlacement,
+  labelText: string,
+) {
+  const cx = node.left + node.size / 2;
+  const cy = node.top + node.size / 2;
+  const gap = 8;
+
+  switch (placement) {
+    case 'above': {
+      const width = 140;
+      return {
+        left: cx - width / 2,
+        top: node.top - 36,
+        width,
+        align: 'center' as const,
+      };
+    }
+    case 'below': {
+      const width = 150;
+      return {
+        left: cx - width / 2,
+        top: node.top + node.size + gap,
+        width,
+        align: 'center' as const,
+      };
+    }
+    case 'right': {
+      const width = labelText.length > 16 ? 125 : 105;
+      return {
+        left: node.left + node.size + gap,
+        top: cy - 16,
+        width,
+        align: 'left' as const,
+      };
+    }
+    case 'left': {
+      const width = labelText.length > 22 ? 168 : 108;
+      const lineCount = labelText.length > 22 ? 3 : 2;
+      return {
+        left: node.left - gap - width,
+        top: cy - lineCount * 8,
+        width,
+        align: 'right' as const,
+      };
+    }
+    default: {
+      const _exhaustive: never = placement;
+      return _exhaustive;
+    }
+  }
+}
 
 const DEFAULT_NETWORK_NODES: NetworkNode[] = [
   { value: '1',       label: 'Caritas Rwanda' },
@@ -90,10 +146,14 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
     ...NODE_LAYOUTS[i] || NODE_LAYOUTS[NODE_LAYOUTS.length - 1],
   }));
 
-  const labels = content.networkNodes!.map((n, i) => ({
-    text: n.label,
-    ...LABEL_LAYOUTS[i] || LABEL_LAYOUTS[LABEL_LAYOUTS.length - 1],
-  }));
+  const labels = content.networkNodes!.map((n, i) => {
+    const nodeLayout = NODE_LAYOUTS[i] ?? NODE_LAYOUTS[NODE_LAYOUTS.length - 1];
+    const placement = LABEL_PLACEMENTS[i] ?? 'above';
+    return {
+      text: n.label,
+      ...labelLayoutForNode(nodeLayout, placement, n.label),
+    };
+  });
   const wrapperRef = useRef<HTMLDivElement>(null);
   const infographicRef = useRef<HTMLDivElement>(null);
 
