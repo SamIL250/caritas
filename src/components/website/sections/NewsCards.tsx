@@ -165,6 +165,7 @@ export default function NewsCards({
   const n = list.length;
   const side0 = n >= 2 ? list[1] : null;
   const side1 = n >= 3 ? list[2] : null;
+  const side2 = n >= 4 ? list[3] : null;
   const showSides = side0;
 
   const advance = useCallback(() => {
@@ -238,7 +239,9 @@ export default function NewsCards({
               <div
                 className={
                   showSides
-                    ? "stories-magazine"
+                    ? side2
+                      ? "stories-magazine stories-magazine--three-sides"
+                      : "stories-magazine"
                     : "stories-magazine stories-magazine--feature-only"
                 }
               >
@@ -368,6 +371,42 @@ export default function NewsCards({
                           href={side1.link_url}
                           className="story-read"
                           openInNew={side1.open_in_new}
+                        >
+                          Read Story <i className="fa-solid fa-arrow-right" aria-hidden />
+                        </StoryLink>
+                      ) : null}
+                    </div>
+                  </article>
+                )}
+
+                {side2 && (
+                  <article className="story-small">
+                    <div
+                      className="story-small-image"
+                      style={
+                        articleImage(side2)
+                          ? { backgroundImage: `url('${articleImage(side2).replace(/'/g, "%27")}')` }
+                          : { background: "#1a2a3a" }
+                      }
+                      role="img"
+                      aria-label=""
+                    />
+                    <div className="story-small-body">
+                      <div className="story-small-meta">
+                        {side2.tag ? <span className="story-small-tag">{side2.tag}</span> : null}
+                        {side2.date ? (
+                          <span className="story-small-date">
+                            <i className="fa-regular fa-calendar" aria-hidden /> {side2.date}
+                          </span>
+                        ) : null}
+                      </div>
+                      <h3>{side2.title}</h3>
+                      {side2.excerpt ? <p>{side2.excerpt}</p> : null}
+                      {side2.link_url ? (
+                        <StoryLink
+                          href={side2.link_url}
+                          className="story-read"
+                          openInNew={side2.open_in_new}
                         >
                           Read Story <i className="fa-solid fa-arrow-right" aria-hidden />
                         </StoryLink>

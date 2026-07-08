@@ -122,27 +122,6 @@ export default function HistoryBentoSection() {
                 className="about-hist-body"
                 dangerouslySetInnerHTML={{ __html: card.body }}
               />
-
-              {card.year === "2025" ? (
-                <div className="about-hist-jubilee-stats">
-                  <div className="about-hist-stat-item">
-                    <div className="about-hist-stat-num">7M+</div>
-                    <div className="about-hist-stat-lbl">People Served</div>
-                  </div>
-                  <div className="about-hist-stat-item">
-                    <div className="about-hist-stat-num">10</div>
-                    <div className="about-hist-stat-lbl">Dioceses</div>
-                  </div>
-                  <div className="about-hist-stat-item">
-                    <div className="about-hist-stat-num">56K+</div>
-                    <div className="about-hist-stat-lbl">Volunteers</div>
-                  </div>
-                  <div className="about-hist-stat-item">
-                    <div className="about-hist-stat-num">66</div>
-                    <div className="about-hist-stat-lbl">Years of Service</div>
-                  </div>
-                </div>
-              ) : null}
             </div>
           ))}
         </div>

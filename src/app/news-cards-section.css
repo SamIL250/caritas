@@ -69,6 +69,27 @@
   display: none !important;
 }
 
+/* Three side cards: wider image, narrower content column */
+@media (min-width: 900px) {
+  .stories-magazine--three-sides .story-small {
+    flex-direction: row !important;
+  }
+  .stories-magazine--three-sides .story-small-image {
+    width: 168px !important;
+    min-width: 168px !important;
+    height: auto !important;
+    min-height: 100% !important;
+    background-size: cover !important;
+    background-position: center center !important;
+  }
+  .stories-magazine--three-sides .story-small-body {
+    flex: 1 !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 168px) !important;
+    padding: 0.6rem 0.65rem !important;
+  }
+}
+
 /* CTA — remove shadow and translateY hover */
 .stories-cta a {
   box-shadow: none !important;

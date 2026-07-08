@@ -6,8 +6,9 @@ export const metadata = {
   title: "Caritas Rwanda CMS",
   description: "Content Management System for Caritas Rwanda",
   icons: {
-    icon: '/img/fav.png',
-    apple: '/img/fav.png',
+    icon: "/img/fav.png",
+    apple: "/img/fav.png",
+    shortcut: "/img/fav.png",
   },
 };
 
