@@ -2,17 +2,18 @@
  * Canonical public origin for server-generated absolute URLs (emails, dashboard links,
  * newsletter unsubscribe, etc.).
  *
- * Configure **`NEXT_PUBLIC_SITE_URL`** (e.g. `https://caritasrwanda.vercel.app`
- * or your custom domain) in Vercel env for a stable canonical host. If it is mistakenly set to
- * `http://localhost:3000`, that value is ignored while the app runs on Vercel so links in
- * production emails still use the deployed host (`VERCEL_URL`).
+ * Set **`NEXT_PUBLIC_SITE_URL`** (e.g. `https://new.caritasrwanda.org`) in Vercel
+ * → Settings → Environment Variables for Production. If it is mistakenly set to
+ * `http://localhost:3000`, that value is ignored on Vercel so links in production
+ * emails use the canonical live domain instead of `*.vercel.app`.
  *
- * On Vercel, `VERCEL_URL` is always set — use it when no explicit public URL is configured.
+ * On Vercel preview deployments, `VERCEL_URL` is used when no explicit public URL is set.
  */
 
 import { isLoopbackOrigin } from "@/lib/site-origin-shared";
 
-const STAGING_FALLBACK_ORIGIN = "https://caritasrwanda.vercel.app";
+/** Live public website — used for production emails and dashboard links. */
+const CANONICAL_PRODUCTION_ORIGIN = "https://new.caritasrwanda.org";
 
 function normalizeOrigin(raw: string | undefined): string | undefined {
   if (!raw?.trim()) return undefined;
@@ -24,16 +25,23 @@ function normalizeOrigin(raw: string | undefined): string | undefined {
 export { isLoopbackOrigin } from "@/lib/site-origin-shared";
 
 export function resolveSiteOrigin(): string {
-  const explicit = normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL);
+  const explicit =
+    normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL) ??
+    normalizeOrigin(process.env.SITE_URL);
   const vercelHost = process.env.VERCEL_URL?.trim().replace(/\/$/, "");
   const vercelOrigin = vercelHost ? `https://${vercelHost}` : undefined;
+  const isVercelProduction =
+    process.env.VERCEL === "1" && process.env.VERCEL_ENV === "production";
 
-  // Misconfigured env: localhost SITE_URL on a Vercel deployment — use the real host.
+  // Misconfigured env: localhost SITE_URL on a Vercel deployment.
   if (explicit && vercelOrigin && isLoopbackOrigin(explicit)) {
-    return vercelOrigin;
+    return isVercelProduction ? CANONICAL_PRODUCTION_ORIGIN : vercelOrigin;
   }
   if (explicit && !isLoopbackOrigin(explicit)) {
     return explicit;
+  }
+  if (isVercelProduction) {
+    return CANONICAL_PRODUCTION_ORIGIN;
   }
   if (vercelOrigin) {
     return vercelOrigin;
@@ -42,5 +50,5 @@ export function resolveSiteOrigin(): string {
     const port = process.env.PORT?.trim() || "3000";
     return explicit || `http://localhost:${port}`;
   }
-  return explicit || STAGING_FALLBACK_ORIGIN;
+  return explicit || CANONICAL_PRODUCTION_ORIGIN;
 }
