@@ -112,6 +112,10 @@ export default async function AboutPage() {
       ? heroRow.image_url
       : "/img/slide1.webp";
 
+  const canonicalNavLabels = Object.fromEntries(
+    ABOUT_SECTION_NAV.map((item) => [hrefToAboutAnchor(item.href), item.label]),
+  ) as Record<string, string>;
+
   const rawNav = options.quick_nav as
     | Array<{ label: string; href: string; icon?: string }>
     | undefined;
@@ -173,9 +177,13 @@ export default async function AboutPage() {
 
   const panelAnchors = new Set(Object.keys(panels));
   const quickNavSource = quickNav.length > 0 ? quickNav : [...ABOUT_SECTION_NAV];
-  const filteredQuickNav = quickNavSource.filter((item) =>
-    panelAnchors.has(hrefToAboutAnchor(item.href)),
-  );
+  const filteredQuickNav = quickNavSource
+    .filter((item) => panelAnchors.has(hrefToAboutAnchor(item.href)))
+    .map((item) => {
+      const anchor = hrefToAboutAnchor(item.href);
+      const canonicalLabel = canonicalNavLabels[anchor];
+      return canonicalLabel ? { ...item, label: canonicalLabel } : item;
+    });
 
   return (
     <AboutPageSwitcher

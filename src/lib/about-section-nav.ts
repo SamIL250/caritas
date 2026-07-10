@@ -6,7 +6,7 @@ export const ABOUT_SECTION_NAV = [
     icon: "fa-clock-rotate-left",
   },
   {
-    label: "Mission & Vision",
+    label: "Vision & Mission",
     href: "#mission",
     icon: "fa-bullseye",
   },
