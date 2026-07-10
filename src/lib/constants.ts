@@ -345,7 +345,7 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   pillar_cards: {
     eyebrow: "Who We Are",
     eyebrow_icon: "fa-bullseye",
-    title: "Mission, Vision & Values",
+    title: "Vision, Mission & Values",
     subtitle:
       "Guided by the Word of God and the principles of Catholic Social Teaching, every action we take is rooted in dignity, solidarity, and justice.",
     anchor_id: "mission",

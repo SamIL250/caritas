@@ -43,7 +43,7 @@ export default function MissionVisionValuesSection({
       {showMissionVision ? (
       <div className="container">
         <div className="head-center">
-          <h2 className="sub-section-title">Mission, Vision &amp; Values</h2>
+          <h2 className="sub-section-title">Vision, Mission &amp; Values</h2>
         </div>
 
         <div className="about-mvv-statements">
