@@ -89,6 +89,23 @@ export default function AboutPageSwitcher({
     [validAnchors, syncFromHash],
   );
 
+  const handleGoBack = useCallback(() => {
+    const url = new URL(window.location.href);
+    url.hash = "";
+    window.history.replaceState(null, "", url.toString());
+    setActiveAnchor(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (activeAnchor) {
+      document.body.classList.add("about-section-active");
+    } else {
+      document.body.classList.remove("about-section-active");
+    }
+    return () => document.body.classList.remove("about-section-active");
+  }, [activeAnchor]);
+
   const activeHref = activeAnchor ? `#${activeAnchor}` : null;
 
   return (
@@ -103,6 +120,16 @@ export default function AboutPageSwitcher({
       {activeAnchor && panels[activeAnchor] ? (
         <div className="about-page-section-panel" key={activeAnchor}>
           {panels[activeAnchor]}
+          <div className="about-page-section-actions">
+            <button
+              type="button"
+              className="about-page-go-back"
+              onClick={handleGoBack}
+            >
+              <i className="fa-solid fa-arrow-left" aria-hidden />
+              Go back
+            </button>
+          </div>
         </div>
       ) : null}
     </div>

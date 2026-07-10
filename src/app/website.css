@@ -5290,6 +5290,39 @@
             scroll-margin-top: 5rem;
         }
 
+        body.about-section-active .website-footer {
+            display: none;
+        }
+
+        .about-page-section-actions {
+            display: flex;
+            justify-content: center;
+            padding: 2.5rem 1.5rem 3.5rem;
+            background: #f8f6f3;
+        }
+
+        .about-page-go-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-family: var(--font-inter, 'Inter', sans-serif);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #a5280d;
+            background: #fff;
+            border: 1.5px solid rgba(165, 40, 13, 0.28);
+            border-radius: 100px;
+            padding: 0.85rem 1.75rem;
+            cursor: pointer;
+            transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .about-page-go-back:hover {
+            color: #fff;
+            background: #a5280d;
+            border-color: #a5280d;
+        }
+
         /* Key stats — white infographic card (about.html reference; layout "strip") */
         section.stats-banner {
             padding: 3rem 1.25rem 4rem;
