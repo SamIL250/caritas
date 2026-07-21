@@ -5,6 +5,7 @@ import {
   testimonyDetailHref,
   type TestimonyRow,
 } from "@/lib/testimonies";
+import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 
 type Props = {
   testimony: TestimonyRow;
@@ -61,10 +62,11 @@ export function TestimonyDetailLayout({ testimony, allTestimonies }: Props) {
           <article className="testimony-detail-main">
             {coverUrl ? (
               <div className="testimony-detail-cover">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <MediaFigure
                   src={coverUrl}
                   alt={testimony.cover_image_alt || testimony.title}
+                  figureClassName="testimony-detail-cover-figure"
+                  imgClassName=""
                 />
               </div>
             ) : null}

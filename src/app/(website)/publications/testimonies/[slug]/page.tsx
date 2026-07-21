@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { prepareStaffRichHtml } from "@/lib/prepare-staff-rich-html";
 import { sortTestimonies, type TestimonyRow } from "@/lib/testimonies";
 import { TestimonyDetailLayout } from "@/components/website/publications/TestimonyDetailLayout";
 import { ViewTracker } from "@/components/website/ViewTracker";
@@ -50,7 +50,7 @@ export default async function TestimonyDetailPage({ params }: PageProps) {
   if (!testimony) notFound();
 
   const bodyHtml = testimony.body?.trim()
-    ? sanitizeStaffRichText(testimony.body.trim())
+    ? await prepareStaffRichHtml(testimony.body.trim())
     : "";
 
   return (

@@ -74,9 +74,12 @@ import VolunteerModalWrapper from "@/components/website/VolunteerModalWrapper";
 import EventsWidget from "@/components/website/EventsWidget";
 import ChatbotFab from "@/components/website/ChatbotFab";
 import CookieConsentBanner from "@/components/website/CookieConsentBanner";
+import { MediaCaptionProvider } from "@/components/website/MediaCaptionProvider";
 import { DonationProvider } from "@/context/DonationContext";
 import { VolunteerProvider } from "@/context/VolunteerContext";
 import { getMergedFooterSettings, getCookieConsentSettings } from "@/lib/site-settings";
+import { buildMediaCaptionRecord } from "@/lib/media-captions";
+import { loadAllMediaCaptions } from "@/lib/media-captions-server";
 
 import { Poppins, Inter, Playfair_Display } from "next/font/google";
 
@@ -106,13 +109,15 @@ export default async function WebsiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [footerSettings, cookieSettings] = await Promise.all([
+  const [footerSettings, cookieSettings, captionMap] = await Promise.all([
     getMergedFooterSettings(),
     getCookieConsentSettings(),
+    loadAllMediaCaptions(),
   ]);
   return (
     <VolunteerProvider>
       <DonationProvider>
+        <MediaCaptionProvider captions={buildMediaCaptionRecord(captionMap)}>
         <div className={`website-root ${poppins.variable} ${inter.variable} ${playfair.variable}`}>
           <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
           {/* FontAwesome */}
@@ -132,6 +137,7 @@ export default async function WebsiteLayout({
           <EventsWidget />
           <ChatbotFab />
         </div>
+        </MediaCaptionProvider>
       </DonationProvider>
     </VolunteerProvider>
   );

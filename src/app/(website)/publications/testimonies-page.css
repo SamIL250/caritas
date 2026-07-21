@@ -235,11 +235,18 @@
   margin-bottom: 1.5rem;
 }
 
-.testimony-detail-cover img {
+.testimony-detail-cover img,
+.testimony-detail-cover-figure img {
   width: 100%;
   max-height: 420px;
   object-fit: cover;
   display: block;
+}
+
+.testimony-detail-cover-figure .media-figure-caption {
+  padding: 0.65rem 0.85rem 0.85rem;
+  text-align: left;
+  background: #fff;
 }
 
 .testimony-detail-lede {

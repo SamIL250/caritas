@@ -8,7 +8,7 @@ import {
   type NewsArticleRow,
 } from "@/lib/news";
 import type { ProgramCategoryRow } from "@/lib/programs";
-import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { prepareStaffRichHtml } from "@/lib/prepare-staff-rich-html";
 import { CampaignFullStory } from "@/components/website/campaigns/CampaignFullStory";
 import { fetchDepartmentRelatedContent } from "@/lib/department-related";
 import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
@@ -77,7 +77,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
   const { article, department } = found;
   const coverUrl = article.image_url?.trim() || "";
   const storyHtml =
-    article.body?.trim() ? sanitizeStaffRichText(article.body.trim()) : "";
+    article.body?.trim() ? await prepareStaffRichHtml(article.body.trim()) : "";
 
   const isExternalArticle = article.external_url?.trim() && /^https?:\/\//i.test(article.external_url);
 

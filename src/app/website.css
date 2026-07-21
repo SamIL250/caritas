@@ -8291,6 +8291,38 @@
             display: none;
         }
 
+        /* Media library captions — shared figure styling (non-hero) */
+        .media-figure {
+            margin: 0;
+        }
+
+        .media-figure-caption {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.55;
+            font-style: italic;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .media-figure-caption--on-dark {
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        .testimony-detail-cover-figure .media-figure-caption,
+        .pub-card-figure .media-figure-caption,
+        .news-card-figure .media-figure-caption {
+            text-align: left;
+            font-size: 0.8125rem;
+            padding: 0 0.15rem;
+        }
+
+        .testimony-card-figure .media-figure-caption {
+            padding: 0.5rem 0.75rem 0;
+            text-align: left;
+            font-size: 0.75rem;
+        }
+
         .donation-campaign-meta {
             list-style: none;
             padding: 0;

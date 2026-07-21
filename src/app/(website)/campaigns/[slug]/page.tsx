@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import CampaignDetailHero from "@/components/website/campaigns/CampaignDetailHero";
 import { CampaignComments } from "@/components/website/campaigns/CampaignComments";
 import { CampaignFullStory } from "@/components/website/campaigns/CampaignFullStory";
-import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { prepareStaffRichHtml } from "@/lib/prepare-staff-rich-html";
 import { enrichCampaignFundraisingCopy, fetchFundraisingStatsForCampaigns } from "@/lib/community-campaign-fundraising-stats";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database.types";
@@ -74,7 +74,7 @@ export default async function CampaignDetailPage({
   const donationsOk = Boolean(c.donations_enabled);
   const primaryUrl = (c.primary_action_url || "#donate").trim() || "#donate";
   const storyHtml =
-    (c.body || "").trim() !== "" ? sanitizeStaffRichText((c.body || "").trim()) : "";
+    (c.body || "").trim() !== "" ? await prepareStaffRichHtml((c.body || "").trim()) : "";
 
   return (
     <div className="campaign-detail-root">

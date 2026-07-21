@@ -7,7 +7,7 @@ import {
   formatProgramDate,
 } from "@/lib/programs";
 import { fetchProgramBySlug } from "../get-programs-data";
-import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { prepareStaffRichHtml } from "@/lib/prepare-staff-rich-html";
 import { fetchDepartmentRelatedContent } from "@/lib/department-related";
 import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
 import { CampaignFullStory } from "@/components/website/campaigns/CampaignFullStory";
@@ -53,7 +53,7 @@ export default async function ProgramArticlePage({ params }: PageProps) {
 
   const coverUrl = encodeProgramAssetUrl(program.cover_image_url);
   const storyHtml =
-    program.body?.trim() !== "" ? sanitizeStaffRichText(program.body!.trim()) : "";
+    program.body?.trim() !== "" ? await prepareStaffRichHtml(program.body!.trim()) : "";
 
   const externalHref =
     program.external_url?.trim() && /^https?:\/\//i.test(program.external_url)

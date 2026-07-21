@@ -7,6 +7,7 @@ import {
   testimonyDetailHref,
   type TestimonyRow,
 } from "@/lib/testimonies";
+import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 
 type Props = {
   testimonies: TestimonyRow[];
@@ -56,11 +57,12 @@ function TestimonyCard({ row }: { row: TestimonyRow }) {
       <Link href={href} className="testimony-card-link">
         <div className="testimony-card-image-wrap">
           {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <MediaFigure
               src={imageUrl}
               alt={row.cover_image_alt || row.title}
-              className="testimony-card-image"
+              hideCaption
+              figureClassName="testimony-card-figure"
+              imgClassName="testimony-card-image"
             />
           ) : (
             <div className="testimony-card-image testimony-card-image-placeholder" aria-hidden />

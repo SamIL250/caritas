@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
+import { prepareStaffRichHtml } from "@/lib/prepare-staff-rich-html";
 import { fetchDepartmentRelatedContent } from "@/lib/department-related";
 import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
 import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
@@ -83,7 +83,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   if (!data) notFound();
 
   const { publication, category, department } = data;
-  const storyHtml = publication.body?.trim() ? sanitizeStaffRichText(publication.body.trim()) : "";
+  const storyHtml = publication.body?.trim() ? await prepareStaffRichHtml(publication.body.trim()) : "";
   const href = publicationHasPdf(publication)
     ? publicationPrimaryHref(publication)
     : publication.external_url?.trim() || "";

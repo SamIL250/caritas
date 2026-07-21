@@ -10,6 +10,7 @@ import type { PublishedNewsArticle } from "@/app/(website)/news/get-news-data";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
 
 import Link from "next/link";
+import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 
 function normalize(s: string) {
   return s.toLowerCase().trim();
@@ -117,9 +118,11 @@ export default function NewsArticlesFeed({
           >
             <article className="news-featured">
               <div className="news-feat-img">
-                <img
+                <MediaFigure
                   src={featuredArticle.image_url}
                   alt={featuredArticle.image_alt || featuredArticle.title}
+                  hideCaption
+                  figureClassName="news-feat-figure"
                 />
                 <div className="news-feat-badge">
                   <i className="fa-solid fa-star mr-1" aria-hidden />
@@ -168,7 +171,12 @@ export default function NewsArticlesFeed({
                         className="news-mag-large"
                       >
                         <div className="news-mag-large-img">
-                          <img src={filteredGrid[0].image_url} alt={filteredGrid[0].title} />
+                          <MediaFigure
+                            src={filteredGrid[0].image_url}
+                            alt={filteredGrid[0].title}
+                            hideCaption
+                            figureClassName="news-mag-figure"
+                          />
                           <div className="news-mag-large-tag">{tagLabel(filteredGrid[0])}</div>
                         </div>
                         <h3 className="news-mag-large-title">{filteredGrid[0].title}</h3>
@@ -186,7 +194,13 @@ export default function NewsArticlesFeed({
                         className="flex items-center gap-4 group text-inherit no-underline border border-stone-200 rounded-2xl p-3 hover:border-[var(--primary-orange)] transition-colors bg-white mt-auto"
                       >
                         <div className="w-1/3 aspect-[4/3] rounded-xl overflow-hidden relative shrink-0">
-                          <img src={filteredGrid[1].image_url} alt={filteredGrid[1].title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                          <MediaFigure
+                            src={filteredGrid[1].image_url}
+                            alt={filteredGrid[1].title}
+                            hideCaption
+                            figureClassName="news-mag-figure h-full"
+                            imgClassName="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
                         </div>
                         <div className="w-2/3 flex flex-col justify-center">
                           <div className="text-[10px] font-bold text-[#a5280d] mb-1 uppercase tracking-wider">{tagLabel(filteredGrid[1])}</div>
@@ -206,7 +220,12 @@ export default function NewsArticlesFeed({
                         className="news-mag-list-item text-inherit no-underline"
                       >
                         <div className="news-mag-list-img">
-                          <img src={a.image_url} alt={a.title} />
+                          <MediaFigure
+                            src={a.image_url}
+                            alt={a.title}
+                            hideCaption
+                            figureClassName="news-mag-figure"
+                          />
                         </div>
                         <div className="news-mag-list-content">
                           <div className="news-mag-list-meta">
@@ -237,7 +256,12 @@ export default function NewsArticlesFeed({
                       aria-label={`Read: ${a.title}`}
                     >
                       <div className="news-card-img">
-                        <img src={a.image_url} alt={a.image_alt || a.title} />
+                        <MediaFigure
+                          src={a.image_url}
+                          alt={a.image_alt || a.title}
+                          hideCaption
+                          figureClassName="news-card-figure"
+                        />
                         <div className="news-card-overlay" aria-hidden />
                         <div className="news-card-tag">{tagLabel(a)}</div>
                       </div>

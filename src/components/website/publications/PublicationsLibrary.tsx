@@ -15,6 +15,7 @@ import { TESTIMONIES_SECTION_ANCHOR, type TestimonyRow } from "@/lib/testimonies
 import { TestimoniesSection } from "./TestimoniesSection";
 import { PublicationLockModal } from "./PublicationLockModal";
 import { ViewTracker } from "@/components/website/ViewTracker";
+import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 
 type FilterKey = "all" | string;
 
@@ -264,10 +265,11 @@ function FeaturedContent({ cat, pub }: { cat: PublicationCategoryRow; pub: Publi
       </div>
       <div className="pub-feat-img">
         {pub.cover_image_url.trim() ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <MediaFigure
             src={encodePublicationAssetUrl(pub.cover_image_url)}
             alt={pub.cover_image_alt || pub.title}
+            hideCaption
+            figureClassName="pub-feat-figure"
           />
         ) : null}
         {isLocked ? (
@@ -407,8 +409,13 @@ function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: Publicat
       {/* Image */}
       <div className="pub-card-image-wrap">
         {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt={row.cover_image_alt || row.title} className="pub-card-image" />
+          <MediaFigure
+            src={imageUrl}
+            alt={row.cover_image_alt || row.title}
+            hideCaption
+            figureClassName="pub-card-figure"
+            imgClassName="pub-card-image"
+          />
         ) : (
           <div className="pub-card-image pub-card-image-placeholder" />
         )}
