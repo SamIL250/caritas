@@ -34,6 +34,7 @@ import {
 import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
 import { DEFAULT_DIOCESE_MAP_SECTION_CONTENT } from "@/lib/diocese-map-defaults";
+import { CANONICAL_PROGRAMS } from "@/lib/program-cards-defaults";
 
 export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   hero: {
@@ -223,10 +224,10 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   },
   program_cards: {
     eyebrow: "What We Do",
-    heading: "Our Program",
+    heading: "Our Programs",
     subtitle:
-      "Making a lasting difference through targeted, community-focused initiatives across Rwanda",
-    programs: []
+      "Making a difference through Social Welfare, Health, and Development interventions with safe Finance and Administration services.",
+    programs: CANONICAL_PROGRAMS.map((p) => ({ ...p })),
   },
   home_about: {
     title: "About Us",
@@ -609,7 +610,7 @@ export const SECTION_LABELS: Record<string, string> = {
   contact_info: "Contact & Map",
   gallery: "Image Gallery",
   divider: "Divider Line",
-  program_cards: "Our Program",
+  program_cards: "Our Programs",
   home_about: "Home — About story",
   map_section: "Our Location",
   featured_campaign: "Featured campaign",

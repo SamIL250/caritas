@@ -30,6 +30,7 @@ import { Modal } from '@/components/ui/Modal';
 import { MediaPicker } from '@/components/dashboard/MediaPicker';
 import { createClient } from '@/lib/supabase/client';
 import { SECTION_ICONS, SECTION_LABELS, DEFAULT_SECTION_CONTENT } from '@/lib/constants';
+import { PROGRAM_SLOT_TITLES, ensureProgramCardSlots, hydrateProgramCardsContent, type ProgramCardItem } from '@/lib/program-cards-defaults';
 import { FEATURED_CAMPAIGN_SIDEBAR_MAX } from '@/lib/featured-campaign-home-data';
 import {
   saveSection,
@@ -154,10 +155,17 @@ function resolveDeepLinkedSection(
 ): { selectedId: string | null; localState: unknown } {
   if (!sectionId || !sectionList?.length) return { selectedId: null, localState: null };
   const section = sectionList.find((s: unknown) => (s as { id: string }).id === sectionId) as
-    | { id: string; content?: unknown }
+    | { id: string; type?: string; content?: unknown }
     | undefined;
   if (!section) return { selectedId: null, localState: null };
-  return { selectedId: sectionId, localState: section.content || {} };
+  const content = section.content || {};
+  if (section.type === 'program_cards') {
+    return {
+      selectedId: sectionId,
+      localState: hydrateProgramCardsContent(content as Record<string, unknown>),
+    };
+  }
+  return { selectedId: sectionId, localState: content };
 }
 
 interface PageEditorProps {
@@ -457,7 +465,11 @@ export default function PageEditorClient({
       setLocalState(hero);
     } else if (id) {
       const section = sections.find(s => s.id === id);
-      setLocalState(section?.content || {});
+      const content =
+        section?.type === 'program_cards'
+          ? hydrateProgramCardsContent((section?.content as Record<string, unknown>) || {})
+          : section?.content || {};
+      setLocalState(content);
     } else {
       setLocalState(null);
     }
@@ -489,9 +501,13 @@ export default function PageEditorClient({
         setHero(snapshot);
       } else if (selectedId) {
         const sectionType = sections.find((s) => s.id === selectedId)?.type || '';
-        await saveSection(selectedId, sectionType, snapshot);
+        const payload =
+          sectionType === 'program_cards'
+            ? hydrateProgramCardsContent(snapshot as Record<string, unknown>)
+            : snapshot;
+        await saveSection(selectedId, sectionType, payload);
         setSections((prev) =>
-          prev.map((s) => (s.id === selectedId ? { ...s, content: snapshot } : s)),
+          prev.map((s) => (s.id === selectedId ? { ...s, content: payload } : s)),
         );
       }
       setHasChanges(false);
@@ -3450,9 +3466,45 @@ function SectionForm({
         </div>
       );
     }
-    case 'program_cards':
+    case 'program_cards': {
+      const ensurePrograms = (): ProgramCardItem[] =>
+        ensureProgramCardSlots((state.programs as Partial<ProgramCardItem>[]) || []);
+
+      const patchProgram = (idx: number, patch: Partial<ProgramCardItem>) => {
+        const list = ensurePrograms();
+        list[idx] = { ...list[idx], ...patch };
+        onChange('programs', list);
+      };
+
+      const patchBullet = (progIdx: number, bulletIdx: number, value: string) => {
+        const list = ensurePrograms();
+        const bullets = [...(list[progIdx].bullets ?? [])];
+        bullets[bulletIdx] = value;
+        list[progIdx] = { ...list[progIdx], bullets };
+        onChange('programs', list);
+      };
+
+      const addBullet = (progIdx: number) => {
+        const list = ensurePrograms();
+        const bullets = [...(list[progIdx].bullets ?? []), ''];
+        list[progIdx] = { ...list[progIdx], bullets };
+        onChange('programs', list);
+      };
+
+      const removeBullet = (progIdx: number, bulletIdx: number) => {
+        const list = ensurePrograms();
+        const bullets = (list[progIdx].bullets ?? []).filter((_, i) => i !== bulletIdx);
+        list[progIdx] = { ...list[progIdx], bullets };
+        onChange('programs', list);
+      };
+
+      const programs = ensurePrograms();
+
       return (
         <div className="space-y-6">
+          <p className="text-[10px] leading-relaxed text-stone-500">
+            Four program pillars (tabs): tab label, image, title, description, bullet list, icon, and link for each slot.
+          </p>
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" htmlFor="pc-eyebrow">
               Eyebrow
@@ -3490,22 +3542,14 @@ function SectionForm({
             />
           </div>
           <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider" id="pc-programs-list-label">
-            Program items
+            Program tabs (4)
           </p>
           <ul className="space-y-4" aria-labelledby="pc-programs-list-label">
-            {state.programs?.map((item: any, idx: number) => (
-              <li key={idx} className="p-4 bg-stone-50 rounded-2xl border border-stone-100 space-y-3 relative list-none">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newItems = state.programs.filter((_: any, i: number) => i !== idx);
-                    onChange('programs', newItems);
-                  }}
-                  className="absolute top-2 right-2 text-stone-300 hover:text-red-500 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#7A1515] focus:ring-offset-1"
-                  aria-label={`Remove program ${item.title || idx + 1}`}
-                >
-                  <X size={16} aria-hidden />
-                </button>
+            {programs.map((item, idx) => (
+              <li key={idx} className="p-4 bg-stone-50 rounded-2xl border border-stone-100 space-y-3 list-none">
+                <div className="text-[10px] font-bold uppercase text-[#7A1515]">
+                  Tab {idx + 1}: {PROGRAM_SLOT_TITLES[idx]}
+                </div>
                 {item.image_url ? (
                   <div className="relative w-full h-32 rounded-lg overflow-hidden bg-stone-200">
                     <img src={item.image_url} alt="" className="w-full h-full object-cover" />
@@ -3535,21 +3579,28 @@ function SectionForm({
                     isOpen
                     onClose={() => setShowMediaPicker(null)}
                     onSelect={(m: any) => {
-                      const newItems = [...(state.programs || [])];
-                      newItems[idx] = { ...newItems[idx], image_url: m.url };
-                      onChange('programs', newItems);
+                      patchProgram(idx, { image_url: m.url });
                       setShowMediaPicker(null);
                     }}
                   />
                 )}
+                <div className="space-y-1">
+                  <label className="text-[10px] text-stone-500" htmlFor={`pc-tab-label-${idx}`}>
+                    Tab label (use Enter in preview for line breaks — type \n here)
+                  </label>
+                  <input
+                    id={`pc-tab-label-${idx}`}
+                    type="text"
+                    value={item.tab_label ?? ''}
+                    onChange={(e) => patchProgram(idx, { tab_label: e.target.value })}
+                    className="w-full bg-white border border-stone-200 rounded-lg p-2 text-xs"
+                    placeholder="Social\nWelfare"
+                  />
+                </div>
                 <input
                   type="text"
                   value={item.title ?? ''}
-                  onChange={(e) => {
-                    const newItems = [...state.programs];
-                    newItems[idx] = { ...newItems[idx], title: e.target.value };
-                    onChange('programs', newItems);
-                  }}
+                  onChange={(e) => patchProgram(idx, { title: e.target.value })}
                   className="w-full bg-white border border-stone-200 rounded-lg p-2 text-sm font-bold focus:ring-0"
                   placeholder="Title"
                 />
@@ -3560,15 +3611,46 @@ function SectionForm({
                   <textarea
                     id={`pc-prog-desc-${idx}`}
                     value={item.description ?? ''}
-                    onChange={(e) => {
-                      const newItems = [...state.programs];
-                      newItems[idx] = { ...newItems[idx], description: e.target.value };
-                      onChange('programs', newItems);
-                    }}
+                    onChange={(e) => patchProgram(idx, { description: e.target.value })}
                     className="w-full bg-white border border-stone-200 rounded-lg p-2 text-xs focus:ring-0"
                     placeholder="Description"
                     rows={3}
                   />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-bold uppercase text-stone-400">Bullet list</p>
+                  <ul className="space-y-2">
+                    {(item.bullets ?? []).map((bullet, bulletIdx) => (
+                      <li key={bulletIdx} className="flex items-center gap-2 list-none">
+                        <span className="shrink-0 text-stone-400" aria-hidden>
+                          <Check size={14} />
+                        </span>
+                        <input
+                          type="text"
+                          value={bullet}
+                          onChange={(e) => patchBullet(idx, bulletIdx, e.target.value)}
+                          className="flex-1 bg-white border border-stone-200 rounded-lg p-2 text-xs"
+                          placeholder={`Bullet ${bulletIdx + 1}`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeBullet(idx, bulletIdx)}
+                          className="shrink-0 text-stone-300 hover:text-red-500 rounded-md p-1"
+                          aria-label={`Remove bullet ${bulletIdx + 1}`}
+                        >
+                          <X size={14} aria-hidden />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full text-xs"
+                    onClick={() => addBullet(idx)}
+                  >
+                    Add bullet
+                  </Button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div className="space-y-1">
@@ -3578,13 +3660,17 @@ function SectionForm({
                     <input
                       id={`pc-icon-${idx}`}
                       type="text"
-                      value={String(item.icon ?? '').replace(/^fa-solid /, '')}
+                      value={String(item.icon ?? '').replace(/^fa-solid fa-/, '').replace(/^fa-/, '')}
                       onChange={(e) => {
                         const v = e.target.value.trim();
-                        const icon = v.startsWith('fa-') ? v : v ? `fa-${v}` : 'fa-circle';
-                        const newItems = [...state.programs];
-                        newItems[idx] = { ...newItems[idx], icon };
-                        onChange('programs', newItems);
+                        const icon = v.startsWith('fa-solid ') || v.startsWith('fa-regular ') || v.startsWith('fa-brands ')
+                          ? v
+                          : v.startsWith('fa-')
+                            ? `fa-solid ${v}`
+                            : v
+                              ? `fa-solid fa-${v}`
+                              : 'fa-solid fa-circle';
+                        patchProgram(idx, { icon });
                       }}
                       className="w-full bg-white border border-stone-200 rounded-lg p-2 text-xs"
                       placeholder="building-columns"
@@ -3598,49 +3684,18 @@ function SectionForm({
                       id={`pc-link-${idx}`}
                       type="text"
                       value={item.link_url ?? ''}
-                      onChange={(e) => {
-                        const newItems = [...state.programs];
-                        newItems[idx] = { ...newItems[idx], link_url: e.target.value };
-                        onChange('programs', newItems);
-                      }}
+                      onChange={(e) => patchProgram(idx, { link_url: e.target.value })}
                       className="w-full bg-white border border-stone-200 rounded-lg p-2 text-xs"
-                      placeholder="/programs#social-welfare · #health · #development · #finance-administration"
+                      placeholder="/programs#social-welfare"
                     />
                   </div>
                 </div>
               </li>
             ))}
           </ul>
-          <Button
-            variant="secondary"
-            className="w-full"
-            type="button"
-            onClick={() => setShowMediaPicker('add_program')}
-          >
-            Add program
-          </Button>
-          {showMediaPicker === 'add_program' && (
-            <MediaPicker
-              isOpen
-              onClose={() => setShowMediaPicker(null)}
-              onSelect={(m: any) => {
-                const newItems = [
-                  ...(state.programs || []),
-                  {
-                    title: 'New program',
-                    description: '',
-                    icon: 'fa-seedling',
-                    image_url: m.url,
-                    link_url: '/programs#development',
-                  },
-                ];
-                onChange('programs', newItems);
-                setShowMediaPicker(null);
-              }}
-            />
-          )}
         </div>
       );
+    }
     case 'map_section':
       return (
         <div className="space-y-6">
