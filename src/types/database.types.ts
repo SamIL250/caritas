@@ -219,6 +219,7 @@ export interface Database {
           size_bytes: number | null
           mime_type: string | null
           alt_text: string | null
+          caption: string | null
           uploaded_by: string | null
           folder_id: string | null
           deleted_at: string | null
@@ -233,6 +234,7 @@ export interface Database {
           size_bytes?: number | null
           mime_type?: string | null
           alt_text?: string | null
+          caption?: string | null
           uploaded_by?: string | null
           folder_id?: string | null
           deleted_at?: string | null
@@ -247,6 +249,7 @@ export interface Database {
           size_bytes?: number | null
           mime_type?: string | null
           alt_text?: string | null
+          caption?: string | null
           uploaded_by?: string | null
           folder_id?: string | null
           deleted_at?: string | null

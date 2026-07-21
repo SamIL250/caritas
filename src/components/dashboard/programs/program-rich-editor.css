@@ -78,3 +78,25 @@
   padding: 0.12em 0.4em;
   border-radius: 0.3rem;
 }
+
+.program-rich-editor .tiptap.ProseMirror .rich-text-figure {
+  margin: 0.85rem 0;
+}
+
+.program-rich-editor .tiptap.ProseMirror .rich-text-figure img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.85rem;
+  margin: 0;
+}
+
+.program-rich-editor .tiptap.ProseMirror .rich-text-figure figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: rgb(107 114 128);
+  text-align: center;
+}

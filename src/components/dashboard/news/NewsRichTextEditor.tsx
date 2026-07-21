@@ -3,7 +3,6 @@
 import React, { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
@@ -24,10 +23,13 @@ import {
   Undo2,
   Redo2,
   Video,
+  Captions,
 } from "lucide-react";
-import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { MediaPicker, type PickedMediaItem } from "@/components/dashboard/MediaPicker";
 import { enrichRichTextMediaEmbeds, parseMediaEmbedUrl } from "@/lib/rich-text-media-embed";
+import { enrichRichTextFigures } from "@/lib/rich-text-figure";
 import { RichTextMediaEmbed } from "./RichTextMediaEmbedExtension";
+import { RichTextFigure } from "./RichTextFigureExtension";
 
 import "./news-rich-editor.css";
 
@@ -35,15 +37,17 @@ export type NewsRichTextEditorHandle = {
   getHTML: () => string;
 };
 
-type MediaItem = { id: string; url: string; filename: string };
-
 type Props = {
   initialHtml: string | null | undefined;
 };
 
-function pickMediaUrl(m: MediaItem | MediaItem[]): string {
-  if (Array.isArray(m)) return m[0]?.url ?? "";
-  return m.url;
+function pickMediaItem(m: PickedMediaItem | PickedMediaItem[]): PickedMediaItem | null {
+  if (Array.isArray(m)) return m[0] ?? null;
+  return m;
+}
+
+function prepareEditorHtml(html: string): string {
+  return enrichRichTextFigures(enrichRichTextMediaEmbeds(html));
 }
 
 export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
@@ -53,7 +57,7 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
     const starterContent = useMemo(() => {
       const raw = (initialHtml ?? "").trim();
       if (!raw) return "<p></p>";
-      return enrichRichTextMediaEmbeds(raw);
+      return prepareEditorHtml(raw);
     }, [initialHtml]);
 
     const editor = useEditor({
@@ -74,12 +78,8 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
             class: "news-rich-link",
           },
         }),
-        Image.configure({
-          inline: false,
-          allowBase64: false,
-          HTMLAttributes: {
-            class: "news-rich-inline-img",
-          },
+        RichTextFigure.configure({
+          imageClass: "news-rich-inline-img",
         }),
         RichTextMediaEmbed,
       ],
@@ -101,17 +101,40 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
             !html ||
             html.replace(/\s/g, "") === "<p></p>" ||
             html.replace(/\s/g, "") === "<p><br></p>";
-          return emptyish ? "" : enrichRichTextMediaEmbeds(html);
+          return emptyish ? "" : prepareEditorHtml(html);
         },
       }),
       [editor],
     );
 
-    const onInsertImage = (m: MediaItem | MediaItem[]) => {
-      const src = pickMediaUrl(m);
-      if (!src || !editor) return;
-      editor.chain().focus().setImage({ src, alt: "" }).run();
+    const onInsertImage = (m: PickedMediaItem | PickedMediaItem[]) => {
+      const item = pickMediaItem(m);
+      const caption = item?.caption?.trim() ?? "";
+      if (!item?.url || !caption || !editor) return;
+      editor
+        .chain()
+        .focus()
+        .setRichTextFigure({
+          src: item.url,
+          alt: caption,
+          caption,
+          imageClass: "news-rich-inline-img",
+        })
+        .run();
       setPickerOpen(false);
+    };
+
+    const editFigureCaption = () => {
+      if (!editor || !editor.isActive("richTextFigure")) return;
+      const current = String(editor.getAttributes("richTextFigure").caption ?? "");
+      const next = window.prompt("Image caption", current);
+      if (next === null) return;
+      const trimmed = next.trim();
+      if (!trimmed) {
+        window.alert("Caption is required.");
+        return;
+      }
+      editor.chain().focus().updateRichTextFigureCaption(trimmed).run();
     };
 
     const setLink = () => {
@@ -233,6 +256,13 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
             label="Remove link"
             icon={<Unlink size={16} />}
             disabled={!editor.isActive("link")}
+          />
+          <ToolbarIcon
+            active={editor.isActive("richTextFigure")}
+            onClick={editFigureCaption}
+            label="Edit image caption"
+            icon={<Captions size={16} />}
+            disabled={!editor.isActive("richTextFigure")}
           />
           <ToolbarIcon
             active={false}

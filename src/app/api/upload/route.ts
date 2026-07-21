@@ -27,6 +27,13 @@ export async function POST(request: NextRequest) {
       typeof folderRaw === "string" && folderRaw.length > 0 ? folderRaw : null;
 
     const isImage = file.type.startsWith("image/");
+    const captionRaw = formData.get("caption");
+    const caption =
+      typeof captionRaw === "string" && captionRaw.trim().length > 0 ? captionRaw.trim() : null;
+    if (isImage && !caption) {
+      return NextResponse.json({ error: "Image caption is required." }, { status: 400 });
+    }
+
     let url: string;
     let storage_path: string;
 
@@ -65,6 +72,8 @@ export async function POST(request: NextRequest) {
       url,
       size_bytes: file.size,
       mime_type: file.type,
+      caption,
+      alt_text: caption,
       uploaded_by: user.id,
       folder_id,
       deleted_at: null as string | null,

@@ -8253,6 +8253,44 @@
             padding: 0;
         }
 
+        .donation-campaign-prose .rich-text-figure,
+        .campaign-full-story-html .rich-text-figure,
+        .pub-article-story .rich-text-figure,
+        .event-detail__prose .rich-text-figure {
+            margin: 1.15rem 0;
+        }
+
+        .donation-campaign-prose .rich-text-figure img,
+        .campaign-full-story-html .rich-text-figure img,
+        .pub-article-story .rich-text-figure img,
+        .event-detail__prose .rich-text-figure img {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            margin: 0;
+        }
+
+        .donation-campaign-prose .rich-text-figure figcaption,
+        .campaign-full-story-html .rich-text-figure figcaption,
+        .pub-article-story .rich-text-figure figcaption,
+        .event-detail__prose .rich-text-figure figcaption {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.55;
+            font-style: italic;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .donation-campaign-prose .rich-text-figure figcaption:empty,
+        .campaign-full-story-html .rich-text-figure figcaption:empty,
+        .pub-article-story .rich-text-figure figcaption:empty,
+        .event-detail__prose .rich-text-figure figcaption:empty {
+            display: none;
+        }
+
         .donation-campaign-meta {
             list-style: none;
             padding: 0;

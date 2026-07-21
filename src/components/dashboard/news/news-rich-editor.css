@@ -87,3 +87,25 @@
   aspect-ratio: 16 / 9;
   border: 0;
 }
+
+.news-rich-editor .tiptap.ProseMirror .rich-text-figure {
+  margin: 0.85rem 0;
+}
+
+.news-rich-editor .tiptap.ProseMirror .rich-text-figure img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 0;
+}
+
+.news-rich-editor .tiptap.ProseMirror .rich-text-figure figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: rgb(87 83 78);
+  text-align: center;
+}

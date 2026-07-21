@@ -3,7 +3,6 @@
 import React, { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
@@ -24,8 +23,11 @@ import {
   Paperclip,
   Undo2,
   Redo2,
+  Captions,
 } from "lucide-react";
-import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { MediaPicker, type PickedMediaItem } from "@/components/dashboard/MediaPicker";
+import { enrichRichTextFigures } from "@/lib/rich-text-figure";
+import { RichTextFigure } from "@/components/dashboard/news/RichTextFigureExtension";
 
 import "./program-rich-editor.css";
 
@@ -33,19 +35,19 @@ export type ProgramRichTextEditorHandle = {
   getHTML: () => string;
 };
 
-type MediaItem = { id: string; url: string; filename: string };
-
 type Props = {
   initialHtml: string | null | undefined;
   placeholder?: string;
 };
 
-function pickMediaUrl(m: MediaItem | MediaItem[]): { url: string; filename: string } {
-  if (Array.isArray(m)) {
-    const first = m[0];
-    return { url: first?.url ?? "", filename: first?.filename ?? "" };
-  }
-  return { url: m.url, filename: m.filename };
+function pickMediaItem(m: PickedMediaItem | PickedMediaItem[]): PickedMediaItem | null {
+  if (Array.isArray(m)) return m[0] ?? null;
+  return m;
+}
+
+function pickMediaUrl(m: PickedMediaItem | PickedMediaItem[]): { url: string; filename: string } {
+  const item = pickMediaItem(m);
+  return { url: item?.url ?? "", filename: item?.filename ?? "" };
 }
 
 export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Props>(
@@ -56,7 +58,7 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
     const starterContent = useMemo(() => {
       const raw = (initialHtml ?? "").trim();
       if (!raw) return "<p></p>";
-      return raw;
+      return enrichRichTextFigures(raw);
     }, [initialHtml]);
 
     const editor = useEditor({
@@ -79,12 +81,8 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
             target: "_blank",
           },
         }),
-        Image.configure({
-          inline: false,
-          allowBase64: false,
-          HTMLAttributes: {
-            class: "program-rich-inline-img",
-          },
+        RichTextFigure.configure({
+          imageClass: "program-rich-inline-img",
         }),
       ],
       content: starterContent,
@@ -104,20 +102,30 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
             !html ||
             html.replace(/\s/g, "") === "<p></p>" ||
             html.replace(/\s/g, "") === "<p><br></p>";
-          return emptyish ? "" : html;
+          return emptyish ? "" : enrichRichTextFigures(html);
         },
       }),
       [editor],
     );
 
-    const onInsertImage = (m: MediaItem | MediaItem[]) => {
-      const { url } = pickMediaUrl(m);
-      if (!url || !editor) return;
-      editor.chain().focus().setImage({ src: url, alt: "" }).run();
+    const onInsertImage = (m: PickedMediaItem | PickedMediaItem[]) => {
+      const item = pickMediaItem(m);
+      const caption = item?.caption?.trim() ?? "";
+      if (!item?.url || !caption || !editor) return;
+      editor
+        .chain()
+        .focus()
+        .setRichTextFigure({
+          src: item.url,
+          alt: caption,
+          caption,
+          imageClass: "program-rich-inline-img",
+        })
+        .run();
       setImagePickerOpen(false);
     };
 
-    const onInsertFile = (m: MediaItem | MediaItem[]) => {
+    const onInsertFile = (m: PickedMediaItem | PickedMediaItem[]) => {
       const { url, filename } = pickMediaUrl(m);
       if (!url || !editor) return;
       const labelBase = (filename || url.split("/").pop() || "Download file").replace(
@@ -162,6 +170,19 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
         return;
       }
       editor.chain().focus().extendMarkRange("link").setLink({ href: t }).run();
+    };
+
+    const editFigureCaption = () => {
+      if (!editor || !editor.isActive("richTextFigure")) return;
+      const current = String(editor.getAttributes("richTextFigure").caption ?? "");
+      const next = window.prompt("Image caption", current);
+      if (next === null) return;
+      const trimmed = next.trim();
+      if (!trimmed) {
+        window.alert("Caption is required.");
+        return;
+      }
+      editor.chain().focus().updateRichTextFigureCaption(trimmed).run();
     };
 
     if (!editor) {
@@ -253,6 +274,13 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
             label="Remove link"
             icon={<Unlink size={16} />}
             disabled={!editor.isActive("link")}
+          />
+          <ToolbarIcon
+            active={editor.isActive("richTextFigure")}
+            onClick={editFigureCaption}
+            label="Edit image caption"
+            icon={<Captions size={16} />}
+            disabled={!editor.isActive("richTextFigure")}
           />
           <ToolbarIcon
             active={false}

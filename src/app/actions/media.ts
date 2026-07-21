@@ -85,6 +85,13 @@ export async function uploadMedia(formData: FormData) {
   const folder_id =
     typeof folderRaw === "string" && folderRaw.length > 0 ? folderRaw : null;
 
+  const captionRaw = formData.get("caption");
+  const caption =
+    typeof captionRaw === "string" && captionRaw.trim().length > 0 ? captionRaw.trim() : null;
+  if (file.type.startsWith("image/") && !caption) {
+    throw new Error("Image caption is required.");
+  }
+
   const filename = file.name;
   const cloudResult = await uploadToCloudinary(file);
   const filePath = cloudResult.publicId;
@@ -101,6 +108,8 @@ export async function uploadMedia(formData: FormData) {
     url: publicUrl,
     size_bytes: actualSize,
     mime_type: file.type,
+    caption,
+    alt_text: caption,
     uploaded_by: user?.id ?? null,
     folder_id,
     deleted_at: null as string | null,
@@ -151,6 +160,20 @@ export async function renameMediaFile(mediaId: string, filename: string) {
   if (!trimmed) throw new Error("Filename is required.");
 
   const { error } = await supabase.from("media").update({ filename: trimmed }).eq("id", mediaId);
+
+  if (error) throw new Error(error.message);
+  revalidatePath("/dashboard/media");
+}
+
+export async function updateMediaCaption(mediaId: string, caption: string) {
+  const supabase = await createClient();
+  const trimmed = caption.trim();
+  if (!trimmed) throw new Error("Caption is required.");
+
+  const { error } = await supabase
+    .from("media")
+    .update({ caption: trimmed, alt_text: trimmed })
+    .eq("id", mediaId);
 
   if (error) throw new Error(error.message);
   revalidatePath("/dashboard/media");
@@ -214,6 +237,7 @@ export async function saveDirectUploadedMedia(data: {
   filename: string;
   mime_type: string;
   folder_id?: string | null;
+  caption?: string | null;
 }): Promise<MediaRow> {
   const supabase = await createClient();
 
@@ -221,12 +245,22 @@ export async function saveDirectUploadedMedia(data: {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const caption =
+    typeof data.caption === "string" && data.caption.trim().length > 0
+      ? data.caption.trim()
+      : null;
+  if (data.mime_type.startsWith("image/") && !caption) {
+    throw new Error("Image caption is required.");
+  }
+
   const row = {
     filename: data.filename,
     storage_path: data.storage_path,
     url: data.url,
     size_bytes: data.bytes,
     mime_type: data.mime_type,
+    caption,
+    alt_text: caption,
     uploaded_by: user?.id ?? null,
     folder_id: data.folder_id ?? null,
     deleted_at: null as string | null,

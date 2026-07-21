@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   DndContext,
   closestCorners,
@@ -26,6 +27,7 @@ import {
   Upload,
   Eraser,
   Pencil,
+  ChevronLeft,
 } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
 import { Button } from "@/components/ui/Button";
@@ -48,7 +50,9 @@ import {
   restoreMedia,
   softDeleteMedia,
   uploadMedia,
+  updateMediaCaption,
 } from "@/app/actions/media";
+import { MediaCaptionModal, type MediaCaptionDraft } from "@/components/dashboard/MediaCaptionModal";
 
 function dragFileId(id: string) {
   return `file:${id}`;
@@ -56,6 +60,102 @@ function dragFileId(id: string) {
 
 function dropFolderId(id: string | null) {
   return id === null ? "drop-folder:root" : `drop-folder:${id}`;
+}
+
+type MediaContextMenuState = {
+  kind: "file" | "folder";
+  target: MediaRow | MediaFolderRow;
+  top: number;
+  left: number;
+};
+
+function clampMenuPosition(top: number, left: number, menuHeight = 240, menuWidth = 220) {
+  if (typeof window === "undefined") {
+    return { top, left };
+  }
+
+  let nextTop = top;
+  let nextLeft = left;
+
+  if (nextLeft + menuWidth > window.innerWidth - 12) {
+    nextLeft = window.innerWidth - menuWidth - 12;
+  }
+  if (nextLeft < 12) nextLeft = 12;
+
+  if (nextTop + menuHeight > window.innerHeight - 12) {
+    nextTop = Math.max(12, window.innerHeight - menuHeight - 12);
+  }
+  if (nextTop < 12) nextTop = 12;
+
+  return { top: nextTop, left: nextLeft };
+}
+
+function menuPositionFromButton(e: React.MouseEvent<HTMLElement>, menuHeight = 240) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const top =
+    spaceBelow >= menuHeight + 12
+      ? rect.bottom + 6
+      : Math.max(12, rect.top - menuHeight - 6);
+  return clampMenuPosition(top, rect.left, menuHeight);
+}
+
+function menuPositionFromPointer(e: React.MouseEvent) {
+  return clampMenuPosition(e.clientY, e.clientX);
+}
+
+const MEDIA_PAGE_SIZE = 20;
+
+function MediaPaginationBar({
+  page,
+  totalPages,
+  totalItems,
+  pageSize,
+  onPageChange,
+}: {
+  page: number;
+  totalPages: number;
+  totalItems: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalItems <= pageSize) return null;
+
+  const start = (page - 1) * pageSize + 1;
+  const end = Math.min(page * pageSize, totalItems);
+
+  return (
+    <div className="mt-6 flex flex-col gap-3 border-t border-stone-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-sm text-stone-500">
+        Showing {start}–{end} of {totalItems} files
+      </p>
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          variant="secondary"
+          className="h-9 gap-1 px-3"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+        >
+          <ChevronLeft size={16} aria-hidden />
+          Previous
+        </Button>
+        <span className="min-w-[7rem] text-center text-sm font-medium text-stone-600">
+          Page {page} of {totalPages}
+        </span>
+        <Button
+          type="button"
+          variant="secondary"
+          className="h-9 gap-1 px-3"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+        >
+          Next
+          <ChevronRight size={16} aria-hidden />
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 function DroppableFolderShell({
@@ -110,6 +210,7 @@ function DraggableFileCard({
   trashMode,
   disabledDrag,
   onCtx,
+  onOpenMenu,
   copiedId,
   onCopy,
 }: {
@@ -117,6 +218,7 @@ function DraggableFileCard({
   trashMode: boolean;
   disabledDrag?: boolean;
   onCtx: (e: React.MouseEvent, item: MediaRow) => void;
+  onOpenMenu: (e: React.MouseEvent<HTMLElement>, item: MediaRow) => void;
   copiedId: string | null;
   onCopy: () => void;
 }) {
@@ -156,7 +258,9 @@ function DraggableFileCard({
           <div className="flex h-full items-center justify-center gap-2">
             <button
               type="button"
+              onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 onCopy();
               }}
@@ -167,12 +271,15 @@ function DraggableFileCard({
             </button>
             <button
               type="button"
+              onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
-                onCtx(e, item);
+                onOpenMenu(e, item);
               }}
               className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-700 hover:text-[var(--color-primary)]"
-              title="More"
+              title="More options"
+              aria-haspopup="menu"
             >
               <MoreHorizontal size={18} />
             </button>
@@ -183,6 +290,11 @@ function DraggableFileCard({
         <p className="truncate text-xs font-bold text-stone-700" title={item.filename}>
           {item.filename}
         </p>
+        {item.mime_type?.startsWith("image/") ? (
+          <p className="mt-0.5 line-clamp-2 px-1 text-[10px] italic text-stone-500">
+            {item.caption?.trim() || "Caption needed"}
+          </p>
+        ) : null}
         <p className="mt-0.5 text-[10px] text-stone-400">
           {formatBytes(typeof item.size_bytes === "number" ? item.size_bytes : 0)}
         </p>
@@ -260,15 +372,7 @@ export default function MediaLibraryClient({
   const [trashMode, setTrashMode] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [ctxMenu, setCtxMenu] = useState<
-    | null
-    | {
-        x: number;
-        y: number;
-        kind: "file" | "folder";
-        target: MediaRow | MediaFolderRow;
-      }
-  >(null);
+  const [ctxMenu, setCtxMenu] = useState<MediaContextMenuState | null>(null);
 
   const [renameOpen, setRenameOpen] = useState(false);
   const [renameValue, setRenameValue] = useState("");
@@ -281,6 +385,10 @@ export default function MediaLibraryClient({
   const [confirmTrashFile, setConfirmTrashFile] = useState<MediaRow | null>(null);
   const [confirmPurgeFile, setConfirmPurgeFile] = useState<MediaRow | null>(null);
   const [confirmDeleteFolder, setConfirmDeleteFolder] = useState<MediaFolderRow | null>(null);
+  const [pendingImageUploads, setPendingImageUploads] = useState<File[]>([]);
+  const [pendingOtherUploads, setPendingOtherUploads] = useState<File[]>([]);
+  const [captionEditItem, setCaptionEditItem] = useState<MediaRow | null>(null);
+  const [page, setPage] = useState(1);
 
   const ctxMenuRef = useRef<HTMLDivElement | null>(null);
 
@@ -327,13 +435,27 @@ export default function MediaLibraryClient({
   }, [currentFolderId, trashMode]);
 
   useEffect(() => {
+    if (!ctxMenu) return;
+
     function closeCtx(e: MouseEvent) {
-      if (!ctxMenu) return;
       if (ctxMenuRef.current?.contains(e.target as Node)) return;
       setCtxMenu(null);
     }
-    window.addEventListener("click", closeCtx);
-    return () => window.removeEventListener("click", closeCtx);
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setCtxMenu(null);
+    }
+
+    const tid = window.setTimeout(() => {
+      document.addEventListener("mousedown", closeCtx);
+    }, 0);
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.clearTimeout(tid);
+      document.removeEventListener("mousedown", closeCtx);
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, [ctxMenu]);
 
   const childFolders = useMemo(() => {
@@ -347,22 +469,74 @@ export default function MediaLibraryClient({
     [currentFolderId, foldersFlat],
   );
 
+  const totalPages = Math.max(1, Math.ceil(items.length / MEDIA_PAGE_SIZE));
+
+  const paginatedItems = useMemo(() => {
+    const start = (page - 1) * MEDIA_PAGE_SIZE;
+    return items.slice(start, start + MEDIA_PAGE_SIZE);
+  }, [items, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [currentFolderId, trashMode]);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || []);
     e.target.value = "";
     if (files.length === 0) return;
-    
+
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const otherFiles = files.filter((file) => !file.type.startsWith("image/"));
+
+    if (imageFiles.length > 0) {
+      setPendingImageUploads(imageFiles);
+      setPendingOtherUploads(otherFiles);
+      return;
+    }
+
     setUploading(true);
     setError(null);
     try {
-      const uploadPromises = files.map(async (file) => {
-        const fd = new FormData();
-        fd.append("file", file);
-        if (currentFolderId) fd.append("folder_id", currentFolderId);
-        return await uploadMedia(fd);
-      });
-      
-      await Promise.all(uploadPromises);
+      await Promise.all(
+        otherFiles.map(async (file) => {
+          const fd = new FormData();
+          fd.append("file", file);
+          if (currentFolderId) fd.append("folder_id", currentFolderId);
+          return uploadMedia(fd);
+        }),
+      );
+      await reload();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function completeImageUpload(captionsByName: Record<string, string>) {
+    const imageFiles = pendingImageUploads;
+    const otherFiles = pendingOtherUploads;
+    setPendingImageUploads([]);
+    setPendingOtherUploads([]);
+
+    setUploading(true);
+    setError(null);
+    try {
+      await Promise.all(
+        [...imageFiles, ...otherFiles].map(async (file) => {
+          const fd = new FormData();
+          fd.append("file", file);
+          if (currentFolderId) fd.append("folder_id", currentFolderId);
+          if (file.type.startsWith("image/")) {
+            fd.append("caption", captionsByName[file.name] ?? "");
+          }
+          return uploadMedia(fd);
+        }),
+      );
       await reload();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Upload failed.");
@@ -393,12 +567,20 @@ export default function MediaLibraryClient({
   }
 
   function openCtxFile(e: React.MouseEvent, item: MediaRow) {
-    setCtxMenu({ x: e.clientX, y: e.clientY, kind: "file", target: item });
+    e.preventDefault();
+    const { top, left } = menuPositionFromPointer(e);
+    setCtxMenu({ kind: "file", target: item, top, left });
+  }
+
+  function openCtxFileMenu(e: React.MouseEvent<HTMLElement>, item: MediaRow) {
+    const { top, left } = menuPositionFromButton(e);
+    setCtxMenu({ kind: "file", target: item, top, left });
   }
 
   function openCtxFolder(e: React.MouseEvent, folder: MediaFolderRow) {
     e.preventDefault();
-    setCtxMenu({ x: e.clientX, y: e.clientY, kind: "folder", target: folder });
+    const { top, left } = menuPositionFromPointer(e);
+    setCtxMenu({ kind: "folder", target: folder, top, left });
   }
 
   async function submitRename() {
@@ -525,8 +707,9 @@ export default function MediaLibraryClient({
                 <p className="text-sm font-semibold text-stone-700">Recycle bin is empty</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                {items.map((item) => (
+              <>
+                <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                  {paginatedItems.map((item) => (
                   <Card key={item.id} className="relative bg-white p-2">
                     <div className={`relative mb-3 overflow-hidden rounded-xl bg-stone-50 ${item.mime_type?.startsWith("image/") ? "aspect-square" : "aspect-[4/3]"}`}>
                       {item.mime_type?.startsWith("image/") ? (
@@ -570,8 +753,16 @@ export default function MediaLibraryClient({
                       </Button>
                     </div>
                   </Card>
-                ))}
-              </div>
+                  ))}
+                </div>
+                <MediaPaginationBar
+                  page={page}
+                  totalPages={totalPages}
+                  totalItems={items.length}
+                  pageSize={MEDIA_PAGE_SIZE}
+                  onPageChange={setPage}
+                />
+              </>
             )
           ) : (
             <>
@@ -602,8 +793,9 @@ export default function MediaLibraryClient({
                   <div className="mt-6 flex gap-3">{uploadTrigger}</div>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                  {items.map((item) => (
+                <>
+                  <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                    {paginatedItems.map((item) => (
                     <DraggableFileCard
                       key={item.id}
                       item={item}
@@ -615,9 +807,18 @@ export default function MediaLibraryClient({
                         window.setTimeout(() => setCopiedId(null), 2000);
                       }}
                       onCtx={openCtxFile}
+                      onOpenMenu={openCtxFileMenu}
                     />
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                  <MediaPaginationBar
+                    page={page}
+                    totalPages={totalPages}
+                    totalItems={items.length}
+                    pageSize={MEDIA_PAGE_SIZE}
+                    onPageChange={setPage}
+                  />
+                </>
               )}
             </>
           )}
@@ -631,97 +832,119 @@ export default function MediaLibraryClient({
         </span>
       </div>
 
-      {ctxMenu ? (
-        <div
-          ref={ctxMenuRef}
-          className="fixed z-[400] min-w-[200px] overflow-hidden rounded-xl border border-stone-100 bg-white py-1"
-          style={{
-            left: Math.min(ctxMenu.x, typeof window !== "undefined" ? window.innerWidth - 220 : ctxMenu.x),
-            top: Math.min(ctxMenu.y, typeof window !== "undefined" ? window.innerHeight - 240 : ctxMenu.y),
-          }}
-          role="menu"
-        >
-          {ctxMenu.kind === "folder" ? (
-            <>
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
-                onClick={() => {
-                  const f = ctxMenu.target as MediaFolderRow;
-                  setCurrentFolderId(f.id);
-                  setCtxMenu(null);
-                }}
-              >
-                <FolderIcon size={16} aria-hidden /> Open
-              </button>
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
-                onClick={() => {
-                  const f = ctxMenu.target as MediaFolderRow;
-                  renameKindRef.current = "folder";
-                  renameIdRef.current = f.id;
-                  setRenameValue(f.name);
-                  setRenameOpen(true);
-                  setCtxMenu(null);
-                }}
-              >
-                <Pencil size={16} aria-hidden /> Rename
-              </button>
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-700 hover:bg-red-50"
-                onClick={() => {
-                  setConfirmDeleteFolder(ctxMenu.target as MediaFolderRow);
-                  setCtxMenu(null);
-                }}
-              >
-                <Trash2 size={16} aria-hidden /> Delete folder
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
-                onClick={() => {
-                  const f = ctxMenu.target as MediaRow;
-                  void navigator.clipboard.writeText(f.url);
-                  setCopiedId(f.id);
-                  window.setTimeout(() => setCopiedId(null), 2000);
-                  setCtxMenu(null);
-                }}
-              >
-                <Copy size={16} aria-hidden /> Copy URL
-              </button>
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
-                onClick={() => {
-                  const f = ctxMenu.target as MediaRow;
-                  renameKindRef.current = "file";
-                  renameIdRef.current = f.id;
-                  setRenameValue(f.filename);
-                  setRenameOpen(true);
-                  setCtxMenu(null);
-                }}
-              >
-                <Pencil size={16} aria-hidden /> Rename
-              </button>
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-700 hover:bg-red-50"
-                onClick={() => {
-                  setConfirmTrashFile(ctxMenu.target as MediaRow);
-                  setCtxMenu(null);
-                }}
-              >
-                <Trash2 size={16} aria-hidden /> Move to recycle bin
-              </button>
-            </>
-          )}
-        </div>
-      ) : null}
+      {ctxMenu && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              ref={ctxMenuRef}
+              className="fixed z-[9999] min-w-[200px] overflow-hidden rounded-xl border border-stone-200 bg-white py-1 shadow-xl"
+              style={{ top: ctxMenu.top, left: ctxMenu.left }}
+              role="menu"
+            >
+              {ctxMenu.kind === "folder" ? (
+                <>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                    onClick={() => {
+                      const f = ctxMenu.target as MediaFolderRow;
+                      setCurrentFolderId(f.id);
+                      setCtxMenu(null);
+                    }}
+                  >
+                    <FolderIcon size={16} aria-hidden /> Open
+                  </button>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                    onClick={() => {
+                      const f = ctxMenu.target as MediaFolderRow;
+                      renameKindRef.current = "folder";
+                      renameIdRef.current = f.id;
+                      setRenameValue(f.name);
+                      setRenameOpen(true);
+                      setCtxMenu(null);
+                    }}
+                  >
+                    <Pencil size={16} aria-hidden /> Rename
+                  </button>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-700 hover:bg-red-50"
+                    onClick={() => {
+                      setConfirmDeleteFolder(ctxMenu.target as MediaFolderRow);
+                      setCtxMenu(null);
+                    }}
+                  >
+                    <Trash2 size={16} aria-hidden /> Delete folder
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                    onClick={() => {
+                      const f = ctxMenu.target as MediaRow;
+                      void navigator.clipboard.writeText(f.url);
+                      setCopiedId(f.id);
+                      window.setTimeout(() => setCopiedId(null), 2000);
+                      setCtxMenu(null);
+                    }}
+                  >
+                    <Copy size={16} aria-hidden /> Copy URL
+                  </button>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                    onClick={() => {
+                      const f = ctxMenu.target as MediaRow;
+                      if (f.mime_type?.startsWith("image/")) {
+                        setCaptionEditItem(f);
+                        setCtxMenu(null);
+                        return;
+                      }
+                      renameKindRef.current = "file";
+                      renameIdRef.current = f.id;
+                      setRenameValue(f.filename);
+                      setRenameOpen(true);
+                      setCtxMenu(null);
+                    }}
+                  >
+                    <Pencil size={16} aria-hidden />{" "}
+                    {(ctxMenu.target as MediaRow).mime_type?.startsWith("image/") ? "Edit caption" : "Rename"}
+                  </button>
+                  {(ctxMenu.target as MediaRow).mime_type?.startsWith("image/") ? (
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                      onClick={() => {
+                        const f = ctxMenu.target as MediaRow;
+                        renameKindRef.current = "file";
+                        renameIdRef.current = f.id;
+                        setRenameValue(f.filename);
+                        setRenameOpen(true);
+                        setCtxMenu(null);
+                      }}
+                    >
+                      <Pencil size={16} aria-hidden /> Rename file
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-700 hover:bg-red-50"
+                    onClick={() => {
+                      setConfirmTrashFile(ctxMenu.target as MediaRow);
+                      setCtxMenu(null);
+                    }}
+                  >
+                    <Trash2 size={16} aria-hidden /> Move to recycle bin
+                  </button>
+                </>
+              )}
+            </div>,
+            document.body,
+          )
+        : null}
 
       <Modal isOpen={renameOpen} onClose={() => setRenameOpen(false)} title="Rename">
         <div className="space-y-4">
@@ -813,6 +1036,60 @@ export default function MediaLibraryClient({
         title="Delete folder?"
         description="The folder must be empty (no files, no subfolders). This cannot be undone."
         confirmLabel="Delete folder"
+      />
+
+      <MediaCaptionModal
+        open={pendingImageUploads.length > 0}
+        title="Add image captions"
+        description="Every image needs a caption before it is saved to the library."
+        items={pendingImageUploads.map((file) => ({
+          key: file.name,
+          label: file.name,
+          previewUrl: URL.createObjectURL(file),
+          caption: "",
+        }))}
+        onCancel={() => {
+          setPendingImageUploads([]);
+          setPendingOtherUploads([]);
+        }}
+        onConfirm={(captionsByKey) => void completeImageUpload(captionsByKey)}
+      />
+
+      <MediaCaptionModal
+        open={captionEditItem !== null}
+        title="Edit image caption"
+        description="This caption appears below the image in news, articles, and testimonies."
+        items={
+          captionEditItem
+            ? [
+                {
+                  key: captionEditItem.id,
+                  label: captionEditItem.filename,
+                  previewUrl: cloudinaryUrl(captionEditItem.url, {
+                    width: 160,
+                    height: 160,
+                    crop: "fill",
+                    quality: "auto",
+                    format: "auto",
+                  }),
+                  caption: captionEditItem.caption?.trim() ?? "",
+                },
+              ]
+            : []
+        }
+        onCancel={() => setCaptionEditItem(null)}
+        onConfirm={(captionsByKey) => {
+          if (!captionEditItem) return;
+          void updateMediaCaption(captionEditItem.id, captionsByKey[captionEditItem.id] ?? "")
+            .then(async () => {
+              setCaptionEditItem(null);
+              await reload();
+            })
+            .catch((e: unknown) => {
+              setError(e instanceof Error ? e.message : "Could not save caption.");
+              setCaptionEditItem(null);
+            });
+        }}
       />
     </div>
   );
