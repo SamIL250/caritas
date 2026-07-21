@@ -915,6 +915,54 @@ export interface Database {
         }
         Relationships: []
       }
+      testimonies: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          excerpt: string
+          body: string
+          cover_image_url: string
+          cover_image_alt: string
+          status: "draft" | "published"
+          published_at: string | null
+          sort_order: number
+          created_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug: string
+          excerpt?: string
+          body?: string
+          cover_image_url?: string
+          cover_image_alt?: string
+          status?: "draft" | "published"
+          published_at?: string | null
+          sort_order?: number
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          excerpt?: string
+          body?: string
+          cover_image_url?: string
+          cover_image_alt?: string
+          status?: "draft" | "published"
+          published_at?: string | null
+          sort_order?: number
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       publication_categories: {
         Row: {
           id: string
@@ -1500,6 +1548,7 @@ export interface Database {
         | 'social'
       news_article_status: 'draft' | 'published'
       publication_status: 'draft' | 'published'
+      testimony_status: 'draft' | 'published'
       publication_category_kind: 'pdf' | 'story' | 'external' | 'hybrid' | 'file'
       program_status: 'draft' | 'published'
       community_campaign_comment_status: 'pending' | 'approved' | 'rejected'

@@ -73,3 +73,17 @@
   padding: 0.12em 0.35em;
   border-radius: 0.25rem;
 }
+
+.news-rich-editor .tiptap.ProseMirror .rich-media-embed {
+  margin: 0.85rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: rgb(13 27 42);
+}
+
+.news-rich-editor .tiptap.ProseMirror .rich-media-embed iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}

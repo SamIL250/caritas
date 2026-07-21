@@ -3,6 +3,8 @@ import type {
   PublicationCategoryRow,
   PublicationRow,
 } from "@/lib/publications";
+import type { TestimonyRow } from "@/lib/testimonies";
+import { sortTestimonies } from "@/lib/testimonies";
 import type { Json } from "@/types/database.types";
 
 export type PublishedPublication = PublicationRow;
@@ -68,6 +70,16 @@ export async function fetchPublishedPublications(): Promise<PublishedPublication
   return (data ?? []) as PublishedPublication[];
 }
 
+/** All published testimonies for /publications (separate from publication categories). */
+export async function fetchPublishedTestimonies(): Promise<TestimonyRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("testimonies")
+    .select("*")
+    .eq("status", "published");
+  return sortTestimonies((data ?? []) as TestimonyRow[]);
+}
+
 /** All categories (system + custom) for filters / labels. */
 export async function fetchPublicationCategories(): Promise<PublicationCategoryRow[]> {
   const supabase = await createClient();
@@ -86,6 +98,7 @@ export async function resolvePublicationsPublicPagePayload(): Promise<{
   cmsSections: PublicationsCmsSection[];
   publications: PublishedPublication[];
   categories: PublicationCategoryRow[];
+  testimonies: TestimonyRow[];
 }> {
   const supabase = await createClient();
 
@@ -97,12 +110,13 @@ export async function resolvePublicationsPublicPagePayload(): Promise<{
 
   const page = pageRow as { id: string; meta: Json | null } | null;
 
-  const [heroRes, pubs, categories] = await Promise.all([
+  const [heroRes, pubs, categories, testimonies] = await Promise.all([
     page?.id
       ? supabase.from("hero_content").select("*").eq("page_id", page.id).maybeSingle()
       : Promise.resolve({ data: null }),
     fetchPublishedPublications(),
     fetchPublicationCategories(),
+    fetchPublishedTestimonies(),
   ]);
 
   const heroRow = (heroRes?.data ?? null) as Record<string, unknown> | null;
@@ -142,5 +156,6 @@ export async function resolvePublicationsPublicPagePayload(): Promise<{
     cmsSections,
     publications: pubs,
     categories,
+    testimonies,
   };
 }

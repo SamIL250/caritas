@@ -10,19 +10,24 @@ import {
   Lock,
   Plus,
   Settings2,
+  User,
 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { deletePublication } from "@/app/actions/publications";
+import { deleteTestimony } from "@/app/actions/testimonies";
 import {
   type PublicationCategoryRow,
   type PublicationRow,
 } from "@/lib/publications";
+import type { TestimonyRow } from "@/lib/testimonies";
 import { PublicationCategoryIcon } from "@/components/dashboard/publications/PublicationCategoryIcon";
 import { PublicationRowItem } from "@/components/dashboard/publications/PublicationRowItem";
+import { TestimonyRowItem } from "@/components/dashboard/publications/TestimonyRowItem";
 import { PublicationsCategoriesPanel } from "@/components/dashboard/publications/PublicationsCategoriesPanel";
 
 type Tab =
   | { key: "all"; label: string; kind: "all" }
+  | { key: "testimonies"; label: string; kind: "testimonies" }
   | { key: "settings"; label: string; kind: "settings" }
   | { key: string; label: string; kind: "category"; category: PublicationCategoryRow };
 
@@ -34,10 +39,12 @@ function tabFromSearch(raw: string | null): string {
 function PublicationsDashboardClient({
   items,
   categories,
+  testimonies,
   publicationsPageEditorHref,
 }: {
   items: PublicationRow[];
   categories: PublicationCategoryRow[];
+  testimonies: TestimonyRow[];
   publicationsPageEditorHref: string | null;
 }) {
   const router = useRouter();
@@ -45,6 +52,7 @@ function PublicationsDashboardClient({
   const tabKey = tabFromSearch(searchParams.get("tab"));
 
   const [delId, setDelId] = useState<string | null>(null);
+  const [delTestimonyId, setDelTestimonyId] = useState<string | null>(null);
   const [deletingPending, startDeleting] = useTransition();
   const [showLockedOnly, setShowLockedOnly] = useState(false);
 
@@ -61,6 +69,7 @@ function PublicationsDashboardClient({
     sortedCategories.forEach((c) =>
       all.push({ key: c.slug, label: c.plural_label || c.label, kind: "category", category: c }),
     );
+    all.push({ key: "testimonies", label: "Testimonies", kind: "testimonies" });
     all.push({ key: "settings", label: "Categories", kind: "settings" });
     return all;
   }, [sortedCategories]);
@@ -105,9 +114,18 @@ function PublicationsDashboardClient({
     });
   }
 
+  function handleDeleteTestimony(id: string) {
+    startDeleting(async () => {
+      const r = await deleteTestimony(id);
+      setDelTestimonyId(null);
+      if (!r.error) router.refresh();
+    });
+  }
+
   const activeTab = tabs.find((t) => t.key === tabKey) ?? tabs[0];
   const activeCategory =
     activeTab.kind === "category" ? activeTab.category : null;
+  const isTestimoniesTab = activeTab.kind === "testimonies";
 
   const filteredItems = (activeCategory
     ? items.filter((r) => r.category === activeCategory.slug)
@@ -118,9 +136,15 @@ function PublicationsDashboardClient({
     ? `/dashboard/publications/new?category=${encodeURIComponent(activeCategory.slug)}`
     : "/dashboard/publications/new";
 
-  const newCtaLabel = activeCategory
-    ? `New ${activeCategory.label.toLowerCase()}`
-    : "New publication";
+  const newCtaLabel = isTestimoniesTab
+    ? "New testimony"
+    : activeCategory
+      ? `New ${activeCategory.label.toLowerCase()}`
+      : "New publication";
+
+  const newItemHref = isTestimoniesTab
+    ? "/dashboard/publications/testimonies/new"
+    : newPublicationHref;
 
   return (
     <div className="space-y-10">
@@ -181,7 +205,7 @@ function PublicationsDashboardClient({
               ) : null}
               {activeTab.kind !== "settings" ? (
                 <Link
-                  href={newPublicationHref}
+                  href={newItemHref}
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#7A1515] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#651212]"
                 >
                   <Plus className="size-5" strokeWidth={2.25} aria-hidden />
@@ -209,13 +233,15 @@ function PublicationsDashboardClient({
           <div className="flex min-w-max flex-wrap gap-1 border-b border-stone-200 px-1 pb-px">
             {tabs.map((t) => {
               const active = t.key === activeTab.key;
-              const showBadge = t.kind === "category" || t.kind === "all";
+              const showBadge = t.kind === "category" || t.kind === "all" || t.kind === "testimonies";
               const badgeCount =
                 t.kind === "all"
                   ? counts.total
-                  : t.kind === "category"
-                    ? counts.byCategory[t.category.slug] ?? 0
-                    : 0;
+                  : t.kind === "testimonies"
+                    ? testimonies.length
+                    : t.kind === "category"
+                      ? counts.byCategory[t.category.slug] ?? 0
+                      : 0;
               return (
                 <button
                   key={t.key}
@@ -228,6 +254,7 @@ function PublicationsDashboardClient({
                   }`}
                 >
                   {t.kind === "settings" ? <Settings2 className="size-3.5" aria-hidden /> : null}
+                  {t.kind === "testimonies" ? <User className="size-3.5" aria-hidden /> : null}
                   {t.kind === "category" ? (
                     <PublicationCategoryIcon
                       icon={t.category.icon}
@@ -252,7 +279,7 @@ function PublicationsDashboardClient({
           </div>
         </div>
 
-        {counts.locked > 0 ? (
+        {counts.locked > 0 && !isTestimoniesTab ? (
           <button
             type="button"
             onClick={() => setShowLockedOnly((v) => !v)}
@@ -270,6 +297,11 @@ function PublicationsDashboardClient({
 
       {activeTab.kind === "settings" ? (
         <PublicationsCategoriesPanel categories={sortedCategories} />
+      ) : isTestimoniesTab ? (
+        <TestimoniesListPanel
+          items={testimonies}
+          onDelete={(id) => setDelTestimonyId(id)}
+        />
       ) : (
         <PublicationsListPanel
           activeCategory={activeCategory}
@@ -292,6 +324,68 @@ function PublicationsDashboardClient({
           if (delId) handleDelete(delId);
         }}
       />
+
+      <ConfirmDialog
+        isOpen={delTestimonyId !== null}
+        title="Delete testimony?"
+        description="This removes the testimony from the Publications page. Media files stay in the Media Library unless removed separately."
+        confirmLabel={deletingPending ? "Deleting…" : "Delete"}
+        onClose={() => setDelTestimonyId(null)}
+        onConfirm={() => {
+          if (delTestimonyId) handleDeleteTestimony(delTestimonyId);
+        }}
+      />
+    </div>
+  );
+}
+
+function TestimoniesListPanel({
+  items,
+  onDelete,
+}: {
+  items: TestimonyRow[];
+  onDelete: (id: string) => void;
+}) {
+  if (items.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <div className="mx-auto flex max-w-md flex-col items-center">
+          <div className="mb-6 flex size-24 items-center justify-center rounded-full bg-stone-100">
+            <User className="size-10 text-[#7A1515]/45" strokeWidth={1.25} aria-hidden />
+          </div>
+          <h3 className="text-lg font-semibold text-stone-900">No testimonies yet</h3>
+          <p className="mt-2 max-w-sm text-sm leading-relaxed text-stone-500">
+            Testimonies appear under the Publications page in their own tab — separate from publication categories.
+          </p>
+          <Link
+            href="/dashboard/publications/testimonies/new"
+            className="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#7A1515] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#651212]"
+          >
+            <Plus className="size-5" aria-hidden /> New testimony
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
+        <div>
+          <h3 className="text-sm font-bold text-stone-900">Testimonies</h3>
+          <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
+            Inspirational stories with rich text detail pages at /publications/testimonies/[slug].
+          </p>
+        </div>
+        <p className="text-xs tabular-nums text-stone-400">
+          {items.length} {items.length === 1 ? "item" : "items"}
+        </p>
+      </div>
+      <div className="flex flex-col gap-3">
+        {items.map((row) => (
+          <TestimonyRowItem key={row.id} row={row} onDelete={onDelete} />
+        ))}
+      </div>
     </div>
   );
 }

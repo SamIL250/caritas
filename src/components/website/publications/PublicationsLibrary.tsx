@@ -11,6 +11,8 @@ import {
   publicationPrimaryHref,
   readCategoryBehavior,
 } from "@/lib/publications";
+import { TESTIMONIES_SECTION_ANCHOR, type TestimonyRow } from "@/lib/testimonies";
+import { TestimoniesSection } from "./TestimoniesSection";
 import { PublicationLockModal } from "./PublicationLockModal";
 import { ViewTracker } from "@/components/website/ViewTracker";
 
@@ -19,6 +21,7 @@ type FilterKey = "all" | string;
 type Props = {
   publications: PublicationRow[];
   categories: PublicationCategoryRow[];
+  testimonies?: TestimonyRow[];
 };
 
 function formatHeroDate(iso: string | null): string {
@@ -46,7 +49,7 @@ function gridClassForKind(kind: string, slug: string): string {
   return "pub-card-grid";
 }
 
-export default function PublicationsLibrary({ publications, categories }: Props) {
+export default function PublicationsLibrary({ publications, categories, testimonies = [] }: Props) {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [activePublication, setActivePublication] = useState<PublicationRow | null>(null);
   const [lockedPub, setLockedPub] = useState<PublicationRow | null>(null);
@@ -76,8 +79,20 @@ export default function PublicationsLibrary({ publications, categories }: Props)
     return strat.find((p) => p.featured) ?? strat[0] ?? null;
   }, [publications]);
 
-  const totalCount = publications.filter((p) => p.category !== "success_story").length;
+  const totalCount =
+    publications.filter((p) => p.category !== "success_story").length + testimonies.length;
   const showSection = (slug: string) => filter === "all" || filter === slug;
+  const showTestimonies = filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR;
+
+  useEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (hash === TESTIMONIES_SECTION_ANCHOR) {
+      setFilter(TESTIMONIES_SECTION_ANCHOR);
+      window.setTimeout(() => {
+        document.getElementById(TESTIMONIES_SECTION_ANCHOR)?.scrollIntoView({ behavior: "smooth" });
+      }, 120);
+    }
+  }, []);
 
   // Lock body scroll when drawer open
   useEffect(() => {
@@ -146,11 +161,22 @@ export default function PublicationsLibrary({ publications, categories }: Props)
               <span className="pub-filter-count">{counts[c.slug] ?? 0}</span>
             </button>
           ))}
+
+          <button
+            type="button"
+            className={`pub-filter-btn${filter === TESTIMONIES_SECTION_ANCHOR ? " active" : ""}`}
+            onClick={() => setFilter(TESTIMONIES_SECTION_ANCHOR)}
+            aria-pressed={filter === TESTIMONIES_SECTION_ANCHOR}
+          >
+            <i className="fa-solid fa-user" aria-hidden />
+            Testimonies
+            <span className="pub-filter-count">{testimonies.length}</span>
+          </button>
         </div>
       </div>
 
       <main className="pub-main">
-          {strategicFeatured && strategicCat && showSection("strategic_plan") ? (
+          {filter !== TESTIMONIES_SECTION_ANCHOR && strategicFeatured && strategicCat && showSection("strategic_plan") ? (
             <section
               className="pub-section"
               id={readCategoryBehavior(strategicCat).site_anchor || "strategic"}
@@ -191,7 +217,8 @@ export default function PublicationsLibrary({ publications, categories }: Props)
             </section>
           ) : null}
 
-        {sortedCategories.map((cat) => {
+        {filter !== TESTIMONIES_SECTION_ANCHOR
+          ? sortedCategories.map((cat) => {
           const items = publications.filter((p) => p.category === cat.slug);
           const behavior = readCategoryBehavior(cat);
           const anchor = behavior.site_anchor || cat.slug.replace(/_/g, "-");
@@ -207,7 +234,10 @@ export default function PublicationsLibrary({ publications, categories }: Props)
               onLockedClick={setLockedPub}
             />
           );
-        }        )}
+        })
+          : null}
+
+        <TestimoniesSection testimonies={testimonies} visible={showTestimonies} />
       </main>
 
       <PublicationDrawer

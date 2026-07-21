@@ -57,6 +57,12 @@ export default function WebsiteHeader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  /** Light-background pages need solid nav links immediately (no hero behind the bar). */
+  const prefersSolidNav = Boolean(
+    pathname?.startsWith('/publications/testimonies/'),
+  );
+  const solidNav = scrolled || prefersSolidNav;
+
   const isActive = (path: string) => pathname === path;
 
   const toggleSub = (key: SubKey) => {
@@ -72,13 +78,13 @@ export default function WebsiteHeader() {
     }
   };
 
-  const headerClass = `site-header${scrolled ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}`;
-  const containerClass = scrolled ? 'navbar-container scrolled' : 'navbar-container';
+  const headerClass = `site-header${solidNav ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}`;
+  const containerClass = solidNav ? 'navbar-container scrolled' : 'navbar-container';
 
   return (
     <header className={headerClass}>
       <div className={containerClass}>
-        <Link href="/" className={scrolled ? 'logo show-scroll-logo' : 'logo'} onClick={() => { closeNav(); closeModal(); }}>
+        <Link href="/" className={solidNav ? 'logo show-scroll-logo' : 'logo'} onClick={() => { closeNav(); closeModal(); }}>
           <img src="/img/logo_caritas.webp" alt="Caritas Rwanda" className="logo-default" />
           <img src="/img/logo_bg.webp" alt="Caritas Rwanda" className="logo-scroll" />
         </Link>
@@ -271,6 +277,9 @@ export default function WebsiteHeader() {
                   </Link>
                   <Link href="/publications#policies" onClick={closeNav}>
                     <i className="fa-solid fa-file-lines"></i> Policies
+                  </Link>
+                  <Link href="/publications#testimonies" onClick={closeNav}>
+                    <i className="fa-solid fa-user"></i> Testimonies
                   </Link>
                   <div className="nav-dropdown-divider"></div>
                   <Link href="/publications#strategic" onClick={closeNav}>

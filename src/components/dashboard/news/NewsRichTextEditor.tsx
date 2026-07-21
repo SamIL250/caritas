@@ -23,8 +23,11 @@ import {
   Unlink,
   Undo2,
   Redo2,
+  Video,
 } from "lucide-react";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { enrichRichTextMediaEmbeds, parseMediaEmbedUrl } from "@/lib/rich-text-media-embed";
+import { RichTextMediaEmbed } from "./RichTextMediaEmbedExtension";
 
 import "./news-rich-editor.css";
 
@@ -50,7 +53,7 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
     const starterContent = useMemo(() => {
       const raw = (initialHtml ?? "").trim();
       if (!raw) return "<p></p>";
-      return raw;
+      return enrichRichTextMediaEmbeds(raw);
     }, [initialHtml]);
 
     const editor = useEditor({
@@ -78,6 +81,7 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
             class: "news-rich-inline-img",
           },
         }),
+        RichTextMediaEmbed,
       ],
       content: starterContent,
       editorProps: {
@@ -97,7 +101,7 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
             !html ||
             html.replace(/\s/g, "") === "<p></p>" ||
             html.replace(/\s/g, "") === "<p><br></p>";
-          return emptyish ? "" : html;
+          return emptyish ? "" : enrichRichTextMediaEmbeds(html);
         },
       }),
       [editor],
@@ -120,7 +124,24 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
         editor.chain().focus().extendMarkRange("link").unsetLink().run();
         return;
       }
+      const embed = parseMediaEmbedUrl(t);
+      if (embed) {
+        editor.chain().focus().setMediaEmbed(embed).run();
+        return;
+      }
       editor.chain().focus().extendMarkRange("link").setLink({ href: t }).run();
+    };
+
+    const insertMediaEmbed = () => {
+      if (!editor) return;
+      const url = window.prompt("YouTube or Vimeo URL");
+      if (url === null) return;
+      const info = parseMediaEmbedUrl(url.trim());
+      if (!info) {
+        window.alert("Paste a valid YouTube or Vimeo link.");
+        return;
+      }
+      editor.chain().focus().setMediaEmbed(info).run();
     };
 
     if (!editor) {
@@ -218,6 +239,12 @@ export const NewsRichTextEditor = forwardRef<NewsRichTextEditorHandle, Props>(
             onClick={() => setPickerOpen(true)}
             label="Insert image from library"
             icon={<ImageIcon size={16} />}
+          />
+          <ToolbarIcon
+            active={editor.isActive("mediaEmbed")}
+            onClick={insertMediaEmbed}
+            label="Embed video (YouTube or Vimeo)"
+            icon={<Video size={16} />}
           />
           <span className="mx-1 h-5 w-px bg-stone-200" aria-hidden />
           <ToolbarIcon

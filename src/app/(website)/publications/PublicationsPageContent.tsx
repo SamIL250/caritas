@@ -11,13 +11,17 @@ import type { PublicationsCmsSection, PublicationsPageChrome } from "./get-publi
 import PublicationsLandingHero from "@/components/website/publications/PublicationsLandingHero";
 import PublicationsLibrary from "@/components/website/publications/PublicationsLibrary";
 
+import type { TestimonyRow } from "@/lib/testimonies";
+
 import "./publications-page.css";
+import "./testimonies-page.css";
 
 type Props = {
   chrome: PublicationsPageChrome;
   cmsSections: PublicationsCmsSection[];
   publications: PublicationRow[];
   categories: PublicationCategoryRow[];
+  testimonies: TestimonyRow[];
 };
 
 export default function PublicationsPageContent({
@@ -25,6 +29,7 @@ export default function PublicationsPageContent({
   cmsSections,
   publications,
   categories,
+  testimonies,
 }: Props) {
   return (
     <div className="pub-page-root">
@@ -44,6 +49,7 @@ export default function PublicationsPageContent({
               key={section.id}
               publications={publications}
               categories={categories}
+              testimonies={testimonies}
             />
           );
         }

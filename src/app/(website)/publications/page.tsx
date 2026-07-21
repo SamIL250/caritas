@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PublicationsPage() {
-  const { chrome, cmsSections, publications, categories } =
+  const { chrome, cmsSections, publications, categories, testimonies } =
     await resolvePublicationsPublicPagePayload();
 
   return (
@@ -21,6 +21,7 @@ export default async function PublicationsPage() {
       cmsSections={cmsSections}
       publications={publications}
       categories={categories}
+      testimonies={testimonies}
     />
   );
 }
