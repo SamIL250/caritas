@@ -236,6 +236,18 @@ section.cr-home-about {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.cr-info-box--right .cr-info-values-text {
+  padding-left: 2.75rem;
+  padding-top: 1.25rem;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.cr-info-box--right .cr-info-values-text > div > span:first-child {
+  font-size: 12px;
+  line-height: 24px;
+}
+
 .cr-icon-overlap {
   position: absolute;
   z-index: 5;
