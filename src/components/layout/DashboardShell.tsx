@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sidebar } from "./Sidebar";
+import { FontAwesomeIconPickerFab } from "@/components/dashboard/FontAwesomeIconPickerFab";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -82,6 +83,7 @@ export function DashboardShell({ children, profile, initialPagesCount = 0 }: Das
           )}
         </main>
       </div>
+      <FontAwesomeIconPickerFab />
     </div>
   );
 }
