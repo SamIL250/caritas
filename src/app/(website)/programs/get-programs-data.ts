@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import type { Json } from "@/types/database.types";
 import type {
   ProgramCategoryRow,
@@ -61,10 +62,8 @@ export async function fetchPublishedPrograms(): Promise<ProgramRow[]> {
     .from("programs")
     .select("*")
     .eq("status", "published")
-    .order("featured", { ascending: false })
-    .order("sort_order", { ascending: true })
     .order("published_at", { ascending: false });
-  return (data ?? []) as ProgramRow[];
+  return sortByPublishedNewest((data ?? []) as ProgramRow[]);
 }
 
 export async function fetchProgramCategories(): Promise<ProgramCategoryRow[]> {
@@ -85,7 +84,7 @@ export async function fetchPublishedSuccessStories(): Promise<PublicationRow[]> 
     .eq("status", "published")
     .eq("category", "success_story")
     .order("published_at", { ascending: false });
-  return (data ?? []) as PublicationRow[];
+  return sortByPublishedNewest((data ?? []) as PublicationRow[]);
 }
 
 export async function fetchPublishedNews(): Promise<NewsArticleRow[]> {
@@ -95,7 +94,7 @@ export async function fetchPublishedNews(): Promise<NewsArticleRow[]> {
     .select("*")
     .eq("status", "published")
     .order("published_at", { ascending: false });
-  return (data ?? []) as NewsArticleRow[];
+  return sortByPublishedNewest((data ?? []) as NewsArticleRow[]);
 }
 
 export async function resolveProgramsPublicPagePayload(): Promise<{
@@ -179,8 +178,7 @@ export async function fetchRelatedPrograms(
     .eq("status", "published")
     .eq("category_id", categoryId)
     .neq("id", excludeId)
-    .order("featured", { ascending: false })
     .order("published_at", { ascending: false })
     .limit(limit);
-  return (data ?? []) as ProgramRow[];
+  return sortByPublishedNewest((data ?? []) as ProgramRow[]);
 }

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import type {
   PublicationCategoryRow,
   PublicationRow,
@@ -64,10 +65,9 @@ export async function fetchPublishedPublications(): Promise<PublishedPublication
     .from("publications")
     .select("*")
     .eq("status", "published")
-    .order("sort_order", { ascending: true })
     .order("published_at", { ascending: false });
 
-  return (data ?? []) as PublishedPublication[];
+  return sortByPublishedNewest((data ?? []) as PublishedPublication[]);
 }
 
 /** All published testimonies for /publications (separate from publication categories). */

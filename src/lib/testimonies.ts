@@ -1,3 +1,4 @@
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import { encodePublicationAssetUrl } from "@/lib/publications";
 
 export type TestimonyStatus = "draft" | "published";
@@ -28,15 +29,8 @@ export function encodeTestimonyAssetUrl(url: string): string {
   return encodePublicationAssetUrl(url);
 }
 
-export function sortTestimonies<T extends Pick<TestimonyRow, "sort_order" | "published_at" | "title">>(
+export function sortTestimonies<T extends Pick<TestimonyRow, "published_at" | "created_at" | "title">>(
   rows: T[],
 ): T[] {
-  return [...rows].sort((a, b) => {
-    const order = a.sort_order - b.sort_order;
-    if (order !== 0) return order;
-    const aTime = a.published_at ? new Date(a.published_at).getTime() : 0;
-    const bTime = b.published_at ? new Date(b.published_at).getTime() : 0;
-    if (bTime !== aTime) return bTime - aTime;
-    return a.title.localeCompare(b.title);
-  });
+  return sortByPublishedNewest(rows);
 }

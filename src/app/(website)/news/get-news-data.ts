@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import type { Database } from "@/types/database.types";
 import type { Json } from "@/types/database.types";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
@@ -104,11 +105,9 @@ export async function fetchPublishedArticles(): Promise<{
     `,
     )
     .eq("status", "published")
-    .order("featured", { ascending: false })
-    .order("sort_order", { ascending: true })
     .order("published_at", { ascending: false });
 
-  const list = (articles ?? []) as unknown as PublishedNewsArticle[];
+  const list = sortByPublishedNewest((articles ?? []) as unknown as PublishedNewsArticle[]);
   const featuredArticle = list.find((a) => a.featured) ?? null;
   const gridArticles = featuredArticle ? list.filter((a) => a.id !== featuredArticle.id) : list;
 
