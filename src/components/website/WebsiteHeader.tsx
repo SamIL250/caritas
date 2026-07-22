@@ -59,7 +59,8 @@ export default function WebsiteHeader() {
 
   /** Light-background pages need solid nav links immediately (no hero behind the bar). */
   const prefersSolidNav = Boolean(
-    pathname?.startsWith('/publications/testimonies/'),
+    pathname?.startsWith('/publications/testimonies/') ||
+      (pathname?.startsWith('/news/') && pathname !== '/news'),
   );
   const solidNav = scrolled || prefersSolidNav;
 
