@@ -64,6 +64,7 @@ function NewsDashboardClient({
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [featuredOnly, setFeaturedOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const departmentSlugById = useMemo(() => {
@@ -107,6 +108,9 @@ function NewsDashboardClient({
         (a) => effectiveNewsDepartmentSlug(a, departmentSlugById) === departmentFilter,
       );
     }
+    if (featuredOnly) {
+      list = list.filter((a) => a.featured);
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
       list = list.filter((a) =>
@@ -114,7 +118,7 @@ function NewsDashboardClient({
       );
     }
     return list;
-  }, [articles, statusFilter, categoryFilter, departmentFilter, departmentSlugById, searchQuery]);
+  }, [articles, statusFilter, categoryFilter, departmentFilter, featuredOnly, departmentSlugById, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / DASHBOARD_LIST_PAGE_SIZE));
   const paginated = useMemo(() => {
@@ -124,7 +128,7 @@ function NewsDashboardClient({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [statusFilter, categoryFilter, departmentFilter, searchQuery]);
+  }, [statusFilter, categoryFilter, departmentFilter, featuredOnly, searchQuery]);
 
   async function handleDelete(id: string) {
     const r = await deleteNewsArticle(id);
@@ -315,6 +319,24 @@ function NewsDashboardClient({
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setFeaturedOnly((v) => !v)}
+                aria-pressed={featuredOnly}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  featuredOnly
+                    ? "bg-amber-100 text-amber-900 ring-1 ring-amber-200"
+                    : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                }`}
+              >
+                <Star
+                  className={`size-3.5 ${featuredOnly ? "fill-amber-500 text-amber-500" : ""}`}
+                  aria-hidden
+                />
+                Featured
+              </button>
             </div>
             <p className="text-xs tabular-nums text-stone-400">
               {filtered.length} of {counts.total} {counts.total === 1 ? "item" : "items"}
