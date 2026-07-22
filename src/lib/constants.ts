@@ -270,7 +270,9 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     map_b_title: "Caritas Rwanda HQ",
     map_b_subtitle: "Kigali, Rwanda — get directions",
     map_b_embed_url:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.5112492331314!2d30.05660827473925!3d-1.9485541980337648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca425b5be2a55%3A0xcc6cf890e6ae864!2sCaritas%20Rwanda!5e0!3m2!1sen!2srw!4v1776832048548!5m2!1sen!2srw"
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.5112492331314!2d30.05660827473925!3d-1.9485541980337648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca425b5be2a55%3A0xcc6cf890e6ae864!2sCaritas%20Rwanda!5e0!3m2!1sen!2srw!4v1776832048548!5m2!1sen!2srw",
+    cta_label: "Send us a message",
+    cta_url: "/contact",
   },
   stats_banner: {
     layout: "strip",
@@ -607,12 +609,12 @@ export const SECTION_LABELS: Record<string, string> = {
   cta: "Call to Action",
   partners: "Partners Logos",
   news_cards: "News & Stories",
-  contact_info: "Contact & Map",
+  contact_info: "Contact form",
   gallery: "Image Gallery",
   divider: "Divider Line",
   program_cards: "Our Programs",
   home_about: "Home — About story",
-  map_section: "Our Location",
+  map_section: "Find Us",
   featured_campaign: "Featured campaign",
   stats_banner: "Our resources",
   featured_quote: "Featured quote (chairperson)",

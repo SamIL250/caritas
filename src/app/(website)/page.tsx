@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import HeroSection from "@/components/website/sections/HeroSection";
 import ProgramCards from "@/components/website/sections/ProgramCards";
 import AboutSection from "@/components/website/sections/AboutSection";
-import ContactWithMapSection from "@/components/website/sections/ContactWithMapSection";
+import OurLocationSection from "@/components/website/sections/OurLocationSection";
 import { renderWebsiteSectionWithFeatured } from "@/lib/public-page-sections-server";
 import { enrichCtaSectionsWithFeaturedCampaigns } from "@/lib/enrich-cta-featured-campaign";
 import type { PublicSectionRow } from "@/lib/public-page-sections";
@@ -26,6 +26,19 @@ export default async function LandingPage() {
   }
 
   const pageId = (page as { id: string }).id;
+
+  // Ensure home has a Find Us section in CMS (replaces legacy contact block)
+  const { data: homeMapCheck } = await supabase
+    .from("sections")
+    .select("id")
+    .eq("page_id", pageId)
+    .eq("type", "map_section")
+    .maybeSingle();
+
+  if (!homeMapCheck) {
+    const { ensureHomeFindUsSection } = await import("@/app/actions/init-contact-sections");
+    await ensureHomeFindUsSection(pageId);
+  }
 
   // 2. Fetch Hero
   const { data: hero } = await supabase
@@ -108,19 +121,14 @@ export default async function LandingPage() {
       {/* Default programs block only when no program_cards row exists in CMS */}
       {!hasProgramSection ? <ProgramCards key="fallback-program-cards" /> : null}
 
-      {/* All other CMS sections + contact block */}
+      {/* All other CMS sections + Find Us block */}
       {(() => {
-        const contactSections = enrichedSections?.filter(
-          (s: any) => s.type === 'contact_info' || s.type === 'map_section'
-        ) ?? [];
+        const mapRow = enrichedSections?.find((s: any) => s.type === "map_section");
         // Note: video_gallery is intentionally kept in otherSections so it renders
         // from DB via renderWebsiteSectionWithFeatured (VideoGallerySection)
         const otherSections = enrichedSections?.filter(
-          (s: any) => s.type !== 'contact_info' && s.type !== 'map_section'
+          (s: any) => s.type !== "contact_info" && s.type !== "map_section"
         ) ?? [];
-
-        const contactRow = contactSections.find((s: any) => s.type === 'contact_info');
-        const mapRow = contactSections.find((s: any) => s.type === 'map_section');
 
         // Extract video_gallery to pass its props to news_cards
         const videoGalleryRow = otherSections.find((s: any) => s.type === 'video_gallery');
@@ -173,25 +181,15 @@ export default async function LandingPage() {
           }
         }
 
-        // Keep contact_info and map_section props separate so map fields
-        // never overwrite contact text fields (eyebrow, heading_line1, etc.)
-        const contactProps =
-          contactRow?.content && typeof contactRow.content === 'object' && !Array.isArray(contactRow.content)
-            ? (contactRow.content as Record<string, unknown>)
-            : {};
         const mapProps =
-          mapRow?.content && typeof mapRow.content === 'object' && !Array.isArray(mapRow.content)
+          mapRow?.content && typeof mapRow.content === "object" && !Array.isArray(mapRow.content)
             ? (mapRow.content as Record<string, unknown>)
             : {};
-
-        const combinedProps = { ...contactProps, ...mapProps };
 
         return (
           <>
             {finalOtherSections.map(renderWebsiteSectionWithFeatured)}
-            {contactRow || mapRow ? (
-              <ContactWithMapSection {...combinedProps} />
-            ) : null}
+            <OurLocationSection {...mapProps} show_cta />
           </>
         );
       })()}

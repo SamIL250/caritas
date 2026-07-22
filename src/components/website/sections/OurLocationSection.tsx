@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const DEFAULTS = {
@@ -13,8 +14,13 @@ const DEFAULTS = {
   map_b_title: "Caritas Rwanda HQ",
   map_b_subtitle: "Kigali, Rwanda — get directions",
   map_b_embed_url:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.5112492331314!2d30.05660827473925!3d-1.9485541980337648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca425b5be2a55%3A0xcc6cf890e6ae864!2sCaritas%20Rwanda!5e0!3m2!1sen!2srw!4v1776832048548!5m2!1sen!2srw"
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.5112492331314!2d30.05660827473925!3d-1.9485541980337648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca425b5be2a55%3A0xcc6cf890e6ae864!2sCaritas%20Rwanda!5e0!3m2!1sen!2srw!4v1776832048548!5m2!1sen!2srw",
+  cta_label: "Send us a message",
+  cta_url: "/contact",
 };
+
+const DEFAULT_CTA_LABEL = "Send us a message";
+const DEFAULT_CTA_URL = "/contact";
 
 export type OurLocationSectionProps = {
   eyebrow?: string;
@@ -27,12 +33,19 @@ export type OurLocationSectionProps = {
   map_b_title?: string;
   map_b_subtitle?: string;
   map_b_embed_url?: string;
+  cta_label?: string;
+  cta_url?: string;
+  /** When true, renders the full-width CTA link below the map cards. */
+  show_cta?: boolean;
 };
 
 export default function OurLocationSection(props: OurLocationSectionProps) {
   const c = { ...DEFAULTS, ...props };
   const aUrl = (c.map_a_embed_url || DEFAULTS.map_a_embed_url).trim();
   const bUrl = (c.map_b_embed_url || DEFAULTS.map_b_embed_url).trim();
+  const showCta = props.show_cta === true;
+  const ctaLabel = (props.cta_label ?? c.cta_label ?? DEFAULT_CTA_LABEL).trim() || DEFAULT_CTA_LABEL;
+  const ctaUrl = (props.cta_url ?? c.cta_url ?? DEFAULT_CTA_URL).trim() || DEFAULT_CTA_URL;
 
   return (
     <section className="map-section" id="our-location" aria-labelledby="our-location-title">
@@ -90,6 +103,15 @@ export default function OurLocationSection(props: OurLocationSectionProps) {
           ) : null}
         </div>
       </div>
+
+      {showCta ? (
+        <div className="map-section-cta-wrap">
+          <Link href={ctaUrl} className="map-section-cta">
+            <i className="fa-solid fa-envelope" aria-hidden />
+            {ctaLabel}
+          </Link>
+        </div>
+      ) : null}
     </section>
   );
 }

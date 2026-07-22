@@ -748,7 +748,8 @@ export default function PageEditorClient({
       case 'gallery': return <Gallery {...props} />;
       case 'divider': return <Divider />;
       case 'program_cards': return <ProgramCards {...props} />;
-      case 'map_section': return <OurLocationSection {...props} />;
+      case 'map_section':
+        return <OurLocationSection {...props} show_cta={page.slug === 'home'} />;
       case 'stats_banner':
         return isAboutPage ? null : <StatsBannerSection {...props} />;
       case 'featured_quote':
@@ -2987,29 +2988,19 @@ function SectionForm({
       const FIELD_TYPES = ['text', 'email', 'tel', 'textarea', 'select'];
       return (
         <div className="space-y-6">
+          {pageSlug === 'home' ? (
+            <p className="text-[10px] text-amber-800 bg-amber-50 border border-amber-100 rounded-xl p-3 leading-relaxed">
+              This section is hidden on the homepage. Edit the <strong>Find Us</strong> section for the map block and contact button.
+            </p>
+          ) : null}
           <p className="text-[10px] text-stone-500 leading-relaxed">
-            Left column and intro copy. The form submits to your dashboard Contact inbox and sends confirmation emails via SMTP.
+            Intro copy appears above the form on the Contact page. Office details live in the site footer — they are not repeated here.
           </p>
           {renderField('Eyebrow', 'eyebrow', 'text')}
           {renderField('Heading (line 1)', 'heading_line1', 'text')}
           {renderField('Heading (line 2, accent)', 'heading_line2', 'text')}
           {renderField('Intro paragraph', 'subtext', 'textarea', { rows: 4 })}
-          <div className="grid grid-cols-2 gap-3">
-            {renderField('Headquarters label', 'headquarters_label', 'text')}
-            {renderField('Headquarters (location)', 'headquarters', 'text')}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {renderField('Phone label', 'phone_label', 'text')}
-            {renderField('Phone number', 'phone', 'text')}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {renderField('Email label', 'email_label', 'text')}
-            {renderField('Email address', 'email', 'text')}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {renderField('Office hours label', 'hours_label', 'text')}
-            {renderField('Office hours', 'office_hours', 'text')}
-          </div>
+          <hr className="border-stone-200" />
           <div className="grid grid-cols-2 gap-3">
             {renderField('Form title', 'form_title', 'text')}
             {renderField('Form subtitle', 'form_subtitle', 'text')}
@@ -3699,6 +3690,14 @@ function SectionForm({
     case 'map_section':
       return (
         <div className="space-y-6">
+          {pageSlug === 'contact' ? (
+            <p className="text-[10px] text-amber-800 bg-amber-50 border border-amber-100 rounded-xl p-3 leading-relaxed">
+              Find Us is shown on the homepage, not the contact page. Use the <strong>Contact form</strong> section for this page.
+            </p>
+          ) : null}
+          <p className="text-[10px] text-stone-500">
+            Find Us block with two Google Maps embeds. On the homepage, a full-width button appears below the maps linking to the Contact page.
+          </p>
           <p className="text-[10px] text-stone-500">
             Paste the full <code className="text-[#7A1515]">src</code> URL from each Google Maps embed (Share → Embed a map).
           </p>
@@ -3732,6 +3731,10 @@ function SectionForm({
               placeholder="https://www.google.com/maps/embed?..."
             />
           </div>
+          <hr className="border-stone-200" />
+          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Homepage button (below maps)</p>
+          {renderField('Button label', 'cta_label', 'text')}
+          {renderField('Button link', 'cta_url', 'text')}
         </div>
       );
     case 'gallery':

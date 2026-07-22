@@ -34,7 +34,54 @@ const DEFAULT_MAP_CONTENT = {
   map_b_subtitle: "Kigali, Rwanda — get directions",
   map_b_embed_url:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.5112492331314!2d30.05660827473925!3d-1.9485541980337648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca425b5be2a55%3A0xcc6cf890e6ae864!2sCaritas%20Rwanda!5e0!3m2!1sen!2srw!4v1776832048548!5m2!1sen!2srw",
+  cta_label: "Send us a message",
+  cta_url: "/contact",
 };
+
+/**
+ * Ensures the home page has a `map_section` row for the Find Us block.
+ */
+export async function ensureHomeFindUsSection(pageId: string) {
+  const supabase = createAdminClient();
+
+  const { data: existing } = await supabase
+    .from('sections')
+    .select('id, type')
+    .eq('page_id', pageId)
+    .in('type', ['map_section', 'contact_info']);
+
+  const hasMapSection = existing?.some((s) => s.type === 'map_section');
+  const contactInfoIds = existing?.filter((s) => s.type === 'contact_info').map((s) => s.id) ?? [];
+
+  if (!hasMapSection) {
+    const { data: maxOrderRow } = await supabase
+      .from('sections')
+      .select('order')
+      .eq('page_id', pageId)
+      .order('order', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const nextOrder = typeof maxOrderRow?.order === 'number' ? maxOrderRow.order + 10 : 100;
+
+    await supabase.from('sections').insert({
+      page_id: pageId,
+      type: 'map_section',
+      content: DEFAULT_MAP_CONTENT,
+      order: nextOrder,
+      visible: true,
+    });
+  }
+
+  if (contactInfoIds.length > 0) {
+    await supabase
+      .from('sections')
+      .update({ visible: false })
+      .in('id', contactInfoIds);
+  }
+
+  revalidatePath('/');
+}
 
 const DEFAULT_FAQ_CONTENT = {
   eyebrow: "FAQ",
@@ -64,11 +111,8 @@ const DEFAULT_FAQ_CONTENT = {
 };
 
 /**
- * Ensures that the contact page has both a `contact_info` and `map_section`
- * row in the `sections` table. If they don't exist, they are inserted with
- * sensible defaults so the dashboard can edit them immediately.
- *
- * This is safe to call on every render — it only inserts when rows are missing.
+ * Ensures that the contact page has a `contact_info` section (and FAQ).
+ * Safe to call on every render — only inserts when rows are missing.
  */
 export async function ensureContactPageSections(pageId: string) {
   const supabase = createAdminClient();
@@ -77,10 +121,9 @@ export async function ensureContactPageSections(pageId: string) {
     .from('sections')
     .select('id, type')
     .eq('page_id', pageId)
-    .in('type', ['contact_info', 'map_section', 'faq_section']);
+    .in('type', ['contact_info', 'faq_section']);
 
   const hasContactInfo = existing?.some((s) => s.type === 'contact_info');
-  const hasMapSection = existing?.some((s) => s.type === 'map_section');
   const hasFaqSection = existing?.some((s) => s.type === 'faq_section');
 
   const toInsert: Array<{
@@ -97,16 +140,6 @@ export async function ensureContactPageSections(pageId: string) {
       type: 'contact_info',
       content: DEFAULT_CONTACT_CONTENT,
       order: 10,
-      visible: true,
-    });
-  }
-
-  if (!hasMapSection) {
-    toInsert.push({
-      page_id: pageId,
-      type: 'map_section',
-      content: DEFAULT_MAP_CONTENT,
-      order: 20,
       visible: true,
     });
   }

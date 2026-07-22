@@ -301,68 +301,30 @@ export function ContactMessageForm({
 
 export default function ContactInfo(props: ContactInfoProps) {
   const c = mergeLegacy(props);
+  const headingLine2 = c.heading_line2.trim();
 
   return (
-    <section className="contact-section" id="contact" aria-labelledby="contact-heading">
+    <section className="contact-section contact-section--form-only" id="contact" aria-labelledby="contact-heading">
       <div className="contact-orb" aria-hidden />
-      <div className="contact-inner">
-        <div className="contact-info-panel">
-          <div className="contact-eyebrow">
-            <i className="fa-solid fa-envelope" aria-hidden />
-            {c.eyebrow}
+      <div className="contact-inner contact-inner--form-only">
+        <div className="contact-form-card contact-form-card--unified">
+          <div className="contact-intro-panel">
+            <div className="contact-eyebrow">
+              <i className="fa-solid fa-envelope" aria-hidden />
+              {c.eyebrow}
+            </div>
+            <h2 className="contact-heading" id="contact-heading">
+              {c.heading_line1}
+              {headingLine2 ? (
+                <>
+                  <br />
+                  <span>{headingLine2}</span>
+                </>
+              ) : null}
+            </h2>
+            <p className="contact-subtext">{c.subtext}</p>
           </div>
-          <h2 className="contact-heading" id="contact-heading">
-            {c.heading_line1}
-            <br />
-            <span>{c.heading_line2}</span>
-          </h2>
-          <p className="contact-subtext">{c.subtext}</p>
 
-          <div className="contact-info-cards">
-            <div className="contact-info-card">
-              <div className="contact-info-card-icon" aria-hidden>
-                <i className="fa-solid fa-location-dot" />
-              </div>
-              <div className="contact-info-card-text">
-                <strong>{c.headquarters_label}</strong>
-                <span>{c.headquarters}</span>
-              </div>
-            </div>
-            <div className="contact-info-card">
-              <div className="contact-info-card-icon" aria-hidden>
-                <i className="fa-solid fa-phone" />
-              </div>
-              <div className="contact-info-card-text">
-                <strong>{c.phone_label}</strong>
-                <span>
-                  <a href={`tel:${c.phone.replace(/[^+\d]/g, "")}`}>{c.phone}</a>
-                </span>
-              </div>
-            </div>
-            <div className="contact-info-card">
-              <div className="contact-info-card-icon" aria-hidden>
-                <i className="fa-solid fa-envelope" />
-              </div>
-              <div className="contact-info-card-text">
-                <strong>{c.email_label}</strong>
-                <span>
-                  <a href={`mailto:${c.email}`}>{c.email}</a>
-                </span>
-              </div>
-            </div>
-            <div className="contact-info-card">
-              <div className="contact-info-card-icon" aria-hidden>
-                <i className="fa-solid fa-clock" />
-              </div>
-              <div className="contact-info-card-text">
-                <strong>{c.hours_label}</strong>
-                <span>{c.office_hours}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="contact-form-card">
           <ContactMessageForm
             formTitle={c.form_title}
             formSubtitle={c.form_subtitle}

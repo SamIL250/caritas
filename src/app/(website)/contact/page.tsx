@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
-import ContactMapToggleSection from "@/components/website/sections/ContactMapToggleSection";
-import FaqSection from "@/components/website/sections/FaqSection";
+import ContactInfo from "@/components/website/sections/ContactInfo";
 import { renderWebsiteSection } from "@/lib/public-page-sections";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       (page?.title ? `${page.title} | Caritas Rwanda` : "Contact Us | Caritas Rwanda"),
     description:
       meta.seo_description ||
-      "Get in touch with Caritas Rwanda — reach our headquarters in Kigali, send us a message, or find us on the map.",
+      "Get in touch with Caritas Rwanda — send us a message and our team will respond within 24 hours.",
   };
 }
 
@@ -60,8 +59,7 @@ export default async function ContactPage() {
     sections = s || [];
 
     const hasContactInfo = sections.some((s: any) => s.type === "contact_info");
-    const hasMapSection = sections.some((s: any) => s.type === "map_section");
-    if (!hasContactInfo || !hasMapSection) {
+    if (!hasContactInfo) {
       const { ensureContactPageSections } = await import(
         "@/app/actions/init-contact-sections"
       );
@@ -116,28 +114,16 @@ export default async function ContactPage() {
       }))
     : [];
 
-  const contactSections = sections.filter(
-    (s: any) => s.type === "contact_info" || s.type === "map_section"
-  );
+  const contactRow = sections.find((s: any) => s.type === "contact_info");
   const otherSections = sections.filter(
     (s: any) => s.type !== "contact_info" && s.type !== "map_section"
   );
-
-  const contactRow = contactSections.find((s: any) => s.type === "contact_info");
-  const mapRow = contactSections.find((s: any) => s.type === "map_section");
 
   const contactProps =
     contactRow?.content &&
     typeof contactRow.content === "object" &&
     !Array.isArray(contactRow.content)
       ? (contactRow.content as Record<string, unknown>)
-      : {};
-
-  const mapProps =
-    mapRow?.content &&
-    typeof mapRow.content === "object" &&
-    !Array.isArray(mapRow.content)
-      ? (mapRow.content as Record<string, unknown>)
       : {};
 
   return (
@@ -152,7 +138,7 @@ export default async function ContactPage() {
         quickNav={quickNav}
       />
 
-      <ContactMapToggleSection contactProps={contactProps} mapProps={mapProps} />
+      <ContactInfo {...contactProps} />
 
       {otherSections.map((section: any) => {
         return renderWebsiteSection(section);
