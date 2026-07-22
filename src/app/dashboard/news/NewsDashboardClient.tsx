@@ -126,9 +126,11 @@ function NewsDashboardClient({
     return filtered.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
   }, [filtered, currentPage]);
 
+  const filterKey = `${statusFilter}|${categoryFilter}|${departmentFilter}|${featuredOnly}|${searchQuery.trim()}`;
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [statusFilter, categoryFilter, departmentFilter, featuredOnly, searchQuery]);
+  }, [filterKey]);
 
   async function handleDelete(id: string) {
     const r = await deleteNewsArticle(id);
