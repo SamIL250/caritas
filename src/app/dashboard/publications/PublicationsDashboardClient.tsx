@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useTransition } from "react";
+import React, { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -13,6 +13,10 @@ import {
   User,
 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import {
+  DashboardPaginationBar,
+  DASHBOARD_LIST_PAGE_SIZE,
+} from "@/components/dashboard/DashboardPaginationBar";
 import { deletePublication } from "@/app/actions/publications";
 import { deleteTestimony } from "@/app/actions/testimonies";
 import {
@@ -90,12 +94,6 @@ function PublicationsDashboardClient({
   const categoryById = useMemo(() => {
     const m = new Map<string, PublicationCategoryRow>();
     categories.forEach((c) => m.set(c.id, c));
-    return m;
-  }, [categories]);
-
-  const categoryBySlug = useMemo(() => {
-    const m = new Map<string, PublicationCategoryRow>();
-    categories.forEach((c) => m.set(c.slug, c));
     return m;
   }, [categories]);
 
@@ -306,7 +304,6 @@ function PublicationsDashboardClient({
         <PublicationsListPanel
           activeCategory={activeCategory}
           items={filteredItems}
-          categoryBySlug={categoryBySlug}
           allCategoryById={categoryById}
           onDelete={(id) => setDelId(id)}
           newPublicationHref={newPublicationHref}
@@ -346,6 +343,17 @@ function TestimoniesListPanel({
   items: TestimonyRow[];
   onDelete: (id: string) => void;
 }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(items.length / DASHBOARD_LIST_PAGE_SIZE));
+  const paginatedItems = useMemo(() => {
+    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
+    return items.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
+  }, [items, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [items]);
+
   if (items.length === 0) {
     return (
       <div className="py-16 text-center">
@@ -379,13 +387,22 @@ function TestimoniesListPanel({
         </div>
         <p className="text-xs tabular-nums text-stone-400">
           {items.length} {items.length === 1 ? "item" : "items"}
+          {items.length > DASHBOARD_LIST_PAGE_SIZE ? ` · page ${currentPage} of ${totalPages}` : ""}
         </p>
       </div>
       <div className="flex flex-col gap-3">
-        {items.map((row) => (
+        {paginatedItems.map((row) => (
           <TestimonyRowItem key={row.id} row={row} onDelete={onDelete} />
         ))}
       </div>
+      <DashboardPaginationBar
+        page={currentPage}
+        totalPages={totalPages}
+        totalItems={items.length}
+        pageSize={DASHBOARD_LIST_PAGE_SIZE}
+        itemLabel={items.length === 1 ? "item" : "items"}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }
@@ -418,7 +435,6 @@ function Stat({
 function PublicationsListPanel({
   activeCategory,
   items,
-  categoryBySlug,
   allCategoryById,
   onDelete,
   newPublicationHref,
@@ -426,12 +442,22 @@ function PublicationsListPanel({
 }: {
   activeCategory: PublicationCategoryRow | null;
   items: PublicationRow[];
-  categoryBySlug: Map<string, PublicationCategoryRow>;
   allCategoryById: Map<string, PublicationCategoryRow>;
   onDelete: (id: string) => void;
   newPublicationHref: string;
   newCtaLabel: string;
 }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(items.length / DASHBOARD_LIST_PAGE_SIZE));
+  const paginatedItems = useMemo(() => {
+    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
+    return items.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
+  }, [items, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [items, activeCategory?.id]);
+
   if (items.length === 0) {
     return (
       <div className="py-16 text-center">
@@ -482,10 +508,11 @@ function PublicationsListPanel({
           </div>
           <p className="text-xs tabular-nums text-stone-400">
             {items.length} {items.length === 1 ? "item" : "items"}
+            {items.length > DASHBOARD_LIST_PAGE_SIZE ? ` · page ${currentPage} of ${totalPages}` : ""}
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          {items.map((row) => (
+          {paginatedItems.map((row) => (
             <PublicationRowItem
               key={row.id}
               row={row}
@@ -494,63 +521,50 @@ function PublicationsListPanel({
             />
           ))}
         </div>
+        <DashboardPaginationBar
+          page={currentPage}
+          totalPages={totalPages}
+          totalItems={items.length}
+          pageSize={DASHBOARD_LIST_PAGE_SIZE}
+          itemLabel={items.length === 1 ? "item" : "items"}
+          onPageChange={setCurrentPage}
+        />
       </div>
     );
   }
 
-  // "All" tab: group by category for orientation, but use the same row component everywhere.
-  const grouped = new Map<string, PublicationRow[]>();
-  items.forEach((row) => {
-    const list = grouped.get(row.category) ?? [];
-    list.push(row);
-    grouped.set(row.category, list);
-  });
-  const orderedSlugs = Array.from(categoryBySlug.values())
-    .sort((a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label))
-    .map((c) => c.slug);
-
   return (
-    <div className="space-y-10">
-      {orderedSlugs.map((slug) => {
-        const list = grouped.get(slug) ?? [];
-        if (!list.length) return null;
-        const cat = categoryBySlug.get(slug);
-        return (
-          <div key={slug}>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                {cat ? (
-                  <PublicationCategoryIcon icon={cat.icon} accent={cat.accent} size={26} />
-                ) : null}
-                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                  {cat?.plural_label || cat?.label || slug}
-                </h3>
-                <span className="text-[11px] tabular-nums text-stone-400">
-                  {list.length} {list.length === 1 ? "item" : "items"}
-                </span>
-              </div>
-              {cat ? (
-                <Link
-                  href={`/dashboard/publications/new?category=${encodeURIComponent(cat.slug)}`}
-                  className="text-[11px] font-semibold text-[#7A1515] hover:underline"
-                >
-                  + Add {cat.label.toLowerCase()}
-                </Link>
-              ) : null}
-            </div>
-            <div className="flex flex-col gap-2">
-              {list.map((row) => (
-                <PublicationRowItem
-                  key={row.id}
-                  row={row}
-                  category={allCategoryById.get(row.category_id)}
-                  onDelete={onDelete}
-                />
-              ))}
-            </div>
-          </div>
-        );
-      })}
+    <div>
+      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
+        <div>
+          <h3 className="text-sm font-bold text-stone-900">All publications</h3>
+          <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
+            Every category in one list, newest updates first.
+          </p>
+        </div>
+        <p className="text-xs tabular-nums text-stone-400">
+          {items.length} {items.length === 1 ? "item" : "items"}
+          {items.length > DASHBOARD_LIST_PAGE_SIZE ? ` · page ${currentPage} of ${totalPages}` : ""}
+        </p>
+      </div>
+      <div className="flex flex-col gap-3">
+        {paginatedItems.map((row) => (
+          <PublicationRowItem
+            key={row.id}
+            row={row}
+            category={allCategoryById.get(row.category_id)}
+            onDelete={onDelete}
+          />
+        ))}
+      </div>
+      <DashboardPaginationBar
+        page={currentPage}
+        totalPages={totalPages}
+        totalItems={items.length}
+        pageSize={DASHBOARD_LIST_PAGE_SIZE}
+        itemLabel={items.length === 1 ? "item" : "items"}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

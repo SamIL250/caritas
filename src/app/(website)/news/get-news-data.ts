@@ -108,10 +108,8 @@ export async function fetchPublishedArticles(): Promise<{
     .order("published_at", { ascending: false });
 
   const list = sortByPublishedNewest((articles ?? []) as unknown as PublishedNewsArticle[]);
-  const featuredArticle = list.find((a) => a.featured) ?? null;
-  const gridArticles = featuredArticle ? list.filter((a) => a.id !== featuredArticle.id) : list;
 
-  return { featuredArticle, gridArticles };
+  return { featuredArticle: null, gridArticles: list };
 }
 
 /** Full data for `/news`: CMS page when seeded, fallback to singleton settings otherwise. */

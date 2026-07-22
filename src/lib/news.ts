@@ -36,6 +36,17 @@ export function inferredDepartmentSlugFromLegacyNewsCategory(
   }
 }
 
+/** Resolve program pillar slug from explicit department_id or legacy news category. */
+export function effectiveNewsDepartmentSlug(
+  article: Pick<NewsArticleRow, "department_id" | "category">,
+  departmentSlugById: ReadonlyMap<string, string>,
+): string | null {
+  if (article.department_id) {
+    return departmentSlugById.get(article.department_id) ?? null;
+  }
+  return inferredDepartmentSlugFromLegacyNewsCategory(article.category);
+}
+
 export type NewsArticleRow = Database["public"]["Tables"]["news_articles"]["Row"];
 
 export type NewsPageSettingsRow = Database["public"]["Tables"]["news_page_settings"]["Row"];

@@ -1,15 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { fetchProgramDepartmentOptions } from "@/lib/program-departments";
 import { Topbar } from "@/components/layout/Topbar";
 import type { Database } from "@/types/database.types";
 import NewsDashboardClient from "./NewsDashboardClient";
 
 export default async function DashboardNewsPage() {
   const supabase = await createClient();
-  const [{ data: articles }, { data: newsPageRow }] = await Promise.all([
+  const [{ data: articles }, { data: newsPageRow }, departments] = await Promise.all([
     supabase.from("news_articles").select("*").order("updated_at", { ascending: false }),
     supabase.from("pages").select("id").eq("slug", "news").maybeSingle(),
+    fetchProgramDepartmentOptions(supabase),
   ]);
 
   const typed = (articles ?? []) as Database["public"]["Tables"]["news_articles"]["Row"][];
@@ -37,7 +39,11 @@ export default async function DashboardNewsPage() {
         }
       />
 
-      <NewsDashboardClient articles={typed} newsPageEditorHref={newsPageEditorHref} />
+      <NewsDashboardClient
+        articles={typed}
+        departments={departments}
+        newsPageEditorHref={newsPageEditorHref}
+      />
     </div>
   );
 }

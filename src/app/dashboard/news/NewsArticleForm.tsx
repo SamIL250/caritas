@@ -203,7 +203,7 @@ export function NewsArticleForm({ mode, article, departments, duplicateFrom }: P
             defaultChecked={source?.featured ?? false}
             className="h-4 w-4 rounded border-stone-300 text-[#7A1515] accent-[#7A1515]"
           />
-          Feature this story on the News page hero
+          Feature this story as the hero for its category on /news
         </label>
       </div>
     </div>

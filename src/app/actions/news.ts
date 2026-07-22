@@ -49,8 +49,16 @@ async function nextUniqueSlug(
   return `${base}-${Date.now()}`;
 }
 
-async function clearOtherFeatured(supabase: Awaited<ReturnType<typeof createClient>>, exceptId?: string) {
-  let q = supabase.from("news_articles").update({ featured: false }).eq("featured", true);
+async function clearOtherFeaturedInCategory(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  category: Category,
+  exceptId?: string,
+) {
+  let q = supabase
+    .from("news_articles")
+    .update({ featured: false })
+    .eq("featured", true)
+    .eq("category", category);
   if (exceptId) q = q.neq("id", exceptId);
   await q;
 }
@@ -90,7 +98,7 @@ export async function createNewsArticle(form: FormData): Promise<{ error?: strin
       .maybeSingle();
     const sort_order = ((maxRow as { sort_order?: number })?.sort_order ?? 0) + 10;
 
-    if (featured) await clearOtherFeatured(supabase);
+    if (featured) await clearOtherFeaturedInCategory(supabase, category);
 
     const { error } = await supabase.from("news_articles").insert({
       title,
@@ -150,7 +158,7 @@ export async function updateNewsArticle(
     if (status === "published" && !published_at) published_at = new Date().toISOString();
     if (status === "draft") published_at = null;
 
-    if (featured) await clearOtherFeatured(supabase, articleId);
+    if (featured) await clearOtherFeaturedInCategory(supabase, category, articleId);
 
     const { error } = await supabase
       .from("news_articles")

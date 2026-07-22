@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -18,8 +18,13 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import {
+  DashboardPaginationBar,
+  DASHBOARD_LIST_PAGE_SIZE,
+} from "@/components/dashboard/DashboardPaginationBar";
 import type { NewsArticleRow } from "@/lib/news";
-import { categoryLabel } from "@/lib/news";
+import { categoryLabel, effectiveNewsDepartmentSlug } from "@/lib/news";
+import type { ProgramDepartmentOption } from "@/lib/program-departments";
 import { deleteNewsArticle } from "@/app/actions/news";
 import { useRouter } from "next/navigation";
 
@@ -46,9 +51,11 @@ function ArticleThumb({ url, alt }: { url?: string | null; alt?: string }) {
 
 function NewsDashboardClient({
   articles,
+  departments,
   newsPageEditorHref,
 }: {
   articles: NewsArticleRow[];
+  departments: ProgramDepartmentOption[];
   newsPageEditorHref: string | null;
 }) {
   const router = useRouter();
@@ -56,6 +63,20 @@ function NewsDashboardClient({
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const departmentSlugById = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const d of departments) map.set(d.id, d.slug);
+    return map;
+  }, [departments]);
+
+  const departmentLabelBySlug = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const d of departments) map.set(d.slug, d.label);
+    return map;
+  }, [departments]);
 
   const counts = useMemo(() => {
     const list = articles ?? [];
@@ -81,6 +102,11 @@ function NewsDashboardClient({
     if (categoryFilter !== "all") {
       list = list.filter((a) => a.category === categoryFilter);
     }
+    if (departmentFilter !== "all") {
+      list = list.filter(
+        (a) => effectiveNewsDepartmentSlug(a, departmentSlugById) === departmentFilter,
+      );
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
       list = list.filter((a) =>
@@ -88,7 +114,17 @@ function NewsDashboardClient({
       );
     }
     return list;
-  }, [articles, statusFilter, categoryFilter, searchQuery]);
+  }, [articles, statusFilter, categoryFilter, departmentFilter, departmentSlugById, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / DASHBOARD_LIST_PAGE_SIZE));
+  const paginated = useMemo(() => {
+    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
+    return filtered.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
+  }, [filtered, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, categoryFilter, departmentFilter, searchQuery]);
 
   async function handleDelete(id: string) {
     const r = await deleteNewsArticle(id);
@@ -113,8 +149,8 @@ function NewsDashboardClient({
                     Story library
                   </h2>
                   <p className="mt-1 max-w-xl text-sm leading-relaxed text-stone-500">
-                    Publish items that appear as entries on /news; feature one headline. Drafts stay hidden
-                    until published.
+                    Publish items that appear as entries on /news; feature one headline per category.
+                    Drafts stay hidden until published.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium text-stone-500">
@@ -265,8 +301,26 @@ function NewsDashboardClient({
                 ))}
               </select>
             </div>
+            <div className="flex items-center gap-2">
+              <select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-600 outline-none focus:border-[#7A1515] focus:ring-2 focus:ring-[#7A1515]/15"
+                aria-label="Filter by program"
+              >
+                <option value="all">All programs</option>
+                {departments.map((d) => (
+                  <option key={d.id} value={d.slug}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <p className="text-xs tabular-nums text-stone-400">
               {filtered.length} of {counts.total} {counts.total === 1 ? "item" : "items"}
+              {filtered.length > DASHBOARD_LIST_PAGE_SIZE
+                ? ` · page ${currentPage} of ${totalPages}`
+                : ""}
             </p>
           </div>
 
@@ -277,8 +331,12 @@ function NewsDashboardClient({
               <p className="mt-1 text-xs text-stone-400">Try adjusting your search or filter criteria.</p>
             </div>
           ) : (
+          <>
           <div className="flex flex-col gap-3">
-            {filtered.map((row) => (
+            {paginated.map((row) => {
+              const deptSlug = effectiveNewsDepartmentSlug(row, departmentSlugById);
+              const deptLabel = deptSlug ? departmentLabelBySlug.get(deptSlug) : null;
+              return (
               <article
                 key={row.id}
                 className="group flex flex-col gap-4 rounded-xl px-2 py-3 transition-colors hover:bg-stone-100/65 sm:flex-row sm:items-center sm:gap-5 sm:py-4 sm:pr-4"
@@ -300,6 +358,11 @@ function NewsDashboardClient({
                     <span className="text-[11px] font-semibold uppercase tracking-wide text-stone-400">
                       {categoryLabel(row.category)}
                     </span>
+                    {deptLabel ? (
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-stone-400">
+                        {deptLabel}
+                      </span>
+                    ) : null}
                   </div>
                   <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-stone-500">{row.excerpt}</p>
                 </div>
@@ -340,8 +403,18 @@ function NewsDashboardClient({
                   </button>
                 </div>
               </article>
-            ))}
+            );
+            })}
           </div>
+          <DashboardPaginationBar
+            page={currentPage}
+            totalPages={totalPages}
+            totalItems={filtered.length}
+            pageSize={DASHBOARD_LIST_PAGE_SIZE}
+            itemLabel={filtered.length === 1 ? "item" : "items"}
+            onPageChange={setCurrentPage}
+          />
+          </>
         )}
         </div>
       )}

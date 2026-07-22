@@ -3,11 +3,13 @@
 import { useMemo, useState, useEffect } from "react";
 import {
   categoryLabel,
+  effectiveNewsDepartmentSlug,
   formatPublishedDate,
   inferredDepartmentSlugFromLegacyNewsCategory,
 } from "@/lib/news";
 import type { PublishedNewsArticle } from "@/app/(website)/news/get-news-data";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 
 import Link from "next/link";
 import { MediaFigure } from "@/components/website/MediaCaptionProvider";
@@ -53,18 +55,31 @@ export default function NewsArticlesFeed({
   onDepartmentFilterChange,
   query,
 }: Props) {
-  const featuredVisible =
-    featuredArticle &&
-    matchesDepartmentFilter(featuredArticle, departmentFilter) &&
-    matchesQuery(featuredArticle, query);
+  const allArticles = useMemo(() => {
+    const byId = new Map<string, PublishedNewsArticle>();
+    if (featuredArticle) byId.set(featuredArticle.id, featuredArticle);
+    for (const a of gridArticles) byId.set(a.id, a);
+    return sortByPublishedNewest([...byId.values()]);
+  }, [featuredArticle, gridArticles]);
+
+  const scopedArticles = useMemo(() => {
+    return allArticles.filter(
+      (a) => matchesDepartmentFilter(a, departmentFilter) && matchesQuery(a, query),
+    );
+  }, [allArticles, departmentFilter, query]);
+
+  const heroArticle = useMemo(() => {
+    const featured = scopedArticles.filter((a) => a.featured);
+    if (featured.length === 0) return null;
+    return sortByPublishedNewest(featured)[0] ?? null;
+  }, [scopedArticles]);
 
   const filteredGrid = useMemo(() => {
-    return gridArticles.filter(
-      (a) =>
-        matchesDepartmentFilter(a, departmentFilter) &&
-        matchesQuery(a, query),
-    );
-  }, [gridArticles, departmentFilter, query]);
+    if (!heroArticle) return scopedArticles;
+    return scopedArticles.filter((a) => a.id !== heroArticle.id);
+  }, [scopedArticles, heroArticle]);
+
+  const featuredVisible = heroArticle !== null;
 
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 9;
@@ -110,17 +125,17 @@ export default function NewsArticlesFeed({
       ) : null}
 
       <div className="news-wrap">
-        {featuredVisible && featuredArticle && (
+        {featuredVisible && heroArticle && (
           <Link
-            href={`/news/${featuredArticle.slug}`}
+            href={`/news/${heroArticle.slug}`}
             className="block text-inherit no-underline news-featured-clickable"
-            aria-label={`Read: ${featuredArticle.title}`}
+            aria-label={`Read: ${heroArticle.title}`}
           >
             <article className="news-featured">
               <div className="news-feat-img">
                 <MediaFigure
-                  src={featuredArticle.image_url}
-                  alt={featuredArticle.image_alt || featuredArticle.title}
+                  src={heroArticle.image_url}
+                  alt={heroArticle.image_alt || heroArticle.title}
                   hideCaption
                   figureClassName="news-feat-figure"
                 />
@@ -131,14 +146,14 @@ export default function NewsArticlesFeed({
               </div>
               <div className="news-feat-content">
                 <div className="news-feat-meta">
-                  <span className="news-feat-cat">{tagLabel(featuredArticle)}</span>
+                  <span className="news-feat-cat">{tagLabel(heroArticle)}</span>
                   <span>
                     <i className="fa-regular fa-calendar mr-1" aria-hidden />
-                    {formatPublishedDate(featuredArticle.published_at)}
+                    {formatPublishedDate(heroArticle.published_at)}
                   </span>
                 </div>
-                <h2>{featuredArticle.title}</h2>
-                <p>{featuredArticle.excerpt}</p>
+                <h2>{heroArticle.title}</h2>
+                <p>{heroArticle.excerpt}</p>
                 <span className="news-read-more">
                   Read article{" "}
                   <i className="fa-solid fa-arrow-right text-xs" aria-hidden />
