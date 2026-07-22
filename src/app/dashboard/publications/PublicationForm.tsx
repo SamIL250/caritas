@@ -18,6 +18,7 @@ import {
 } from "@/lib/publications";
 import { createPublication, updatePublication } from "@/app/actions/publications";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 import { PublicationCategoryIcon } from "@/components/dashboard/publications/PublicationCategoryIcon";
 import { PublicationCustomFields } from "@/components/dashboard/publications/PublicationCustomFields";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
@@ -133,7 +134,7 @@ export function PublicationForm({
     : "";
 
   return (
-    <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
+    <form id="publication-form" className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
       <div className="flex items-center gap-3">
         <Link
           href={category ? `/dashboard/publications?tab=${encodeURIComponent(category.slug)}` : "/dashboard/publications"}
@@ -508,14 +509,14 @@ export function PublicationForm({
         }}
       />
 
-      <div className="sticky bottom-4 flex justify-end gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur z-50 shadow-lg mt-8">
+      <DashboardFormActions formId="publication-form" align="end">
         <Link
           href={category ? `/dashboard/publications?tab=${encodeURIComponent(category.slug)}` : "/dashboard/publications"}
-          className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50 flex-1 lg:flex-none"
+          className="inline-flex h-10 flex-1 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50 lg:flex-none"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving} className="h-10 flex-1 lg:flex-none">
+        <Button type="submit" form="publication-form" variant="primary" disabled={saving} className="h-10 flex-1 lg:flex-none">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
@@ -528,7 +529,7 @@ export function PublicationForm({
             "Save changes"
           )}
         </Button>
-      </div>
+      </DashboardFormActions>
     </form>
   );
 }

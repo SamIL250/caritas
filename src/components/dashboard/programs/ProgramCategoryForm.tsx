@@ -18,6 +18,7 @@ import {
   updateProgramCategory,
 } from "@/app/actions/program-categories";
 import { ProgramCategoryIcon } from "./ProgramCategoryIcon";
+import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 
 const BACK_HREF = "/dashboard/programs?tab=settings";
 
@@ -66,7 +67,7 @@ function ProgramCategoryForm(props: Props) {
   const isSystem = mode === "edit" && cat?.is_system;
 
   return (
-    <form className="max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
+    <form id="program-category-form" className="max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
       <div className="flex items-center gap-3">
         <Link
           href={BACK_HREF}
@@ -270,18 +271,18 @@ function ProgramCategoryForm(props: Props) {
         }}
       />
 
-      <div className="sticky bottom-2 flex justify-end gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur">
+      <DashboardFormActions formId="program-category-form" align="end">
         <Link
           href={BACK_HREF}
-          className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
+          className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={busy} className="gap-2">
+        <Button type="submit" form="program-category-form" variant="primary" disabled={busy} className="h-10 gap-2">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
           {mode === "create" ? "Create category" : "Save changes"}
         </Button>
-      </div>
+      </DashboardFormActions>
     </form>
   );
 }

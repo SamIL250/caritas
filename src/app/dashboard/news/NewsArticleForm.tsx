@@ -16,6 +16,7 @@ import {
   type NewsRichTextEditorHandle,
 } from "@/components/dashboard/news/NewsRichTextEditor";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 
 type Props = {
   mode: "create" | "edit";
@@ -71,7 +72,7 @@ export function NewsArticleForm({ mode, article, departments, duplicateFrom }: P
     : "";
 
   return (
-    <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
+    <form id="news-article-form" className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
       {msg && (
         <p role="status" className={`rounded-lg px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}`}>
           {msg.text}
@@ -303,14 +304,14 @@ export function NewsArticleForm({ mode, article, departments, duplicateFrom }: P
         }}
       />
 
-      <div className="sticky bottom-4 flex gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur mt-8 z-50 shadow-lg">
+      <DashboardFormActions formId="news-article-form">
         <Link
           href="/dashboard/news"
           className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving} className="flex-1 h-10">
+        <Button type="submit" form="news-article-form" variant="primary" disabled={saving} className="flex-1 h-10">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
@@ -323,7 +324,7 @@ export function NewsArticleForm({ mode, article, departments, duplicateFrom }: P
             "Save changes"
           )}
         </Button>
-      </div>
+      </DashboardFormActions>
     </form>
   );
 }

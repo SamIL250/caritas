@@ -11,6 +11,7 @@ import {
   type NewsRichTextEditorHandle,
 } from "@/components/dashboard/news/NewsRichTextEditor";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 import { createTestimony, updateTestimony } from "@/app/actions/testimonies";
 import { encodeTestimonyAssetUrl, type TestimonyRow } from "@/lib/testimonies";
 
@@ -73,7 +74,7 @@ export function TestimonyForm({ mode, testimony }: Props) {
   }
 
   return (
-    <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
+    <form id="testimony-form" className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
       <Link
         href="/dashboard/publications?tab=testimonies"
         className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#7A1515]"
@@ -186,11 +187,6 @@ export function TestimonyForm({ mode, testimony }: Props) {
               />
               <p className="text-[11px] text-stone-400">Lower numbers appear first.</p>
             </div>
-
-            <Button type="submit" variant="primary" className="w-full" disabled={saving}>
-              {saving ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-              {mode === "create" ? "Create testimony" : "Save changes"}
-            </Button>
           </div>
 
           <div className="space-y-4 rounded-2xl border border-stone-200/80 bg-white p-4 shadow-sm sm:p-6">
@@ -237,6 +233,26 @@ export function TestimonyForm({ mode, testimony }: Props) {
           }}
         />
       ) : null}
+
+      <DashboardFormActions formId="testimony-form">
+        <Link
+          href="/dashboard/publications?tab=testimonies"
+          className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
+        >
+          Cancel
+        </Link>
+        <Button type="submit" form="testimony-form" variant="primary" disabled={saving} className="flex-1 h-10">
+          {saving ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
+            </>
+          ) : mode === "create" ? (
+            "Create testimony"
+          ) : (
+            "Save changes"
+          )}
+        </Button>
+      </DashboardFormActions>
     </form>
   );
 }

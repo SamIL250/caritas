@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 import {
   NewsRichTextEditor,
   type NewsRichTextEditorHandle,
@@ -100,7 +101,7 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
   const defaultCat = categories[0]?.id ?? "";
 
   return (
-    <form className="max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
+    <form id="community-campaign-form" className="max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
       <div className="flex flex-wrap items-center gap-3">
         <Link
           href="/dashboard/community-campaigns"
@@ -443,14 +444,14 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
         }}
       />
 
-      <div className="flex justify-end gap-3">
+      <DashboardFormActions formId="community-campaign-form" align="end">
         <Link
           href="/dashboard/community-campaigns"
-          className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
+          className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--color-border-default)] bg-white px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-stone-50"
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving}>
+        <Button type="submit" form="community-campaign-form" variant="primary" disabled={saving} className="h-10">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
@@ -463,7 +464,7 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
             "Save changes"
           )}
         </Button>
-      </div>
+      </DashboardFormActions>
     </form>
   );
 }

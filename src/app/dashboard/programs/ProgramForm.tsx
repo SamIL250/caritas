@@ -14,6 +14,7 @@ import {
 } from "@/lib/programs";
 import { createProgram, updateProgram } from "@/app/actions/programs";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 import { ProgramCategoryIcon } from "@/components/dashboard/programs/ProgramCategoryIcon";
 import {
   ProgramRichTextEditor,
@@ -109,7 +110,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
     : "";
 
   return (
-    <form className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
+    <form id="program-form" className="max-w-full space-y-6" onSubmit={handleSubmit} noValidate>
       {msg ? (
         <p
           role="status"
@@ -408,7 +409,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
         }}
       />
 
-      <div className="sticky bottom-4 flex gap-3 rounded-xl border border-stone-200/80 bg-white/95 p-3 backdrop-blur mt-8 z-50 shadow-lg">
+      <DashboardFormActions formId="program-form">
         <Link
           href={
             category
@@ -419,7 +420,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
         >
           Cancel
         </Link>
-        <Button type="submit" variant="primary" disabled={saving} className="flex-1 h-10">
+        <Button type="submit" form="program-form" variant="primary" disabled={saving} className="flex-1 h-10">
           {saving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
@@ -432,7 +433,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
             "Save changes"
           )}
         </Button>
-      </div>
+      </DashboardFormActions>
     </form>
   );
 }
