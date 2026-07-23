@@ -17,6 +17,13 @@ import {
 import { formatPublishedDate, type NewsArticleRow } from "@/lib/news";
 import RwandaMapBackground from "./RwandaMapBackground";
 
+const PROGRAM_GRID_COLUMNS = 4;
+const SUCCESS_STORY_ROWS = 1;
+const NEWS_ROWS = 2;
+
+const SUCCESS_STORIES_VISIBLE = PROGRAM_GRID_COLUMNS * SUCCESS_STORY_ROWS;
+const NEWS_VISIBLE = PROGRAM_GRID_COLUMNS * NEWS_ROWS;
+
 type Props = {
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
@@ -111,6 +118,10 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
     (a) => a.department_id === activeCategory?.id,
   );
 
+  function categoryNewsHref(slug: string) {
+    return `/news?topic=${encodeURIComponent(slug)}`;
+  }
+
   return (
     <>
       {/* ── Sticky Tab Bar ── */}
@@ -191,10 +202,19 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             {activeStories.length > 0 && (
               <div className="prog-success-section">
                 <div className="prog-success-header">
-                  <span className={`stories-eyebrow ${cat.slug}-peyebrow`}>
-                    <i className="fa-solid fa-star mr-2" />
-                    Success Stories
-                  </span>
+                  <div className="prog-section-head-row">
+                    <span className={`stories-eyebrow ${cat.slug}-peyebrow`}>
+                      <i className="fa-solid fa-star mr-2" />
+                      Success Stories
+                    </span>
+                    <Link
+                      href={categoryNewsHref(cat.slug)}
+                      className="prog-section-view-more"
+                    >
+                      View more
+                      <i className="fa-solid fa-arrow-right" aria-hidden />
+                    </Link>
+                  </div>
                   <h3 className="prog-success-title">Lives Transformed Through {cat.label}</h3>
                   <p className="prog-success-sub">
                     Real stories of dignity restored and lives rebuilt across Rwanda&apos;s communities.
@@ -202,7 +222,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
                 </div>
 
                 <div className="prog-success-grid">
-                  {activeStories.map((story) => (
+                  {activeStories.slice(0, SUCCESS_STORIES_VISIBLE).map((story) => (
                     <SuccessStoryCard
                       key={story.id}
                       story={story}
@@ -217,9 +237,18 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             {activeNewsArticles.length > 0 && (
               <div className="prog-news-section">
                 <div className="prog-news-header">
-                  <span className="prog-news-label">
-                    {cat.label}
-                  </span>
+                  <div className="prog-section-head-row">
+                    <span className="prog-news-label">
+                      {cat.label}
+                    </span>
+                    <Link
+                      href={categoryNewsHref(cat.slug)}
+                      className="prog-section-view-more"
+                    >
+                      View more
+                      <i className="fa-solid fa-arrow-right" aria-hidden />
+                    </Link>
+                  </div>
                   <h3 className="prog-news-title">Latest News</h3>
                   <p className="prog-news-sub">
                     Updates and stories from the {cat.label.toLowerCase()} department.
@@ -227,7 +256,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
                 </div>
 
                 <div className="prog-news-grid">
-                  {activeNewsArticles.map((article) => (
+                  {activeNewsArticles.slice(0, NEWS_VISIBLE).map((article) => (
                     <NewsCard
                       key={article.id}
                       article={article}
