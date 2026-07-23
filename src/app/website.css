@@ -5448,6 +5448,38 @@
             color: #fff;
         }
 
+        /* About page categories — solid dark red (Donate color, no gradient ring) */
+        .page-hero--with-quick-nav .qnav-pill {
+            background: #8c2208;
+            border: none;
+            color: #ffffff;
+            font-weight: 600;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+
+        .page-hero--with-quick-nav .qnav-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 18px rgba(140, 34, 8, 0.45);
+            background: #701a05;
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .page-hero--with-quick-nav .qnav-pill.is-active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(140, 34, 8, 0.5);
+            background: #701a05;
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .page-hero--with-quick-nav .qnav-pill:active {
+            transform: translateY(0);
+            background: #5a1505;
+        }
+
         @media (max-width: 768px) {
             .page-hero--with-quick-nav .page-hero-inner {
                 max-width: 760px;
