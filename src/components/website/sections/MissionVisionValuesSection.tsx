@@ -47,25 +47,25 @@ export default function MissionVisionValuesSection({
         </div>
 
         <div className="about-mvv-statements">
-          <div className="about-mvv-stmt about-mvv-stmt--mission">
-            <div className="about-mvv-stmt-num">01</div>
-            <div className="about-mvv-stmt-body">
-              <div className="about-mvv-stmt-label">Our Mission</div>
-              <p className="about-mvv-stmt-quote">
-                To assist people in need and promote their <strong>integral human development</strong>,
-                drawing on Charity as per the Word of God — reaching the poor, sick, elderly,
-                refugees, people with disabilities, and all vulnerable communities across Rwanda.
-              </p>
-            </div>
-          </div>
           <div className="about-mvv-stmt about-mvv-stmt--vision">
-            <div className="about-mvv-stmt-num">02</div>
+            <div className="about-mvv-stmt-num">01</div>
             <div className="about-mvv-stmt-body">
               <div className="about-mvv-stmt-label">Our Vision</div>
               <p className="about-mvv-stmt-quote">
                 A Rwanda where every person — regardless of background, status, or circumstance
                 — lives with full <strong>dignity, equal rights</strong>, and the opportunity to
                 flourish in body, mind, and spirit through inclusive, non-discriminatory interventions.
+              </p>
+            </div>
+          </div>
+          <div className="about-mvv-stmt about-mvv-stmt--mission">
+            <div className="about-mvv-stmt-num">02</div>
+            <div className="about-mvv-stmt-body">
+              <div className="about-mvv-stmt-label">Our Mission</div>
+              <p className="about-mvv-stmt-quote">
+                To assist people in need and promote their <strong>integral human development</strong>,
+                drawing on Charity as per the Word of God — reaching the poor, sick, elderly,
+                refugees, people with disabilities, and all vulnerable communities across Rwanda.
               </p>
             </div>
           </div>
