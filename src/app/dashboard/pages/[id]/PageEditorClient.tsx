@@ -89,6 +89,12 @@ import ValuesGridSection from '@/components/website/sections/ValuesGridSection';
 import ChairpersonSection from '@/components/website/sections/ChairpersonSection';
 import HistoryBentoSection from '@/components/website/sections/HistoryBentoSection';
 import MissionVisionValuesSection from '@/components/website/sections/MissionVisionValuesSection';
+import {
+  hydrateMissionVisionEditorContent,
+  hydrateValuesGridEditorContent,
+  parseMissionVisionContent,
+  parseValuesGridContent,
+} from '@/lib/mission-vision-values';
 import NetworkSection from '@/components/website/sections/NetworkSection';
 import LeadershipGridSection from '@/components/website/sections/LeadershipGridSection';
 import AboutSection from '@/components/website/sections/AboutSection';
@@ -149,7 +155,25 @@ function previewModeFromCanvasWidth(px: number): 'desktop' | 'tablet' | 'mobile'
 
 const LS_SIDEBAR_WIDTH = 'pageEditor.sidebarWidth';
 
+function hydrateSectionEditorContent(
+  pageSlug: string,
+  section: { type?: string; content?: unknown } | undefined,
+): unknown {
+  const content = (section?.content as Record<string, unknown>) || {};
+  if (section?.type === 'program_cards') {
+    return hydrateProgramCardsContent(content);
+  }
+  if (pageSlug === 'about' && section?.type === 'pillar_cards') {
+    return hydrateMissionVisionEditorContent(content);
+  }
+  if (pageSlug === 'about' && section?.type === 'values_grid') {
+    return hydrateValuesGridEditorContent(content);
+  }
+  return content;
+}
+
 function resolveDeepLinkedSection(
+  pageSlug: string,
   sectionId: string | undefined | null,
   sectionList: unknown[],
 ): { selectedId: string | null; localState: unknown } {
@@ -158,14 +182,10 @@ function resolveDeepLinkedSection(
     | { id: string; type?: string; content?: unknown }
     | undefined;
   if (!section) return { selectedId: null, localState: null };
-  const content = section.content || {};
-  if (section.type === 'program_cards') {
-    return {
-      selectedId: sectionId,
-      localState: hydrateProgramCardsContent(content as Record<string, unknown>),
-    };
-  }
-  return { selectedId: sectionId, localState: content };
+  return {
+    selectedId: sectionId,
+    localState: hydrateSectionEditorContent(pageSlug, section),
+  };
 }
 
 interface PageEditorProps {
@@ -205,7 +225,7 @@ export default function PageEditorClient({
   const [slides, setSlides] = useState(initialSlides);
   const [metricsSections] = useState(initialMetricsSections);
 
-  const deepLinked = resolveDeepLinkedSection(initialSelectedSectionId, initialSections);
+  const deepLinked = resolveDeepLinkedSection(initialPage.slug, initialSelectedSectionId, initialSections);
 
   const [selectedId, setSelectedId] = useState<string | null>(deepLinked.selectedId); // 'hero' or section.id or 'slides'
   const [selectedSlideId, setSelectedSlideId] = useState<string | null>(null);
@@ -465,11 +485,7 @@ export default function PageEditorClient({
       setLocalState(hero);
     } else if (id) {
       const section = sections.find(s => s.id === id);
-      const content =
-        section?.type === 'program_cards'
-          ? hydrateProgramCardsContent((section?.content as Record<string, unknown>) || {})
-          : section?.content || {};
-      setLocalState(content);
+      setLocalState(hydrateSectionEditorContent(page.slug, section));
     } else {
       setLocalState(null);
     }
@@ -769,9 +785,17 @@ export default function PageEditorClient({
       case 'timeline':
         return isAboutPage ? <HistoryBentoSection /> : <TimelineSection {...props} />;
       case 'pillar_cards':
-        return isAboutPage ? null : <PillarCardsSection {...props} />;
+        return isAboutPage ? (
+          <MissionVisionValuesSection showValues={false} {...parseMissionVisionContent(props)} />
+        ) : (
+          <PillarCardsSection {...props} />
+        );
       case 'values_grid':
-        return isAboutPage ? <MissionVisionValuesSection /> : <ValuesGridSection {...props} />;
+        return isAboutPage ? (
+          <MissionVisionValuesSection showMissionVision={false} {...parseValuesGridContent(props)} />
+        ) : (
+          <ValuesGridSection {...props} />
+        );
       case 'network_section': return <NetworkSection {...props} showFullInfo={page.slug === 'diocesan'} />;
       case 'diocese_map_section': return <DioceseMapSection {...props} />;
       case 'leadership_grid': return <LeadershipGridSection {...props} />;
@@ -4277,6 +4301,81 @@ function SectionForm({
         </div>
       );
     case 'pillar_cards':
+      if (pageSlug === 'about') {
+        const patchStatement = (idx: number, field: string, value: string) => {
+          const list = [...(state.statements || [])];
+          list[idx] = { ...list[idx], [field]: value };
+          onChange('statements', list);
+        };
+        return (
+          <div className="space-y-4">
+            <p className="text-[10px] text-stone-500 leading-relaxed">
+              Vision and mission statements shown on the About page. Order controls the 01 / 02 numbering. Use **double asterisks** for bold phrases in the quote text.
+            </p>
+            {renderField('Section title', 'title', 'text')}
+            {renderField('Anchor id', 'anchor_id', 'text')}
+            <p className="text-[10px] font-bold uppercase text-stone-400">Statements</p>
+            <ul className="space-y-3">
+              {(state.statements || []).map((stmt: any, idx: number) => (
+                <li key={idx} className="relative list-none rounded-lg border border-stone-100 bg-stone-50 p-3">
+                  <button
+                    type="button"
+                    className="absolute right-2 top-2 text-stone-300 hover:text-red-500"
+                    onClick={() =>
+                      onChange(
+                        'statements',
+                        (state.statements || []).filter((_: any, i: number) => i !== idx),
+                      )
+                    }
+                    aria-label={`Remove statement ${idx + 1}`}
+                  >
+                    <X size={14} aria-hidden />
+                  </button>
+                  <div className="grid gap-2 pr-8">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold text-stone-400 w-8">{String(idx + 1).padStart(2, '0')}</span>
+                      <select
+                        className="flex-1 rounded border border-stone-200 p-2 text-xs"
+                        value={stmt.variant ?? 'vision'}
+                        onChange={(e) => patchStatement(idx, 'variant', e.target.value)}
+                      >
+                        <option value="vision">Vision</option>
+                        <option value="mission">Mission</option>
+                      </select>
+                    </div>
+                    <input
+                      className="w-full rounded border border-stone-200 p-2 text-xs font-semibold"
+                      value={stmt.label ?? ''}
+                      onChange={(e) => patchStatement(idx, 'label', e.target.value)}
+                      placeholder="Label (e.g. Our Vision)"
+                    />
+                    <textarea
+                      className="w-full rounded border border-stone-200 p-2 text-xs"
+                      rows={5}
+                      value={stmt.body ?? ''}
+                      onChange={(e) => patchStatement(idx, 'body', e.target.value)}
+                      placeholder="Statement text — use **bold** for emphasis"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full"
+              onClick={() =>
+                onChange('statements', [
+                  ...(state.statements || []),
+                  { variant: 'vision', label: '', body: '' },
+                ])
+              }
+            >
+              <Plus size={14} className="mr-2" /> Add statement
+            </Button>
+          </div>
+        );
+      }
       return (
         <div className="space-y-4">
           {renderField('Eyebrow', 'eyebrow', 'text')}
@@ -4384,6 +4483,86 @@ function SectionForm({
         </div>
       );
     case 'values_grid':
+      if (pageSlug === 'about') {
+        const patchValue = (idx: number, field: string, value: string) => {
+          const list = [...(state.items || [])];
+          list[idx] = { ...list[idx], [field]: value };
+          onChange('items', list);
+        };
+        return (
+          <div className="space-y-4">
+            <p className="text-[10px] text-stone-500 leading-relaxed">
+              Core values grid on the About page. Each value appears as a pill with icon, name, and short description.
+            </p>
+            {renderField('Eyebrow', 'eyebrow', 'text')}
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase text-stone-400">Eyebrow icon class</label>
+              <input
+                className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                value={state.eyebrow_icon ?? ''}
+                onChange={(e) => onChange('eyebrow_icon', e.target.value)}
+                placeholder="fa-star"
+              />
+            </div>
+            {renderField('Title', 'title', 'text')}
+            {renderField('Anchor id', 'anchor_id', 'text')}
+            <p className="text-[10px] font-bold uppercase text-stone-400">Values</p>
+            <ul className="space-y-3">
+              {(state.items || []).map((v: any, idx: number) => (
+                <li key={idx} className="relative list-none rounded-lg border border-stone-100 bg-stone-50 p-3">
+                  <button
+                    type="button"
+                    className="absolute right-2 top-2 text-stone-300 hover:text-red-500"
+                    onClick={() =>
+                      onChange(
+                        'items',
+                        (state.items || []).filter((_: any, i: number) => i !== idx),
+                      )
+                    }
+                    aria-label={`Remove value ${idx + 1}`}
+                  >
+                    <X size={14} aria-hidden />
+                  </button>
+                  <div className="grid gap-2 pr-8">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold text-stone-400 w-8">{String(idx + 1).padStart(2, '0')}</span>
+                      <input
+                        className="w-28 rounded border border-stone-200 p-2 text-xs font-mono"
+                        value={v.icon ?? ''}
+                        onChange={(e) => patchValue(idx, 'icon', e.target.value)}
+                        placeholder="fa-heart"
+                      />
+                      <input
+                        className="flex-1 rounded border border-stone-200 p-2 text-xs font-semibold"
+                        value={v.name ?? ''}
+                        onChange={(e) => patchValue(idx, 'name', e.target.value)}
+                        placeholder="Value name"
+                      />
+                    </div>
+                    <textarea
+                      className="w-full rounded border border-stone-200 p-2 text-xs"
+                      rows={2}
+                      value={v.desc ?? ''}
+                      onChange={(e) => patchValue(idx, 'desc', e.target.value)}
+                      placeholder="Short description"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full"
+              onClick={() =>
+                onChange('items', [...(state.items || []), { icon: 'fa-star', name: '', desc: '' }])
+              }
+            >
+              <Plus size={14} className="mr-2" /> Add value
+            </Button>
+          </div>
+        );
+      }
       return (
         <div className="space-y-4">
           {renderField('Eyebrow', 'eyebrow', 'text')}

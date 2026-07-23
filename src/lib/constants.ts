@@ -33,6 +33,14 @@ import {
 } from "lucide-react";
 import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
+import {
+  DEFAULT_MVV_STATEMENTS,
+  DEFAULT_MVV_TITLE,
+  DEFAULT_MVV_VALUE_ITEMS,
+  DEFAULT_MVV_VALUES_EYEBROW,
+  DEFAULT_MVV_VALUES_EYEBROW_ICON,
+  DEFAULT_MVV_VALUES_TITLE,
+} from "@/lib/mission-vision-values";
 import { DEFAULT_DIOCESE_MAP_SECTION_CONTENT } from "@/lib/diocese-map-defaults";
 import { CANONICAL_PROGRAMS } from "@/lib/program-cards-defaults";
 
@@ -346,22 +354,16 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     items: []
   },
   pillar_cards: {
-    eyebrow: "Who We Are",
-    eyebrow_icon: "fa-bullseye",
-    title: "Vision, Mission & Values",
-    subtitle:
-      "Guided by the Word of God and the principles of Catholic Social Teaching, every action we take is rooted in dignity, solidarity, and justice.",
+    title: DEFAULT_MVV_TITLE,
     anchor_id: "mission",
-    pillars: []
+    statements: DEFAULT_MVV_STATEMENTS.map((s) => ({ ...s })),
   },
   values_grid: {
-    eyebrow: "Core Values",
-    eyebrow_icon: "fa-star",
-    title: "What We Stand For",
-    subtitle:
-      "Eleven guiding principles that shape every program, decision, and relationship within Caritas Rwanda — rooted in the Gospel and Catholic Social Teaching.",
+    eyebrow: DEFAULT_MVV_VALUES_EYEBROW,
+    eyebrow_icon: DEFAULT_MVV_VALUES_EYEBROW_ICON,
+    title: DEFAULT_MVV_VALUES_TITLE,
     anchor_id: "values",
-    items: []
+    items: DEFAULT_MVV_VALUE_ITEMS.map((v) => ({ ...v })),
   },
   network_section: {
     eyebrow: "Our Network",
@@ -619,8 +621,8 @@ export const SECTION_LABELS: Record<string, string> = {
   stats_banner: "Our resources",
   featured_quote: "Featured quote (chairperson)",
   timeline: "History timeline",
-  pillar_cards: "Mission / vision / pillars",
-  values_grid: "Values grid",
+  pillar_cards: "Vision & mission",
+  values_grid: "Core values",
   network_section: "Network & dioceses",
   diocese_map_section: "Diocese network map",
   leadership_grid: "Leadership chronicle (timeline)",

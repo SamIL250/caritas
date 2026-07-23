@@ -1,112 +1,108 @@
 import React from "react";
-
-type ValueItem = {
-  num: string;
-  icon: string;
-  name: string;
-  desc: string;
-};
-
-const values: ValueItem[] = [
-  { num: "01", icon: "fa-megaphone", name: "Advocacy", desc: "Speaking up for the vulnerable and voiceless" },
-  { num: "02", icon: "fa-heart", name: "Compassion", desc: "Meeting suffering with sincere care and empathy" },
-  { num: "03", icon: "fa-scale-balanced", name: "Equity", desc: "Ensuring fair access and equal opportunity for all" },
-  { num: "04", icon: "fa-leaf", name: "Environment Protection", desc: "Safeguarding creation for future generations" },
-  { num: "05", icon: "fa-sun", name: "Hope", desc: "Inspiring confidence in a brighter tomorrow" },
-  { num: "06", icon: "fa-person-rays", name: "Human Dignity", desc: "Honouring the sacred worth of every person" },
-  { num: "07", icon: "fa-gavel", name: "Justice", desc: "Upholding rights, fairness, and moral integrity" },
-  { num: "08", icon: "fa-hand-holding-heart", name: "Service", desc: "Giving selflessly to those who need it most" },
-  { num: "09", icon: "fa-handshake", name: "Solidarity", desc: "Standing united across all communities" },
-  { num: "10", icon: "fa-shield-halved", name: "Stewardship & Accountability", desc: "Managing every resource with full transparency" },
-  { num: "11", icon: "fa-people-group", name: "Subsidiarity & Partnership", desc: "Empowering local action through collaboration" },
-];
+import { faSolidIconClass } from "@/lib/fontawesome";
+import {
+  DEFAULT_MVV_BG_SLIDES,
+  DEFAULT_MVV_STATEMENTS,
+  DEFAULT_MVV_TITLE,
+  DEFAULT_MVV_VALUE_ITEMS,
+  DEFAULT_MVV_VALUES_EYEBROW,
+  DEFAULT_MVV_VALUES_EYEBROW_ICON,
+  DEFAULT_MVV_VALUES_TITLE,
+  type MvvStatement,
+  type MvvValueItem,
+} from "@/lib/mission-vision-values";
+import { formatInlineBold } from "@/lib/text-format";
 
 type MissionVisionValuesSectionProps = {
   showMissionVision?: boolean;
   showValues?: boolean;
+  title?: string;
+  statements?: MvvStatement[];
+  valuesEyebrow?: string;
+  valuesEyebrowIcon?: string;
+  valuesTitle?: string;
+  values?: MvvValueItem[];
+  bgSlides?: string[];
 };
+
+function statementNum(index: number): string {
+  return String(index + 1).padStart(2, "0");
+}
 
 export default function MissionVisionValuesSection({
   showMissionVision = true,
   showValues = true,
+  title = DEFAULT_MVV_TITLE,
+  statements = DEFAULT_MVV_STATEMENTS,
+  valuesEyebrow = DEFAULT_MVV_VALUES_EYEBROW,
+  valuesEyebrowIcon = DEFAULT_MVV_VALUES_EYEBROW_ICON,
+  valuesTitle = DEFAULT_MVV_VALUES_TITLE,
+  values = DEFAULT_MVV_VALUE_ITEMS,
+  bgSlides = DEFAULT_MVV_BG_SLIDES,
 }: MissionVisionValuesSectionProps = {}) {
   if (!showMissionVision && !showValues) return null;
 
   const valuesOnly = showValues && !showMissionVision;
-
   const sectionClass = valuesOnly
     ? "about-mvv-section about-mvv-section--values-only"
     : "about-mvv-section";
+  const eyebrowIconClass = faSolidIconClass(valuesEyebrowIcon) ?? "fa-solid fa-star";
 
   return (
     <section className={sectionClass} id={valuesOnly ? "values" : "mission"}>
       {showMissionVision ? (
-      <div className="container">
-        <div className="head-center">
-          <h2 className="sub-section-title">Vision, Mission &amp; Values</h2>
-        </div>
+        <div className="container">
+          <div className="head-center">
+            <h2 className="sub-section-title">{title}</h2>
+          </div>
 
-        <div className="about-mvv-statements">
-          <div className="about-mvv-stmt about-mvv-stmt--vision">
-            <div className="about-mvv-stmt-num">01</div>
-            <div className="about-mvv-stmt-body">
-              <div className="about-mvv-stmt-label">Our Vision</div>
-              <p className="about-mvv-stmt-quote">
-                A Rwanda where every person — regardless of background, status, or circumstance
-                — lives with full <strong>dignity, equal rights</strong>, and the opportunity to
-                flourish in body, mind, and spirit through inclusive, non-discriminatory interventions.
-              </p>
-            </div>
-          </div>
-          <div className="about-mvv-stmt about-mvv-stmt--mission">
-            <div className="about-mvv-stmt-num">02</div>
-            <div className="about-mvv-stmt-body">
-              <div className="about-mvv-stmt-label">Our Mission</div>
-              <p className="about-mvv-stmt-quote">
-                To assist people in need and promote their <strong>integral human development</strong>,
-                drawing on Charity as per the Word of God — reaching the poor, sick, elderly,
-                refugees, people with disabilities, and all vulnerable communities across Rwanda.
-              </p>
-            </div>
+          <div className="about-mvv-statements">
+            {statements.map((stmt, index) => (
+              <div
+                key={`${stmt.variant}-${index}`}
+                className={`about-mvv-stmt about-mvv-stmt--${stmt.variant}`}
+              >
+                <div className="about-mvv-stmt-num">{statementNum(index)}</div>
+                <div className="about-mvv-stmt-body">
+                  <div className="about-mvv-stmt-label">{stmt.label}</div>
+                  <p className="about-mvv-stmt-quote">{formatInlineBold(stmt.body)}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
       ) : null}
 
       {showValues ? (
-      <div className="about-mvv-values-strip" id="values">
-        <div className="about-mvv-bg-slides">
-          <div
-            className="about-mvv-bg-slide"
-            style={{ backgroundImage: "url('https://caritasrwanda.org/wp-content/uploads/2025/06/162A1384-scaled.jpg')" }}
-          />
-          <div
-            className="about-mvv-bg-slide"
-            style={{ backgroundImage: "url('https://caritasrwanda.org/wp-content/uploads/2025/03/162A9519-scaled.jpg')" }}
-          />
-          <div
-            className="about-mvv-bg-slide"
-            style={{ backgroundImage: "url('https://caritasrwanda.org/wp-content/uploads/2025/03/162A5107-scaled.jpg')" }}
-          />
-        </div>
-        <div className="about-mvv-vals-header">
-          <div className="about-mvv-vals-eyebrow">
-            <i className="fa-solid fa-star" style={{ marginRight: "0.4rem" }} aria-hidden /> Core Values
+        <div className="about-mvv-values-strip" id="values">
+          <div className="about-mvv-bg-slides">
+            {bgSlides.map((url, index) => (
+              <div
+                key={`${url}-${index}`}
+                className="about-mvv-bg-slide"
+                style={{ backgroundImage: `url('${url}')` }}
+              />
+            ))}
           </div>
-          <div className="about-mvv-vals-title">Principles We Live By</div>
-        </div>
-        <div className="about-mvv-values-grid">
-          {values.map((v) => (
-            <div key={v.num} className="about-mvv-value-pill" data-num={v.num}>
-              <div className="about-mvv-value-pill-icon">
-                <i className={`fa-solid ${v.icon}`} aria-hidden />
-              </div>
-              <div className="about-mvv-value-pill-name">{v.name}</div>
-              <p className="about-mvv-value-pill-desc">{v.desc}</p>
+          <div className="about-mvv-vals-header">
+            <div className="about-mvv-vals-eyebrow">
+              <i className={eyebrowIconClass} style={{ marginRight: "0.4rem" }} aria-hidden />
+              {valuesEyebrow}
             </div>
-          ))}
+            <div className="about-mvv-vals-title">{valuesTitle}</div>
+          </div>
+          <div className="about-mvv-values-grid">
+            {values.map((v, index) => (
+              <div key={`${v.name}-${index}`} className="about-mvv-value-pill" data-num={statementNum(index)}>
+                <div className="about-mvv-value-pill-icon">
+                  <i className={faSolidIconClass(v.icon) ?? "fa-solid fa-star"} aria-hidden />
+                </div>
+                <div className="about-mvv-value-pill-name">{v.name}</div>
+                <p className="about-mvv-value-pill-desc">{v.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
       ) : null}
     </section>
   );

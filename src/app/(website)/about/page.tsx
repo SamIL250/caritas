@@ -6,6 +6,10 @@ import { renderWebsiteSection } from "@/lib/public-page-sections";
 import AboutPageSwitcher from "@/components/website/about/AboutPageSwitcher";
 import HistoryBentoSection from "@/components/website/sections/HistoryBentoSection";
 import MissionVisionValuesSection from "@/components/website/sections/MissionVisionValuesSection";
+import {
+  parseMissionVisionContent,
+  parseValuesGridContent,
+} from "@/lib/mission-vision-values";
 import { ABOUT_SECTION_NAV, hrefToAboutAnchor } from "@/lib/about-section-nav";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -141,16 +145,28 @@ export default async function AboutPage() {
     switch (section.type) {
       case "stats_banner":
       case "featured_quote":
-      case "pillar_cards":
       case "contact_info":
       case "map_section":
         break;
       case "timeline":
         panels[anchor] = <HistoryBentoSection key={section.id} />;
         break;
+      case "pillar_cards":
+        panels[anchor] = (
+          <MissionVisionValuesSection
+            key={section.id}
+            showValues={false}
+            {...parseMissionVisionContent(section.content)}
+          />
+        );
+        break;
       case "values_grid":
         panels[anchor] = (
-          <MissionVisionValuesSection key={section.id} showMissionVision={false} />
+          <MissionVisionValuesSection
+            key={section.id}
+            showMissionVision={false}
+            {...parseValuesGridContent(section.content)}
+          />
         );
         break;
       case "network_section":
