@@ -387,6 +387,109 @@
   font-size: 0.95rem;
 }
 
+.news-page-root .news-empty--inline {
+  padding: 2rem 1rem;
+  text-align: left;
+}
+
+/* ==================== MORE STORIES + YEAR FILTER ==================== */
+
+.news-page-root .news-more-stories-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  align-items: start;
+}
+
+.news-page-root .news-more-stories-main {
+  min-width: 0;
+}
+
+.news-page-root .news-year-filter {
+  position: sticky;
+  top: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  min-width: 4.25rem;
+  padding-left: 1.75rem;
+  border-left: 1px solid var(--news-edge);
+}
+
+.news-page-root .news-year-filter-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--news-muted);
+  margin-bottom: 0.65rem;
+}
+
+.news-page-root .news-year-filter-btn {
+  background: none;
+  border: none;
+  text-align: right;
+  padding: 0.3rem 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.2;
+  transition: color 0.2s ease;
+}
+
+.news-page-root .news-year-filter-btn:hover {
+  color: var(--news-ink);
+}
+
+.news-page-root .news-year-filter-btn.is-active {
+  color: var(--news-red);
+  font-weight: 800;
+}
+
+@media (max-width: 960px) {
+  .news-page-root .news-more-stories-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .news-page-root .news-year-filter {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.45rem;
+    min-width: 0;
+    padding: 0 0 1.25rem;
+    margin-bottom: 0.5rem;
+    border-left: none;
+    border-bottom: 1px solid var(--news-edge);
+  }
+
+  .news-page-root .news-year-filter-label {
+    width: 100%;
+    margin-bottom: 0.15rem;
+    text-align: left;
+  }
+
+  .news-page-root .news-year-filter-btn {
+    text-align: center;
+    padding: 0.38rem 0.85rem;
+    border: 1px solid var(--news-edge);
+    border-radius: 100px;
+    font-size: 0.82rem;
+    color: var(--news-muted);
+  }
+
+  .news-page-root .news-year-filter-btn.is-active {
+    border-color: rgba(165, 40, 13, 0.35);
+    background: rgba(165, 40, 13, 0.06);
+    color: var(--news-red);
+  }
+}
+
 .news-page-root .news-newsletter {
   margin-top: 3rem;
   background: #1a2332;

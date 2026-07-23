@@ -36,6 +36,17 @@ function matchesQuery(a: PublishedNewsArticle, query: string): boolean {
   return `${a.title} ${a.excerpt}`.toLowerCase().includes(q);
 }
 
+function articleYear(a: PublishedNewsArticle): number | null {
+  if (!a.published_at) return null;
+  const year = new Date(a.published_at).getFullYear();
+  return Number.isNaN(year) ? null : year;
+}
+
+function matchesYearFilter(a: PublishedNewsArticle, yearFilter: number | "all"): boolean {
+  if (yearFilter === "all") return true;
+  return articleYear(a) === yearFilter;
+}
+
 type Props = {
   featuredArticle: PublishedNewsArticle | null;
   gridArticles: PublishedNewsArticle[];
@@ -68,6 +79,15 @@ export default function NewsArticlesFeed({
     );
   }, [allArticles, departmentFilter, query]);
 
+  const availableYears = useMemo(() => {
+    const years = new Set<number>();
+    for (const article of scopedArticles) {
+      const year = articleYear(article);
+      if (year !== null) years.add(year);
+    }
+    return [...years].sort((a, b) => b - a);
+  }, [scopedArticles]);
+
   const heroArticle = useMemo(() => {
     const featured = scopedArticles.filter((a) => a.featured);
     if (featured.length === 0) return null;
@@ -82,17 +102,43 @@ export default function NewsArticlesFeed({
   const featuredVisible = heroArticle !== null;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [yearFilter, setYearFilter] = useState<number | "all">("all");
   const ITEMS_PER_PAGE = 9;
 
   useEffect(() => {
     setCurrentPage(1);
+    setYearFilter("all");
   }, [departmentFilter, query]);
 
-  const totalPages = Math.ceil(filteredGrid.length / ITEMS_PER_PAGE);
-  const paginatedGrid = filteredGrid.slice(
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [yearFilter]);
+
+  useEffect(() => {
+    if (yearFilter !== "all" && !availableYears.includes(yearFilter)) {
+      setYearFilter("all");
+    }
+  }, [availableYears, yearFilter]);
+
+  const yearScopedGrid = useMemo(() => {
+    return filteredGrid.filter((a) => matchesYearFilter(a, yearFilter));
+  }, [filteredGrid, yearFilter]);
+
+  const showMagazineLayout = yearFilter === "all" && currentPage === 1 && yearScopedGrid.length > 0;
+
+  const moreStoriesPool = useMemo(() => {
+    if (showMagazineLayout) return yearScopedGrid.slice(6);
+    return yearScopedGrid;
+  }, [showMagazineLayout, yearScopedGrid]);
+
+  const totalPages = Math.max(1, Math.ceil(moreStoriesPool.length / ITEMS_PER_PAGE));
+  const paginatedMoreStories = moreStoriesPool.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
+
+  const showMoreStoriesSection =
+    yearFilter !== "all" || currentPage > 1 || yearScopedGrid.length > 6;
 
   const tagLabel = (a: PublishedNewsArticle) =>
     a.department?.label?.trim() || categoryLabel(a.category);
@@ -169,10 +215,16 @@ export default function NewsArticlesFeed({
           </p>
         )}
 
+        {yearFilter !== "all" && yearScopedGrid.length === 0 && filteredGrid.length > 0 && (
+          <p className="news-empty">
+            No articles from {yearFilter} in this selection. Try another year or category.
+          </p>
+        )}
+
         {filteredGrid.length > 0 && (
           <>
             {/* Magazine Layout for Top Stories on Page 1 */}
-            {currentPage === 1 && filteredGrid.length > 0 && (
+            {showMagazineLayout && (
               <div className="news-mag-section">
                 <div className="news-mag-header">
                   <h2>{featuredVisible ? "Trending Now" : "Top Stories"}</h2>
@@ -180,47 +232,47 @@ export default function NewsArticlesFeed({
                 <div className="news-mag-grid">
                   {/* Left Column: Large Featured + Wide Article */}
                   <div className="flex flex-col gap-6 w-full h-full">
-                    {filteredGrid[0] && (
+                    {yearScopedGrid[0] && (
                       <Link
-                        href={`/news/${filteredGrid[0].slug}`}
+                        href={`/news/${yearScopedGrid[0].slug}`}
                         className="news-mag-large"
                       >
                         <div className="news-mag-large-img">
                           <MediaFigure
-                            src={filteredGrid[0].image_url}
-                            alt={filteredGrid[0].title}
+                            src={yearScopedGrid[0].image_url}
+                            alt={yearScopedGrid[0].title}
                             hideCaption
                             figureClassName="news-mag-figure"
                           />
-                          <div className="news-mag-large-tag">{tagLabel(filteredGrid[0])}</div>
+                          <div className="news-mag-large-tag">{tagLabel(yearScopedGrid[0])}</div>
                         </div>
-                        <h3 className="news-mag-large-title">{filteredGrid[0].title}</h3>
+                        <h3 className="news-mag-large-title">{yearScopedGrid[0].title}</h3>
                         <div className="news-mag-large-meta">
-                          <span>{formatPublishedDate(filteredGrid[0].published_at)}</span>
+                          <span>{formatPublishedDate(yearScopedGrid[0].published_at)}</span>
                           <span>•</span>
-                          <span>{filteredGrid[0].excerpt?.substring(0, 80)}...</span>
+                          <span>{yearScopedGrid[0].excerpt?.substring(0, 80)}...</span>
                         </div>
                       </Link>
                     )}
                     
-                    {filteredGrid[1] && (
+                    {yearScopedGrid[1] && (
                       <Link
-                        href={`/news/${filteredGrid[1].slug}`}
+                        href={`/news/${yearScopedGrid[1].slug}`}
                         className="flex items-center gap-4 group text-inherit no-underline border border-stone-200 rounded-2xl p-3 hover:border-[var(--primary-orange)] transition-colors bg-white mt-auto"
                       >
                         <div className="w-1/3 aspect-[4/3] rounded-xl overflow-hidden relative shrink-0">
                           <MediaFigure
-                            src={filteredGrid[1].image_url}
-                            alt={filteredGrid[1].title}
+                            src={yearScopedGrid[1].image_url}
+                            alt={yearScopedGrid[1].title}
                             hideCaption
                             figureClassName="news-mag-figure h-full"
                             imgClassName="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         </div>
                         <div className="w-2/3 flex flex-col justify-center">
-                          <div className="text-[10px] font-bold text-[#a5280d] mb-1 uppercase tracking-wider">{tagLabel(filteredGrid[1])}</div>
-                          <h4 className="text-[15px] font-bold text-stone-900 group-hover:text-[#a5280d] transition-colors mb-1 line-clamp-2 leading-tight">{filteredGrid[1].title}</h4>
-                          <div className="text-[11px] text-stone-500">{formatPublishedDate(filteredGrid[1].published_at)}</div>
+                          <div className="text-[10px] font-bold text-[#a5280d] mb-1 uppercase tracking-wider">{tagLabel(yearScopedGrid[1])}</div>
+                          <h4 className="text-[15px] font-bold text-stone-900 group-hover:text-[#a5280d] transition-colors mb-1 line-clamp-2 leading-tight">{yearScopedGrid[1].title}</h4>
+                          <div className="text-[11px] text-stone-500">{formatPublishedDate(yearScopedGrid[1].published_at)}</div>
                         </div>
                       </Link>
                     )}
@@ -228,7 +280,7 @@ export default function NewsArticlesFeed({
 
                   {/* Right: Vertical List */}
                   <div className="news-mag-list">
-                    {filteredGrid.slice(2, 6).map((a) => (
+                    {yearScopedGrid.slice(2, 6).map((a) => (
                       <Link
                         key={a.id}
                         href={`/news/${a.slug}`}
@@ -257,72 +309,130 @@ export default function NewsArticlesFeed({
             )}
 
             {/* Standard Grid for Remaining Stories */}
-            {(currentPage > 1 || filteredGrid.length > 6) && (
-              <>
-                <div className="news-section-divider">
-                  <h2>{currentPage === 1 ? "More Stories" : "Stories"}</h2>
-                </div>
-                <div className="news-grid">
-                  {(currentPage === 1 ? paginatedGrid.slice(6) : paginatedGrid).map((a) => (
-                    <Link
-                      key={a.id}
-                      href={`/news/${a.slug}`}
-                      className="news-card text-inherit no-underline cursor-pointer block"
-                      aria-label={`Read: ${a.title}`}
-                    >
-                      <div className="news-card-img">
-                        <MediaFigure
-                          src={a.image_url}
-                          alt={a.image_alt || a.title}
-                          hideCaption
-                          figureClassName="news-card-figure"
-                        />
-                        <div className="news-card-overlay" aria-hidden />
-                        <div className="news-card-tag">{tagLabel(a)}</div>
-                      </div>
-                      <div className="news-card-body">
-                        <div className="news-card-date">
-                          <i className="fa-regular fa-calendar" aria-hidden />
-                          {formatPublishedDate(a.published_at)}
-                        </div>
-                        <h3>{a.title}</h3>
-                        <p>{a.excerpt}</p>
-                        <span className="news-card-link">
-                          Read article <i className="fa-solid fa-arrow-right text-xs" aria-hidden />
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )}
+            {showMoreStoriesSection && (
+              <div className="news-more-stories-layout">
+                <div className="news-more-stories-main">
+                  <div className="news-section-divider">
+                    <h2>
+                      {yearFilter !== "all"
+                        ? `Stories from ${yearFilter}`
+                        : showMagazineLayout
+                          ? "More Stories"
+                          : "Stories"}
+                    </h2>
+                  </div>
 
-            {totalPages > 1 && (
-              <div className="news-pagination">
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="news-pagination-btn"
-                >
-                  <i className="fa-solid fa-chevron-left" />
-                  Previous
-                </button>
-                <span className="news-pagination-info">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="news-pagination-btn"
-                >
-                  Next
-                  <i className="fa-solid fa-chevron-right" />
-                </button>
+                  {paginatedMoreStories.length > 0 ? (
+                    <div className="news-grid">
+                      {paginatedMoreStories.map((a) => (
+                        <Link
+                          key={a.id}
+                          href={`/news/${a.slug}`}
+                          className="news-card text-inherit no-underline cursor-pointer block"
+                          aria-label={`Read: ${a.title}`}
+                        >
+                          <div className="news-card-img">
+                            <MediaFigure
+                              src={a.image_url}
+                              alt={a.image_alt || a.title}
+                              hideCaption
+                              figureClassName="news-card-figure"
+                            />
+                            <div className="news-card-overlay" aria-hidden />
+                            <div className="news-card-tag">{tagLabel(a)}</div>
+                          </div>
+                          <div className="news-card-body">
+                            <div className="news-card-date">
+                              <i className="fa-regular fa-calendar" aria-hidden />
+                              {formatPublishedDate(a.published_at)}
+                            </div>
+                            <h3>{a.title}</h3>
+                            <p>{a.excerpt}</p>
+                            <span className="news-card-link">
+                              Read article <i className="fa-solid fa-arrow-right text-xs" aria-hidden />
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="news-empty news-empty--inline">
+                      No stories from {yearFilter} to show here.
+                    </p>
+                  )}
+
+                  {moreStoriesPool.length > ITEMS_PER_PAGE && (
+                    <div className="news-pagination">
+                      <button
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="news-pagination-btn"
+                      >
+                        <i className="fa-solid fa-chevron-left" />
+                        Previous
+                      </button>
+                      <span className="news-pagination-info">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="news-pagination-btn"
+                      >
+                        Next
+                        <i className="fa-solid fa-chevron-right" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {availableYears.length > 0 ? (
+                  <NewsYearFilter
+                    years={availableYears}
+                    value={yearFilter}
+                    onChange={setYearFilter}
+                  />
+                ) : null}
               </div>
             )}
           </>
         )}
       </div>
     </>
+  );
+}
+
+function NewsYearFilter({
+  years,
+  value,
+  onChange,
+}: {
+  years: number[];
+  value: number | "all";
+  onChange: (year: number | "all") => void;
+}) {
+  return (
+    <aside className="news-year-filter" aria-label="Filter stories by year">
+      <span className="news-year-filter-label">Year</span>
+      <button
+        type="button"
+        className={`news-year-filter-btn${value === "all" ? " is-active" : ""}`}
+        onClick={() => onChange("all")}
+        aria-pressed={value === "all"}
+      >
+        All
+      </button>
+      {years.map((year) => (
+        <button
+          key={year}
+          type="button"
+          className={`news-year-filter-btn${value === year ? " is-active" : ""}`}
+          onClick={() => onChange(year)}
+          aria-pressed={value === year}
+        >
+          {year}
+        </button>
+      ))}
+    </aside>
   );
 }
