@@ -113,6 +113,7 @@ export default function AboutPageSwitcher({
       <PageHeroSection
         {...hero}
         quickNav={quickNav}
+        quickNavHint="Unfold"
         quickNavMode="select"
         activeQuickNavHref={activeHref}
         onQuickNavSelect={handleSelect}

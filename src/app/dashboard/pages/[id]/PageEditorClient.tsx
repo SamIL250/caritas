@@ -627,6 +627,7 @@ export default function PageEditorClient({
             imageUrl={localState.image_url}
             breadcrumbLabel="About Us"
             quickNav={qn}
+            quickNavHint="Unfold"
           />
         );
       }

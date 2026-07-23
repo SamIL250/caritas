@@ -15,6 +15,8 @@ type PageHeroSectionProps = {
   /** Background image URL — baked into --page-hero-image CSS var */
   imageUrl?: string;
   breadcrumbLabel?: string;
+  /** When set, shows a hint label to the left of the quick-nav pills (e.g. About page). */
+  quickNavHint?: string;
   quickNav?: QuickNavItem[];
   /** When "select", pills toggle sections instead of scrolling to anchors. */
   quickNavMode?: "anchor" | "select";
@@ -63,6 +65,7 @@ export default function PageHeroSection({
   imageUrl = "/img/slide1.webp",
   breadcrumbLabel = "About Us",
   quickNav = [],
+  quickNavHint,
   quickNavMode = "anchor",
   activeQuickNavHref = null,
   onQuickNavSelect,
@@ -70,7 +73,7 @@ export default function PageHeroSection({
 }: PageHeroSectionProps) {
   return (
     <section
-      className="page-hero"
+      className={`page-hero${quickNavHint ? " page-hero--with-quick-nav" : ""}`}
       style={
         {
           ["--page-hero-image" as string]: `url(${JSON.stringify(imageUrl)})`,
@@ -95,8 +98,17 @@ export default function PageHeroSection({
             <span>{breadcrumbLabel}</span>
           </nav>
           {quickNav.length > 0 ? (
-            <nav className="hero-quick-nav" aria-label="On this page">
-              {quickNav.map((item) => {
+            <div className="hero-quick-nav-row">
+              {quickNavHint ? (
+                <div className="hero-quick-nav-hint" aria-hidden>
+                  <span className="hero-quick-nav-hint__icon" aria-hidden>
+                    <i className="fa-solid fa-hand-point-right" aria-hidden />
+                  </span>
+                  <span className="hero-quick-nav-hint__label">{quickNavHint}</span>
+                </div>
+              ) : null}
+              <nav className="hero-quick-nav" aria-label="On this page">
+                {quickNav.map((item) => {
                 const ic = item.icon?.trim();
                 const iconClass = ic
                   ? ic.includes("fa-")
@@ -129,7 +141,8 @@ export default function PageHeroSection({
                   </a>
                 );
               })}
-            </nav>
+              </nav>
+            </div>
           ) : null}
           {children}
         </div>
