@@ -174,10 +174,157 @@
   border-radius: 100px;
 }
 
-.pub-main {
-  max-width: 1160px;
+.pub-main-layout {
+  max-width: 1240px;
   margin: 0 auto;
   padding: 1.5rem 2rem 3rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  align-items: start;
+}
+
+.pub-main-content {
+  min-width: 0;
+}
+
+.pub-empty-filtered {
+  margin: 0 0 1.5rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #5a6a7a;
+  font-size: 0.95rem;
+  border: 1px dashed rgba(13, 27, 42, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.pub-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  min-height: 220px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  border: 1px dashed #e5e7eb;
+  border-radius: 16px;
+  background: rgba(249, 250, 251, 0.75);
+}
+
+.pub-empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+.pub-empty-state-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.pub-empty-state-text {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #9ca3af;
+}
+
+.pub-year-filter {
+  position: sticky;
+  top: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  min-width: 4.25rem;
+  padding-left: 1.75rem;
+  border-left: 1px solid rgba(13, 27, 42, 0.1);
+}
+
+.pub-year-filter-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #5a6a7a;
+  margin-bottom: 0.65rem;
+}
+
+.pub-year-filter-btn {
+  background: none;
+  border: none;
+  text-align: right;
+  padding: 0.3rem 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.2;
+  transition: color 0.2s ease;
+}
+
+.pub-year-filter-btn:hover {
+  color: #0d1b2a;
+}
+
+.pub-year-filter-btn.is-active {
+  color: #a5280d;
+  font-weight: 800;
+}
+
+@media (max-width: 960px) {
+  .pub-main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pub-year-filter {
+    position: static;
+    order: -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.45rem;
+    min-width: 0;
+    padding: 0 0 1.25rem;
+    margin-bottom: 0.5rem;
+    border-left: none;
+    border-bottom: 1px solid rgba(13, 27, 42, 0.1);
+  }
+
+  .pub-year-filter-label {
+    width: 100%;
+    margin-bottom: 0.15rem;
+    text-align: left;
+  }
+
+  .pub-year-filter-btn {
+    text-align: center;
+    padding: 0.38rem 0.85rem;
+    border: 1px solid rgba(13, 27, 42, 0.1);
+    border-radius: 100px;
+    font-size: 0.82rem;
+    color: #5a6a7a;
+  }
+
+  .pub-year-filter-btn.is-active {
+    border-color: rgba(165, 40, 13, 0.35);
+    background: rgba(165, 40, 13, 0.06);
+    color: #a5280d;
+  }
 }
 
 .pub-section {
@@ -528,7 +675,7 @@
     min-height: 200px;
   }
 
-  .pub-main {
+  .pub-main-layout {
     padding: 2rem 1rem 4rem;
   }
 }

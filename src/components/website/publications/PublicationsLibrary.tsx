@@ -50,8 +50,28 @@ function gridClassForKind(kind: string, slug: string): string {
   return "pub-card-grid";
 }
 
+function itemYear(publishedAt: string | null): number | null {
+  if (!publishedAt) return null;
+  const year = new Date(publishedAt).getFullYear();
+  return Number.isNaN(year) ? null : year;
+}
+
+function publicationYear(row: Pick<PublicationRow, "published_at">): number | null {
+  return itemYear(row.published_at);
+}
+
+function testimonyYear(row: Pick<TestimonyRow, "published_at">): number | null {
+  return itemYear(row.published_at);
+}
+
+function matchesYearFilter(year: number | null, yearFilter: number | "all"): boolean {
+  if (yearFilter === "all") return true;
+  return year === yearFilter;
+}
+
 export default function PublicationsLibrary({ publications, categories, testimonies = [] }: Props) {
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [yearFilter, setYearFilter] = useState<number | "all">("all");
   const [activePublication, setActivePublication] = useState<PublicationRow | null>(null);
   const [lockedPub, setLockedPub] = useState<PublicationRow | null>(null);
 
@@ -84,6 +104,72 @@ export default function PublicationsLibrary({ publications, categories, testimon
     publications.filter((p) => p.category !== "success_story").length + testimonies.length;
   const showSection = (slug: string) => filter === "all" || filter === slug;
   const showTestimonies = filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR;
+
+  const scopedPublications = useMemo(() => {
+    if (filter === TESTIMONIES_SECTION_ANCHOR) return [];
+    if (filter === "all") {
+      return publications.filter((p) => p.category !== "success_story");
+    }
+    return publications.filter((p) => p.category === filter);
+  }, [filter, publications]);
+
+  const scopedTestimonies = useMemo(() => {
+    if (filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR) return testimonies;
+    return [];
+  }, [filter, testimonies]);
+
+  const availableYears = useMemo(() => {
+    const years = new Set<number>();
+    for (const publication of scopedPublications) {
+      const year = publicationYear(publication);
+      if (year !== null) years.add(year);
+    }
+    for (const testimony of scopedTestimonies) {
+      const year = testimonyYear(testimony);
+      if (year !== null) years.add(year);
+    }
+    return [...years].sort((a, b) => b - a);
+  }, [scopedPublications, scopedTestimonies]);
+
+  useEffect(() => {
+    setYearFilter("all");
+  }, [filter]);
+
+  useEffect(() => {
+    if (yearFilter !== "all" && !availableYears.includes(yearFilter)) {
+      setYearFilter("all");
+    }
+  }, [availableYears, yearFilter]);
+
+  const showStrategicFeatured =
+    strategicFeatured &&
+    matchesYearFilter(publicationYear(strategicFeatured), yearFilter);
+
+  const hasFilteredContent = useMemo(() => {
+    if (yearFilter === "all") return true;
+    if (showStrategicFeatured) return true;
+
+    const hasCategoryItems = sortedCategories.some((cat) => {
+      const sectionVisible = filter === "all" || filter === cat.slug;
+      if (!sectionVisible) return false;
+      return publications
+        .filter((p) => p.category === cat.slug)
+        .some((row) => matchesYearFilter(publicationYear(row), yearFilter));
+    });
+
+    const hasTestimonyItems =
+      (filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR) &&
+      scopedTestimonies.some((row) => matchesYearFilter(testimonyYear(row), yearFilter));
+
+    return hasCategoryItems || hasTestimonyItems;
+  }, [
+    yearFilter,
+    showStrategicFeatured,
+    sortedCategories,
+    filter,
+    publications,
+    scopedTestimonies,
+  ]);
 
   useEffect(() => {
     const hash = window.location.hash.replace(/^#/, "");
@@ -176,8 +262,15 @@ export default function PublicationsLibrary({ publications, categories, testimon
         </div>
       </div>
 
-      <main className="pub-main">
-          {filter !== TESTIMONIES_SECTION_ANCHOR && strategicFeatured && strategicCat && showSection("strategic_plan") ? (
+      <div className="pub-main-layout">
+        <div className="pub-main-content">
+          {yearFilter !== "all" && !hasFilteredContent ? (
+            <p className="pub-empty-filtered">
+              No publications from {yearFilter} in this selection. Try another year or category.
+            </p>
+          ) : null}
+
+          {filter !== TESTIMONIES_SECTION_ANCHOR && strategicFeatured && strategicCat && showSection("strategic_plan") && showStrategicFeatured ? (
             <section
               className="pub-section"
               id={readCategoryBehavior(strategicCat).site_anchor || "strategic"}
@@ -218,28 +311,44 @@ export default function PublicationsLibrary({ publications, categories, testimon
             </section>
           ) : null}
 
-        {filter !== TESTIMONIES_SECTION_ANCHOR
-          ? sortedCategories.map((cat) => {
-          const items = publications.filter((p) => p.category === cat.slug);
-          const behavior = readCategoryBehavior(cat);
-          const anchor = behavior.site_anchor || cat.slug.replace(/_/g, "-");
-          const visible = showSection(cat.slug);
-          return (
-            <CategorySection
-              key={cat.id}
-              cat={cat}
-              items={items}
-              anchor={anchor}
-              visible={visible}
-              onOpenDrawer={setActivePublication}
-              onLockedClick={setLockedPub}
-            />
-          );
-        })
-          : null}
+          {filter !== TESTIMONIES_SECTION_ANCHOR
+            ? sortedCategories.map((cat) => {
+                const items = publications.filter((p) => p.category === cat.slug);
+                const behavior = readCategoryBehavior(cat);
+                const anchor = behavior.site_anchor || cat.slug.replace(/_/g, "-");
+                const visible = showSection(cat.slug);
+                return (
+                  <CategorySection
+                    key={cat.id}
+                    cat={cat}
+                    items={items}
+                    anchor={anchor}
+                    visible={visible}
+                    yearFilter={yearFilter}
+                    onOpenDrawer={setActivePublication}
+                    onLockedClick={setLockedPub}
+                  />
+                );
+              })
+            : null}
 
-        <TestimoniesSection testimonies={testimonies} visible={showTestimonies} />
-      </main>
+          <TestimoniesSection
+            testimonies={scopedTestimonies.filter((row) =>
+              matchesYearFilter(testimonyYear(row), yearFilter),
+            )}
+            visible={showTestimonies}
+            yearFilter={yearFilter}
+          />
+        </div>
+
+        {availableYears.length > 0 ? (
+          <PublicationsYearFilter
+            years={availableYears}
+            value={yearFilter}
+            onChange={setYearFilter}
+          />
+        ) : null}
+      </div>
 
       <PublicationDrawer
         publication={activePublication}
@@ -330,6 +439,7 @@ function CategorySection({
   items,
   anchor,
   visible,
+  yearFilter,
   onOpenDrawer,
   onLockedClick,
 }: {
@@ -337,14 +447,33 @@ function CategorySection({
   items: PublicationRow[];
   anchor: string;
   visible: boolean;
+  yearFilter: number | "all";
   onOpenDrawer: (row: PublicationRow) => void;
   onLockedClick: (row: PublicationRow) => void;
 }) {
   const headingId = `pub-${cat.slug}-heading`;
   const gridClass = gridClassForKind(cat.kind, cat.slug);
+  const filteredItems = items.filter((row) =>
+    matchesYearFilter(publicationYear(row), yearFilter),
+  );
+
+  if (!visible) {
+    return (
+      <section
+        className="pub-section pub-section--hidden"
+        id={anchor}
+        aria-labelledby={headingId}
+      />
+    );
+  }
+
+  if (yearFilter !== "all" && filteredItems.length === 0) {
+    return null;
+  }
+
   return (
     <section
-      className={`pub-section${visible ? "" : " pub-section--hidden"}`}
+      className="pub-section"
       id={anchor}
       aria-labelledby={headingId}
     >
@@ -355,23 +484,23 @@ function CategorySection({
             {cat.plural_label || cat.label}
           </div>
           <h2 className="pub-section-title" id={headingId}>
-            {cat.label}
+            {yearFilter !== "all" ? `${cat.label} · ${yearFilter}` : cat.label}
           </h2>
         </div>
       </div>
-      {items.length > 0 ? (
+      {filteredItems.length > 0 ? (
         <div className={gridClass}>
-          {items.map((p) => (
+          {filteredItems.map((p) => (
             <CategoryCard key={p.id} cat={cat} row={p} onOpenDrawer={onOpenDrawer} onLockedClick={onLockedClick} />
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 py-16 text-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-stone-100 text-stone-400">
+        <div className="pub-empty-state">
+          <div className="pub-empty-state-icon">
             <i className={cat.icon || "fa-solid fa-file"} aria-hidden />
           </div>
-          <p className="text-sm font-semibold text-stone-600">No {cat.plural_label?.toLowerCase() || cat.label?.toLowerCase() || "items"} yet</p>
-          <p className="mt-1 text-xs text-stone-400">Check back later for updates.</p>
+          <p className="pub-empty-state-title">No {cat.plural_label?.toLowerCase() || cat.label?.toLowerCase() || "items"} yet</p>
+          <p className="pub-empty-state-text">Check back later for updates.</p>
         </div>
       )}
     </section>
@@ -599,5 +728,40 @@ function PublicationDrawer({
         )}
       </aside>
     </>
+  );
+}
+
+function PublicationsYearFilter({
+  years,
+  value,
+  onChange,
+}: {
+  years: number[];
+  value: number | "all";
+  onChange: (year: number | "all") => void;
+}) {
+  return (
+    <aside className="pub-year-filter" aria-label="Filter publications by year">
+      <span className="pub-year-filter-label">Year</span>
+      <button
+        type="button"
+        className={`pub-year-filter-btn${value === "all" ? " is-active" : ""}`}
+        onClick={() => onChange("all")}
+        aria-pressed={value === "all"}
+      >
+        All
+      </button>
+      {years.map((year) => (
+        <button
+          key={year}
+          type="button"
+          className={`pub-year-filter-btn${value === year ? " is-active" : ""}`}
+          onClick={() => onChange(year)}
+          aria-pressed={value === year}
+        >
+          {year}
+        </button>
+      ))}
+    </aside>
   );
 }

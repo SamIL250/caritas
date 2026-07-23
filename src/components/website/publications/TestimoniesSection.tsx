@@ -12,18 +12,33 @@ import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 type Props = {
   testimonies: TestimonyRow[];
   visible: boolean;
+  yearFilter?: number | "all";
 };
 
-export function TestimoniesSection({ testimonies, visible }: Props) {
+export function TestimoniesSection({ testimonies, visible, yearFilter = "all" }: Props) {
+  if (!visible) {
+    return (
+      <section
+        className="pub-section testimony-section pub-section--hidden"
+        id={TESTIMONIES_SECTION_ANCHOR}
+        aria-labelledby="pub-testimonies-heading"
+      />
+    );
+  }
+
+  if (yearFilter !== "all" && testimonies.length === 0) {
+    return null;
+  }
+
   return (
     <section
-      className={`pub-section testimony-section${visible ? "" : " pub-section--hidden"}`}
+      className="pub-section testimony-section"
       id={TESTIMONIES_SECTION_ANCHOR}
       aria-labelledby="pub-testimonies-heading"
     >
       <div className="testimony-section-head">
         <h2 className="testimony-section-title" id="pub-testimonies-heading">
-          Some of Our Testimonials
+          {yearFilter !== "all" ? `Testimonials · ${yearFilter}` : "Some of Our Testimonials"}
         </h2>
       </div>
 
@@ -34,12 +49,12 @@ export function TestimoniesSection({ testimonies, visible }: Props) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 py-16 text-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-stone-100 text-stone-400">
+        <div className="pub-empty-state">
+          <div className="pub-empty-state-icon">
             <i className="fa-solid fa-user" aria-hidden />
           </div>
-          <p className="text-sm font-semibold text-stone-600">No testimonies yet</p>
-          <p className="mt-1 text-xs text-stone-400">Check back later for inspiring stories.</p>
+          <p className="pub-empty-state-title">No testimonies yet</p>
+          <p className="pub-empty-state-text">Check back later for inspiring stories.</p>
         </div>
       )}
     </section>
