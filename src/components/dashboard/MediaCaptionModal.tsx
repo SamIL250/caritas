@@ -16,6 +16,7 @@ type Props = {
   title: string;
   description?: string;
   items: MediaCaptionDraft[];
+  requireCaptions?: boolean;
   onCancel: () => void;
   onConfirm: (captionsByKey: Record<string, string>) => void;
 };
@@ -25,6 +26,7 @@ export function MediaCaptionModal({
   title,
   description,
   items,
+  requireCaptions = false,
   onCancel,
   onConfirm,
 }: Props) {
@@ -51,11 +53,14 @@ export function MediaCaptionModal({
   }
 
   function handleConfirm() {
-    const missing = drafts.find((item) => !item.caption.trim());
-    if (missing) {
-      setError("Every image needs a caption before continuing.");
-      return;
+    if (requireCaptions) {
+      const missing = drafts.find((item) => !item.caption.trim());
+      if (missing) {
+        setError("Every image needs a caption before continuing.");
+        return;
+      }
     }
+    setError(null);
     onConfirm(Object.fromEntries(drafts.map((item) => [item.key, item.caption.trim()])));
   }
 
@@ -91,12 +96,14 @@ export function MediaCaptionModal({
                 <div className="min-w-0">
                   <p className="truncate text-sm font-semibold text-stone-800">{item.label}</p>
                   <p className="mt-0.5 text-xs text-stone-500">
-                    This caption appears below the image on the public site.
+                    {requireCaptions
+                      ? "This caption appears below the image on the public site."
+                      : "Optional. Add a caption if this image should show one on the public site."}
                   </p>
                 </div>
               </div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                Caption
+                Caption{requireCaptions ? "" : " (optional)"}
                 <textarea
                   value={item.caption}
                   onChange={(e) => updateCaption(item.key, e.target.value)}

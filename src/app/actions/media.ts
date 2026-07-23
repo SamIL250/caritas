@@ -88,9 +88,6 @@ export async function uploadMedia(formData: FormData) {
   const captionRaw = formData.get("caption");
   const caption =
     typeof captionRaw === "string" && captionRaw.trim().length > 0 ? captionRaw.trim() : null;
-  if (file.type.startsWith("image/") && !caption) {
-    throw new Error("Image caption is required.");
-  }
 
   const filename = file.name;
   const cloudResult = await uploadToCloudinary(file);
@@ -168,11 +165,11 @@ export async function renameMediaFile(mediaId: string, filename: string) {
 export async function updateMediaCaption(mediaId: string, caption: string) {
   const supabase = await createClient();
   const trimmed = caption.trim();
-  if (!trimmed) throw new Error("Caption is required.");
+  const value = trimmed.length > 0 ? trimmed : null;
 
   const { error } = await supabase
     .from("media")
-    .update({ caption: trimmed, alt_text: trimmed })
+    .update({ caption: value, alt_text: value })
     .eq("id", mediaId);
 
   if (error) throw new Error(error.message);
@@ -249,9 +246,6 @@ export async function saveDirectUploadedMedia(data: {
     typeof data.caption === "string" && data.caption.trim().length > 0
       ? data.caption.trim()
       : null;
-  if (data.mime_type.startsWith("image/") && !caption) {
-    throw new Error("Image caption is required.");
-  }
 
   const row = {
     filename: data.filename,

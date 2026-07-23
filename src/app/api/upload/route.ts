@@ -27,14 +27,11 @@ export async function POST(request: NextRequest) {
       typeof folderRaw === "string" && folderRaw.length > 0 ? folderRaw : null;
 
     const isImage = file.type.startsWith("image/");
-    const captionRaw = formData.get("caption");
-    const caption =
-      typeof captionRaw === "string" && captionRaw.trim().length > 0 ? captionRaw.trim() : null;
-    if (isImage && !caption) {
-      return NextResponse.json({ error: "Image caption is required." }, { status: 400 });
-    }
+  const captionRaw = formData.get("caption");
+  const caption =
+    typeof captionRaw === "string" && captionRaw.trim().length > 0 ? captionRaw.trim() : null;
 
-    let url: string;
+  let url: string;
     let storage_path: string;
 
     // Small images → Cloudinary (image optimisation via transforms)

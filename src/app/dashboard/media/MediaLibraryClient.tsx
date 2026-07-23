@@ -290,9 +290,9 @@ function DraggableFileCard({
         <p className="truncate text-xs font-bold text-stone-700" title={item.filename}>
           {item.filename}
         </p>
-        {item.mime_type?.startsWith("image/") ? (
+        {item.mime_type?.startsWith("image/") && item.caption?.trim() ? (
           <p className="mt-0.5 line-clamp-2 px-1 text-[10px] italic text-stone-500">
-            {item.caption?.trim() || "Caption needed"}
+            {item.caption}
           </p>
         ) : null}
         <p className="mt-0.5 text-[10px] text-stone-400">
@@ -385,8 +385,6 @@ export default function MediaLibraryClient({
   const [confirmTrashFile, setConfirmTrashFile] = useState<MediaRow | null>(null);
   const [confirmPurgeFile, setConfirmPurgeFile] = useState<MediaRow | null>(null);
   const [confirmDeleteFolder, setConfirmDeleteFolder] = useState<MediaFolderRow | null>(null);
-  const [pendingImageUploads, setPendingImageUploads] = useState<File[]>([]);
-  const [pendingOtherUploads, setPendingOtherUploads] = useState<File[]>([]);
   const [captionEditItem, setCaptionEditItem] = useState<MediaRow | null>(null);
   const [page, setPage] = useState(1);
 
@@ -489,50 +487,16 @@ export default function MediaLibraryClient({
     e.target.value = "";
     if (files.length === 0) return;
 
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-    const otherFiles = files.filter((file) => !file.type.startsWith("image/"));
-
-    if (imageFiles.length > 0) {
-      setPendingImageUploads(imageFiles);
-      setPendingOtherUploads(otherFiles);
-      return;
-    }
-
     setUploading(true);
     setError(null);
     try {
       await Promise.all(
-        otherFiles.map(async (file) => {
-          const fd = new FormData();
-          fd.append("file", file);
-          if (currentFolderId) fd.append("folder_id", currentFolderId);
-          return uploadMedia(fd);
-        }),
-      );
-      await reload();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Upload failed.");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function completeImageUpload(captionsByName: Record<string, string>) {
-    const imageFiles = pendingImageUploads;
-    const otherFiles = pendingOtherUploads;
-    setPendingImageUploads([]);
-    setPendingOtherUploads([]);
-
-    setUploading(true);
-    setError(null);
-    try {
-      await Promise.all(
-        [...imageFiles, ...otherFiles].map(async (file) => {
+        files.map(async (file) => {
           const fd = new FormData();
           fd.append("file", file);
           if (currentFolderId) fd.append("folder_id", currentFolderId);
           if (file.type.startsWith("image/")) {
-            fd.append("caption", captionsByName[file.name] ?? "");
+            fd.append("caption", "");
           }
           return uploadMedia(fd);
         }),
@@ -1039,26 +1003,9 @@ export default function MediaLibraryClient({
       />
 
       <MediaCaptionModal
-        open={pendingImageUploads.length > 0}
-        title="Add image captions"
-        description="Every image needs a caption before it is saved to the library."
-        items={pendingImageUploads.map((file) => ({
-          key: file.name,
-          label: file.name,
-          previewUrl: URL.createObjectURL(file),
-          caption: "",
-        }))}
-        onCancel={() => {
-          setPendingImageUploads([]);
-          setPendingOtherUploads([]);
-        }}
-        onConfirm={(captionsByKey) => void completeImageUpload(captionsByKey)}
-      />
-
-      <MediaCaptionModal
         open={captionEditItem !== null}
         title="Edit image caption"
-        description="This caption appears below the image in news, articles, and testimonies."
+        description="Captions are optional. Add one if this image should show text below it on the public site."
         items={
           captionEditItem
             ? [
