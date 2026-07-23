@@ -531,6 +531,34 @@
   }
 }
 
+.prog-success-load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.prog-success-load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.8rem;
+  background: transparent;
+  border: 2px solid var(--dept-color, #8b1a1a);
+  border-radius: 100px;
+  color: var(--dept-color, #8b1a1a);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.prog-success-load-more-btn:hover {
+  background: var(--dept-color, #8b1a1a);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
 .prog-success-card {
   display: none;
 }

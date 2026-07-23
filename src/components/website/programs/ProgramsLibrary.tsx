@@ -21,7 +21,7 @@ const PROGRAM_GRID_COLUMNS = 4;
 const SUCCESS_STORY_ROWS = 1;
 const NEWS_ROWS = 2;
 
-const SUCCESS_STORIES_VISIBLE = PROGRAM_GRID_COLUMNS * SUCCESS_STORY_ROWS;
+const SUCCESS_STORIES_PER_ROW = PROGRAM_GRID_COLUMNS;
 const NEWS_VISIBLE = PROGRAM_GRID_COLUMNS * NEWS_ROWS;
 
 type Props = {
@@ -200,37 +200,7 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
 
             {/* ── Success Stories ── */}
             {activeStories.length > 0 && (
-              <div className="prog-success-section">
-                <div className="prog-success-header">
-                  <div className="prog-section-head-row">
-                    <span className={`stories-eyebrow ${cat.slug}-peyebrow`}>
-                      <i className="fa-solid fa-star mr-2" />
-                      Success Stories
-                    </span>
-                    <Link
-                      href={categoryNewsHref(cat.slug)}
-                      className="prog-section-view-more"
-                    >
-                      View more
-                      <i className="fa-solid fa-arrow-right" aria-hidden />
-                    </Link>
-                  </div>
-                  <h3 className="prog-success-title">Lives Transformed Through {cat.label}</h3>
-                  <p className="prog-success-sub">
-                    Real stories of dignity restored and lives rebuilt across Rwanda&apos;s communities.
-                  </p>
-                </div>
-
-                <div className="prog-success-grid">
-                  {activeStories.slice(0, SUCCESS_STORIES_VISIBLE).map((story) => (
-                    <SuccessStoryCard
-                      key={story.id}
-                      story={story}
-                      deptSlug={cat.slug}
-                    />
-                  ))}
-                </div>
-              </div>
+              <SuccessStoriesSection stories={activeStories} category={cat} />
             )}
 
             {/* ── Latest News ── */}
@@ -328,6 +298,64 @@ function ProgramBubbleGallery({ items, onClick }: { items: any[]; onClick: (p: a
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Success Stories Section                                            */
+/* ------------------------------------------------------------------ */
+function SuccessStoriesSection({
+  stories,
+  category,
+}: {
+  stories: PublicationRow[];
+  category: ProgramCategoryRow;
+}) {
+  const [rowsVisible, setRowsVisible] = useState(SUCCESS_STORY_ROWS);
+
+  useEffect(() => {
+    setRowsVisible(SUCCESS_STORY_ROWS);
+  }, [category.slug]);
+
+  const visibleCount = rowsVisible * SUCCESS_STORIES_PER_ROW;
+  const visibleStories = stories.slice(0, visibleCount);
+  const hasMoreStories = stories.length > visibleCount;
+
+  return (
+    <div className="prog-success-section">
+      <div className="prog-success-header">
+        <span className={`stories-eyebrow ${category.slug}-peyebrow`}>
+          <i className="fa-solid fa-star mr-2" />
+          Success Stories
+        </span>
+        <h3 className="prog-success-title">Lives Transformed Through {category.label}</h3>
+        <p className="prog-success-sub">
+          Real stories of dignity restored and lives rebuilt across Rwanda&apos;s communities.
+        </p>
+      </div>
+
+      <div className="prog-success-grid">
+        {visibleStories.map((story) => (
+          <SuccessStoryCard
+            key={story.id}
+            story={story}
+            deptSlug={category.slug}
+          />
+        ))}
+      </div>
+
+      {hasMoreStories ? (
+        <div className="prog-success-load-more-wrap">
+          <button
+            type="button"
+            className="prog-success-load-more-btn"
+            onClick={() => setRowsVisible((rows) => rows + 1)}
+          >
+            Load more
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
