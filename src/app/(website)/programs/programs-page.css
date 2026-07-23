@@ -1246,22 +1246,22 @@
 .bubble-slider-container {
   width: 100%;
 }
-.bubble-slider { display:flex; align-items:center; gap:1.2rem; padding:1.5rem 1rem 2.5rem; max-width:1000px; margin:0 auto; }
+.bubble-slider { display:flex; align-items:center; gap:1.5rem; padding:1.5rem 1rem 2.5rem; max-width:1100px; margin:0 auto; }
 .bs-track-wrap { overflow:hidden; flex:1; }
 .bs-track { display:flex; transition:transform .45s cubic-bezier(.4,0,.2,1); }
 .bs-slide { display:flex; gap:2rem; justify-content:center; min-width:100%; flex-shrink:0; }
-.bubble-circle { width:250px; height:250px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1.6rem 1.4rem; cursor:pointer; transition:transform .3s ease; overflow:hidden; position:relative; background-size:cover; background-position:center; }
+.bubble-circle { width:300px; height:300px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1.85rem 1.65rem; cursor:pointer; transition:transform .3s ease; overflow:hidden; position:relative; background-size:cover; background-position:center; }
 .bubble-circle:hover { transform:scale(1.04) translateY(-4px); }
 .bubble-circle::after { content:''; position:absolute; inset:0; z-index:0; border-radius:50%; }
 .bubble-blue  { background-color:#5AABCC; } .bubble-blue::after  { background:rgba(90,171,204,.65); }
 .bubble-tan   { background-color:#C8A87C; } .bubble-tan::after   { background:rgba(200,168,124,.65); }
 .bubble-green { background-color:#5A9E6E; } .bubble-green::after { background:rgba(90,158,110,.65); }
 .bubble-circle > * { position:relative; z-index:1; }
-.bubble-title { font-size:.9rem; font-weight:800; color:#fff; margin:0 0 .18rem; line-height:1.25; }
-.bubble-tagline { font-size:.62rem; font-style:italic; color:rgba(255,255,255,.9); margin:0 0 .3rem; line-height:1.3; }
-.bubble-sep { width:55%; height:1.5px; background:rgba(255,255,255,.45); margin:.28rem auto; }
-.bubble-desc { font-size:.63rem; color:rgba(255,255,255,.93); line-height:1.4; margin:.25rem 0 .45rem; display:-webkit-box; -webkit-line-clamp:4; line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
-.bubble-loc { font-size:.62rem; color:rgba(255,255,255,.9); display:flex; align-items:center; gap:.25rem; justify-content:center; margin-top:auto; }
+.bubble-title { font-size:.95rem; font-weight:800; color:#fff; margin:0 0 .2rem; line-height:1.25; }
+.bubble-tagline { font-size:.68rem; font-style:italic; color:rgba(255,255,255,.9); margin:0 0 .35rem; line-height:1.35; }
+.bubble-sep { width:55%; height:1.5px; background:rgba(255,255,255,.45); margin:.32rem auto; }
+.bubble-desc { font-size:.68rem; color:rgba(255,255,255,.93); line-height:1.45; margin:.3rem 0 .5rem; display:-webkit-box; -webkit-line-clamp:5; line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
+.bubble-loc { font-size:.66rem; color:rgba(255,255,255,.9); display:flex; align-items:center; gap:.25rem; justify-content:center; margin-top:auto; }
 .bubble-loc i { color:#fff; font-size:.68rem; }
 
 /* ── VIEW ALL BUTTON ── */
@@ -1291,8 +1291,8 @@
   }
   
   .bubble-circle {
-    width: 270px;
-    height: 270px;
+    width: 290px;
+    height: 290px;
     margin: 0 auto;
   }
 }
