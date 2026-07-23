@@ -385,6 +385,8 @@ export default function MediaLibraryClient({
   const [confirmTrashFile, setConfirmTrashFile] = useState<MediaRow | null>(null);
   const [confirmPurgeFile, setConfirmPurgeFile] = useState<MediaRow | null>(null);
   const [confirmDeleteFolder, setConfirmDeleteFolder] = useState<MediaFolderRow | null>(null);
+  const [pendingImageUploads, setPendingImageUploads] = useState<File[]>([]);
+  const [pendingOtherUploads, setPendingOtherUploads] = useState<File[]>([]);
   const [captionEditItem, setCaptionEditItem] = useState<MediaRow | null>(null);
   const [page, setPage] = useState(1);
 
@@ -487,16 +489,50 @@ export default function MediaLibraryClient({
     e.target.value = "";
     if (files.length === 0) return;
 
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const otherFiles = files.filter((file) => !file.type.startsWith("image/"));
+
+    if (imageFiles.length > 0) {
+      setPendingImageUploads(imageFiles);
+      setPendingOtherUploads(otherFiles);
+      return;
+    }
+
     setUploading(true);
     setError(null);
     try {
       await Promise.all(
-        files.map(async (file) => {
+        otherFiles.map(async (file) => {
+          const fd = new FormData();
+          fd.append("file", file);
+          if (currentFolderId) fd.append("folder_id", currentFolderId);
+          return uploadMedia(fd);
+        }),
+      );
+      await reload();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function completeImageUpload(captionsByName: Record<string, string>) {
+    const imageFiles = pendingImageUploads;
+    const otherFiles = pendingOtherUploads;
+    setPendingImageUploads([]);
+    setPendingOtherUploads([]);
+
+    setUploading(true);
+    setError(null);
+    try {
+      await Promise.all(
+        [...imageFiles, ...otherFiles].map(async (file) => {
           const fd = new FormData();
           fd.append("file", file);
           if (currentFolderId) fd.append("folder_id", currentFolderId);
           if (file.type.startsWith("image/")) {
-            fd.append("caption", "");
+            fd.append("caption", captionsByName[file.name] ?? "");
           }
           return uploadMedia(fd);
         }),
@@ -1000,6 +1036,24 @@ export default function MediaLibraryClient({
         title="Delete folder?"
         description="The folder must be empty (no files, no subfolders). This cannot be undone."
         confirmLabel="Delete folder"
+      />
+
+      <MediaCaptionModal
+        open={pendingImageUploads.length > 0}
+        title="Add image captions"
+        description="Optionally add captions before saving images to the library. You can skip any field and add captions later."
+        confirmLabel="Upload"
+        items={pendingImageUploads.map((file) => ({
+          key: file.name,
+          label: file.name,
+          previewUrl: URL.createObjectURL(file),
+          caption: "",
+        }))}
+        onCancel={() => {
+          setPendingImageUploads([]);
+          setPendingOtherUploads([]);
+        }}
+        onConfirm={(captionsByKey) => void completeImageUpload(captionsByKey)}
       />
 
       <MediaCaptionModal

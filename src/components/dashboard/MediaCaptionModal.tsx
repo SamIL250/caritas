@@ -17,6 +17,7 @@ type Props = {
   description?: string;
   items: MediaCaptionDraft[];
   requireCaptions?: boolean;
+  confirmLabel?: string;
   onCancel: () => void;
   onConfirm: (captionsByKey: Record<string, string>) => void;
 };
@@ -27,6 +28,7 @@ export function MediaCaptionModal({
   description,
   items,
   requireCaptions = false,
+  confirmLabel = "Continue",
   onCancel,
   onConfirm,
 }: Props) {
@@ -127,7 +129,7 @@ export function MediaCaptionModal({
             Cancel
           </Button>
           <Button type="button" variant="primary" onClick={handleConfirm}>
-            Continue
+            {confirmLabel}
           </Button>
         </div>
       </div>

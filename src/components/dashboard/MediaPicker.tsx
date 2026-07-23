@@ -170,7 +170,22 @@ export function MediaPicker({
     e.target.value = "";
     if (files.length === 0) return;
 
-    void uploadFiles(files, {});
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const otherFiles = files.filter((file) => !file.type.startsWith("image/"));
+
+    if (imageFiles.length > 0) {
+      setCaptionFlow({
+        kind: "upload",
+        files: imageFiles.map((file) => ({
+          file,
+          previewUrl: URL.createObjectURL(file),
+        })),
+        otherFiles,
+      });
+      return;
+    }
+
+    void uploadFiles(otherFiles, {});
   }
 
   async function finishSelection(items: PickedMediaItem[]) {
@@ -265,7 +280,9 @@ export function MediaPicker({
           <div className="flex items-center justify-between border-b border-stone-100 p-6">
             <div>
               <h2 className="text-xl font-bold text-stone-900">Media library</h2>
-              <p className="mt-0.5 text-xs text-stone-500">Image captions are optional when uploading.</p>
+              <p className="mt-0.5 text-xs text-stone-500">
+                Optional captions can be added when uploading images.
+              </p>
             </div>
             <button type="button" onClick={onClose} className="text-stone-400 hover:text-stone-600">
               <X size={24} aria-hidden />
@@ -427,9 +444,14 @@ export function MediaPicker({
 
       <MediaCaptionModal
         open={captionFlow !== null}
-        title="Complete missing captions"
-        description="These selected images need captions before they can be inserted with a visible caption in articles."
-        requireCaptions
+        title={captionFlow?.kind === "upload" ? "Add image captions" : "Complete missing captions"}
+        description={
+          captionFlow?.kind === "upload"
+            ? "Optionally add captions before uploading. Leave blank if you do not need one."
+            : "These selected images need captions before they can be inserted with a visible caption in articles."
+        }
+        requireCaptions={captionFlow?.kind === "select"}
+        confirmLabel={captionFlow?.kind === "upload" ? "Upload" : "Continue"}
         items={captionModalItems}
         onCancel={() => setCaptionFlow(null)}
         onConfirm={(captionsByKey) => void handleCaptionConfirm(captionsByKey)}
