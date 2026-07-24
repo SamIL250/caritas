@@ -158,14 +158,12 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                 </button>
               </div>
               <div className="nav-dropdown">
-                <div className="nav-dropdown-inner">
-                  <Link href="/about" className="md:hidden !font-bold text-[#8c2208]" onClick={closeNav}>
-                    Explore All About Us
-                  </Link>
+                <div className="nav-dropdown-inner nav-sub-menu">
                   {ABOUT_SECTION_NAV.map((item) => (
                     <Link
                       key={item.href}
                       href={aboutSectionPath(item.href)}
+                      className="nav-mega-category"
                       onClick={(e) => {
                         if (pathname === '/about') {
                           e.preventDefault();
@@ -175,10 +173,16 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                         }
                       }}
                     >
-                      <i className={`fa-solid ${item.icon.replace(/^fa-solid\s+/i, '')}`}></i>{' '}
-                      {item.label}
+                      <span className="nav-mega-category-icon" aria-hidden>
+                        <i className={`fa-solid ${item.icon}`} />
+                      </span>
+                      <span className="nav-mega-category-label">{item.label}</span>
                     </Link>
                   ))}
+                  <Link href="/about" className="nav-mega-view-all" onClick={closeNav}>
+                    View all about us
+                    <i className="fa-solid fa-arrow-right" aria-hidden />
+                  </Link>
                 </div>
               </div>
             </li>
@@ -214,18 +218,34 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                 </button>
               </div>
               <div className="nav-dropdown">
-                <div className="nav-dropdown-inner nav-dropdown-cards">
-                  <Link href="/programs#social-welfare" onClick={closeNav}>
-                    <i className="fa-solid fa-people-roof"></i> Social Welfare
+                <div className="nav-dropdown-inner nav-sub-menu">
+                  <Link href="/programs#social-welfare" className="nav-mega-category" onClick={closeNav}>
+                    <span className="nav-mega-category-icon" aria-hidden>
+                      <i className="fa-solid fa-people-roof" />
+                    </span>
+                    <span className="nav-mega-category-label">Social Welfare</span>
                   </Link>
-                  <Link href="/programs#health" onClick={closeNav}>
-                    <i className="fa-solid fa-heart-pulse"></i> Health
+                  <Link href="/programs#health" className="nav-mega-category" onClick={closeNav}>
+                    <span className="nav-mega-category-icon" aria-hidden>
+                      <i className="fa-solid fa-heart-pulse" />
+                    </span>
+                    <span className="nav-mega-category-label">Health</span>
                   </Link>
-                  <Link href="/programs#development" onClick={closeNav}>
-                    <i className="fa-solid fa-seedling"></i> Development
+                  <Link href="/programs#development" className="nav-mega-category" onClick={closeNav}>
+                    <span className="nav-mega-category-icon" aria-hidden>
+                      <i className="fa-solid fa-seedling" />
+                    </span>
+                    <span className="nav-mega-category-label">Development</span>
                   </Link>
-                  <Link href="/programs#finance-administration" onClick={closeNav}>
-                    <i className="fa-solid fa-building-columns"></i> Finance &amp; Administration
+                  <Link href="/programs#finance-administration" className="nav-mega-category" onClick={closeNav}>
+                    <span className="nav-mega-category-icon" aria-hidden>
+                      <i className="fa-solid fa-building-columns" />
+                    </span>
+                    <span className="nav-mega-category-label">Finance &amp; Administration</span>
+                  </Link>
+                  <Link href="/programs" className="nav-mega-view-all" onClick={closeNav}>
+                    View all programs
+                    <i className="fa-solid fa-arrow-right" aria-hidden />
                   </Link>
                 </div>
               </div>
