@@ -135,7 +135,7 @@ export default function NavMegaMenu({
             }
           }}
         >
-          {label} <ChevronDown size={14} className="inline-block ml-1 opacity-60" />
+          {label} <ChevronDown size={14} className="nav-inline-caret inline-block ml-1 opacity-60" />
         </Link>
         <button
           type="button"
