@@ -8,10 +8,16 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { useDonation } from '@/context/DonationContext';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { ABOUT_SECTION_NAV, aboutSectionPath, hrefToAboutAnchor } from '@/lib/about-section-nav';
+import NavMegaMenu from '@/components/website/NavMegaMenu';
+import type { NavMegaMenuData } from '@/lib/nav-mega-menu-data';
 
-type SubKey = 'about' | 'programs' | 'publications';
+type SubKey = 'about' | 'programs' | 'news' | 'publications';
 
-export default function WebsiteHeader() {
+type Props = {
+  navMegaMenu: NavMegaMenuData;
+};
+
+export default function WebsiteHeader({ navMegaMenu }: Props) {
   const { isModalOpen, openModal, closeModal } = useDonation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState<SubKey | null>(null);
@@ -60,7 +66,9 @@ export default function WebsiteHeader() {
   /** Light-background pages need solid nav links immediately (no hero behind the bar). */
   const prefersSolidNav = Boolean(
     pathname?.startsWith('/publications/testimonies/') ||
-      (pathname?.startsWith('/news/') && pathname !== '/news'),
+      pathname?.startsWith('/publications/') ||
+      (pathname?.startsWith('/news/') && pathname !== '/news') ||
+      pathname === '/news',
   );
   const solidNav = scrolled || prefersSolidNav;
 
@@ -223,11 +231,16 @@ export default function WebsiteHeader() {
               </div>
             </li>
 
-            <li>
-              <Link href="/news" onClick={closeNav}>
-                News &amp; Updates
-              </Link>
-            </li>
+            <NavMegaMenu
+              menuKey="news"
+              label="News & Updates"
+              href="/news"
+              isActive={isActive('/news') || Boolean(pathname?.startsWith('/news/'))}
+              categories={navMegaMenu.news}
+              isExpanded={openSub === 'news'}
+              onToggle={() => toggleSub('news')}
+              onCloseNav={closeNav}
+            />
 
             {/* <li>
               <Link href="/diocesan" className={isActive('/diocesan') ? 'current' : ''} onClick={closeNav}>
@@ -235,60 +248,16 @@ export default function WebsiteHeader() {
               </Link>
             </li> */}
 
-            <li className={['has-dropdown', openSub === 'publications' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
-              <div className="nav-item-row">
-                <Link
-                  href="/publications"
-                  className={isActive('/publications') ? 'current' : ''}
-                  onClick={(e) => {
-                    if (window.innerWidth < 1024) {
-                      e.preventDefault();
-                      toggleSub('publications');
-                    } else {
-                      closeNav();
-                    }
-                  }}
-                >
-                  Publications <ChevronDown size={14} className="inline-block ml-1 opacity-60" />
-                </Link>
-                <button
-                  type="button"
-                  className="nav-submenu-toggle"
-                  aria-expanded={openSub === 'publications'}
-                  aria-label="Toggle Publications submenu"
-                  onClick={() => toggleSub('publications')}
-                >
-                  <ChevronDown
-                    size={18}
-                    aria-hidden
-                    className={openSub === 'publications' ? 'rotate-180 transition-transform' : 'transition-transform'}
-                  />
-                </button>
-              </div>
-              <div className="nav-dropdown">
-                <div className="nav-dropdown-inner">
-                  <Link href="/publications#annual-reports" onClick={closeNav}>
-                    <i className="fa-solid fa-chart-bar"></i> Annual Reports
-                  </Link>
-                  <Link href="/publications#newsletters" onClick={closeNav}>
-                    <i className="fa-solid fa-newspaper"></i> Newsletters
-                  </Link>
-                  <Link href="/publications#caritas-contact" onClick={closeNav}>
-                    <i className="fa-solid fa-download"></i> Caritas Contact
-                  </Link>
-                  <Link href="/publications#policies" onClick={closeNav}>
-                    <i className="fa-solid fa-file-lines"></i> Policies
-                  </Link>
-                  <Link href="/publications#testimonies" onClick={closeNav}>
-                    <i className="fa-solid fa-user"></i> Testimonies
-                  </Link>
-                  <div className="nav-dropdown-divider"></div>
-                  <Link href="/publications#strategic" onClick={closeNav}>
-                    <i className="fa-solid fa-map"></i> Strategic Plan
-                  </Link>
-                </div>
-              </div>
-            </li>
+            <NavMegaMenu
+              menuKey="publications"
+              label="Publications"
+              href="/publications"
+              isActive={isActive('/publications') || Boolean(pathname?.startsWith('/publications/'))}
+              categories={navMegaMenu.publications}
+              isExpanded={openSub === 'publications'}
+              onToggle={() => toggleSub('publications')}
+              onCloseNav={closeNav}
+            />
 
             <li>
               <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>

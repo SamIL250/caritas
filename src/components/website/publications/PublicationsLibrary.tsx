@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type {
   PublicationCategoryRow,
   PublicationRow,
@@ -83,14 +84,6 @@ export default function PublicationsLibrary({ publications, categories, testimon
     [categories],
   );
 
-  const counts = useMemo(() => {
-    const m: Record<string, number> = {};
-    publications.forEach((p) => {
-      m[p.category] = (m[p.category] ?? 0) + 1;
-    });
-    return m;
-  }, [publications]);
-
   const strategicCat = useMemo(
     () => categories.find((c) => c.slug === "strategic_plan") ?? null,
     [categories],
@@ -100,8 +93,6 @@ export default function PublicationsLibrary({ publications, categories, testimon
     return strat.find((p) => p.featured) ?? strat[0] ?? null;
   }, [publications]);
 
-  const totalCount =
-    publications.filter((p) => p.category !== "success_story").length + testimonies.length;
   const showSection = (slug: string) => filter === "all" || filter === slug;
   const showTestimonies = filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR;
 
@@ -208,59 +199,12 @@ export default function PublicationsLibrary({ publications, categories, testimon
 
   return (
     <>
-      <div className="pub-filter-bar">
-        <div className="pub-filter-inner">
-          <button
-            type="button"
-            className={`pub-filter-btn${filter === "all" ? " active" : ""}`}
-            onClick={() => setFilter("all")}
-            aria-pressed={filter === "all"}
-          >
-            <i className="fa-solid fa-layer-group" aria-hidden />
-            All
-            <span className="pub-filter-count">{totalCount}</span>
-          </button>
-
-          {strategicCat ? (
-            <button
-              key={strategicCat.id}
-              type="button"
-              className={`pub-filter-btn${filter === strategicCat.slug ? " active" : ""}`}
-              onClick={() => setFilter(strategicCat.slug)}
-              aria-pressed={filter === strategicCat.slug}
-            >
-              {strategicCat.icon ? <i className={strategicCat.icon} aria-hidden /> : null}
-              {strategicCat.plural_label || strategicCat.label}
-              <span className="pub-filter-count">{counts[strategicCat.slug] ?? 0}</span>
-            </button>
-          ) : null}
-
-          {sortedCategories.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              className={`pub-filter-btn${filter === c.slug ? " active" : ""}`}
-              onClick={() => setFilter(c.slug)}
-              aria-pressed={filter === c.slug}
-            >
-              {c.icon ? <i className={c.icon} aria-hidden /> : null}
-              {c.plural_label || c.label}
-              <span className="pub-filter-count">{counts[c.slug] ?? 0}</span>
-            </button>
-          ))}
-
-          <button
-            type="button"
-            className={`pub-filter-btn${filter === TESTIMONIES_SECTION_ANCHOR ? " active" : ""}`}
-            onClick={() => setFilter(TESTIMONIES_SECTION_ANCHOR)}
-            aria-pressed={filter === TESTIMONIES_SECTION_ANCHOR}
-          >
-            <i className="fa-solid fa-user" aria-hidden />
-            Testimonies
-            <span className="pub-filter-count">{testimonies.length}</span>
-          </button>
-        </div>
-      </div>
+      <PublicationsFilterBar
+        filter={filter}
+        onFilterChange={setFilter}
+        strategicCat={strategicCat}
+        sortedCategories={sortedCategories}
+      />
 
       <div className="pub-main-layout">
         <div className="pub-main-content">
@@ -362,6 +306,130 @@ export default function PublicationsLibrary({ publications, categories, testimon
         onClose={() => setLockedPub(null)}
       />
     </>
+  );
+}
+
+function PublicationsFilterBar({
+  filter,
+  onFilterChange,
+  strategicCat,
+  sortedCategories,
+}: {
+  filter: FilterKey;
+  onFilterChange: (key: FilterKey) => void;
+  strategicCat: PublicationCategoryRow | null;
+  sortedCategories: PublicationCategoryRow[];
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollHints = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft < maxScroll - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    updateScrollHints();
+
+    el.addEventListener("scroll", updateScrollHints, { passive: true });
+    const observer = new ResizeObserver(updateScrollHints);
+    observer.observe(el);
+
+    return () => {
+      el.removeEventListener("scroll", updateScrollHints);
+      observer.disconnect();
+    };
+  }, [updateScrollHints, strategicCat, sortedCategories]);
+
+  const scrollBy = (direction: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = Math.max(180, Math.round(el.clientWidth * 0.55));
+    el.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
+  };
+
+  return (
+    <div className="pub-filter-bar">
+      <div className="pub-filter-scroll">
+        <button
+          type="button"
+          className={`pub-filter-scroll-hint pub-filter-scroll-hint--left${canScrollLeft ? " is-visible" : ""}`}
+          aria-label="Scroll categories left"
+          aria-hidden={!canScrollLeft}
+          tabIndex={canScrollLeft ? 0 : -1}
+          onClick={() => scrollBy("left")}
+        >
+          <ChevronLeft size={16} strokeWidth={2.25} aria-hidden />
+        </button>
+
+        <div className="pub-filter-inner" ref={scrollRef}>
+          <button
+            type="button"
+            className={`pub-filter-btn${filter === "all" ? " active" : ""}`}
+            onClick={() => onFilterChange("all")}
+            aria-pressed={filter === "all"}
+          >
+            <i className="fa-solid fa-layer-group" aria-hidden />
+            All
+          </button>
+
+          {strategicCat ? (
+            <button
+              key={strategicCat.id}
+              type="button"
+              className={`pub-filter-btn${filter === strategicCat.slug ? " active" : ""}`}
+              onClick={() => onFilterChange(strategicCat.slug)}
+              aria-pressed={filter === strategicCat.slug}
+            >
+              {strategicCat.icon ? <i className={strategicCat.icon} aria-hidden /> : null}
+              {strategicCat.plural_label || strategicCat.label}
+            </button>
+          ) : null}
+
+          {sortedCategories.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              className={`pub-filter-btn${filter === c.slug ? " active" : ""}`}
+              onClick={() => onFilterChange(c.slug)}
+              aria-pressed={filter === c.slug}
+            >
+              {c.icon ? <i className={c.icon} aria-hidden /> : null}
+              {c.plural_label || c.label}
+            </button>
+          ))}
+
+          <button
+            type="button"
+            className={`pub-filter-btn${filter === TESTIMONIES_SECTION_ANCHOR ? " active" : ""}`}
+            onClick={() => onFilterChange(TESTIMONIES_SECTION_ANCHOR)}
+            aria-pressed={filter === TESTIMONIES_SECTION_ANCHOR}
+          >
+            <i className="fa-solid fa-user" aria-hidden />
+            Testimonies
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className={`pub-filter-scroll-hint pub-filter-scroll-hint--right${canScrollRight ? " is-visible" : ""}`}
+          aria-label="Scroll categories right"
+          aria-hidden={!canScrollRight}
+          tabIndex={canScrollRight ? 0 : -1}
+          onClick={() => scrollBy("right")}
+        >
+          <ChevronRight size={16} strokeWidth={2.25} aria-hidden />
+        </button>
+      </div>
+    </div>
   );
 }
 
