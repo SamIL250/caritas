@@ -23,6 +23,7 @@ import {
   Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -121,6 +122,11 @@ import type { PublicationCategoryRow, PublicationRow } from '@/lib/publications'
 import type { ProgramCategoryRow, ProgramRow } from '@/lib/programs';
 import type { NewsArticleRow } from '@/lib/news';
 import { saveProgramBubbleDrafts, type ProgramBubbleDraft } from '@/app/actions/programs';
+import {
+  applyProgramBubbleDrafts,
+  buildProgramBubbleDraft,
+  persistProgramBubbleDraftOnRow,
+} from '@/lib/program-bubble-draft';
 import { parseProgramsLibrarySectionContent, parseProgramsPartnerSectionContent } from '@/lib/programs-library-section';
 import { ImageIcon } from 'lucide-react';
 
@@ -272,6 +278,24 @@ export default function PageEditorClient({
   const [showSlideMediaPicker, setShowSlideMediaPicker] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [programBubbleDrafts, setProgramBubbleDrafts] = useState<Record<string, ProgramBubbleDraft>>({});
+  const programBubbleDraftsRef = useRef<Record<string, ProgramBubbleDraft>>({});
+  const [programsPreviewPrograms, setProgramsPreviewPrograms] = useState<ProgramRow[]>(
+    () => programsPreview?.programs ?? [],
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    programBubbleDraftsRef.current = programBubbleDrafts;
+  }, [programBubbleDrafts]);
+
+  useEffect(() => {
+    setProgramsPreviewPrograms(programsPreview?.programs ?? []);
+  }, [programsPreview?.programs]);
+
+  const mergedProgramsPreviewPrograms = useMemo(
+    () => applyProgramBubbleDrafts(programsPreviewPrograms, programBubbleDrafts),
+    [programsPreviewPrograms, programBubbleDrafts],
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -529,18 +553,11 @@ export default function PageEditorClient({
 
   const handleProgramBubbleDraftChange = (programId: string, patch: Partial<ProgramBubbleDraft>) => {
     setProgramBubbleDrafts((prev) => {
-      const baseProgram = programsPreview?.programs.find((p) => p.id === programId);
+      const baseProgram = programsPreviewPrograms.find((p) => p.id === programId);
       const existing = prev[programId];
       return {
         ...prev,
-        [programId]: {
-          title: patch.title ?? existing?.title ?? baseProgram?.title ?? '',
-          subtitle: patch.subtitle ?? existing?.subtitle ?? baseProgram?.subtitle ?? '',
-          excerpt: patch.excerpt ?? existing?.excerpt ?? baseProgram?.excerpt ?? '',
-          project_period: patch.project_period ?? existing?.project_period ?? baseProgram?.project_period ?? '',
-          carried_by: patch.carried_by ?? existing?.carried_by ?? baseProgram?.carried_by ?? '',
-          cover_image_url: patch.cover_image_url ?? existing?.cover_image_url ?? baseProgram?.cover_image_url ?? '',
-        },
+        [programId]: buildProgramBubbleDraft(baseProgram, existing, patch),
       };
     });
     setHasChanges(true);
@@ -572,15 +589,25 @@ export default function PageEditorClient({
         setSections((prev) =>
           prev.map((s) => (s.id === selectedId ? { ...s, content: payload } : s)),
         );
-        if (sectionType === 'programs_library' && Object.keys(programBubbleDrafts).length > 0) {
-          const bubbleRes = await saveProgramBubbleDrafts(programBubbleDrafts);
-          if (bubbleRes.error) throw new Error(bubbleRes.error);
-          setProgramBubbleDrafts({});
+        if (sectionType === 'programs_library') {
+          const draftsToSave = programBubbleDraftsRef.current;
+          if (Object.keys(draftsToSave).length > 0) {
+            const bubbleRes = await saveProgramBubbleDrafts(draftsToSave);
+            if (bubbleRes.error) throw new Error(bubbleRes.error);
+            setProgramsPreviewPrograms((prev) =>
+              prev.map((program) => {
+                const draft = draftsToSave[program.id];
+                return draft ? persistProgramBubbleDraftOnRow(program, draft) : program;
+              }),
+            );
+            setProgramBubbleDrafts({});
+          }
         }
       }
       setHasChanges(false);
       setSavedAt(new Date());
       setIsStale(true);
+      router.refresh();
       setTimeout(() => setSavedAt(null), 2000);
     } catch (error: any) {
       console.error('Save failed:', error);
@@ -890,11 +917,10 @@ export default function PageEditorClient({
         return (
           <ProgramsLibrarySectionPreview
             sectionContent={props}
-            programs={programsPreview?.programs ?? []}
+            programs={mergedProgramsPreviewPrograms}
             categories={programsPreview?.categories ?? []}
             successStories={programsPreview?.successStories ?? []}
             news={programsPreview?.news ?? []}
-            programDrafts={programBubbleDrafts}
           />
         );
       case 'cta': {
@@ -1041,6 +1067,7 @@ export default function PageEditorClient({
                   onSelectSlide={setSelectedSlideId}
                   pageSlug={page.slug}
                   programsPreview={programsPreview}
+                  programsPreviewPrograms={programsPreviewPrograms}
                   programBubbleDrafts={programBubbleDrafts}
                   onProgramBubbleDraftChange={handleProgramBubbleDraftChange}
                 />
@@ -1650,6 +1677,7 @@ function SectionForm({
   onSelectSlide,
   pageSlug,
   programsPreview,
+  programsPreviewPrograms,
   programBubbleDrafts,
   onProgramBubbleDraftChange,
 }: any) {
@@ -5395,7 +5423,7 @@ function SectionForm({
         <ProgramsLibrarySectionEditor
           state={state}
           onChange={onChange}
-          programs={programsPreview?.programs ?? []}
+          programs={programsPreviewPrograms ?? []}
           categories={programsPreview?.categories ?? []}
           programDrafts={programBubbleDrafts ?? {}}
           onProgramDraftChange={onProgramBubbleDraftChange}

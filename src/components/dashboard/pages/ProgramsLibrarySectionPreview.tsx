@@ -10,36 +10,13 @@ import {
   parseProgramsLibrarySectionContent,
   type ProgramsLibrarySectionContent,
 } from "@/lib/programs-library-section";
-import type { ProgramBubbleDraft } from "@/app/actions/programs";
-
 type Props = {
   sectionContent: unknown;
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
   successStories: PublicationRow[];
   news: NewsArticleRow[];
-  programDrafts?: Record<string, ProgramBubbleDraft>;
 };
-
-function applyDrafts(
-  programs: ProgramRow[],
-  drafts: Record<string, ProgramBubbleDraft> | undefined,
-): ProgramRow[] {
-  if (!drafts || !Object.keys(drafts).length) return programs;
-  return programs.map((program) => {
-    const draft = drafts[program.id];
-    if (!draft) return program;
-    return {
-      ...program,
-      title: draft.title ?? program.title,
-      subtitle: draft.subtitle ?? program.subtitle,
-      excerpt: draft.excerpt ?? program.excerpt,
-      project_period: draft.project_period ?? program.project_period,
-      carried_by: draft.carried_by ?? program.carried_by,
-      cover_image_url: draft.cover_image_url ?? program.cover_image_url,
-    };
-  });
-}
 
 export default function ProgramsLibrarySectionPreview({
   sectionContent,
@@ -47,11 +24,10 @@ export default function ProgramsLibrarySectionPreview({
   categories,
   successStories,
   news,
-  programDrafts,
 }: Props) {
   const libraryConfig: ProgramsLibrarySectionContent =
     parseProgramsLibrarySectionContent(sectionContent);
-  const previewPrograms = applyDrafts(programs, programDrafts);
+  const previewPrograms = programs;
 
   if (!previewPrograms.length) {
     return (

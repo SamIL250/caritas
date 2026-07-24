@@ -243,11 +243,11 @@ export async function saveProgramBubbleDrafts(
         .from("programs")
         .update({
           title,
-          subtitle: draft.subtitle.trim(),
-          excerpt: draft.excerpt.trim(),
-          project_period: draft.project_period.trim(),
-          carried_by: draft.carried_by.trim(),
-          cover_image_url: draft.cover_image_url.trim(),
+          subtitle: (draft.subtitle ?? "").trim(),
+          excerpt: (draft.excerpt ?? "").trim(),
+          project_period: (draft.project_period ?? "").trim(),
+          carried_by: (draft.carried_by ?? "").trim(),
+          cover_image_url: (draft.cover_image_url ?? "").trim(),
         })
         .eq("id", programId);
 

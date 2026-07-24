@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import type { ProgramCategoryRow, ProgramRow } from "@/lib/programs";
 import type { ProgramBubbleDraft } from "@/app/actions/programs";
+import { mergeProgramBubbleDraft } from "@/lib/program-bubble-draft";
 
 type Props = {
   state: Record<string, unknown>;
@@ -16,20 +17,6 @@ type Props = {
   programDrafts: Record<string, ProgramBubbleDraft>;
   onProgramDraftChange: (programId: string, patch: Partial<ProgramBubbleDraft>) => void;
 };
-
-function mergeProgramDraft(
-  program: ProgramRow,
-  draft: ProgramBubbleDraft | undefined,
-): ProgramBubbleDraft {
-  return {
-    title: draft?.title ?? program.title,
-    subtitle: draft?.subtitle ?? program.subtitle ?? "",
-    excerpt: draft?.excerpt ?? program.excerpt ?? "",
-    project_period: draft?.project_period ?? program.project_period ?? "",
-    carried_by: draft?.carried_by ?? program.carried_by ?? "",
-    cover_image_url: draft?.cover_image_url ?? program.cover_image_url ?? "",
-  };
-}
 
 function ProgramBubbleEditor({
   program,
@@ -263,7 +250,7 @@ export default function ProgramsLibrarySectionEditor({
                       key={program.id}
                       program={program}
                       categoryLabel={cat.label}
-                      draft={mergeProgramDraft(program, programDrafts[program.id])}
+                      draft={mergeProgramBubbleDraft(program, programDrafts[program.id])}
                       onDraftChange={(patch) => onProgramDraftChange(program.id, patch)}
                     />
                   ))}
