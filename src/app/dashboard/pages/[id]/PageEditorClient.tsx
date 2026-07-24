@@ -122,7 +122,6 @@ import type { ProgramCategoryRow, ProgramRow } from '@/lib/programs';
 import type { NewsArticleRow } from '@/lib/news';
 import { saveProgramBubbleDrafts, type ProgramBubbleDraft } from '@/app/actions/programs';
 import { parseProgramsLibrarySectionContent, parseProgramsPartnerSectionContent } from '@/lib/programs-library-section';
-import { parseProgramBubbleLayout } from '@/lib/program-bubble-layout';
 import { ImageIcon } from 'lucide-react';
 
 import '@/app/website-cms-section-preview.css';
@@ -532,16 +531,15 @@ export default function PageEditorClient({
     setProgramBubbleDrafts((prev) => {
       const baseProgram = programsPreview?.programs.find((p) => p.id === programId);
       const existing = prev[programId];
-      const mergedLayout = patch.bubble_layout ?? existing?.bubble_layout ?? (baseProgram ? parseProgramBubbleLayout(baseProgram.bubble_layout) : undefined);
       return {
         ...prev,
         [programId]: {
           title: patch.title ?? existing?.title ?? baseProgram?.title ?? '',
           subtitle: patch.subtitle ?? existing?.subtitle ?? baseProgram?.subtitle ?? '',
           excerpt: patch.excerpt ?? existing?.excerpt ?? baseProgram?.excerpt ?? '',
-          location: patch.location ?? existing?.location ?? baseProgram?.location ?? '',
+          project_period: patch.project_period ?? existing?.project_period ?? baseProgram?.project_period ?? '',
+          carried_by: patch.carried_by ?? existing?.carried_by ?? baseProgram?.carried_by ?? '',
           cover_image_url: patch.cover_image_url ?? existing?.cover_image_url ?? baseProgram?.cover_image_url ?? '',
-          bubble_layout: mergedLayout!,
         },
       };
     });

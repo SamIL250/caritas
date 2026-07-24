@@ -502,6 +502,18 @@ function ProgramDrawer({
               <div className="drawer-info-section">
                 <h3 className="drawer-info-heading">Program Details</h3>
                 <div className="drawer-info-grid-2col">
+                  {program.project_period ? (
+                    <div className="drawer-info-item">
+                      <span className="drawer-info-label">Project period</span>
+                      <span className="drawer-info-value">{program.project_period}</span>
+                    </div>
+                  ) : null}
+                  {program.carried_by ? (
+                    <div className="drawer-info-item drawer-info-item-wide">
+                      <span className="drawer-info-label">Carried by</span>
+                      <span className="drawer-info-value">{program.carried_by}</span>
+                    </div>
+                  ) : null}
                   {program.location ? (
                     <div className="drawer-info-item">
                       <span className="drawer-info-label">Location</span>

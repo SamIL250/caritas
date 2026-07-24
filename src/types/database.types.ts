@@ -1089,6 +1089,8 @@ export interface Database {
           subtitle: string
           location: string
           contact_phone: string
+          project_period: string
+          carried_by: string
           tag_label: string
           tag_icon: string
           featured: boolean
@@ -1114,6 +1116,8 @@ export interface Database {
           subtitle?: string
           location?: string
           contact_phone?: string
+          project_period?: string
+          carried_by?: string
           tag_label?: string
           tag_icon?: string
           featured?: boolean
@@ -1139,6 +1143,8 @@ export interface Database {
           subtitle?: string
           location?: string
           contact_phone?: string
+          project_period?: string
+          carried_by?: string
           tag_label?: string
           tag_icon?: string
           featured?: boolean

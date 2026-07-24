@@ -6,15 +6,6 @@ import { ChevronDown, ChevronUp, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import type { ProgramCategoryRow, ProgramRow } from "@/lib/programs";
-import {
-  BUBBLE_LAYOUT_PRESET_LABELS,
-  bubbleLayoutFromPreset,
-  detectBubbleLayoutPreset,
-  parseProgramBubbleLayout,
-  type BubbleContentZone,
-  type ProgramBubbleLayout,
-  type ProgramBubbleLayoutPreset,
-} from "@/lib/program-bubble-layout";
 import type { ProgramBubbleDraft } from "@/app/actions/programs";
 
 type Props = {
@@ -26,56 +17,18 @@ type Props = {
   onProgramDraftChange: (programId: string, patch: Partial<ProgramBubbleDraft>) => void;
 };
 
-const ZONE_OPTIONS: { value: BubbleContentZone; label: string }[] = [
-  { value: "top", label: "Top" },
-  { value: "center", label: "Middle" },
-  { value: "bottom", label: "Bottom" },
-];
-
-const PRESET_OPTIONS = Object.entries(BUBBLE_LAYOUT_PRESET_LABELS) as Array<
-  [Exclude<ProgramBubbleLayoutPreset, "custom">, string]
->;
-
 function mergeProgramDraft(
   program: ProgramRow,
   draft: ProgramBubbleDraft | undefined,
 ): ProgramBubbleDraft {
-  const layout = parseProgramBubbleLayout(draft?.bubble_layout ?? program.bubble_layout);
   return {
     title: draft?.title ?? program.title,
     subtitle: draft?.subtitle ?? program.subtitle ?? "",
     excerpt: draft?.excerpt ?? program.excerpt ?? "",
-    location: draft?.location ?? program.location ?? "",
+    project_period: draft?.project_period ?? program.project_period ?? "",
+    carried_by: draft?.carried_by ?? program.carried_by ?? "",
     cover_image_url: draft?.cover_image_url ?? program.cover_image_url ?? "",
-    bubble_layout: layout,
   };
-}
-
-function ZoneSelect({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: BubbleContentZone;
-  onChange: (zone: BubbleContentZone) => void;
-}) {
-  return (
-    <label className="space-y-1 block">
-      <span className="text-[9px] font-bold uppercase tracking-wider text-stone-400">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value as BubbleContentZone)}
-        className="h-8 w-full rounded-lg border border-stone-200 bg-white px-2 text-xs"
-      >
-        {ZONE_OPTIONS.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
 }
 
 function ProgramBubbleEditor({
@@ -91,20 +44,6 @@ function ProgramBubbleEditor({
 }) {
   const [open, setOpen] = useState(false);
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
-  const preset = detectBubbleLayoutPreset(draft.bubble_layout);
-
-  function applyPreset(next: Exclude<ProgramBubbleLayoutPreset, "custom">) {
-    onDraftChange({ bubble_layout: bubbleLayoutFromPreset(next) });
-  }
-
-  function patchLayout(patch: Partial<ProgramBubbleLayout>) {
-    onDraftChange({
-      bubble_layout: {
-        ...draft.bubble_layout,
-        ...patch,
-      },
-    });
-  }
 
   return (
     <li className="rounded-xl border border-stone-200 bg-white overflow-hidden">
@@ -117,11 +56,39 @@ function ProgramBubbleEditor({
           <div className="truncate text-xs font-bold text-stone-800">{draft.title || program.title}</div>
           <div className="text-[10px] text-stone-400">{categoryLabel}</div>
         </div>
-        {open ? <ChevronUp size={16} className="shrink-0 text-stone-400" /> : <ChevronDown size={16} className="shrink-0 text-stone-400" />}
+        {open ? (
+          <ChevronUp size={16} className="shrink-0 text-stone-400" />
+        ) : (
+          <ChevronDown size={16} className="shrink-0 text-stone-400" />
+        )}
       </button>
 
       {open ? (
         <div className="space-y-4 border-t border-stone-100 p-3">
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold uppercase tracking-wider text-stone-400">
+              Project period (top of circle)
+            </label>
+            <input
+              type="text"
+              value={draft.project_period}
+              onChange={(e) => onDraftChange({ project_period: e.target.value })}
+              placeholder="May 3, 2025 - April 2027"
+              className="w-full rounded-lg border border-stone-200 px-2 py-1.5 text-xs"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold uppercase tracking-wider text-stone-400">
+              Carried by (below period)
+            </label>
+            <input
+              type="text"
+              value={draft.carried_by}
+              onChange={(e) => onDraftChange({ carried_by: e.target.value })}
+              placeholder="By Secours Catholique in Cyangugu and Gikongoro"
+              className="w-full rounded-lg border border-stone-200 px-2 py-1.5 text-xs"
+            />
+          </div>
           <div className="space-y-1">
             <label className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Title</label>
             <input
@@ -141,20 +108,13 @@ function ProgramBubbleEditor({
             />
           </div>
           <div className="space-y-1">
-            <label className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Description</label>
+            <label className="text-[9px] font-bold uppercase tracking-wider text-stone-400">
+              Short description (truncated on circle)
+            </label>
             <textarea
               rows={3}
               value={draft.excerpt}
               onChange={(e) => onDraftChange({ excerpt: e.target.value })}
-              className="w-full rounded-lg border border-stone-200 px-2 py-1.5 text-xs"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-[9px] font-bold uppercase tracking-wider text-stone-400">Location</label>
-            <input
-              type="text"
-              value={draft.location}
-              onChange={(e) => onDraftChange({ location: e.target.value })}
               className="w-full rounded-lg border border-stone-200 px-2 py-1.5 text-xs"
             />
           </div>
@@ -177,32 +137,6 @@ function ProgramBubbleEditor({
                 <ImagePlus size={14} className="mr-1" />
                 Choose image
               </Button>
-            </div>
-          </div>
-
-          <div className="space-y-2 border-t border-stone-100 pt-3">
-            <p className="text-[9px] font-bold uppercase tracking-wider text-stone-500">Text positioning</p>
-            <div className="grid grid-cols-3 gap-1.5">
-              {PRESET_OPTIONS.map(([id, label]) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => applyPreset(id)}
-                  className={`rounded-lg border px-2 py-1.5 text-[10px] font-semibold transition-colors ${
-                    preset === id
-                      ? "border-[#7A1515] bg-[#7A1515]/5 text-[#7A1515]"
-                      : "border-stone-200 text-stone-600 hover:border-stone-300"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <ZoneSelect label="Title" value={draft.bubble_layout.title} onChange={(v) => patchLayout({ title: v })} />
-              <ZoneSelect label="Subtitle" value={draft.bubble_layout.subtitle} onChange={(v) => patchLayout({ subtitle: v })} />
-              <ZoneSelect label="Description" value={draft.bubble_layout.excerpt} onChange={(v) => patchLayout({ excerpt: v })} />
-              <ZoneSelect label="Location" value={draft.bubble_layout.location} onChange={(v) => patchLayout({ location: v })} />
             </div>
           </div>
 
@@ -250,7 +184,7 @@ export default function ProgramsLibrarySectionEditor({
     <div className="space-y-6">
       <p className="text-[10px] leading-relaxed text-stone-500">
         Category tabs, panel descriptions, and the Rwanda map stay dynamic from program categories.
-        Edit circle content and layout here; use Save changes to publish section settings and bubble updates.
+        Each circle uses a fixed layout: period, carried by, title/subtitle, then a short preview — click opens the drawer for full details.
       </p>
 
       <div className="space-y-3 rounded-xl border border-stone-100 bg-stone-50 p-3">

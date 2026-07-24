@@ -5,11 +5,6 @@ import { revalidatePath } from "next/cache";
 import type { Database } from "@/types/database.types";
 import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
 import { slugifyProgram } from "@/lib/programs";
-import {
-  parseProgramBubbleLayout,
-  serializeBubbleLayout,
-  type ProgramBubbleLayout,
-} from "@/lib/program-bubble-layout";
 
 type Status = Database["public"]["Enums"]["program_status"];
 
@@ -17,22 +12,10 @@ export type ProgramBubbleDraft = {
   title: string;
   subtitle: string;
   excerpt: string;
-  location: string;
+  project_period: string;
+  carried_by: string;
   cover_image_url: string;
-  bubble_layout: ProgramBubbleLayout;
 };
-
-function parseBubbleLayoutField(form: FormData): ProgramBubbleLayout {
-  const raw = form.get("bubble_layout");
-  if (typeof raw !== "string" || !raw.trim()) {
-    return parseProgramBubbleLayout(null);
-  }
-  try {
-    return parseProgramBubbleLayout(JSON.parse(raw));
-  } catch {
-    return parseProgramBubbleLayout(null);
-  }
-}
 
 async function requireUser() {
   const supabase = await createClient();
@@ -49,6 +32,26 @@ function parsePublishedAtField(form: FormData): string | null {
   if (!raw) return null;
   const d = new Date(raw);
   return Number.isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+function readProgramFields(form: FormData) {
+  return {
+    title: String(form.get("title") || "").trim(),
+    excerpt: String(form.get("excerpt") || "").trim(),
+    bodyRaw: form.get("body"),
+    cover_image_url: String(form.get("cover_image_url") || "").trim(),
+    cover_image_alt: String(form.get("cover_image_alt") || "").trim(),
+    external_url: String(form.get("external_url") || "").trim(),
+    subtitle: String(form.get("subtitle") || "").trim(),
+    location: String(form.get("location") || "").trim(),
+    contact_phone: String(form.get("contact_phone") || "").trim(),
+    tag_label: String(form.get("tag_label") || "").trim(),
+    tag_icon: String(form.get("tag_icon") || "").trim(),
+    project_period: String(form.get("project_period") || "").trim(),
+    carried_by: String(form.get("carried_by") || "").trim(),
+    featured: form.get("featured") === "on",
+    status: (String(form.get("status") || "draft") === "published" ? "published" : "draft") as Status,
+  };
 }
 
 async function nextUniqueSlug(
@@ -82,8 +85,8 @@ async function ensureCategoryExists(
 export async function createProgram(form: FormData): Promise<{ error?: string; id?: string }> {
   try {
     const { supabase, user } = await requireUser();
-    const title = String(form.get("title") || "").trim();
-    if (!title) return { error: "Title is required." };
+    const fields = readProgramFields(form);
+    if (!fields.title) return { error: "Title is required." };
 
     const category_id = String(form.get("category_id") || "").trim();
     if (!category_id) return { error: "Choose a program category." };
@@ -91,29 +94,17 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
     await ensureCategoryExists(supabase, category_id);
 
     const slugInput = String(form.get("slug") || "").trim();
-    const baseSlug = slugifyProgram(slugInput || title);
+    const baseSlug = slugifyProgram(slugInput || fields.title);
     const slug = await nextUniqueSlug(supabase, baseSlug);
 
-    const excerpt = String(form.get("excerpt") || "").trim();
-    const bodyRaw = form.get("body");
     const bodyClean =
-      typeof bodyRaw === "string" && bodyRaw.trim() ? sanitizeStaffRichText(bodyRaw) : null;
-
-    const cover_image_url = String(form.get("cover_image_url") || "").trim();
-    const cover_image_alt = String(form.get("cover_image_alt") || "").trim();
-    const external_url = String(form.get("external_url") || "").trim();
-    const subtitle = String(form.get("subtitle") || "").trim();
-    const location = String(form.get("location") || "").trim();
-    const contact_phone = String(form.get("contact_phone") || "").trim();
-    const tag_label = String(form.get("tag_label") || "").trim();
-    const tag_icon = String(form.get("tag_icon") || "").trim();
-    const featured = form.get("featured") === "on";
-    const status: Status = String(form.get("status") || "draft") === "published" ? "published" : "draft";
-    const bubble_layout = serializeBubbleLayout(parseBubbleLayoutField(form));
+      typeof fields.bodyRaw === "string" && fields.bodyRaw.trim()
+        ? sanitizeStaffRichText(fields.bodyRaw)
+        : null;
 
     let published_at: string | null = parsePublishedAtField(form);
-    if (status === "published" && !published_at) published_at = new Date().toISOString();
-    if (status === "draft") published_at = null;
+    if (fields.status === "published" && !published_at) published_at = new Date().toISOString();
+    if (fields.status === "draft") published_at = null;
 
     const { data: maxRow } = await supabase
       .from("programs")
@@ -126,24 +117,25 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
     const { data, error } = await supabase
       .from("programs")
       .insert({
-        title,
+        title: fields.title,
         slug,
         category_id,
-        excerpt,
+        excerpt: fields.excerpt,
         body: bodyClean,
-        cover_image_url,
-        cover_image_alt,
-        external_url,
-        subtitle,
-        location,
-        contact_phone,
-        tag_label,
-        tag_icon,
-        featured,
-        status,
+        cover_image_url: fields.cover_image_url,
+        cover_image_alt: fields.cover_image_alt,
+        external_url: fields.external_url,
+        subtitle: fields.subtitle,
+        location: fields.location,
+        contact_phone: fields.contact_phone,
+        tag_label: fields.tag_label,
+        tag_icon: fields.tag_icon,
+        project_period: fields.project_period,
+        carried_by: fields.carried_by,
+        featured: fields.featured,
+        status: fields.status,
         published_at,
         sort_order,
-        bubble_layout,
         created_by: user.id,
       })
       .select("id")
@@ -166,9 +158,8 @@ export async function updateProgram(
 ): Promise<{ error?: string }> {
   try {
     const { supabase } = await requireUser();
-
-    const title = String(form.get("title") || "").trim();
-    if (!title) return { error: "Title is required." };
+    const fields = readProgramFields(form);
+    if (!fields.title) return { error: "Title is required." };
 
     const category_id = String(form.get("category_id") || "").trim();
     if (!category_id) return { error: "Choose a program category." };
@@ -176,50 +167,39 @@ export async function updateProgram(
     await ensureCategoryExists(supabase, category_id);
 
     const slugInput = String(form.get("slug") || "").trim();
-    const baseSlug = slugifyProgram(slugInput || title);
+    const baseSlug = slugifyProgram(slugInput || fields.title);
     const slug = await nextUniqueSlug(supabase, baseSlug, programId);
 
-    const excerpt = String(form.get("excerpt") || "").trim();
-    const bodyRaw = form.get("body");
     const bodyClean =
-      typeof bodyRaw === "string" && bodyRaw.trim() ? sanitizeStaffRichText(bodyRaw) : null;
-
-    const cover_image_url = String(form.get("cover_image_url") || "").trim();
-    const cover_image_alt = String(form.get("cover_image_alt") || "").trim();
-    const external_url = String(form.get("external_url") || "").trim();
-    const subtitle = String(form.get("subtitle") || "").trim();
-    const location = String(form.get("location") || "").trim();
-    const contact_phone = String(form.get("contact_phone") || "").trim();
-    const tag_label = String(form.get("tag_label") || "").trim();
-    const tag_icon = String(form.get("tag_icon") || "").trim();
-    const featured = form.get("featured") === "on";
-    const status: Status = String(form.get("status") || "draft") === "published" ? "published" : "draft";
-    const bubble_layout = serializeBubbleLayout(parseBubbleLayoutField(form));
+      typeof fields.bodyRaw === "string" && fields.bodyRaw.trim()
+        ? sanitizeStaffRichText(fields.bodyRaw)
+        : null;
 
     let published_at: string | null = parsePublishedAtField(form);
-    if (status === "published" && !published_at) published_at = new Date().toISOString();
-    if (status === "draft") published_at = null;
+    if (fields.status === "published" && !published_at) published_at = new Date().toISOString();
+    if (fields.status === "draft") published_at = null;
 
     const { error } = await supabase
       .from("programs")
       .update({
-        title,
+        title: fields.title,
         slug,
         category_id,
-        excerpt,
+        excerpt: fields.excerpt,
         body: bodyClean,
-        cover_image_url,
-        cover_image_alt,
-        external_url,
-        subtitle,
-        location,
-        contact_phone,
-        tag_label,
-        tag_icon,
-        featured,
-        status,
+        cover_image_url: fields.cover_image_url,
+        cover_image_alt: fields.cover_image_alt,
+        external_url: fields.external_url,
+        subtitle: fields.subtitle,
+        location: fields.location,
+        contact_phone: fields.contact_phone,
+        tag_label: fields.tag_label,
+        tag_icon: fields.tag_icon,
+        project_period: fields.project_period,
+        carried_by: fields.carried_by,
+        featured: fields.featured,
+        status: fields.status,
         published_at,
-        bubble_layout,
       })
       .eq("id", programId);
 
@@ -265,9 +245,9 @@ export async function saveProgramBubbleDrafts(
           title,
           subtitle: draft.subtitle.trim(),
           excerpt: draft.excerpt.trim(),
-          location: draft.location.trim(),
+          project_period: draft.project_period.trim(),
+          carried_by: draft.carried_by.trim(),
           cover_image_url: draft.cover_image_url.trim(),
-          bubble_layout: serializeBubbleLayout(draft.bubble_layout),
         })
         .eq("id", programId);
 

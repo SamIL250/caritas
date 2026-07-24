@@ -11,7 +11,6 @@ import {
   type ProgramsLibrarySectionContent,
 } from "@/lib/programs-library-section";
 import type { ProgramBubbleDraft } from "@/app/actions/programs";
-import { parseProgramBubbleLayout } from "@/lib/program-bubble-layout";
 
 type Props = {
   sectionContent: unknown;
@@ -35,9 +34,9 @@ function applyDrafts(
       title: draft.title ?? program.title,
       subtitle: draft.subtitle ?? program.subtitle,
       excerpt: draft.excerpt ?? program.excerpt,
-      location: draft.location ?? program.location,
+      project_period: draft.project_period ?? program.project_period,
+      carried_by: draft.carried_by ?? program.carried_by,
       cover_image_url: draft.cover_image_url ?? program.cover_image_url,
-      bubble_layout: draft.bubble_layout ?? parseProgramBubbleLayout(program.bubble_layout),
     };
   });
 }
