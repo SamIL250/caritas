@@ -43,6 +43,7 @@ import {
 } from "@/lib/mission-vision-values";
 import { DEFAULT_DIOCESE_MAP_SECTION_CONTENT } from "@/lib/diocese-map-defaults";
 import { CANONICAL_PROGRAMS } from "@/lib/program-cards-defaults";
+import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section";
 
 export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   hero: {
@@ -384,6 +385,7 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   },
   news_article_feed: {},
   publications_library: {},
+  programs_library: { ...DEFAULT_PROGRAMS_LIBRARY_SECTION },
   faq_section: {
     eyebrow: "FAQ",
     title: "Frequently Asked Questions",
@@ -591,6 +593,7 @@ export const SECTION_ICONS: Record<string, any> = {
   leadership_grid: Users,
   news_article_feed: LayoutList,
   publications_library: BookOpen,
+  programs_library: LayoutGrid,
   news_footer: Mail,
   video_gallery: PlayCircle,
   faq_section: HelpCircle,
@@ -628,6 +631,7 @@ export const SECTION_LABELS: Record<string, string> = {
   leadership_grid: "Leadership chronicle (timeline)",
   news_article_feed: "Article listing",
   publications_library: "Publications library",
+  programs_library: "Programs library",
   news_footer: "News footer strip",
   video_gallery: "Video gallery (YouTube)",
   metrics_kpis: "Metrics KPIs Strip",

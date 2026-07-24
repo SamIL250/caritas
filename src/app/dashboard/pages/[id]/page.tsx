@@ -7,6 +7,12 @@ import {
   fetchPublicationCategories,
   fetchPublishedPublications,
 } from "@/app/(website)/publications/get-publications-data";
+import {
+  fetchProgramCategories,
+  fetchPublishedPrograms,
+  fetchPublishedSuccessStories,
+  fetchPublishedNews,
+} from "@/app/(website)/programs/get-programs-data";
 
 export default async function PageEditor({
   params,
@@ -36,6 +42,21 @@ export default async function PageEditor({
       ? await Promise.all([fetchPublishedPublications(), fetchPublicationCategories()]).then(
           ([publications, categories]) => ({ publications, categories }),
         )
+      : null;
+
+  const programsPreview =
+    page.slug === "programs"
+      ? await Promise.all([
+          fetchPublishedPrograms(),
+          fetchProgramCategories(),
+          fetchPublishedSuccessStories(),
+          fetchPublishedNews(),
+        ]).then(([programs, categories, successStories, news]) => ({
+          programs,
+          categories,
+          successStories,
+          news,
+        }))
       : null;
 
   // 2. Fetch Hero
@@ -83,6 +104,7 @@ export default async function PageEditor({
       initialSlides={slides || []}
       newsFeedPreview={newsFeedPreview}
       publicationsFeedPreview={publicationsFeedPreview}
+      programsPreview={programsPreview}
       initialSelectedSectionId={
         typeof sp.section === "string" && sp.section.length ? sp.section : undefined
       }

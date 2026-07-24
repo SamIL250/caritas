@@ -20,6 +20,14 @@ import {
   ProgramRichTextEditor,
   type ProgramRichTextEditorHandle,
 } from "@/components/dashboard/programs/ProgramRichTextEditor";
+import {
+  BUBBLE_LAYOUT_PRESET_LABELS,
+  bubbleLayoutFromPreset,
+  bubbleLayoutFromProgram,
+  detectBubbleLayoutPreset,
+  type BubbleContentZone,
+  type ProgramBubbleLayoutPreset,
+} from "@/lib/program-bubble-layout";
 
 type Props = {
   mode: "create" | "edit";
@@ -69,6 +77,11 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
 
   const [coverUrl, setCoverUrl] = useState(source?.cover_image_url ?? "");
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
+  const [bubbleLayout, setBubbleLayout] = useState(() =>
+    source ? bubbleLayoutFromProgram(source) : bubbleLayoutFromPreset("stacked-center"),
+  );
+
+  const bubblePreset = detectBubbleLayoutPreset(bubbleLayout);
 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -87,6 +100,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
     fd.set("category_id", category.id);
     fd.set("cover_image_url", coverUrl.trim());
     fd.set("body", bodyRef.current?.getHTML() ?? "");
+    fd.set("bubble_layout", JSON.stringify(bubbleLayout));
 
     const res =
       mode === "create"
@@ -376,6 +390,63 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
                   defaultValue={source?.cover_image_alt ?? ""}
                 />
               </div>
+            </div>
+          </Card>
+
+          <Card className="space-y-4 border-stone-200/90 p-4 sm:p-6">
+            <header>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                Circle layout
+              </h3>
+              <p className="mt-1 text-xs text-stone-500">
+                Control where title, subtitle, description, and location appear inside the map circle on /programs.
+              </p>
+            </header>
+            <div className="grid grid-cols-1 gap-2">
+              {(Object.entries(BUBBLE_LAYOUT_PRESET_LABELS) as Array<
+                [Exclude<ProgramBubbleLayoutPreset, "custom">, string]
+              >).map(([preset, label]) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setBubbleLayout(bubbleLayoutFromPreset(preset))}
+                  className={`rounded-lg border px-3 py-2 text-left text-xs font-semibold transition-colors ${
+                    bubblePreset === preset
+                      ? "border-[#7A1515] bg-[#7A1515]/5 text-[#7A1515]"
+                      : "border-stone-200 text-stone-600 hover:border-stone-300"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {(
+                [
+                  ["Title", "title"],
+                  ["Subtitle", "subtitle"],
+                  ["Description", "excerpt"],
+                  ["Location", "location"],
+                ] as const
+              ).map(([label, key]) => (
+                <label key={key} className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">{label}</span>
+                  <select
+                    value={bubbleLayout[key]}
+                    onChange={(e) =>
+                      setBubbleLayout((prev) => ({
+                        ...prev,
+                        [key]: e.target.value as BubbleContentZone,
+                      }))
+                    }
+                    className="h-8 w-full rounded-md border border-stone-200 bg-white px-2 text-xs"
+                  >
+                    <option value="top">Top</option>
+                    <option value="center">Middle</option>
+                    <option value="bottom">Bottom</option>
+                  </select>
+                </label>
+              ))}
             </div>
           </Card>
 

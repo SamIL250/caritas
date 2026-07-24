@@ -5,6 +5,7 @@ export type ProgramsLandingHeroProps = {
   headlinePrefix: string;
   headlineAccent: string;
   intro: string;
+  heroImageUrl?: string | null;
 };
 
 export default function ProgramsLandingHero({
@@ -12,11 +13,15 @@ export default function ProgramsLandingHero({
   headlinePrefix,
   headlineAccent,
   intro,
+  heroImageUrl,
 }: ProgramsLandingHeroProps) {
-  // original-website/programs.html uses img/slide3.jpg for the hero background
+  const imageUrl =
+    typeof heroImageUrl === "string" && heroImageUrl.trim()
+      ? heroImageUrl.trim()
+      : "/img/slide3.webp";
   return (
     <PageHeroSection
-      imageUrl="/img/slide3.webp"
+      imageUrl={imageUrl}
       eyebrow={eyebrow || "What We Do"}
       heading={`${(headlinePrefix || "Programs that").trim()} ${(headlineAccent || "Transform Lives").trim()}`}
       headingAccent={(headlineAccent || "Transform Lives").trim()}

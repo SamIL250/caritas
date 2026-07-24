@@ -5,8 +5,34 @@ import { revalidatePath } from "next/cache";
 import type { Database } from "@/types/database.types";
 import { sanitizeStaffRichText } from "@/lib/sanitize-staff-html";
 import { slugifyProgram } from "@/lib/programs";
+import {
+  parseProgramBubbleLayout,
+  serializeBubbleLayout,
+  type ProgramBubbleLayout,
+} from "@/lib/program-bubble-layout";
 
 type Status = Database["public"]["Enums"]["program_status"];
+
+export type ProgramBubbleDraft = {
+  title: string;
+  subtitle: string;
+  excerpt: string;
+  location: string;
+  cover_image_url: string;
+  bubble_layout: ProgramBubbleLayout;
+};
+
+function parseBubbleLayoutField(form: FormData): ProgramBubbleLayout {
+  const raw = form.get("bubble_layout");
+  if (typeof raw !== "string" || !raw.trim()) {
+    return parseProgramBubbleLayout(null);
+  }
+  try {
+    return parseProgramBubbleLayout(JSON.parse(raw));
+  } catch {
+    return parseProgramBubbleLayout(null);
+  }
+}
 
 async function requireUser() {
   const supabase = await createClient();
@@ -83,6 +109,7 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
     const status: Status = String(form.get("status") || "draft") === "published" ? "published" : "draft";
+    const bubble_layout = serializeBubbleLayout(parseBubbleLayoutField(form));
 
     let published_at: string | null = parsePublishedAtField(form);
     if (status === "published" && !published_at) published_at = new Date().toISOString();
@@ -116,6 +143,7 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
         status,
         published_at,
         sort_order,
+        bubble_layout,
         created_by: user.id,
       })
       .select("id")
@@ -166,6 +194,7 @@ export async function updateProgram(
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
     const status: Status = String(form.get("status") || "draft") === "published" ? "published" : "draft";
+    const bubble_layout = serializeBubbleLayout(parseBubbleLayoutField(form));
 
     let published_at: string | null = parsePublishedAtField(form);
     if (status === "published" && !published_at) published_at = new Date().toISOString();
@@ -190,6 +219,7 @@ export async function updateProgram(
         featured,
         status,
         published_at,
+        bubble_layout,
       })
       .eq("id", programId);
 
@@ -214,5 +244,41 @@ export async function deleteProgram(programId: string): Promise<{ error?: string
     return {};
   } catch (e: unknown) {
     return { error: e instanceof Error ? e.message : "Failed to delete." };
+  }
+}
+
+export async function saveProgramBubbleDrafts(
+  drafts: Record<string, ProgramBubbleDraft>,
+): Promise<{ error?: string }> {
+  try {
+    const { supabase } = await requireUser();
+    const entries = Object.entries(drafts);
+    if (!entries.length) return {};
+
+    for (const [programId, draft] of entries) {
+      const title = draft.title.trim();
+      if (!title) return { error: "Every program bubble needs a title." };
+
+      const { error } = await supabase
+        .from("programs")
+        .update({
+          title,
+          subtitle: draft.subtitle.trim(),
+          excerpt: draft.excerpt.trim(),
+          location: draft.location.trim(),
+          cover_image_url: draft.cover_image_url.trim(),
+          bubble_layout: serializeBubbleLayout(draft.bubble_layout),
+        })
+        .eq("id", programId);
+
+      if (error) return { error: error.message };
+    }
+
+    revalidatePath("/programs");
+    revalidatePath("/dashboard/programs");
+    revalidatePath("/dashboard/pages");
+    return {};
+  } catch (e: unknown) {
+    return { error: e instanceof Error ? e.message : "Failed to save bubble content." };
   }
 }

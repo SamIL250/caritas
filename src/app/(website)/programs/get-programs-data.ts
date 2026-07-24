@@ -16,6 +16,15 @@ export type ProgramsPageChrome = {
   heroImageUrl: string | null;
 };
 
+export type ProgramsCmsSection = {
+  id: string;
+  type: string;
+  section_key: string | null;
+  content: Json;
+  visible: boolean;
+  order: number;
+};
+
 const DEFAULT_META = {
   title: "Programs — Caritas Rwanda",
   description:
@@ -97,10 +106,21 @@ export async function fetchPublishedNews(): Promise<NewsArticleRow[]> {
   return sortByPublishedNewest((data ?? []) as NewsArticleRow[]);
 }
 
+async function fetchProgramsPageSections(pageId: string): Promise<ProgramsCmsSection[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("sections")
+    .select("id, type, section_key, content, visible, order")
+    .eq("page_id", pageId)
+    .order("order", { ascending: true });
+  return (data ?? []) as ProgramsCmsSection[];
+}
+
 export async function resolveProgramsPublicPagePayload(): Promise<{
   seoTitle: string;
   seoDescription: string;
   chrome: ProgramsPageChrome;
+  cmsSections: ProgramsCmsSection[];
   programs: ProgramRow[];
   categories: ProgramCategoryRow[];
   successStories: PublicationRow[];
@@ -115,10 +135,11 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
     .maybeSingle();
   const page = pageRow as { id: string; meta: Json | null } | null;
 
-  const [heroRes, programs, categories, successStories, news] = await Promise.all([
+  const [heroRes, cmsSections, programs, categories, successStories, news] = await Promise.all([
     page?.id
       ? supabase.from("hero_content").select("*").eq("page_id", page.id).maybeSingle()
       : Promise.resolve({ data: null }),
+    page?.id ? fetchProgramsPageSections(page.id) : Promise.resolve([]),
     fetchPublishedPrograms(),
     fetchProgramCategories(),
     fetchPublishedSuccessStories(),
@@ -135,6 +156,7 @@ export async function resolveProgramsPublicPagePayload(): Promise<{
     seoDescription:
       (meta.seo_description && String(meta.seo_description).trim()) || DEFAULT_META.description,
     chrome,
+    cmsSections,
     programs,
     categories,
     successStories,

@@ -83,9 +83,11 @@ export interface Database {
           id: string
           page_id: string
           type: string
+          name: string | null
           content: Json
           order: number
           visible: boolean
+          section_key: string | null
           created_at: string
           updated_at: string
         }
@@ -93,9 +95,11 @@ export interface Database {
           id?: string
           page_id: string
           type: string
+          name?: string | null
           content?: Json
           order?: number
           visible?: boolean
+          section_key?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -103,9 +107,11 @@ export interface Database {
           id?: string
           page_id?: string
           type?: string
+          name?: string | null
           content?: Json
           order?: number
           visible?: boolean
+          section_key?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -1089,6 +1095,7 @@ export interface Database {
           status: "draft" | "published"
           published_at: string | null
           sort_order: number
+          bubble_layout: Json
           created_by: string | null
           created_at: string
           updated_at: string
@@ -1113,6 +1120,7 @@ export interface Database {
           status?: "draft" | "published"
           published_at?: string | null
           sort_order?: number
+          bubble_layout?: Json
           created_by?: string | null
           created_at?: string
           updated_at?: string
@@ -1137,6 +1145,7 @@ export interface Database {
           status?: "draft" | "published"
           published_at?: string | null
           sort_order?: number
+          bubble_layout?: Json
           created_by?: string | null
           created_at?: string
           updated_at?: string

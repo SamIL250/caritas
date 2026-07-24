@@ -16,6 +16,9 @@ import {
 } from "@/lib/publications";
 import { formatPublishedDate, type NewsArticleRow } from "@/lib/news";
 import RwandaMapBackground from "./RwandaMapBackground";
+import { ProgramBubbleCircle } from "./ProgramBubbleCircle";
+import type { ProgramsLibrarySectionContent } from "@/lib/programs-library-section";
+import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section";
 
 const PROGRAM_GRID_COLUMNS = 4;
 const SUCCESS_STORY_ROWS = 1;
@@ -29,9 +32,16 @@ type Props = {
   categories: ProgramCategoryRow[];
   successStories: PublicationRow[];
   news: NewsArticleRow[];
+  libraryConfig?: ProgramsLibrarySectionContent;
 };
 
-export default function ProgramsLibrary({ programs, categories, successStories, news }: Props) {
+export default function ProgramsLibrary({
+  programs,
+  categories,
+  successStories,
+  news,
+  libraryConfig = DEFAULT_PROGRAMS_LIBRARY_SECTION,
+}: Props) {
   const sortedCategories = useMemo(
     () =>
       [...categories].sort(
@@ -194,17 +204,21 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
             <div className="prog-ref-section">
               <RwandaMapBackground />
               <div className="prog-ref-inner">
-                <ProgramBubbleGallery items={items} onClick={(p) => setActiveProgram(p)} />
+                <ProgramBubbleGallery
+                  items={items}
+                  initialCount={libraryConfig.bubble_initial_count}
+                  viewAllLabel={libraryConfig.view_all_label}
+                  viewAllLessLabel={libraryConfig.view_all_less_label}
+                  onClick={(p) => setActiveProgram(p)}
+                />
               </div>
             </div>
 
-            {/* ── Success Stories ── */}
-            {activeStories.length > 0 && (
+            {libraryConfig.show_success_stories && activeStories.length > 0 && (
               <SuccessStoriesSection stories={activeStories} category={cat} />
             )}
 
-            {/* ── Latest News ── */}
-            {activeNewsArticles.length > 0 && (
+            {libraryConfig.show_news && activeNewsArticles.length > 0 && (
               <div className="prog-news-section">
                 <div className="prog-news-header">
                   <div className="prog-section-head-row">
@@ -252,49 +266,52 @@ export default function ProgramsLibrary({ programs, categories, successStories, 
 /* ------------------------------------------------------------------ */
 /* Bubble Circle Gallery                                                */
 /* ------------------------------------------------------------------ */
-function ProgramBubbleGallery({ items, onClick }: { items: any[]; onClick: (p: any) => void }) {
+function ProgramBubbleGallery({
+  items,
+  initialCount,
+  viewAllLabel,
+  viewAllLessLabel,
+  onClick,
+}: {
+  items: ProgramRow[];
+  initialCount: number;
+  viewAllLabel: string;
+  viewAllLessLabel: string;
+  onClick: (p: ProgramRow) => void;
+}) {
   const [showAll, setShowAll] = useState(false);
-
-  // If not showing all, show maximum 3 items (one slide)
-  const displayItems = showAll ? items : items.slice(0, 3);
+  const visibleCount = Math.max(1, Math.min(initialCount, items.length));
+  const displayItems = showAll ? items : items.slice(0, visibleCount);
+  const BUBBLE_COLORS = ["bubble-blue", "bubble-tan", "bubble-green"];
 
   return (
     <div className={`bubble-slider-container ${showAll ? "show-all" : ""}`}>
       <div className="bubble-slider">
         <div className="bs-track-wrap">
-          <div className="bs-track" style={{ flexWrap: showAll ? "wrap" : "nowrap", gap: "2rem", justifyContent: "center" }}>
-            {displayItems.map((p, idx) => {
-              const BUBBLE_COLORS = ["bubble-blue", "bubble-tan", "bubble-green"];
-              const colorClass = BUBBLE_COLORS[idx % BUBBLE_COLORS.length];
-              const imageUrl = p.cover_image_url?.trim() ? encodeProgramAssetUrl(p.cover_image_url) : "";
-              
-              return (
-                <div 
-                  key={p.id}
-                  className={`bubble-circle ${colorClass}`}
-                  style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }}
-                  onClick={() => onClick(p)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && onClick(p)}
-                >
-                  <h4 className="bubble-title">{p.title}</h4>
-                  {p.subtitle && <p className="bubble-tagline">{p.subtitle}</p>}
-                  <div className="bubble-sep"></div>
-                  <p className="bubble-desc">{p.excerpt}</p>
-                  <div className="bubble-loc">
-                    <i className="fa-solid fa-location-dot"></i> {p.location || "Rwanda"}
-                  </div>
-                </div>
-              );
-            })}
+          <div
+            className="bs-track"
+            style={{ flexWrap: showAll ? "wrap" : "nowrap", gap: "2rem", justifyContent: "center" }}
+          >
+            {displayItems.map((p, idx) => (
+              <ProgramBubbleCircle
+                key={p.id}
+                program={p}
+                colorClass={BUBBLE_COLORS[idx % BUBBLE_COLORS.length]}
+                onClick={onClick}
+              />
+            ))}
           </div>
         </div>
       </div>
-      {items.length > 3 && (
+      {items.length > visibleCount && (
         <div className="bubble-viewall-wrap">
-          <button className={`bubble-viewall-btn ${showAll ? "active" : ""}`} onClick={() => setShowAll(!showAll)}>
-            <i className={`fa-solid fa-${showAll ? "compress" : "expand"}`}></i> {showAll ? "Show Less" : "View All Programs"}
+          <button
+            type="button"
+            className={`bubble-viewall-btn ${showAll ? "active" : ""}`}
+            onClick={() => setShowAll(!showAll)}
+          >
+            <i className={`fa-solid fa-${showAll ? "compress" : "expand"}`} aria-hidden />
+            {showAll ? viewAllLessLabel : viewAllLabel}
           </button>
         </div>
       )}

@@ -110,9 +110,19 @@ import NewsNewsletterFooter from '@/components/website/news/NewsNewsletterFooter
 import NewsFeedSectionPreview from '@/components/dashboard/pages/NewsFeedSectionPreview';
 import PublicationsLandingHero from '@/components/website/publications/PublicationsLandingHero';
 import PublicationsFeedSectionPreview from '@/components/dashboard/pages/PublicationsFeedSectionPreview';
+import ProgramsLandingHero from '@/components/website/programs/ProgramsLandingHero';
+import ProgramsLibrarySectionPreview from '@/components/dashboard/pages/ProgramsLibrarySectionPreview';
+import ProgramsPartnerSection from '@/components/website/programs/ProgramsPartnerSection';
+import ProgramsLibrarySectionEditor from '@/components/dashboard/pages/ProgramsLibrarySectionEditor';
+import ProgramsPartnerSectionEditor from '@/components/dashboard/pages/ProgramsPartnerSectionEditor';
 import FeaturedCampaignSectionPreview from '@/components/dashboard/pages/FeaturedCampaignSectionPreview';
 import type { PublishedNewsArticle } from '@/app/(website)/news/get-news-data';
 import type { PublicationCategoryRow, PublicationRow } from '@/lib/publications';
+import type { ProgramCategoryRow, ProgramRow } from '@/lib/programs';
+import type { NewsArticleRow } from '@/lib/news';
+import { saveProgramBubbleDrafts, type ProgramBubbleDraft } from '@/app/actions/programs';
+import { parseProgramsLibrarySectionContent, parseProgramsPartnerSectionContent } from '@/lib/programs-library-section';
+import { parseProgramBubbleLayout } from '@/lib/program-bubble-layout';
 import { ImageIcon } from 'lucide-react';
 
 import '@/app/website-cms-section-preview.css';
@@ -127,6 +137,7 @@ import '@/app/our-location-section.css';
 import '@/app/network-section.css';
 import '@/app/(website)/news/news-page.css';
 import '@/app/(website)/publications/publications-page.css';
+import '@/app/(website)/programs/programs-page.css';
 import '@/app/diocese-map-section.css';
 
 /** Default / minimum width for the section list + form sidebar (cannot shrink below). */
@@ -162,6 +173,12 @@ function hydrateSectionEditorContent(
   const content = (section?.content as Record<string, unknown>) || {};
   if (section?.type === 'program_cards') {
     return hydrateProgramCardsContent(content);
+  }
+  if (section?.type === 'programs_library') {
+    return parseProgramsLibrarySectionContent(content);
+  }
+  if (section?.type === 'cta' && (section as { section_key?: string }).section_key === 'programs_partner') {
+    return parseProgramsPartnerSectionContent(content);
   }
   if (pageSlug === 'about' && section?.type === 'pillar_cards') {
     return hydrateMissionVisionEditorContent(content);
@@ -203,6 +220,13 @@ interface PageEditorProps {
     publications: PublicationRow[];
     categories: PublicationCategoryRow[];
   } | null;
+  /** When editing the Programs CMS page: published programs for library preview. */
+  programsPreview?: {
+    programs: ProgramRow[];
+    categories: ProgramCategoryRow[];
+    successStories: PublicationRow[];
+    news: NewsArticleRow[];
+  } | null;
   /** Deep-link from Campaigns dashboard: select this section UUID on load (e.g. Featured campaign). */
   initialSelectedSectionId?: string;
   /** Metrics sections data for Impact at a Glance preview on the metrics page. */
@@ -216,6 +240,7 @@ export default function PageEditorClient({
   initialSlides,
   newsFeedPreview = null,
   publicationsFeedPreview = null,
+  programsPreview = null,
   initialSelectedSectionId,
   initialMetricsSections = [],
 }: PageEditorProps) {
@@ -247,6 +272,7 @@ export default function PageEditorClient({
   const [slideToDelete, setSlideToDelete] = useState<string | null>(null);
   const [showSlideMediaPicker, setShowSlideMediaPicker] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [programBubbleDrafts, setProgramBubbleDrafts] = useState<Record<string, ProgramBubbleDraft>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -324,7 +350,8 @@ export default function PageEditorClient({
   const isAboutPage = page.slug === 'about';
   const isNewsPage = page.slug === 'news';
   const isPublicationsPage = page.slug === 'publications';
-  const editorWarmChrome = isAboutPage || isNewsPage || isPublicationsPage;
+  const isProgramsPage = page.slug === 'programs';
+  const editorWarmChrome = isAboutPage || isNewsPage || isPublicationsPage || isProgramsPage;
 
   const autoPreviewMode = useMemo(
     () => previewModeFromCanvasWidth(previewCanvasWidth),
@@ -475,12 +502,13 @@ export default function PageEditorClient({
   // --- Handlers ---
 
   const handleSelectSection = (id: string | null) => {
-    if (hasChanges) {
+    if (hasChanges || Object.keys(programBubbleDrafts).length > 0) {
       setShowUnsavedConfirm(id);
       return;
     }
 
     setSelectedId(id);
+    setProgramBubbleDrafts({});
     if (id === 'hero') {
       setLocalState(hero);
     } else if (id) {
@@ -500,6 +528,26 @@ export default function PageEditorClient({
     setHasChanges(true);
   };
 
+  const handleProgramBubbleDraftChange = (programId: string, patch: Partial<ProgramBubbleDraft>) => {
+    setProgramBubbleDrafts((prev) => {
+      const baseProgram = programsPreview?.programs.find((p) => p.id === programId);
+      const existing = prev[programId];
+      const mergedLayout = patch.bubble_layout ?? existing?.bubble_layout ?? (baseProgram ? parseProgramBubbleLayout(baseProgram.bubble_layout) : undefined);
+      return {
+        ...prev,
+        [programId]: {
+          title: patch.title ?? existing?.title ?? baseProgram?.title ?? '',
+          subtitle: patch.subtitle ?? existing?.subtitle ?? baseProgram?.subtitle ?? '',
+          excerpt: patch.excerpt ?? existing?.excerpt ?? baseProgram?.excerpt ?? '',
+          location: patch.location ?? existing?.location ?? baseProgram?.location ?? '',
+          cover_image_url: patch.cover_image_url ?? existing?.cover_image_url ?? baseProgram?.cover_image_url ?? '',
+          bubble_layout: mergedLayout!,
+        },
+      };
+    });
+    setHasChanges(true);
+  };
+
   const handleUpdateOptionsLocal = (key: string, value: any) => {
     setLocalState((prev: any) => ({
       ...prev,
@@ -516,7 +564,8 @@ export default function PageEditorClient({
         await saveHero(page.id, snapshot);
         setHero(snapshot);
       } else if (selectedId) {
-        const sectionType = sections.find((s) => s.id === selectedId)?.type || '';
+        const selectedSection = sections.find((s) => s.id === selectedId);
+        const sectionType = selectedSection?.type || '';
         const payload =
           sectionType === 'program_cards'
             ? hydrateProgramCardsContent(snapshot as Record<string, unknown>)
@@ -525,6 +574,11 @@ export default function PageEditorClient({
         setSections((prev) =>
           prev.map((s) => (s.id === selectedId ? { ...s, content: payload } : s)),
         );
+        if (sectionType === 'programs_library' && Object.keys(programBubbleDrafts).length > 0) {
+          const bubbleRes = await saveProgramBubbleDrafts(programBubbleDrafts);
+          if (bubbleRes.error) throw new Error(bubbleRes.error);
+          setProgramBubbleDrafts({});
+        }
       }
       setHasChanges(false);
       setSavedAt(new Date());
@@ -693,6 +747,26 @@ export default function PageEditorClient({
           </div>
         );
       }
+      if (page.slug === 'programs') {
+        const o = localState.options || {};
+        const accent =
+          typeof o.heading_accent === 'string' && o.heading_accent.trim()
+            ? String(o.heading_accent)
+            : 'Of Interventions';
+        return (
+          <div className="w-full shrink-0">
+            <ProgramsLandingHero
+              eyebrow={(typeof o.badge_text === 'string' && o.badge_text.trim())
+                ? String(o.badge_text)
+                : 'What we do'}
+              headlinePrefix={typeof localState.heading === 'string' ? localState.heading : 'Four Main Areas'}
+              headlineAccent={accent}
+              intro={typeof localState.subheading === 'string' ? localState.subheading : ''}
+              heroImageUrl={typeof localState.image_url === 'string' ? localState.image_url : null}
+            />
+          </div>
+        );
+      }
       return (
         <HeroSection
           heading={localState.heading}
@@ -728,7 +802,6 @@ export default function PageEditorClient({
       case 'faq_section': return <FaqSection {...props} />;
       case 'image_grid': return <ImageGrid {...props} />;
       case 'testimonial': return <Testimonial {...props} />;
-      case 'cta': return <CTA {...props} />;
       case 'featured_campaign': {
         const p = props as Record<string, unknown>;
         return (
@@ -815,6 +888,23 @@ export default function PageEditorClient({
             categories={publicationsFeedPreview?.categories ?? []}
           />
         );
+      case 'programs_library':
+        return (
+          <ProgramsLibrarySectionPreview
+            sectionContent={props}
+            programs={programsPreview?.programs ?? []}
+            categories={programsPreview?.categories ?? []}
+            successStories={programsPreview?.successStories ?? []}
+            news={programsPreview?.news ?? []}
+            programDrafts={programBubbleDrafts}
+          />
+        );
+      case 'cta': {
+        if (section.section_key === 'programs_partner') {
+          return <ProgramsPartnerSection {...parseProgramsPartnerSectionContent(props)} />;
+        }
+        return <CTA {...props} />;
+      }
       case 'news_footer':
         return (
           <div className="mt-auto w-full shrink-0 pb-8 pt-4">
@@ -943,6 +1033,7 @@ export default function PageEditorClient({
               <div className="min-h-0 flex-1 overflow-y-auto p-4 space-y-6">
                 <SectionForm
                   type={selectedId === 'hero' ? 'hero' : sections.find(s => s.id === selectedId)?.type || ''}
+                  sectionKey={sections.find((s) => s.id === selectedId)?.section_key}
                   state={localState}
                   onChange={handleUpdateLocal}
                   onOptionsChange={handleUpdateOptionsLocal}
@@ -951,6 +1042,9 @@ export default function PageEditorClient({
                   onDeleteSlide={(id: string) => setSlideToDelete(id)}
                   onSelectSlide={setSelectedSlideId}
                   pageSlug={page.slug}
+                  programsPreview={programsPreview}
+                  programBubbleDrafts={programBubbleDrafts}
+                  onProgramBubbleDraftChange={handleProgramBubbleDraftChange}
                 />
               </div>
 
@@ -968,7 +1062,7 @@ export default function PageEditorClient({
                 <Button
                   variant="primary"
                   className="w-full"
-                  disabled={!hasChanges || saving}
+                  disabled={(!hasChanges && Object.keys(programBubbleDrafts).length === 0) || saving}
                   onClick={handleSave}
                 >
                   {saving ? (
@@ -1221,7 +1315,7 @@ export default function PageEditorClient({
               <div
                 className={`page-editor-preview-viewport my-4 min-h-0 shrink-0 max-w-full overflow-y-auto overflow-x-hidden rounded-xl border ${isAboutPage
                     ? 'border-[#dcd6cf] bg-[#f8f6f3]'
-                    : isNewsPage || isPublicationsPage
+                    : isNewsPage || isPublicationsPage || isProgramsPage
                       ? 'border-[#dcd8d0] bg-[#eae5de]'
                       : 'border-stone-200 bg-stone-100/70'
                   }`}
@@ -1237,7 +1331,9 @@ export default function PageEditorClient({
                         ? 'news-page-root bg-[#f7f5f2]'
                         : isPublicationsPage
                           ? 'pub-page-root bg-[#f7f5f2]'
-                          : 'bg-white'
+                          : isProgramsPage
+                            ? 'prog-page-root bg-[#f7f5f2]'
+                            : 'bg-white'
                     }`}
                 >
                   {renderPreview()}
@@ -1310,6 +1406,8 @@ export default function PageEditorClient({
             )
               return null;
             if (page.slug !== 'publications' && type === 'publications_library') return null;
+            if (page.slug !== 'programs' && type === 'programs_library') return null;
+            if (page.slug === 'programs' && type === 'cta' && label === 'Call to Action') return null;
             const Icon = SECTION_ICONS[type] || Plus;
             return (
               <button
@@ -1480,6 +1578,7 @@ export default function PageEditorClient({
           const targetId = showUnsavedConfirm;
           setShowUnsavedConfirm(null);
           setHasChanges(false);
+          setProgramBubbleDrafts({});
           handleSelectSection(targetId);
         }}
         title="Unsaved changes"
@@ -1543,6 +1642,7 @@ function SortableItem({ section, isSelected, onSelect, onToggleVisibility }: any
 
 function SectionForm({
   type,
+  sectionKey,
   state,
   onChange,
   onOptionsChange,
@@ -1550,7 +1650,10 @@ function SectionForm({
   onAddSlide,
   onDeleteSlide,
   onSelectSlide,
-  pageSlug
+  pageSlug,
+  programsPreview,
+  programBubbleDrafts,
+  onProgramBubbleDraftChange,
 }: any) {
   const [showMediaPicker, setShowMediaPicker] = useState<string | null>(null);
   const [campaignPicklist, setCampaignPicklist] = useState<{ id: string; title: string; status: string }[]>(
@@ -2179,6 +2282,15 @@ function SectionForm({
       );
     }
     case 'cta': {
+      if (sectionKey === 'programs_partner') {
+        return (
+          <ProgramsPartnerSectionEditor
+            state={state}
+            onChange={onChange}
+            renderField={renderField}
+          />
+        );
+      }
       const patchStat = (i: number, key: string, v: string) => {
         const list = [...(state.stats || [])];
         list[i] = { ...list[i], [key]: v };
@@ -5279,6 +5391,17 @@ function SectionForm({
             Open Publications →
           </Link>
         </div>
+      );
+    case 'programs_library':
+      return (
+        <ProgramsLibrarySectionEditor
+          state={state}
+          onChange={onChange}
+          programs={programsPreview?.programs ?? []}
+          categories={programsPreview?.categories ?? []}
+          programDrafts={programBubbleDrafts ?? {}}
+          onProgramDraftChange={onProgramBubbleDraftChange}
+        />
       );
     case 'news_footer':
       return (
