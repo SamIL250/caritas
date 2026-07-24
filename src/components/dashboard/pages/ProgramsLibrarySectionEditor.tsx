@@ -72,7 +72,7 @@ function ProgramBubbleEditor({
               type="text"
               value={draft.carried_by}
               onChange={(e) => onDraftChange({ carried_by: e.target.value })}
-              placeholder="By Secours Catholique in Cyangugu and Gikongoro"
+              placeholder="Carried by"
               className="w-full rounded-lg border border-stone-200 px-2 py-1.5 text-xs"
             />
           </div>
