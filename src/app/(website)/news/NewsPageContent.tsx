@@ -22,6 +22,20 @@ type Props = {
   initialTopic?: string;
 };
 
+function resolveDepartmentFilter(
+  initialTopic: string | undefined,
+  departmentPillars: ProgramDepartmentOption[],
+): string {
+  const sorted = [...departmentPillars].sort(
+    (a, b) => a.sort_order - b.sort_order || a.label.localeCompare(b.label),
+  );
+  const fallback = sorted[0]?.slug ?? "";
+  if (initialTopic && sorted.some((pillar) => pillar.slug === initialTopic)) {
+    return initialTopic;
+  }
+  return fallback;
+}
+
 export default function NewsPageContent({
   chrome,
   cmsSections,
@@ -30,16 +44,14 @@ export default function NewsPageContent({
   departmentPillars,
   initialTopic,
 }: Props) {
-  const [departmentFilter, setDepartmentFilter] = useState<string | "all">(initialTopic || "all");
+  const [departmentFilter, setDepartmentFilter] = useState<string>(() =>
+    resolveDepartmentFilter(initialTopic, departmentPillars),
+  );
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    if (initialTopic) {
-      setDepartmentFilter(initialTopic);
-    } else {
-      setDepartmentFilter("all");
-    }
-  }, [initialTopic]);
+    setDepartmentFilter(resolveDepartmentFilter(initialTopic, departmentPillars));
+  }, [initialTopic, departmentPillars]);
 
   // original-website/news.html has no dedicated hero image — use slide4 (community) which fits the news context
   const heroImage =

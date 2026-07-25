@@ -18,7 +18,34 @@ import { PublicationLockModal } from "./PublicationLockModal";
 import { ViewTracker } from "@/components/website/ViewTracker";
 import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 
-type FilterKey = "all" | string;
+type FilterKey = string;
+
+function defaultPublicationFilter(
+  strategicCat: PublicationCategoryRow | null,
+  sortedCategories: PublicationCategoryRow[],
+): string {
+  if (strategicCat) return strategicCat.slug;
+  if (sortedCategories[0]) return sortedCategories[0].slug;
+  return TESTIMONIES_SECTION_ANCHOR;
+}
+
+function filterKeyFromAnchor(
+  anchor: string,
+  strategicCat: PublicationCategoryRow | null,
+  sortedCategories: PublicationCategoryRow[],
+): string | null {
+  if (!anchor) return null;
+  if (anchor === TESTIMONIES_SECTION_ANCHOR) return TESTIMONIES_SECTION_ANCHOR;
+  if (strategicCat) {
+    const strategicAnchor = readCategoryBehavior(strategicCat).site_anchor || "strategic";
+    if (anchor === strategicAnchor) return strategicCat.slug;
+  }
+  for (const cat of sortedCategories) {
+    const catAnchor = readCategoryBehavior(cat).site_anchor || cat.slug.replace(/_/g, "-");
+    if (anchor === catAnchor) return cat.slug;
+  }
+  return null;
+}
 
 type Props = {
   publications: PublicationRow[];
@@ -71,8 +98,6 @@ function matchesYearFilter(year: number | null, yearFilter: number | "all"): boo
 }
 
 export default function PublicationsLibrary({ publications, categories, testimonies = [] }: Props) {
-  const [filter, setFilter] = useState<FilterKey>("all");
-  const [yearFilter, setYearFilter] = useState<number | "all">("all");
   const [activePublication, setActivePublication] = useState<PublicationRow | null>(null);
   const [lockedPub, setLockedPub] = useState<PublicationRow | null>(null);
 
@@ -88,24 +113,29 @@ export default function PublicationsLibrary({ publications, categories, testimon
     () => categories.find((c) => c.slug === "strategic_plan") ?? null,
     [categories],
   );
+
+  const defaultFilter = useMemo(
+    () => defaultPublicationFilter(strategicCat, sortedCategories),
+    [strategicCat, sortedCategories],
+  );
+
+  const [filter, setFilter] = useState<FilterKey>(defaultFilter);
+  const [yearFilter, setYearFilter] = useState<number | "all">("all");
   const strategicFeatured = useMemo(() => {
     const strat = publications.filter((p) => p.category === "strategic_plan");
     return strat.find((p) => p.featured) ?? strat[0] ?? null;
   }, [publications]);
 
-  const showSection = (slug: string) => filter === "all" || filter === slug;
-  const showTestimonies = filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR;
+  const showSection = (slug: string) => filter === slug;
+  const showTestimonies = filter === TESTIMONIES_SECTION_ANCHOR;
 
   const scopedPublications = useMemo(() => {
     if (filter === TESTIMONIES_SECTION_ANCHOR) return [];
-    if (filter === "all") {
-      return publications.filter((p) => p.category !== "success_story");
-    }
     return publications.filter((p) => p.category === filter);
   }, [filter, publications]);
 
   const scopedTestimonies = useMemo(() => {
-    if (filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR) return testimonies;
+    if (filter === TESTIMONIES_SECTION_ANCHOR) return testimonies;
     return [];
   }, [filter, testimonies]);
 
@@ -138,39 +168,47 @@ export default function PublicationsLibrary({ publications, categories, testimon
 
   const hasFilteredContent = useMemo(() => {
     if (yearFilter === "all") return true;
-    if (showStrategicFeatured) return true;
-
-    const hasCategoryItems = sortedCategories.some((cat) => {
-      const sectionVisible = filter === "all" || filter === cat.slug;
-      if (!sectionVisible) return false;
-      return publications
-        .filter((p) => p.category === cat.slug)
-        .some((row) => matchesYearFilter(publicationYear(row), yearFilter));
-    });
-
-    const hasTestimonyItems =
-      (filter === "all" || filter === TESTIMONIES_SECTION_ANCHOR) &&
-      scopedTestimonies.some((row) => matchesYearFilter(testimonyYear(row), yearFilter));
-
-    return hasCategoryItems || hasTestimonyItems;
+    if (strategicCat && filter === strategicCat.slug && showStrategicFeatured) return true;
+    if (filter === TESTIMONIES_SECTION_ANCHOR) {
+      return scopedTestimonies.some((row) => matchesYearFilter(testimonyYear(row), yearFilter));
+    }
+    return scopedPublications.some((row) => matchesYearFilter(publicationYear(row), yearFilter));
   }, [
     yearFilter,
-    showStrategicFeatured,
-    sortedCategories,
+    strategicCat,
     filter,
-    publications,
+    showStrategicFeatured,
+    scopedPublications,
     scopedTestimonies,
   ]);
 
   useEffect(() => {
-    const hash = window.location.hash.replace(/^#/, "");
-    if (hash === TESTIMONIES_SECTION_ANCHOR) {
-      setFilter(TESTIMONIES_SECTION_ANCHOR);
-      window.setTimeout(() => {
-        document.getElementById(TESTIMONIES_SECTION_ANCHOR)?.scrollIntoView({ behavior: "smooth" });
-      }, 120);
+    const validKeys = new Set<string>([
+      ...(strategicCat ? [strategicCat.slug] : []),
+      ...sortedCategories.map((c) => c.slug),
+      TESTIMONIES_SECTION_ANCHOR,
+    ]);
+    if (!validKeys.has(filter)) {
+      setFilter(defaultFilter);
     }
-  }, []);
+  }, [strategicCat, sortedCategories, defaultFilter, filter]);
+
+  useEffect(() => {
+    const syncFromHash = () => {
+      const hash = window.location.hash.replace(/^#/, "").trim();
+      if (!hash) return;
+      const key = filterKeyFromAnchor(hash, strategicCat, sortedCategories);
+      if (!key) return;
+      setFilter(key);
+      window.setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+      }, 120);
+    };
+
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, [strategicCat, sortedCategories]);
 
   // Lock body scroll when drawer open
   useEffect(() => {
@@ -371,16 +409,6 @@ function PublicationsFilterBar({
         </button>
 
         <div className="pub-filter-inner" ref={scrollRef}>
-          <button
-            type="button"
-            className={`pub-filter-btn${filter === "all" ? " active" : ""}`}
-            onClick={() => onFilterChange("all")}
-            aria-pressed={filter === "all"}
-          >
-            <i className="fa-solid fa-layer-group" aria-hidden />
-            All
-          </button>
-
           {strategicCat ? (
             <button
               key={strategicCat.id}

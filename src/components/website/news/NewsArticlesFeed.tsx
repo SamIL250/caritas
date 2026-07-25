@@ -24,8 +24,7 @@ function effectiveDepartmentSlug(a: PublishedNewsArticle): string | null {
   return inferredDepartmentSlugFromLegacyNewsCategory(a.category);
 }
 
-function matchesDepartmentFilter(a: PublishedNewsArticle, filter: string | "all"): boolean {
-  if (filter === "all") return true;
+function matchesDepartmentFilter(a: PublishedNewsArticle, filter: string): boolean {
   const slug = effectiveDepartmentSlug(a);
   return slug === filter;
 }
@@ -53,8 +52,8 @@ type Props = {
   departmentPillars: ProgramDepartmentOption[];
   topicFilter: string;
   onTopicFilterChange: (f: any) => void;
-  departmentFilter: string | "all";
-  onDepartmentFilterChange: (slug: string | "all") => void;
+  departmentFilter: string;
+  onDepartmentFilterChange: (slug: string) => void;
   query: string;
 };
 
@@ -149,13 +148,6 @@ export default function NewsArticlesFeed({
       {departmentPillars.length > 0 ? (
         <div className="news-filter-bar">
           <div className="news-filter-inner">
-            <button
-              type="button"
-              className={`news-filter-btn ${departmentFilter === "all" ? "is-active" : ""}`}
-              onClick={() => onDepartmentFilterChange("all")}
-            >
-              All Programs
-            </button>
             {departmentPillars.map((p) => (
               <button
                 key={p.id}
