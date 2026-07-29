@@ -47,6 +47,22 @@ function filterKeyFromAnchor(
   return null;
 }
 
+function filterAnchorFromKey(
+  key: string,
+  strategicCat: PublicationCategoryRow | null,
+  sortedCategories: PublicationCategoryRow[],
+): string {
+  if (key === TESTIMONIES_SECTION_ANCHOR) return TESTIMONIES_SECTION_ANCHOR;
+  if (strategicCat && key === strategicCat.slug) {
+    return readCategoryBehavior(strategicCat).site_anchor || "strategic";
+  }
+  const cat = sortedCategories.find((c) => c.slug === key);
+  if (cat) {
+    return readCategoryBehavior(cat).site_anchor || cat.slug.replace(/_/g, "-");
+  }
+  return key.replace(/_/g, "-");
+}
+
 type Props = {
   publications: PublicationRow[];
   categories: PublicationCategoryRow[];
@@ -193,22 +209,55 @@ export default function PublicationsLibrary({ publications, categories, testimon
     }
   }, [strategicCat, sortedCategories, defaultFilter, filter]);
 
-  useEffect(() => {
-    const syncFromHash = () => {
-      const hash = window.location.hash.replace(/^#/, "").trim();
-      if (!hash) return;
-      const key = filterKeyFromAnchor(hash, strategicCat, sortedCategories);
-      if (!key) return;
-      setFilter(key);
-      window.setTimeout(() => {
-        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
-      }, 120);
-    };
+  const syncFromHash = useCallback(() => {
+    const raw = window.location.hash.replace(/^#/, "").trim();
+    if (!raw) {
+      setFilter(defaultFilter);
+      return;
+    }
+    const key = filterKeyFromAnchor(raw, strategicCat, sortedCategories);
+    if (!key) return;
+    setFilter(key);
+    window.setTimeout(() => {
+      document.getElementById(raw)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+  }, [defaultFilter, strategicCat, sortedCategories]);
 
+  useEffect(() => {
     syncFromHash();
     window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
-  }, [strategicCat, sortedCategories]);
+    window.addEventListener("popstate", syncFromHash);
+
+    const origPush = history.pushState.bind(history);
+    const origReplace = history.replaceState.bind(history);
+
+    history.pushState = ((data: unknown, unused: string, url?: string | URL | null) => {
+      origPush(data, unused, url);
+      window.setTimeout(() => window.dispatchEvent(new HashChangeEvent("hashchange")), 0);
+    }) as typeof history.pushState;
+
+    history.replaceState = ((data: unknown, unused: string, url?: string | URL | null) => {
+      origReplace(data, unused, url);
+      window.setTimeout(() => window.dispatchEvent(new HashChangeEvent("hashchange")), 0);
+    }) as typeof history.replaceState;
+
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("popstate", syncFromHash);
+      history.pushState = origPush;
+      history.replaceState = origReplace;
+    };
+  }, [syncFromHash]);
+
+  const handleFilterChange = useCallback(
+    (key: FilterKey) => {
+      setFilter(key);
+      const anchor = filterAnchorFromKey(key, strategicCat, sortedCategories);
+      const nextUrl = `${window.location.pathname}${window.location.search}#${anchor}`;
+      window.history.replaceState(null, "", nextUrl);
+    },
+    [strategicCat, sortedCategories],
+  );
 
   // Lock body scroll when drawer open
   useEffect(() => {
@@ -239,7 +288,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
     <>
       <PublicationsFilterBar
         filter={filter}
-        onFilterChange={setFilter}
+        onFilterChange={handleFilterChange}
         strategicCat={strategicCat}
         sortedCategories={sortedCategories}
       />

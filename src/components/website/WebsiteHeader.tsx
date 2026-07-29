@@ -21,6 +21,7 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
   const { isModalOpen, openModal, closeModal } = useDonation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState<SubKey | null>(null);
+  const [suppressDropdowns, setSuppressDropdowns] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const tickingRef = useRef(false);
@@ -28,11 +29,18 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
   const closeNav = useCallback(() => {
     setMobileMenuOpen(false);
     setOpenSub(null);
+    setSuppressDropdowns(true);
   }, []);
 
   useEffect(() => {
     closeNav();
   }, [pathname, closeNav]);
+
+  useEffect(() => {
+    const onHashChange = () => closeNav();
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [closeNav]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -87,7 +95,7 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
     }
   };
 
-  const headerClass = `site-header${solidNav ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}`;
+  const headerClass = `site-header${solidNav ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}${suppressDropdowns ? ' nav-dropdowns-suppressed' : ''}`;
   const containerClass = solidNav ? 'navbar-container scrolled' : 'navbar-container';
 
   return (
@@ -119,7 +127,12 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
           />
         )}
 
-        <nav id="site-primary-nav" className={mobileMenuOpen ? 'nav--open' : undefined} aria-label="Primary">
+        <nav
+          id="site-primary-nav"
+          className={mobileMenuOpen ? 'nav--open' : undefined}
+          aria-label="Primary"
+          onMouseLeave={() => setSuppressDropdowns(false)}
+        >
           <ul>
             <li>
               <Link href="/" className={isActive('/') ? 'current' : ''} onClick={() => { closeNav(); closeModal(); }}>

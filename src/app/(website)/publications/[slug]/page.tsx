@@ -87,6 +87,12 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   const href = publicationHasPdf(publication)
     ? publicationPrimaryHref(publication)
     : publication.external_url?.trim() || "";
+  const isPdf = publicationHasPdf(publication);
+  const isFileOnly = Boolean(href && !storyHtml);
+  const fileActionLabel = isPdf ? "Download PDF" : "Open publication";
+  const fileActionHint = isPdf
+    ? "Get the full document as a PDF — ready to read, print, or share."
+    : "This publication opens in a new tab on an external site.";
 
   let relatedSections: any = null;
   if (department) {
@@ -126,32 +132,69 @@ export default async function PublicationDetailPage({ params }: PageProps) {
             </span>
             <h1 className="prog-article-h1">{publication.title}</h1>
             {publication.excerpt ? <p className="prog-article-deck">{publication.excerpt}</p> : null}
-            {href ? (
-              <div className="prog-article-meta-row" style={{ marginTop: '1.5rem' }}>
+            {href && !isFileOnly ? (
+              <div className="prog-article-meta-row pub-article-cta-row">
                 <a
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="pub-btn-download"
                 >
-                  <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden />
-                  {publicationHasPdf(publication) ? "Download PDF" : "Open external link"}
+                  <i
+                    className={`fa-solid ${isPdf ? "fa-file-pdf" : "fa-arrow-up-right-from-square"}`}
+                    aria-hidden
+                  />
+                  {fileActionLabel}
                 </a>
               </div>
             ) : null}
           </div>
         </header>
-        <article className="pub-article-body">
-          <div className="pub-article-body-grid">
-            <div className="pub-article-story">
-              {storyHtml ? (
+        {isFileOnly ? (
+          <section className="pub-file-access" aria-labelledby="pub-file-access-heading">
+            <div className="pub-file-access-card">
+              <div className="pub-file-access-icon-wrap" aria-hidden>
+                <i className={`fa-solid ${isPdf ? "fa-file-pdf" : "fa-file-lines"}`} />
+              </div>
+              <div className="pub-file-access-copy">
+                <p className="pub-file-access-eyebrow">{isPdf ? "PDF document" : "External publication"}</p>
+                <h2 id="pub-file-access-heading" className="pub-file-access-title">
+                  {isPdf ? "Your file is ready to download" : "Open this publication"}
+                </h2>
+                <p className="pub-file-access-desc">{fileActionHint}</p>
+              </div>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pub-file-access-btn"
+              >
+                <i
+                  className={`fa-solid ${isPdf ? "fa-download" : "fa-arrow-up-right-from-square"}`}
+                  aria-hidden
+                />
+                {fileActionLabel}
+              </a>
+            </div>
+          </section>
+        ) : storyHtml ? (
+          <article className="pub-article-body">
+            <div className="pub-article-body-grid">
+              <div className="pub-article-story">
                 <div dangerouslySetInnerHTML={{ __html: storyHtml }} />
-              ) : (
-                <p>This publication is available through the link above.</p>
-              )}
+              </div>
+            </div>
+          </article>
+        ) : !href ? (
+          <div className="pub-detail-notice-wrap">
+            <div className="pub-detail-notice">
+              <span className="pub-detail-notice-icon" aria-hidden>
+                <i className="fa-solid fa-book-open" />
+              </span>
+              <p>Full publication details will be posted here soon.</p>
             </div>
           </div>
-        </article>
+        ) : null}
 
         {department && relatedSections && (
           <ProgramRelatedHub

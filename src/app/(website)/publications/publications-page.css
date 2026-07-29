@@ -556,6 +556,10 @@
   transform: translateY(-1px);
 }
 
+.pub-article-cta-row {
+  margin-top: 1.75rem;
+}
+
 .pub-btn-preview {
   display: inline-flex;
   align-items: center;
@@ -1151,4 +1155,203 @@
   max-width: 16rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Publication detail page (hero + optional body) */
+.pub-article-page {
+  background: #f7f5f2;
+  color: #0d1b2a;
+}
+
+.pub-article-body {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: 3rem 1.8rem 4rem;
+}
+
+@media (min-width: 1024px) {
+  .pub-article-body {
+    padding: 3.5rem 2.5rem 5rem;
+  }
+}
+
+.pub-article-body-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.pub-article-story {
+  min-width: 0;
+  max-width: 760px;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.pub-article-story > :first-child {
+  margin-top: 0;
+}
+
+.pub-article-story > :last-child {
+  margin-bottom: 0;
+}
+
+.pub-detail-notice-wrap {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.8rem 3rem;
+}
+
+@media (min-width: 1024px) {
+  .pub-detail-notice-wrap {
+    padding: 0 2.5rem 3.5rem;
+  }
+}
+
+.pub-detail-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  max-width: 42rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #e8e2da;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(13, 27, 42, 0.04);
+}
+
+.pub-detail-notice-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  background: rgba(165, 40, 13, 0.08);
+  color: #a5280d;
+  font-size: 0.95rem;
+}
+
+.pub-detail-notice p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #5a6a7a;
+}
+
+/* File-only publications — prominent download / open panel */
+.pub-file-access {
+  position: relative;
+  z-index: 2;
+  max-width: 80rem;
+  margin: -2.75rem auto 0;
+  padding: 0 1.8rem 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .pub-file-access {
+    margin-top: -3.25rem;
+    padding: 0 2.5rem 3rem;
+  }
+}
+
+.pub-file-access-card {
+  display: grid;
+  gap: 1.35rem;
+  align-items: center;
+  padding: 1.65rem 1.5rem;
+  background: #fff;
+  border: 1px solid #e8e2da;
+  border-radius: 16px;
+  box-shadow:
+    0 16px 48px rgba(13, 27, 42, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+
+@media (min-width: 768px) {
+  .pub-file-access-card {
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem 2rem;
+    padding: 2rem 2.25rem;
+  }
+}
+
+.pub-file-access-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(165, 40, 13, 0.12) 0%, rgba(165, 40, 13, 0.06) 100%);
+  color: #a5280d;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.pub-file-access-copy {
+  min-width: 0;
+}
+
+.pub-file-access-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a5280d;
+}
+
+.pub-file-access-title {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: #0d1b2a;
+  letter-spacing: -0.02em;
+}
+
+.pub-file-access-desc {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #5a6a7a;
+  max-width: 36rem;
+}
+
+.pub-file-access-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  border-radius: 12px;
+  background: #a5280d;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 28px rgba(165, 40, 13, 0.32);
+}
+
+@media (min-width: 768px) {
+  .pub-file-access-btn {
+    width: auto;
+    min-width: 11.5rem;
+  }
+}
+
+.pub-file-access-btn:hover {
+  background: #7a1d06;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(165, 40, 13, 0.38);
+}
+
+.pub-file-access-btn i {
+  font-size: 1rem;
 }

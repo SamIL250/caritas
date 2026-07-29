@@ -300,6 +300,21 @@
                 transform: translateX(-50%) translateY(0);
                 pointer-events: auto;
             }
+
+            .site-header.nav-dropdowns-suppressed nav > ul > li:not(.has-mega-dropdown):hover .nav-dropdown,
+            .site-header.nav-dropdowns-suppressed nav > ul > li.has-mega-dropdown:hover .nav-dropdown.nav-mega-dropdown {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            .site-header.nav-dropdowns-suppressed nav > ul > li:not(.has-mega-dropdown):hover .nav-dropdown {
+                transform: translateX(-50%) translateY(-6px);
+            }
+
+            .site-header.nav-dropdowns-suppressed nav > ul > li.has-mega-dropdown:hover .nav-dropdown.nav-mega-dropdown {
+                transform: translateY(-6px);
+            }
         }
 
         .nav-dropdown a {
