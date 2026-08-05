@@ -813,6 +813,7 @@
             position: absolute;
             top: 0.35rem;
             right: 0.35rem;
+            z-index: 2;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -821,8 +822,14 @@
             border-radius: 999px;
             background: rgba(145, 19, 19, 0.92);
             color: #fff;
-            font-size: 0.58rem;
+            font-size: 0.62rem;
+            line-height: 1;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+        }
+
+        .nav-mega-preview-lock i,
+        .nav-mega-preview-lock i::before {
+            color: #fff !important;
         }
 
         .nav-mega-preview-lock-label {

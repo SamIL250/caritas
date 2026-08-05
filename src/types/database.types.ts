@@ -869,6 +869,8 @@ export interface Database {
           created_by: string | null
           created_at: string
           updated_at: string
+          is_locked: boolean
+          access_password: string | null
         }
         Insert: {
           id?: string
@@ -895,6 +897,8 @@ export interface Database {
           created_by?: string | null
           created_at?: string
           updated_at?: string
+          is_locked?: boolean
+          access_password?: string | null
         }
         Update: {
           id?: string
@@ -921,6 +925,8 @@ export interface Database {
           created_by?: string | null
           created_at?: string
           updated_at?: string
+          is_locked?: boolean
+          access_password?: string | null
         }
         Relationships: []
       }
@@ -971,6 +977,41 @@ export interface Database {
           updated_at?: string
         }
         Relationships: []
+      }
+      publication_access_requests: {
+        Row: {
+          id: string
+          publication_id: string
+          requester_email: string
+          status: "pending" | "granted" | "denied"
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          publication_id: string
+          requester_email: string
+          status?: "pending" | "granted" | "denied"
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          publication_id?: string
+          requester_email?: string
+          status?: "pending" | "granted" | "denied"
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "publication_access_requests_publication_id_fkey"
+            columns: ["publication_id"]
+            isOneToOne: false
+            referencedRelation: "publications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       publication_categories: {
         Row: {
