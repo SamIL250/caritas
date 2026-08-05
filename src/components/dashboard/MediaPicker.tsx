@@ -3,10 +3,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { X, Upload, Search, Check, Loader2, ChevronRight, Folder as FolderIcon, FileText } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { getMedia, listMediaFolders, updateMediaCaption } from "@/app/actions/media";
+import { getMedia, listMediaFolders } from "@/app/actions/media";
 import type { MediaFolderRow } from "@/app/actions/media";
 import { cloudinaryUrl } from "@/lib/cloudinary-url";
-import { MediaCaptionModal, type MediaCaptionDraft } from "@/components/dashboard/MediaCaptionModal";
 
 export interface PickedMediaItem {
   id: string;
@@ -26,15 +25,6 @@ interface MediaPickerProps {
   /** When set, new uploads from this picker go into this folder */
   uploadFolderId?: string | null;
 }
-
-type PendingImageUpload = {
-  file: File;
-  previewUrl: string;
-};
-
-type CaptionFlow =
-  | { kind: "upload"; files: PendingImageUpload[]; otherFiles: File[] }
-  | { kind: "select"; items: PickedMediaItem[] };
 
 function buildFolderChain(currentId: string | null, flat: MediaFolderRow[]): MediaFolderRow[] {
   if (!currentId) return [];
@@ -68,7 +58,6 @@ export function MediaPicker({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [captionFlow, setCaptionFlow] = useState<CaptionFlow | null>(null);
 
   const uploadIntoId = uploadFolderIdProp !== undefined ? uploadFolderIdProp : currentFolderId;
 
@@ -119,7 +108,6 @@ export function MediaPicker({
       setSearch("");
       setSelectedIds([]);
       setCurrentFolderId(null);
-      setCaptionFlow(null);
     }, 0);
     return () => window.clearTimeout(t);
   }, [isOpen]);
@@ -169,23 +157,7 @@ export function MediaPicker({
     const files = Array.from(e.target.files || []);
     e.target.value = "";
     if (files.length === 0) return;
-
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-    const otherFiles = files.filter((file) => !file.type.startsWith("image/"));
-
-    if (imageFiles.length > 0) {
-      setCaptionFlow({
-        kind: "upload",
-        files: imageFiles.map((file) => ({
-          file,
-          previewUrl: URL.createObjectURL(file),
-        })),
-        otherFiles,
-      });
-      return;
-    }
-
-    void uploadFiles(otherFiles, {});
+    void uploadFiles(files, {});
   }
 
   async function finishSelection(items: PickedMediaItem[]) {
@@ -195,73 +167,8 @@ export function MediaPicker({
 
   const handleConfirm = async () => {
     const selectedItems = media.filter((m) => selectedIds.includes(m.id));
-    const missingCaption = selectedItems.filter(
-      (item) => isImageItem(item) && !item.caption?.trim(),
-    );
-
-    if (missingCaption.length > 0) {
-      setCaptionFlow({ kind: "select", items: missingCaption });
-      return;
-    }
-
     await finishSelection(selectedItems);
   };
-
-  const captionModalItems: MediaCaptionDraft[] = useMemo(() => {
-    if (!captionFlow) return [];
-    if (captionFlow.kind === "upload") {
-      return captionFlow.files.map(({ file, previewUrl }) => ({
-        key: file.name,
-        label: file.name,
-        previewUrl,
-        caption: "",
-      }));
-    }
-    return captionFlow.items.map((item) => ({
-      key: item.id,
-      label: item.filename,
-      previewUrl: isImageItem(item)
-        ? cloudinaryUrl(item.url, { width: 160, height: 160, crop: "fill", quality: "auto", format: "auto" })
-        : undefined,
-      caption: item.caption?.trim() ?? "",
-    }));
-  }, [captionFlow]);
-
-  async function handleCaptionConfirm(captionsByKey: Record<string, string>) {
-    if (!captionFlow) return;
-
-    if (captionFlow.kind === "upload") {
-      const captionsByName = Object.fromEntries(
-        captionFlow.files.map(({ file }) => [file.name, captionsByKey[file.name] ?? ""]),
-      );
-      const allFiles = [...captionFlow.files.map(({ file }) => file), ...captionFlow.otherFiles];
-      setCaptionFlow(null);
-      await uploadFiles(allFiles, captionsByName);
-      return;
-    }
-
-    setUploadError(null);
-    try {
-      await Promise.all(
-        captionFlow.items.map((item) => updateMediaCaption(item.id, captionsByKey[item.id] ?? "")),
-      );
-      await loadFoldersAndMedia();
-      setCaptionFlow(null);
-
-      const selectedItems = media
-        .filter((m) => selectedIds.includes(m.id))
-        .map((item) => {
-          const updatedCaption = captionsByKey[item.id];
-          if (!updatedCaption) return item;
-          return { ...item, caption: updatedCaption, alt_text: updatedCaption };
-        });
-
-      await finishSelection(selectedItems);
-    } catch (error: unknown) {
-      setUploadError(error instanceof Error ? error.message : "Could not save captions.");
-      setCaptionFlow(null);
-    }
-  }
 
   function toggleSelect(id: string) {
     if (multi) {
@@ -281,7 +188,7 @@ export function MediaPicker({
             <div>
               <h2 className="text-xl font-bold text-stone-900">Media library</h2>
               <p className="mt-0.5 text-xs text-stone-500">
-                Optional captions can be added when uploading images.
+                Pick an existing file or upload here. Image captions are optional.
               </p>
             </div>
             <button type="button" onClick={onClose} className="text-stone-400 hover:text-stone-600">
@@ -396,11 +303,7 @@ export function MediaPicker({
                                 <span className="absolute inset-x-0 bottom-0 bg-black/55 px-2 py-1 text-[10px] italic text-white line-clamp-2">
                                   {item.caption}
                                 </span>
-                              ) : (
-                                <span className="absolute inset-x-0 bottom-0 bg-amber-500/90 px-2 py-1 text-[10px] font-semibold text-white">
-                                  Caption needed
-                                </span>
-                              )}
+                              ) : null}
                             </>
                           ) : (
                             <div className="flex h-full flex-col items-center justify-center gap-2 bg-stone-50 p-3 text-center">
@@ -441,21 +344,6 @@ export function MediaPicker({
           </div>
         </div>
       </div>
-
-      <MediaCaptionModal
-        open={captionFlow !== null}
-        title={captionFlow?.kind === "upload" ? "Add image captions" : "Complete missing captions"}
-        description={
-          captionFlow?.kind === "upload"
-            ? "Optionally add captions before uploading. Leave blank if you do not need one."
-            : "These selected images need captions before they can be inserted with a visible caption in articles."
-        }
-        requireCaptions={captionFlow?.kind === "select"}
-        confirmLabel={captionFlow?.kind === "upload" ? "Upload" : "Continue"}
-        items={captionModalItems}
-        onCancel={() => setCaptionFlow(null)}
-        onConfirm={(captionsByKey) => void handleCaptionConfirm(captionsByKey)}
-      />
     </>
   );
 }

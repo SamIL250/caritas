@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -21,6 +21,10 @@ import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import { DashboardFormActions } from "@/components/dashboard/DashboardFormActions";
 import { PublicationCategoryIcon } from "@/components/dashboard/publications/PublicationCategoryIcon";
 import { PublicationCustomFields } from "@/components/dashboard/publications/PublicationCustomFields";
+import {
+  NewsRichTextEditor,
+  type NewsRichTextEditorHandle,
+} from "@/components/dashboard/news/NewsRichTextEditor";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
 import { Lock, EyeOff } from "lucide-react";
 
@@ -66,6 +70,7 @@ export function PublicationForm({
   duplicateFrom,
 }: Props) {
   const router = useRouter();
+  const bodyRef = useRef<NewsRichTextEditorHandle>(null);
 
   const source = mode === "edit" ? publication : duplicateFrom ?? null;
 
@@ -111,6 +116,9 @@ export function PublicationForm({
     fd.set("category_id", category.id);
     fd.set("cover_image_url", coverUrl.trim());
     fd.set("file_url", showPdf ? pdfUrl.trim() : "");
+    if (showStoryBody) {
+      fd.set("body", bodyRef.current?.getHTML() ?? "");
+    }
 
     const res =
       mode === "create"
@@ -308,16 +316,10 @@ export function PublicationForm({
               <header>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">Story body</h3>
                 <p className="mt-1 text-xs text-stone-500">
-                  HTML body shown when this publication is opened from a story card. Leave blank to use the excerpt only.
+                  Rich text shown when this publication is opened from a story card. Leave blank to use the excerpt only.
                 </p>
               </header>
-              <textarea
-                id="body"
-                name="body"
-                rows={10}
-                defaultValue={source?.body ?? ""}
-                className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 font-mono text-sm focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
-              />
+              <NewsRichTextEditor ref={bodyRef} initialHtml={source?.body ?? ""} />
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="tag_label">

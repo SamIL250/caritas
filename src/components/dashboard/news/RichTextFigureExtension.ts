@@ -118,11 +118,14 @@ export const RichTextFigure = Node.create<RichTextFigureOptions>({
           ),
       updateRichTextFigureCaption:
         (caption: string) =>
-        ({ commands }) =>
-          commands.updateAttributes(this.name, {
-            caption: caption.trim(),
-            alt: caption.trim(),
-          }),
+        ({ commands, editor }) => {
+          const trimmed = caption.trim();
+          const existingAlt = String(editor.getAttributes(this.name).alt ?? "").trim();
+          return commands.updateAttributes(this.name, {
+            caption: trimmed,
+            alt: trimmed || existingAlt,
+          });
+        },
     };
   },
 });

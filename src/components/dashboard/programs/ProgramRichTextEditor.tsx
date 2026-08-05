@@ -45,6 +45,14 @@ function pickMediaItem(m: PickedMediaItem | PickedMediaItem[]): PickedMediaItem 
   return m;
 }
 
+function mediaAltFallback(item: PickedMediaItem): string {
+  const fromAlt = item.alt_text?.trim();
+  if (fromAlt) return fromAlt;
+  const fromCaption = item.caption?.trim();
+  if (fromCaption) return fromCaption;
+  return item.filename.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim();
+}
+
 function pickMediaUrl(m: PickedMediaItem | PickedMediaItem[]): { url: string; filename: string } {
   const item = pickMediaItem(m);
   return { url: item?.url ?? "", filename: item?.filename ?? "" };
@@ -110,14 +118,15 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
 
     const onInsertImage = (m: PickedMediaItem | PickedMediaItem[]) => {
       const item = pickMediaItem(m);
-      const caption = item?.caption?.trim() ?? "";
-      if (!item?.url || !caption || !editor) return;
+      if (!item?.url || !editor) return;
+      const caption = item.caption?.trim() ?? "";
+      const alt = caption || mediaAltFallback(item);
       editor
         .chain()
         .focus()
         .setRichTextFigure({
           src: item.url,
-          alt: caption,
+          alt,
           caption,
           imageClass: "program-rich-inline-img",
         })
@@ -175,14 +184,9 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
     const editFigureCaption = () => {
       if (!editor || !editor.isActive("richTextFigure")) return;
       const current = String(editor.getAttributes("richTextFigure").caption ?? "");
-      const next = window.prompt("Image caption", current);
+      const next = window.prompt("Image caption (optional)", current);
       if (next === null) return;
-      const trimmed = next.trim();
-      if (!trimmed) {
-        window.alert("Caption is required.");
-        return;
-      }
-      editor.chain().focus().updateRichTextFigureCaption(trimmed).run();
+      editor.chain().focus().updateRichTextFigureCaption(next).run();
     };
 
     if (!editor) {

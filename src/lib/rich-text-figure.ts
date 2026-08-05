@@ -11,15 +11,15 @@ function escapeHtml(value: string): string {
 export type RichTextFigureAttrs = {
   src: string;
   alt?: string;
-  caption: string;
+  caption?: string;
   imageClass?: string;
 };
 
-/** Stored HTML for an inline image with caption in CMS rich text. */
+/** Stored HTML for an inline image with optional caption in CMS rich text. */
 export function buildRichTextFigureHtml({
   src,
   alt,
-  caption,
+  caption = "",
   imageClass = "news-rich-inline-img",
 }: RichTextFigureAttrs): string {
   const safeCaption = escapeHtml(caption.trim());
