@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,18 +8,25 @@ import { fetchDepartmentRelatedContent } from "@/lib/department-related";
 import { groupDepartmentRowsForProgramPage } from "@/lib/program-related-grouping";
 import { ProgramRelatedHub } from "@/components/website/programs/ProgramRelatedHub";
 import {
+  ArticleDetailLayout,
+  type ArticleDetailPeer,
+} from "@/components/website/ArticleDetailLayout";
+import {
   encodePublicationAssetUrl,
   publicationCategoryLabel,
+  publicationDetailHref,
   publicationHasPdf,
   publicationPrimaryHref,
   type PublicationCategoryRow,
   type PublicationRow,
 } from "@/lib/publications";
 import type { ProgramCategoryRow } from "@/lib/programs";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import { ViewTracker } from "@/components/website/ViewTracker";
 import { PublicationDetailWrapper } from "@/components/website/publications/PublicationDetailWrapper";
 import "../publications-page.css";
 import "../../programs/program-detail-page.css";
+import "../../news/news-detail-page.css";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -65,6 +73,24 @@ async function fetchPublicationBySlug(
   };
 }
 
+async function fetchSuccessStoriesInDepartment(
+  departmentId: string | null,
+): Promise<ArticleDetailPeer[]> {
+  const supabase = await createClient();
+  let query = supabase
+    .from("publications")
+    .select("id, title, slug, published_at, created_at")
+    .eq("status", "published")
+    .eq("category", "success_story");
+
+  if (departmentId) {
+    query = query.eq("department_id", departmentId);
+  }
+
+  const { data } = await query.order("published_at", { ascending: false });
+  return sortByPublishedNewest((data ?? []) as ArticleDetailPeer[]);
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const row = await fetchPublicationBySlug(slug);
@@ -83,6 +109,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   if (!data) notFound();
 
   const { publication, category, department } = data;
+  const isSuccessStory = publication.category === "success_story";
   const storyHtml = publication.body?.trim() ? await prepareStaffRichHtml(publication.body.trim()) : "";
   const href = publicationHasPdf(publication)
     ? publicationPrimaryHref(publication)
@@ -93,6 +120,51 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   const fileActionHint = isPdf
     ? "Get the full document as a PDF — ready to read, print, or share."
     : "This publication opens in a new tab on an external site.";
+
+  const lockWrapper = (content: ReactNode) => (
+    <PublicationDetailWrapper
+      publicationId={publication.id}
+      isLocked={publication.is_locked}
+      publicationTitle={publication.title}
+      categoryLabel={category ? category.label : publication.category}
+      excerpt={publication.excerpt || undefined}
+      coverImageUrl={publication.cover_image_url || undefined}
+    >
+      {content}
+    </PublicationDetailWrapper>
+  );
+
+  if (isSuccessStory) {
+    const peers = await fetchSuccessStoriesInDepartment(publication.department_id);
+    const departmentLabel = department?.label ?? "Success Stories";
+    const cover = publication.cover_image_url?.trim();
+
+    return lockWrapper(
+      <>
+        <ArticleDetailLayout
+          title={publication.title}
+          excerpt={publication.excerpt}
+          bodyHtml={storyHtml}
+          coverUrl={cover ? encodePublicationAssetUrl(cover) : undefined}
+          coverAlt={publication.cover_image_alt || publication.title}
+          eyebrow={departmentLabel}
+          publishedAt={publication.published_at}
+          breadcrumb={[
+            { href: "/", label: "Home" },
+            { href: "/programs", label: "Programs" },
+          ]}
+          breadcrumbCurrent={departmentLabel}
+          sidebarHeading={`More ${departmentLabel}`}
+          sidebarAriaLabel={`More ${departmentLabel} success stories`}
+          peers={peers}
+          currentId={publication.id}
+          detailHref={(slug) => publicationDetailHref({ slug })}
+          externalUrl={publication.external_url}
+        />
+        <ViewTracker pageType="publication" pageId={publication.id} />
+      </>,
+    );
+  }
 
   let relatedSections: any = null;
   if (department) {
@@ -106,16 +178,8 @@ export default async function PublicationDetailPage({ params }: PageProps) {
     relatedSections = groupDepartmentRowsForProgramPage(relatedRows);
   }
 
-  return (
-    <PublicationDetailWrapper
-      publicationId={publication.id}
-      isLocked={publication.is_locked}
-      publicationTitle={publication.title}
-      categoryLabel={category ? category.label : publication.category}
-      excerpt={publication.excerpt || undefined}
-      coverImageUrl={publication.cover_image_url || undefined}
-    >
-      <div className="pub-article-page program-detail-flush">
+  return lockWrapper(
+    <div className="pub-article-page program-detail-flush">
         <header className="prog-article-hero">
           <div className="prog-article-hero-bg" aria-hidden>
             {publication.cover_image_url.trim() ? (
@@ -206,7 +270,6 @@ export default async function PublicationDetailPage({ params }: PageProps) {
           />
         )}
         <ViewTracker pageType="publication" pageId={publication.id} />
-      </div>
-    </PublicationDetailWrapper>
+      </div>,
   );
 }
