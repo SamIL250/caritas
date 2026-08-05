@@ -3,7 +3,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { isValidEmail } from "@/lib/publication-access";
-import { sendAccessRequestedAlert, sendAccessGrantedEmail } from "@/lib/send-publication-access-email";
+import { sendAccessRequestedAlert, sendAccessGrantedEmail, sendAccessDeniedEmail } from "@/lib/send-publication-access-email";
+import { isMailFailure } from "@/lib/mail";
+import { publicationAccessEmailUrl } from "@/lib/publications";
 import { resolveSiteOrigin } from "@/lib/site-origin";
 
 export async function requestPublicationAccess(
@@ -51,12 +53,48 @@ export async function requestPublicationAccess(
 export async function updateAccessRequest(
   requestId: string,
   status: "granted" | "denied",
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; emailWarning?: string }> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
+
+  const reqRes = await (supabase as any)
+    .from("publication_access_requests")
+    .select("requester_email, publication_id")
+    .eq("id", requestId)
+    .maybeSingle();
+
+  if (!reqRes.data) {
+    return { success: false, error: "Access request not found." };
+  }
+
+  let publication:
+    | {
+        title: string;
+        slug: string;
+        category: string;
+        access_password: string | null;
+      }
+    | null = null;
+
+  if (status === "granted") {
+    const pubRes = await supabase
+      .from("publications")
+      .select("title, slug, category, access_password")
+      .eq("id", reqRes.data.publication_id)
+      .maybeSingle();
+
+    publication = pubRes.data as typeof publication;
+    if (!publication?.access_password?.trim()) {
+      return {
+        success: false,
+        error:
+          "This publication has no access password saved. Edit the publication in the dashboard, set a password under “Require password”, save, then grant again.",
+      };
+    }
+  }
 
   const { error } = await (supabase as any)
     .from("publication_access_requests")
@@ -65,39 +103,53 @@ export async function updateAccessRequest(
 
   if (error) return { success: false, error: error.message };
 
-  // On grant, send the password to the requester
-  if (status === "granted") {
-    try {
-      const reqRes = await (supabase as any)
-        .from("publication_access_requests")
-        .select("requester_email, publication_id")
-        .eq("id", requestId)
-        .maybeSingle();
+  let emailWarning: string | undefined;
 
-      if (reqRes.data) {
-        const pubRes = await supabase
-          .from("publications")
-          .select("title, slug, access_password")
-          .eq("id", reqRes.data.publication_id)
-          .maybeSingle();
-
-        const pub = pubRes.data as any;
-        if (pub?.access_password) {
-          await sendAccessGrantedEmail({
-            to: reqRes.data.requester_email,
-            publicationTitle: pub.title,
-            password: pub.access_password,
-            publicationUrl: `${resolveSiteOrigin()}/publications/${pub.slug}`,
-          });
-        }
+  try {
+    if (status === "granted" && publication?.access_password) {
+      const mailResult = await sendAccessGrantedEmail({
+        to: reqRes.data.requester_email,
+        publicationTitle: publication.title,
+        password: publication.access_password,
+        publicationUrl: publicationAccessEmailUrl(publication, resolveSiteOrigin()),
+      });
+      if (isMailFailure(mailResult)) {
+        emailWarning =
+          mailResult.skipped
+            ? "Request marked granted, but email is not configured (SMTP)."
+            : `Request marked granted, but the email could not be sent: ${mailResult.error}`;
       }
-    } catch {
-      // Email is best-effort; don't fail the grant action
     }
+
+    if (status === "denied") {
+      const pubRes = await supabase
+        .from("publications")
+        .select("title")
+        .eq("id", reqRes.data.publication_id)
+        .maybeSingle();
+      const pubTitle = (pubRes.data as { title?: string } | null)?.title ?? "Publication";
+
+      const mailResult = await sendAccessDeniedEmail({
+        to: reqRes.data.requester_email,
+        publicationTitle: pubTitle,
+        publicationsUrl: `${resolveSiteOrigin()}/publications`,
+      });
+      if (isMailFailure(mailResult)) {
+        emailWarning =
+          mailResult.skipped
+            ? "Request marked denied, but email is not configured (SMTP)."
+            : `Request marked denied, but the email could not be sent: ${mailResult.error}`;
+      }
+    }
+  } catch (e: unknown) {
+    emailWarning =
+      status === "granted"
+        ? `Request marked granted, but the email could not be sent: ${e instanceof Error ? e.message : "Unknown error"}`
+        : `Request marked denied, but the email could not be sent: ${e instanceof Error ? e.message : "Unknown error"}`;
   }
 
   revalidatePath("/dashboard/publications/access-requests");
-  return { success: true };
+  return { success: true, emailWarning };
 }
 
 export async function updatePublicationLock(

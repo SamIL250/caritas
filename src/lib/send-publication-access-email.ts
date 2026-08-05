@@ -51,3 +51,27 @@ export async function sendAccessGrantedEmail(opts: {
       `\n\nPassword: ${opts.password}\n\nLink: ${opts.publicationUrl}\n`,
   });
 }
+
+/** Notify a requester when admin denies access. */
+export async function sendAccessDeniedEmail(opts: {
+  to: string;
+  publicationTitle: string;
+  publicationsUrl: string;
+}) {
+  const inner = `
+<p style="margin:0 0 14px;">Your request to access <strong>${escapeHtml(opts.publicationTitle)}</strong> was not approved at this time.</p>
+<p style="margin:0 0 18px;">If you believe this was a mistake, please contact Caritas Rwanda using the details on our website.</p>
+<p style="margin:0;text-align:center;">
+  <a href="${escapeHtml(opts.publicationsUrl)}" style="display:inline-block;padding:12px 24px;background:#7A1515;color:#ffffff;text-decoration:none;border-radius:999px;font-weight:700;font-size:14px;">Browse Publications</a>
+</p>
+<p style="margin:18px 0 0;font-size:13px;color:#64748b;line-height:1.55;">— Caritas Rwanda<br/><a href="${escapeHtml(resolveSiteOrigin())}" style="color:#7A1515;font-weight:600;">${escapeHtml(resolveSiteOrigin())}</a></p>`;
+
+  return sendMail({
+    to: opts.to,
+    subject: `Access Request Update — ${opts.publicationTitle}`,
+    html: emailShell(inner),
+    text:
+      stripHtmlToText(inner) +
+      `\n\nPublications: ${opts.publicationsUrl}\n`,
+  });
+}

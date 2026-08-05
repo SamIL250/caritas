@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { updateAccessRequest } from "@/app/actions/publication-access";
 import { Mail, CheckCircle, XCircle, Clock, Loader2, Filter } from "lucide-react";
 import type { AccessRequestWithPubTitle } from "@/lib/publication-access";
@@ -9,9 +10,11 @@ type Props = { requests: AccessRequestWithPubTitle[] };
 type Tab = "all" | "pending" | "granted" | "denied";
 
 export function AccessRequestsClient({ requests }: Props) {
+  const router = useRouter();
   const [, startTransition] = useTransition();
   const [updating, setUpdating] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("pending");
+  const [banner, setBanner] = useState<{ ok: boolean; text: string } | null>(null);
 
   const filtered = useMemo(
     () => (tab === "all" ? requests : requests.filter((r) => r.status === tab)),
@@ -26,9 +29,26 @@ export function AccessRequestsClient({ requests }: Props) {
 
   async function handleUpdate(id: string, status: "granted" | "denied") {
     setUpdating(id);
+    setBanner(null);
     startTransition(async () => {
-      await updateAccessRequest(id, status);
+      const result = await updateAccessRequest(id, status);
       setUpdating(null);
+      if (!result.success) {
+        setBanner({ ok: false, text: result.error ?? "Could not update this request." });
+        return;
+      }
+      if (result.emailWarning) {
+        setBanner({ ok: false, text: result.emailWarning });
+        return;
+      }
+      setBanner({
+        ok: true,
+        text:
+          status === "granted"
+            ? "Access granted and notification email sent."
+            : "Access denied and notification email sent.",
+      });
+      router.refresh();
     });
   }
 
@@ -41,6 +61,17 @@ export function AccessRequestsClient({ requests }: Props) {
 
   return (
     <div className="space-y-6">
+      {banner ? (
+        <p
+          role="status"
+          className={`rounded-lg px-3 py-2 text-sm ${
+            banner.ok ? "bg-emerald-50 text-emerald-800" : "bg-amber-50 text-amber-900"
+          }`}
+        >
+          {banner.text}
+        </p>
+      ) : null}
+
       {/* Filter tabs */}
       <div className="flex flex-wrap gap-1 border-b border-stone-200 pb-px">
         {tabs.map((t) => (

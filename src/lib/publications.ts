@@ -166,6 +166,21 @@ export function publicationDetailHref(row: Pick<PublicationRow, "slug">): string
   return `/publications/${encodeURIComponent(row.slug)}`;
 }
 
+/** Public URL to share after access is granted (library anchor for file-only categories). */
+export function publicationAccessEmailUrl(
+  row: Pick<PublicationRow, "slug" | "category">,
+  siteOrigin: string,
+): string {
+  const origin = siteOrigin.replace(/\/+$/, "");
+  const libraryAnchors: Record<string, string> = {
+    policies: "policies",
+    caritas_contact: "caritas-contact",
+  };
+  const anchor = libraryAnchors[row.category];
+  if (anchor) return `${origin}/publications#${anchor}`;
+  return `${origin}${publicationDetailHref(row)}`;
+}
+
 export function publicationHasPdf(row: Pick<PublicationRow, "file_url">): boolean {
   return Boolean(row.file_url?.trim());
 }

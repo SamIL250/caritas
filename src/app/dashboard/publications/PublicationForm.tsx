@@ -483,7 +483,7 @@ export function PublicationForm({
                 defaultValue={source ? (source as any).access_password ?? "" : ""}
               />
               <p className="text-[11px] text-stone-400">
-                Users request access via email. Grant their request from the Access Requests page.
+                Required when locking. Users request access via email; approved users receive this password.
               </p>
             </div>
           </div>

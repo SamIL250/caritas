@@ -100,6 +100,41 @@ function parseCustomFieldsFromForm(
   return out;
 }
 
+async function resolveAccessPassword(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  form: FormData,
+  existingPublicationId?: string,
+): Promise<{ error?: string; is_locked: boolean; access_password: string | null }> {
+  const is_locked = form.get("is_locked") === "on";
+  const access_password_raw = String(form.get("access_password") || "").trim();
+
+  if (!is_locked) {
+    return { is_locked: false, access_password: null };
+  }
+
+  if (access_password_raw) {
+    return { is_locked: true, access_password: access_password_raw };
+  }
+
+  if (existingPublicationId) {
+    const { data: existing } = await supabase
+      .from("publications")
+      .select("access_password")
+      .eq("id", existingPublicationId)
+      .maybeSingle();
+    const preserved = (existing as { access_password?: string | null } | null)?.access_password?.trim();
+    if (preserved) {
+      return { is_locked: true, access_password: preserved };
+    }
+  }
+
+  return {
+    error: "Set an access password when requiring password protection.",
+    is_locked: true,
+    access_password: null,
+  };
+}
+
 export async function createPublication(form: FormData): Promise<{ error?: string }> {
   try {
     const { supabase, user } = await requireUser();
@@ -129,9 +164,9 @@ export async function createPublication(form: FormData): Promise<{ error?: strin
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
-    const is_locked = form.get("is_locked") === "on";
-    const access_password_raw = String(form.get("access_password") || "").trim();
-    const access_password = is_locked && access_password_raw ? access_password_raw : null;
+    const lockFields = await resolveAccessPassword(supabase, form);
+    if (lockFields.error) return { error: lockFields.error };
+    const { is_locked, access_password } = lockFields;
     const status = (String(form.get("status") || "draft") as Status) === "published" ? "published" : "draft";
     const department_id = parseDepartmentIdField(form);
 
@@ -221,9 +256,9 @@ export async function updatePublication(
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
     const featured = form.get("featured") === "on";
-    const is_locked = form.get("is_locked") === "on";
-    const access_password_raw = String(form.get("access_password") || "").trim();
-    const access_password = is_locked && access_password_raw ? access_password_raw : null;
+    const lockFields = await resolveAccessPassword(supabase, form, publicationId);
+    if (lockFields.error) return { error: lockFields.error };
+    const { is_locked, access_password } = lockFields;
     const status = (String(form.get("status") || "draft") as Status) === "published" ? "published" : "draft";
     const department_id = parseDepartmentIdField(form);
 
