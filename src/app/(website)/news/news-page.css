@@ -879,7 +879,24 @@
   overflow: hidden;
 }
 .news-page-root .news-mag-list-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
   font-size: 0.75rem;
+  color: var(--news-muted);
+}
+.news-page-root .news-mag-list-cat {
+  color: #a5280d;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.news-page-root .news-mag-list-meta-sep {
+  color: var(--news-muted);
+  opacity: 0.65;
+}
+.news-page-root .news-mag-list-date {
   color: var(--news-muted);
 }
 

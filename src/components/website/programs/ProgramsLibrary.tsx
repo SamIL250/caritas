@@ -15,6 +15,7 @@ import {
   type PublicationRow,
 } from "@/lib/publications";
 import { formatPublishedDate, type NewsArticleRow } from "@/lib/news";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import RwandaMapBackground from "./RwandaMapBackground";
 import { ProgramBubbleCircle } from "./ProgramBubbleCircle";
 import type { ProgramsLibrarySectionContent } from "@/lib/programs-library-section";
@@ -22,7 +23,7 @@ import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section
 
 const PROGRAM_GRID_COLUMNS = 4;
 const SUCCESS_STORY_ROWS = 1;
-const NEWS_ROWS = 2;
+const NEWS_ROWS = 1;
 
 const SUCCESS_STORIES_PER_ROW = PROGRAM_GRID_COLUMNS;
 const NEWS_VISIBLE = PROGRAM_GRID_COLUMNS * NEWS_ROWS;
@@ -124,9 +125,12 @@ export default function ProgramsLibrary({
   const activeStories = successStories.filter(
     (s) => s.department_id === activeCategory?.id,
   );
-  const activeNewsArticles = news.filter(
-    (a) => a.department_id === activeCategory?.id,
-  );
+  const activeNewsArticles = useMemo(() => {
+    if (!activeCategory) return [];
+    return sortByPublishedNewest(
+      news.filter((a) => a.department_id === activeCategory.id),
+    );
+  }, [news, activeCategory]);
 
   function categoryNewsHref(slug: string) {
     return `/news?topic=${encodeURIComponent(slug)}`;
@@ -221,18 +225,7 @@ export default function ProgramsLibrary({
             {libraryConfig.show_news && activeNewsArticles.length > 0 && (
               <div className="prog-news-section">
                 <div className="prog-news-header">
-                  <div className="prog-section-head-row">
-                    <span className="prog-news-label">
-                      {cat.label}
-                    </span>
-                    <Link
-                      href={categoryNewsHref(cat.slug)}
-                      className="prog-section-view-more"
-                    >
-                      View more
-                      <i className="fa-solid fa-arrow-right" aria-hidden />
-                    </Link>
-                  </div>
+                  <span className="prog-news-label">{cat.label}</span>
                   <h3 className="prog-news-title">Latest News</h3>
                   <p className="prog-news-sub">
                     Updates and stories from the {cat.label.toLowerCase()} department.
@@ -241,11 +234,15 @@ export default function ProgramsLibrary({
 
                 <div className="prog-news-grid">
                   {activeNewsArticles.slice(0, NEWS_VISIBLE).map((article) => (
-                    <NewsCard
-                      key={article.id}
-                      article={article}
-                    />
+                    <NewsCard key={article.id} article={article} />
                   ))}
+                </div>
+
+                <div className="prog-news-footer">
+                  <Link href={categoryNewsHref(cat.slug)} className="prog-news-view-more">
+                    View more stories
+                    <i className="fa-solid fa-arrow-right" aria-hidden />
+                  </Link>
                 </div>
               </div>
             )}

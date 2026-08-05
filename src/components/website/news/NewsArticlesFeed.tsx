@@ -46,6 +46,9 @@ function matchesYearFilter(a: PublishedNewsArticle, yearFilter: number | "all"):
   return articleYear(a) === yearFilter;
 }
 
+const MAGAZINE_SLOT_COUNT = 5;
+const MORE_STORIES_PER_PAGE = 3;
+
 type Props = {
   featuredArticle: PublishedNewsArticle | null;
   gridArticles: PublishedNewsArticle[];
@@ -102,7 +105,6 @@ export default function NewsArticlesFeed({
 
   const [currentPage, setCurrentPage] = useState(1);
   const [yearFilter, setYearFilter] = useState<number | "all">("all");
-  const ITEMS_PER_PAGE = 9;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -120,24 +122,24 @@ export default function NewsArticlesFeed({
   }, [availableYears, yearFilter]);
 
   const yearScopedGrid = useMemo(() => {
-    return filteredGrid.filter((a) => matchesYearFilter(a, yearFilter));
+    return sortByPublishedNewest(filteredGrid.filter((a) => matchesYearFilter(a, yearFilter)));
   }, [filteredGrid, yearFilter]);
 
   const showMagazineLayout = yearFilter === "all" && currentPage === 1 && yearScopedGrid.length > 0;
 
   const moreStoriesPool = useMemo(() => {
-    if (showMagazineLayout) return yearScopedGrid.slice(6);
+    if (showMagazineLayout) return yearScopedGrid.slice(MAGAZINE_SLOT_COUNT);
     return yearScopedGrid;
   }, [showMagazineLayout, yearScopedGrid]);
 
-  const totalPages = Math.max(1, Math.ceil(moreStoriesPool.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(moreStoriesPool.length / MORE_STORIES_PER_PAGE));
   const paginatedMoreStories = moreStoriesPool.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+    (currentPage - 1) * MORE_STORIES_PER_PAGE,
+    currentPage * MORE_STORIES_PER_PAGE,
   );
 
   const showMoreStoriesSection =
-    yearFilter !== "all" || currentPage > 1 || yearScopedGrid.length > 6;
+    yearFilter !== "all" || currentPage > 1 || yearScopedGrid.length > MAGAZINE_SLOT_COUNT;
 
   const tagLabel = (a: PublishedNewsArticle) =>
     a.department?.label?.trim() || categoryLabel(a.category);
@@ -272,7 +274,7 @@ export default function NewsArticlesFeed({
 
                   {/* Right: Vertical List */}
                   <div className="news-mag-list">
-                    {yearScopedGrid.slice(2, 6).map((a) => (
+                    {yearScopedGrid.slice(2, MAGAZINE_SLOT_COUNT).map((a) => (
                       <Link
                         key={a.id}
                         href={`/news/${a.slug}`}
@@ -288,8 +290,11 @@ export default function NewsArticlesFeed({
                         </div>
                         <div className="news-mag-list-content">
                           <div className="news-mag-list-meta">
-                            <span className="text-[#a5280d] font-bold mr-2 uppercase">{tagLabel(a)}</span>
-                            {formatPublishedDate(a.published_at)}
+                            <span className="news-mag-list-cat">{tagLabel(a)}</span>
+                            <span className="news-mag-list-meta-sep" aria-hidden>
+                              •
+                            </span>
+                            <span className="news-mag-list-date">{formatPublishedDate(a.published_at)}</span>
                           </div>
                           <h4 className="news-mag-list-title">{a.title}</h4>
                         </div>
@@ -353,7 +358,7 @@ export default function NewsArticlesFeed({
                     </p>
                   )}
 
-                  {moreStoriesPool.length > ITEMS_PER_PAGE && (
+                  {moreStoriesPool.length > MORE_STORIES_PER_PAGE && (
                     <div className="news-pagination">
                       <button
                         onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
