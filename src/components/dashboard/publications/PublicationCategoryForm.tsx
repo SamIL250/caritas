@@ -28,26 +28,60 @@ import { DashboardFormActions } from "@/components/dashboard/DashboardFormAction
 const BACK_HREF = "/dashboard/publications?tab=settings";
 
 type Props =
-  | { mode: "create"; category?: undefined }
-  | { mode: "edit"; category: PublicationCategoryRow };
+  | { mode: "create"; category?: undefined; duplicateFrom?: PublicationCategoryRow | null }
+  | { mode: "edit"; category: PublicationCategoryRow; duplicateFrom?: undefined };
+
+function duplicateSlug(base: string): string {
+  const cleaned = base.replace(/_copy\d*$/i, "").replace(/_+$/g, "").slice(0, 40);
+  return `${cleaned}_copy`.slice(0, 48);
+}
+
+function duplicateLabel(base: string): string {
+  const trimmed = base.replace(/\s*\(Copy\)\s*$/i, "").trim();
+  return `${trimmed} (Copy)`;
+}
+
+function duplicateSiteAnchor(anchor: string | undefined): string {
+  const trimmed = (anchor ?? "").trim();
+  if (!trimmed) return "";
+  const cleaned = trimmed.replace(/-copy\d*$/i, "");
+  return `${cleaned}-copy`;
+}
 
 export function PublicationCategoryForm(props: Props) {
   const router = useRouter();
   const { mode } = props;
   const cat = mode === "edit" ? props.category : undefined;
-  const initialBehavior = cat ? readCategoryBehavior(cat) : {};
-  const initialSchema = cat ? readFieldSchema(cat) : [];
+  const duplicateFrom = mode === "create" ? props.duplicateFrom ?? null : null;
+  const source = mode === "edit" ? cat : duplicateFrom ?? undefined;
+  const initialBehavior = source ? readCategoryBehavior(source) : {};
+  const initialSchema = source ? readFieldSchema(source) : [];
 
-  const [label, setLabel] = useState(cat?.label ?? "");
-  const [pluralLabel, setPluralLabel] = useState(cat?.plural_label ?? "");
-  const [slug, setSlug] = useState(cat?.slug ?? "");
-  const [slugTouched, setSlugTouched] = useState(false);
-  const [description, setDescription] = useState(cat?.description ?? "");
-  const [icon, setIcon] = useState(cat?.icon ?? "fa-solid fa-file-lines");
-  const [accent, setAccent] = useState(cat?.accent ?? "#7A1515");
-  const [kind, setKind] = useState<PublicationCategoryKind>(cat?.kind ?? "pdf");
-  const [sortOrder, setSortOrder] = useState<number>(cat?.sort_order ?? 100);
-  const [siteAnchor, setSiteAnchor] = useState(initialBehavior.site_anchor ?? "");
+  const [label, setLabel] = useState(
+    () => (duplicateFrom ? duplicateLabel(duplicateFrom.label) : cat?.label ?? ""),
+  );
+  const [pluralLabel, setPluralLabel] = useState(() => {
+    if (duplicateFrom) {
+      return duplicateFrom.plural_label
+        ? duplicateLabel(duplicateFrom.plural_label)
+        : duplicateLabel(duplicateFrom.label);
+    }
+    return cat?.plural_label ?? "";
+  });
+  const [slug, setSlug] = useState(() =>
+    duplicateFrom ? duplicateSlug(duplicateFrom.slug) : cat?.slug ?? "",
+  );
+  const [slugTouched, setSlugTouched] = useState(() => Boolean(duplicateFrom));
+  const [description, setDescription] = useState(source?.description ?? "");
+  const [icon, setIcon] = useState(source?.icon ?? "fa-solid fa-file-lines");
+  const [accent, setAccent] = useState(source?.accent ?? "#7A1515");
+  const [kind, setKind] = useState<PublicationCategoryKind>(source?.kind ?? "pdf");
+  const [sortOrder, setSortOrder] = useState<number>(
+    () => (source?.sort_order ?? 100) + (duplicateFrom ? 1 : 0),
+  );
+  const [siteAnchor, setSiteAnchor] = useState(() =>
+    duplicateFrom ? duplicateSiteAnchor(initialBehavior.site_anchor) : initialBehavior.site_anchor ?? "",
+  );
   const [singleFeatured, setSingleFeatured] = useState(Boolean(initialBehavior.single_featured));
   const [newsLike, setNewsLike] = useState(Boolean(initialBehavior.news_like));
   const [fields, setFields] = useState<PublicationFieldDef[]>(initialSchema);
@@ -150,7 +184,11 @@ export function PublicationCategoryForm(props: Props) {
         </Link>
         <div>
           <h2 className="text-lg font-bold text-stone-900">
-            {mode === "create" ? "New category" : "Edit category"}
+            {mode === "create" && !duplicateFrom
+              ? "New category"
+              : mode === "create"
+                ? "Duplicate category"
+                : "Edit category"}
           </h2>
           {mode === "edit" && cat ? (
             <p className="mt-0.5 inline-flex flex-wrap items-center gap-2 text-xs font-medium text-stone-500">
@@ -164,6 +202,11 @@ export function PublicationCategoryForm(props: Props) {
                   Built-in
                 </>
               ) : null}
+            </p>
+          ) : duplicateFrom ? (
+            <p className="mt-0.5 text-xs text-stone-500">
+              Pre-filled from &ldquo;{duplicateFrom.label}&rdquo;. Change the name, slug, and any settings, then save
+              as a new category.
             </p>
           ) : (
             <p className="mt-0.5 text-xs text-stone-500">
@@ -520,7 +563,7 @@ export function PublicationCategoryForm(props: Props) {
         </Link>
         <Button type="submit" form="publication-category-form" variant="primary" disabled={busy} className="h-10 gap-2">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-          {mode === "create" ? "Create category" : "Save changes"}
+          {mode === "create" && !duplicateFrom ? "Create category" : mode === "create" ? "Create duplicate" : "Save changes"}
         </Button>
       </DashboardFormActions>
     </form>

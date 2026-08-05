@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Pencil, Plus, Trash2, Lock } from "lucide-react";
+import { Pencil, Plus, Trash2, Lock, Copy } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { type PublicationCategoryRow } from "@/lib/publications";
 import { PublicationCategoryIcon } from "./PublicationCategoryIcon";
@@ -115,6 +115,14 @@ export function PublicationsCategoriesPanel({
                         aria-label={`Edit ${c.label}`}
                       >
                         <Pencil size={16} />
+                      </Link>
+                      <Link
+                        href={`/dashboard/publications/categories/new?duplicate=${c.id}`}
+                        className="inline-flex rounded-lg p-2 text-stone-400 hover:bg-stone-100 hover:text-[#7A1515]"
+                        aria-label={`Duplicate ${c.label}`}
+                        title="Duplicate category"
+                      >
+                        <Copy size={16} />
                       </Link>
                       {c.is_system ? (
                         <span
