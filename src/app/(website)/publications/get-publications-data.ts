@@ -15,6 +15,7 @@ export type PublicationsPageChrome = {
   headlinePrefix: string;
   headlineAccent: string;
   intro: string;
+  heroImageUrl: string | null;
 };
 
 export type PublicationsCmsSection = {
@@ -48,12 +49,16 @@ function parseHeroToChrome(hero: Record<string, unknown> | null): PublicationsPa
       : "Resources";
 
   const intro = typeof hero?.subheading === "string" ? hero.subheading : "";
+  const rawUrl = hero?.image_url;
+  const heroImageUrl =
+    typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim() : null;
 
   return {
     eyebrow: badge,
     headlinePrefix,
     headlineAccent,
     intro,
+    heroImageUrl,
   };
 }
 

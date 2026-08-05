@@ -38,6 +38,7 @@ export default function PublicationsPageContent({
         headlinePrefix={chrome.headlinePrefix || "Publications &"}
         headlineAccent={chrome.headlineAccent || "Resources"}
         intro={chrome.intro}
+        heroImageUrl={chrome.heroImageUrl}
       />
 
       {cmsSections.map((section) => {

@@ -768,6 +768,7 @@ export default function PageEditorClient({
               headlinePrefix={headlinePrefix}
               headlineAccent={headlineAccent}
               intro={intro}
+              heroImageUrl={typeof localState.image_url === 'string' ? localState.image_url : null}
             />
           </div>
         );
