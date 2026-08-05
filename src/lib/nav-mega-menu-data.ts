@@ -17,6 +17,7 @@ export type NavMegaPreviewItem = {
   dateLabel: string;
   imageUrl: string | null;
   year: number | null;
+  isLocked?: boolean;
 };
 
 export type NavMegaYearGroup = {
@@ -109,7 +110,7 @@ function buildCategoryPreview(items: NavMegaPreviewItem[]): Pick<NavMegaCategory
   return groupItemsByYear(items);
 }
 
-function publicationPreviewItem(row: PublicationRow): NavMegaPreviewItem {
+function publicationPreviewItem(row: PublicationRow & { is_locked?: boolean }): NavMegaPreviewItem {
   const image = row.cover_image_url?.trim();
   return {
     id: row.id,
@@ -118,6 +119,7 @@ function publicationPreviewItem(row: PublicationRow): NavMegaPreviewItem {
     dateLabel: formatPublishedDate(row.published_at),
     imageUrl: image ? encodePublicationAssetUrl(image) : null,
     year: publishedYear(row.published_at),
+    isLocked: Boolean(row.is_locked),
   };
 }
 
@@ -157,7 +159,7 @@ export async function fetchNavMegaMenuData(): Promise<NavMegaMenuData> {
       .order("published_at", { ascending: false }),
     supabase
       .from("publications")
-      .select("id, title, slug, cover_image_url, published_at, category, status")
+      .select("id, title, slug, cover_image_url, published_at, category, status, is_locked")
       .eq("status", "published")
       .order("published_at", { ascending: false }),
     fetchPublishedTestimonies(),

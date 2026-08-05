@@ -111,6 +111,9 @@ export default async function PublicationDetailPage({ params }: PageProps) {
       publicationId={publication.id}
       isLocked={publication.is_locked}
       publicationTitle={publication.title}
+      categoryLabel={category ? category.label : publication.category}
+      excerpt={publication.excerpt || undefined}
+      coverImageUrl={publication.cover_image_url || undefined}
     >
       <div className="pub-article-page program-detail-flush">
         <header className="prog-article-hero">

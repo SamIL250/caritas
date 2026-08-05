@@ -961,8 +961,145 @@
   font-size: 0.875rem;
   color: #737373;
   line-height: 1.625;
-  max-width: 20rem;
+  max-width: 24rem;
   margin: 0 auto 2rem;
+}
+
+.pub-lock-shell {
+  min-height: calc(100dvh - 6rem);
+}
+
+.pub-lock-drawer-content {
+  padding: 3rem 2.5rem;
+}
+
+/* ── Full-page lock (direct / navbar links) ─────────────── */
+
+.pub-lock-page {
+  background: #f7f5f2;
+  min-height: 60vh;
+}
+
+.pub-lock-page-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #e7e5e4;
+  background: linear-gradient(135deg, #faf8f6 0%, #f3ece8 100%);
+}
+
+.pub-lock-page-hero-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+}
+
+.pub-lock-page-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(2px);
+}
+
+.pub-lock-page-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 2rem;
+}
+
+.pub-lock-page-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #78716c;
+  margin-bottom: 1rem;
+}
+
+.pub-lock-page-breadcrumb a {
+  color: #911313;
+  text-decoration: none;
+}
+
+.pub-lock-page-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.pub-lock-page-eyebrow {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #911313;
+  margin-bottom: 0.65rem;
+}
+
+.pub-lock-page-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem 1rem;
+}
+
+.pub-lock-page-title {
+  margin: 0;
+  flex: 1 1 16rem;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #1c1917;
+}
+
+.pub-lock-page-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(145, 19, 19, 0.18);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #911313;
+  white-space: nowrap;
+}
+
+.pub-lock-page-deck {
+  margin: 0.85rem 0 0;
+  max-width: 46rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #57534e;
+}
+
+.pub-lock-page-body {
+  padding: 2rem 1.5rem 4rem;
+}
+
+.pub-lock-page-card {
+  max-width: 32rem;
+  margin: 0 auto;
+  border-radius: 1.25rem;
+  border: 1px solid #e7e5e4;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 18px 40px rgba(0, 0, 0, 0.06);
+  padding: 2rem 1.75rem 2.25rem;
+}
+
+.pub-lock-page-card .pub-lock-shell {
+  min-height: auto;
+}
+
+.pub-lock-page-card .pub-lock-subtitle {
+  max-width: none;
 }
 
 .pub-lock-tabs {

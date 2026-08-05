@@ -215,9 +215,20 @@ export default function NavMegaMenu({
                                           <i className="fa-solid fa-file-lines" />
                                         </span>
                                       )}
+                                      {item.isLocked ? (
+                                        <span className="nav-mega-preview-lock" title="Password protected">
+                                          <i className="fa-solid fa-lock" aria-hidden />
+                                          <span className="sr-only">Password protected</span>
+                                        </span>
+                                      ) : null}
                                     </div>
                                     <div className="nav-mega-preview-copy">
-                                      <span className="nav-mega-preview-item-title">{item.title}</span>
+                                      <span className="nav-mega-preview-item-title">
+                                        {item.title}
+                                        {item.isLocked ? (
+                                          <span className="nav-mega-preview-lock-label">Locked</span>
+                                        ) : null}
+                                      </span>
                                       {item.dateLabel ? (
                                         <span className="nav-mega-preview-item-date">{item.dateLabel}</span>
                                       ) : null}

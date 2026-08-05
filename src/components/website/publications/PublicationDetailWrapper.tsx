@@ -1,16 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PublicationPasswordGate } from "@/components/website/publications/PublicationPasswordGate";
+import { PublicationLockPage } from "@/components/website/publications/PublicationLockPage";
 
 type Props = {
   publicationId: string;
   isLocked: boolean;
   publicationTitle: string;
+  categoryLabel?: string;
+  excerpt?: string;
+  coverImageUrl?: string;
   children: React.ReactNode;
 };
 
-export function PublicationDetailWrapper({ publicationId, isLocked, publicationTitle, children }: Props) {
+export function PublicationDetailWrapper({
+  publicationId,
+  isLocked,
+  publicationTitle,
+  categoryLabel,
+  excerpt,
+  coverImageUrl,
+  children,
+}: Props) {
   const [unlocked, setUnlocked] = useState(false);
 
   useEffect(() => {
@@ -21,7 +32,9 @@ export function PublicationDetailWrapper({ publicationId, isLocked, publicationT
     try {
       const val = localStorage.getItem(`pub_unlocked_${publicationId}`);
       if (val === "1") setUnlocked(true);
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }, [publicationId, isLocked]);
 
   if (!isLocked || unlocked) {
@@ -29,9 +42,12 @@ export function PublicationDetailWrapper({ publicationId, isLocked, publicationT
   }
 
   return (
-    <PublicationPasswordGate
+    <PublicationLockPage
       publicationId={publicationId}
       publicationTitle={publicationTitle}
+      categoryLabel={categoryLabel}
+      excerpt={excerpt}
+      coverImageUrl={coverImageUrl}
       onUnlock={() => setUnlocked(true)}
     />
   );
