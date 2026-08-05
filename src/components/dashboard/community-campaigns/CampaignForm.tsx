@@ -15,11 +15,21 @@ import {
   type NewsRichTextEditorHandle,
 } from "@/components/dashboard/news/NewsRichTextEditor";
 import type { Database, Json } from "@/types/database.types";
-import { createCommunityCampaign, updateCommunityCampaign } from "@/app/actions/community-campaigns";
+import {
+  createCommunityCampaign,
+  createCommunityCampaignCategoryQuick,
+  updateCommunityCampaign,
+} from "@/app/actions/community-campaigns";
 import { CampaignFundraisingStatsPanel } from "@/components/dashboard/community-campaigns/CampaignFundraisingStatsPanel";
 
 type CampaignRow = Database["public"]["Tables"]["community_campaigns"]["Row"];
 type CategoryRow = Database["public"]["Tables"]["community_campaign_categories"]["Row"];
+
+const NEW_CATEGORY_VALUE = "__new__";
+
+function sortCategories(list: CategoryRow[]): CategoryRow[] {
+  return [...list].sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
+}
 
 function isoToDatetimeLocalValue(iso: string | null | undefined): string {
   if (!iso) return "";
@@ -59,6 +69,15 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
   const [imageUrl, setImageUrl] = useState(source?.featured_image_url ?? "");
   const [imagePickerOpen, setImagePickerOpen] = useState(false);
   const [galleryPickerOpen, setGalleryPickerOpen] = useState(false);
+  const [categoryList, setCategoryList] = useState(() => sortCategories(categories));
+  const [categoryId, setCategoryId] = useState(
+    () => source?.category_id ?? categories[0]?.id ?? "",
+  );
+  const [addingCategory, setAddingCategory] = useState(() => categories.length === 0);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categoryBusy, setCategoryBusy] = useState(false);
+  const [categoryMsg, setCategoryMsg] = useState<string | null>(null);
+
   const [galleryItems, setGalleryItems] = useState<{ url: string; alt?: string | null }[]>(
     () => {
       if (!source?.gallery_images) return [];
@@ -72,11 +91,36 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
     },
   );
 
+  async function handleAddCategory() {
+    const name = newCategoryName.trim();
+    if (!name) {
+      setCategoryMsg("Enter a category name.");
+      return;
+    }
+    setCategoryBusy(true);
+    setCategoryMsg(null);
+    const res = await createCommunityCampaignCategoryQuick(name);
+    setCategoryBusy(false);
+    if (res.error || !res.category) {
+      setCategoryMsg(res.error ?? "Failed to create category.");
+      return;
+    }
+    setCategoryList((prev) => sortCategories([...prev, res.category!]));
+    setCategoryId(res.category.id);
+    setNewCategoryName("");
+    setAddingCategory(false);
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setMsg(null);
+    if (!categoryId) {
+      setMsg({ ok: false, text: "Select or add a campaign category." });
+      return;
+    }
     setSaving(true);
     const fd = new FormData(e.currentTarget);
+    fd.set("category_id", categoryId);
     fd.set("body", bodyRef.current?.getHTML() ?? "");
     fd.set("donation_modal_description_html", modalHtmlRef.current?.getHTML() ?? "");
     fd.set("featured_image_url", imageUrl.trim());
@@ -97,8 +141,6 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
       router.push(`/dashboard/community-campaigns/${res.id}`);
     }
   }
-
-  const defaultCat = categories[0]?.id ?? "";
 
   return (
     <form id="community-campaign-form" className="max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
@@ -155,19 +197,74 @@ export function CampaignForm({ mode, campaign, categories, homeFeaturedEditorHre
             <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="category_id">
               Category
             </label>
+            <input type="hidden" name="category_id" value={categoryId} />
             <select
               id="category_id"
-              name="category_id"
-              required
+              value={addingCategory ? NEW_CATEGORY_VALUE : categoryId}
+              onChange={(e) => {
+                if (e.target.value === NEW_CATEGORY_VALUE) {
+                  setAddingCategory(true);
+                  setCategoryId("");
+                  setCategoryMsg(null);
+                  return;
+                }
+                setAddingCategory(false);
+                setCategoryId(e.target.value);
+              }}
               className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm"
-              defaultValue={source?.category_id ?? defaultCat}
             >
-              {categories.map((c) => (
+              {categoryList.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
                 </option>
               ))}
+              <option value={NEW_CATEGORY_VALUE}>+ Add new category…</option>
             </select>
+            {addingCategory ? (
+              <div className="mt-2 space-y-2 rounded-lg border border-stone-200 bg-stone-50/80 p-3">
+                <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="new_category_name">
+                  New category name
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <Input
+                    id="new_category_name"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder="e.g. Emergency relief"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        void handleAddCategory();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="h-10 shrink-0 text-xs"
+                    disabled={categoryBusy}
+                    onClick={() => void handleAddCategory()}
+                  >
+                    {categoryBusy ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Adding…
+                      </>
+                    ) : (
+                      "Add category"
+                    )}
+                  </Button>
+                </div>
+                {categoryMsg ? (
+                  <p role="status" className="text-xs text-red-600">
+                    {categoryMsg}
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-stone-500">
+                    The category is saved immediately and selected for this campaign.
+                  </p>
+                )}
+              </div>
+            ) : null}
           </div>
           <div className="space-y-1">
             <label className="text-xs font-semibold uppercase tracking-wider text-stone-500" htmlFor="status">

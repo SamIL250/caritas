@@ -8,7 +8,9 @@ import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { createClient } from "@/lib/supabase/client";
+import { DEFAULT_COMMUNITY_CAMPAIGN_CATEGORY_SLUG } from "@/lib/community-campaign-categories";
 import { slugify } from "@/lib/slugify";
+import { deleteCommunityCampaignCategory } from "@/app/actions/community-campaigns";
 import type { Database } from "@/types/database.types";
 
 type CategoryRow = Database["public"]["Tables"]["community_campaign_categories"]["Row"];
@@ -101,11 +103,16 @@ export function CommunityCampaignCategoriesPanel({ initial }: { initial: Categor
     if (!deleteTarget) return;
     setMsg(null);
     setBusy(true);
-    const { error } = await supabase.from("community_campaign_categories").delete().eq("id", deleteTarget.id);
+    const res = await deleteCommunityCampaignCategory(deleteTarget.id);
     setBusy(false);
-    if (error) {
-      setMsg(error.message);
+    if (res.error) {
+      setMsg(res.error);
       return;
+    }
+    if ((res.reassignedCount ?? 0) > 0) {
+      setMsg(
+        `Category deleted. ${res.reassignedCount} campaign${res.reassignedCount === 1 ? "" : "s"} moved to “${res.fallbackName ?? "General"}”.`,
+      );
     }
     setDeleteTarget(null);
     await reload();
@@ -114,7 +121,7 @@ export function CommunityCampaignCategoriesPanel({ initial }: { initial: Categor
   return (
     <div className="space-y-6">
       {msg ? (
-        <p role="status" className="text-sm text-red-600">
+        <p role="status" className={`text-sm ${msg.includes("moved to") ? "text-emerald-700" : "text-red-600"}`}>
           {msg}
         </p>
       ) : null}
@@ -169,7 +176,14 @@ export function CommunityCampaignCategoriesPanel({ initial }: { initial: Categor
           <tbody>
             {categories.map((c) => (
               <tr key={c.id} className="border-b border-stone-100 last:border-0">
-                <td className="px-4 py-3 font-medium text-stone-900">{c.name}</td>
+                <td className="px-4 py-3 font-medium text-stone-900">
+                  {c.name}
+                  {c.slug === DEFAULT_COMMUNITY_CAMPAIGN_CATEGORY_SLUG ? (
+                    <span className="ml-2 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-stone-500">
+                      Default fallback
+                    </span>
+                  ) : null}
+                </td>
                 <td className="px-4 py-3 font-mono text-xs text-stone-600">{c.slug}</td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex justify-end gap-1">
@@ -256,7 +270,11 @@ export function CommunityCampaignCategoriesPanel({ initial }: { initial: Categor
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => void confirmDelete()}
         title="Delete category?"
-        description={`Delete “${deleteTarget?.name ?? ""}”? Campaigns still assigned to this category must be reassigned first (the database will block if any remain).`}
+        description={
+          deleteTarget?.slug === DEFAULT_COMMUNITY_CAMPAIGN_CATEGORY_SLUG
+            ? `Delete “${deleteTarget?.name ?? ""}”? Campaigns using this category will move to your next available category. You cannot delete the last remaining category.`
+            : `Delete “${deleteTarget?.name ?? ""}”? Campaigns still using this category will be moved to the default “General” category automatically.`
+        }
         confirmLabel="Delete"
       />
     </div>

@@ -15,7 +15,9 @@ import { CampaignModerationQueues } from "@/components/dashboard/community-campa
 import { Copy, ExternalLink, Pencil, Star } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Input } from "@/components/ui/Input";
+import { DEFAULT_COMMUNITY_CAMPAIGN_CATEGORY_SLUG } from "@/lib/community-campaign-categories";
 import type { Database } from "@/types/database.types";
 
 import type { EnrichedModerationComment } from "@/lib/community-campaign-moderation-data";
@@ -436,6 +438,7 @@ function CampaignsTab({
 function CategoriesTab({ categories }: { categories: CategoryRow[] }) {
   const router = useRouter();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<CategoryRow | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [busy, startTransition] = useTransition();
 
@@ -444,10 +447,15 @@ function CategoriesTab({ categories }: { categories: CategoryRow[] }) {
   return (
     <div className="space-y-6">
       <p className="text-sm text-stone-600">
-        Categories appear on campaign story cards and filters. Slug must be lowercase with hyphens.
+        Categories appear on campaign story cards and filters. Slug must be lowercase with hyphens. When you delete a
+        category, any campaigns using it are moved to the default <strong>General</strong> category automatically.
       </p>
 
-      {msg ? <p className="text-sm text-red-600">{msg}</p> : null}
+      {msg ? (
+        <p role="status" className={`text-sm ${msg.includes("moved to") ? "text-emerald-700" : "text-red-600"}`}>
+          {msg}
+        </p>
+      ) : null}
 
       <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
         <table className="w-full text-left text-sm">
@@ -462,7 +470,14 @@ function CategoriesTab({ categories }: { categories: CategoryRow[] }) {
           <tbody className="divide-y divide-stone-100">
             {categories.map((c) => (
               <tr key={c.id}>
-                <td className="px-4 py-3 font-medium text-stone-900">{c.name}</td>
+                <td className="px-4 py-3 font-medium text-stone-900">
+                  {c.name}
+                  {c.slug === DEFAULT_COMMUNITY_CAMPAIGN_CATEGORY_SLUG ? (
+                    <Badge variant="default" className="ml-2 text-[10px] uppercase">
+                      Default fallback
+                    </Badge>
+                  ) : null}
+                </td>
                 <td className="px-4 py-3 text-xs text-stone-500">{c.slug}</td>
                 <td className="px-4 py-3 text-xs">{c.sort_order}</td>
                 <td className="px-4 py-3 text-right">
@@ -481,12 +496,8 @@ function CategoriesTab({ categories }: { categories: CategoryRow[] }) {
                     disabled={busy}
                     className="text-xs font-bold uppercase tracking-wider text-red-600 hover:underline disabled:opacity-50"
                     onClick={() => {
-                      startTransition(async () => {
-                        setMsg(null);
-                        const res = await deleteCommunityCampaignCategory(c.id);
-                        if (res.error) setMsg(res.error);
-                        else router.refresh();
-                      });
+                      setMsg(null);
+                      setDeleteTarget(c);
                     }}
                   >
                     Delete
@@ -545,6 +556,36 @@ function CategoriesTab({ categories }: { categories: CategoryRow[] }) {
           </div>
         </form>
       </div>
+
+      <ConfirmDialog
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          if (!deleteTarget) return;
+          startTransition(async () => {
+            setMsg(null);
+            const res = await deleteCommunityCampaignCategory(deleteTarget.id);
+            if (res.error) {
+              setMsg(res.error);
+              return;
+            }
+            if ((res.reassignedCount ?? 0) > 0) {
+              setMsg(
+                `Category deleted. ${res.reassignedCount} campaign${res.reassignedCount === 1 ? "" : "s"} moved to “${res.fallbackName ?? "General"}”.`,
+              );
+            }
+            setDeleteTarget(null);
+            router.refresh();
+          });
+        }}
+        title="Delete category?"
+        description={
+          deleteTarget?.slug === DEFAULT_COMMUNITY_CAMPAIGN_CATEGORY_SLUG
+            ? `Delete “${deleteTarget?.name ?? ""}”? Campaigns using this category will move to your next available category. You cannot delete the last remaining category.`
+            : `Delete “${deleteTarget?.name ?? ""}”? Campaigns still using this category will be moved to the default “General” category automatically.`
+        }
+        confirmLabel="Delete"
+      />
     </div>
   );
 }

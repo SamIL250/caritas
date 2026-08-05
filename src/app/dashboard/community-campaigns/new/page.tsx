@@ -51,23 +51,6 @@ export default async function NewCommunityCampaignPage({
   const catRows = (categories ?? []) as Database["public"]["Tables"]["community_campaign_categories"]["Row"][];
   const editorHref = await homeFeaturedHref(supabase);
 
-  if (!catRows.length) {
-    return (
-      <div className="w-full max-w-full space-y-6">
-        <Topbar title={duplicateFrom ? "Duplicate campaign" : "New campaign"} subtitle="You need at least one category first." />
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-6 text-sm text-amber-950">
-          <p className="mb-3">Add a category under the Categories tab, then return here.</p>
-          <Link
-            href="/dashboard/community-campaigns?tab=categories"
-            className="font-semibold text-[#7A1515] underline underline-offset-2"
-          >
-            Open Categories tab →
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full max-w-full space-y-6">
       <Topbar
@@ -80,10 +63,11 @@ export default async function NewCommunityCampaignPage({
       />
       <CampaignForm mode="create" categories={catRows} homeFeaturedEditorHref={editorHref} duplicateFrom={duplicateFrom} />
       <p className="text-center text-xs text-stone-400">
-        Need another category first?{" "}
+        You can add a category from the dropdown, or manage all categories on the{" "}
         <Link href="/dashboard/community-campaigns?tab=categories" className="text-[#7A1515] underline">
           Categories tab
         </Link>
+        .
       </p>
     </div>
   );

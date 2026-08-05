@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/news";
+import { resolveCommunityCampaignCategoryFallback } from "@/lib/community-campaign-categories";
 import type { Database, Json } from "@/types/database.types";
 
 type CampaignStatus = Database["public"]["Enums"]["community_campaign_status"];
@@ -298,6 +299,53 @@ export async function updateCommunityCampaign(
   }
 }
 
+export async function createCommunityCampaignCategoryQuick(
+  name: string,
+): Promise<{
+  error?: string;
+  category?: Database["public"]["Tables"]["community_campaign_categories"]["Row"];
+}> {
+  try {
+    const { supabase } = await requireStaff();
+    const trimmed = name.trim();
+    if (!trimmed) return { error: "Category name is required." };
+
+    const baseSlug = slugify(trimmed);
+    if (!baseSlug) return { error: "Invalid category name." };
+
+    let slug = baseSlug;
+    for (let n = 0; n < 40; n++) {
+      const { data: existing } = await supabase
+        .from("community_campaign_categories")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (!existing) break;
+      slug = `${baseSlug}-${n + 2}`;
+    }
+
+    const { data: maxRow } = await supabase
+      .from("community_campaign_categories")
+      .select("sort_order")
+      .order("sort_order", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const sort_order = (maxRow?.sort_order ?? 0) + 10;
+
+    const { data, error } = await supabase
+      .from("community_campaign_categories")
+      .insert({ name: trimmed, slug, sort_order })
+      .select("*")
+      .single();
+    if (error) return { error: error.message };
+
+    revalidatePath("/dashboard/community-campaigns");
+    return { category: data };
+  } catch (e: unknown) {
+    return { error: e instanceof Error ? e.message : "Failed to create category." };
+  }
+}
+
 export async function upsertCommunityCampaignCategory(form: FormData): Promise<{ error?: string }> {
   try {
     const { supabase } = await requireStaff();
@@ -327,21 +375,42 @@ export async function upsertCommunityCampaignCategory(form: FormData): Promise<{
   }
 }
 
-export async function deleteCommunityCampaignCategory(categoryId: string): Promise<{ error?: string }> {
+export async function deleteCommunityCampaignCategory(categoryId: string): Promise<{
+  error?: string;
+  reassignedCount?: number;
+  fallbackName?: string;
+}> {
   try {
     const { supabase } = await requireStaff();
-    const { count, error: cErr } = await supabase
-      .from("community_campaigns")
-      .select("id", { count: "exact", head: true })
-      .eq("category_id", categoryId);
-    if (cErr) return { error: cErr.message };
-    if ((count ?? 0) > 0) {
-      return { error: "Cannot delete a category that still has campaigns. Reassign campaigns first." };
+
+    const { count: totalCategories, error: totalErr } = await supabase
+      .from("community_campaign_categories")
+      .select("id", { count: "exact", head: true });
+    if (totalErr) return { error: totalErr.message };
+    if ((totalCategories ?? 0) <= 1) {
+      return { error: "Cannot delete the last remaining category." };
     }
+
+    const fallback = await resolveCommunityCampaignCategoryFallback(supabase, categoryId);
+    if (!fallback) {
+      return { error: "No fallback category available." };
+    }
+
+    const { data: reassigned, error: reassignErr } = await supabase
+      .from("community_campaigns")
+      .update({ category_id: fallback.id })
+      .eq("category_id", categoryId)
+      .select("id");
+    if (reassignErr) return { error: reassignErr.message };
+
     const { error } = await supabase.from("community_campaign_categories").delete().eq("id", categoryId);
     if (error) return { error: error.message };
+
     revalidatePath("/dashboard/community-campaigns");
-    return {};
+    return {
+      reassignedCount: reassigned?.length ?? 0,
+      fallbackName: fallback.name,
+    };
   } catch (e: unknown) {
     return { error: e instanceof Error ? e.message : "Failed to delete category." };
   }
