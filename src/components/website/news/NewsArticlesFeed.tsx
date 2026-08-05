@@ -46,7 +46,8 @@ function matchesYearFilter(a: PublishedNewsArticle, yearFilter: number | "all"):
   return articleYear(a) === yearFilter;
 }
 
-const MAGAZINE_SLOT_COUNT = 5;
+const MAGAZINE_SLOT_COUNT = 4;
+const MAGAZINE_SIDE_CARD_COUNT = 3;
 const MORE_STORIES_PER_PAGE = 3;
 
 type Props = {
@@ -224,9 +225,8 @@ export default function NewsArticlesFeed({
                   <h2>{featuredVisible ? "Trending Now" : "Top Stories"}</h2>
                 </div>
                 <div className="news-mag-grid">
-                  {/* Left Column: Large Featured + Wide Article */}
-                  <div className="flex flex-col gap-6 w-full h-full">
-                    {yearScopedGrid[0] && (
+                  <div className="news-mag-main">
+                    {yearScopedGrid[0] ? (
                       <Link
                         href={`/news/${yearScopedGrid[0].slug}`}
                         className="news-mag-large"
@@ -247,34 +247,11 @@ export default function NewsArticlesFeed({
                           <span>{yearScopedGrid[0].excerpt?.substring(0, 80)}...</span>
                         </div>
                       </Link>
-                    )}
-                    
-                    {yearScopedGrid[1] && (
-                      <Link
-                        href={`/news/${yearScopedGrid[1].slug}`}
-                        className="flex items-center gap-4 group text-inherit no-underline border border-stone-200 rounded-2xl p-3 hover:border-[var(--primary-orange)] transition-colors bg-white mt-auto"
-                      >
-                        <div className="w-1/3 aspect-[4/3] rounded-xl overflow-hidden relative shrink-0">
-                          <MediaFigure
-                            src={yearScopedGrid[1].image_url}
-                            alt={yearScopedGrid[1].title}
-                            hideCaption
-                            figureClassName="news-mag-figure h-full"
-                            imgClassName="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-                        <div className="w-2/3 flex flex-col justify-center">
-                          <div className="text-[10px] font-bold text-[#a5280d] mb-1 uppercase tracking-wider">{tagLabel(yearScopedGrid[1])}</div>
-                          <h4 className="text-[15px] font-bold text-stone-900 group-hover:text-[#a5280d] transition-colors mb-1 line-clamp-2 leading-tight">{yearScopedGrid[1].title}</h4>
-                          <div className="text-[11px] text-stone-500">{formatPublishedDate(yearScopedGrid[1].published_at)}</div>
-                        </div>
-                      </Link>
-                    )}
+                    ) : null}
                   </div>
 
-                  {/* Right: Vertical List */}
                   <div className="news-mag-list">
-                    {yearScopedGrid.slice(2, MAGAZINE_SLOT_COUNT).map((a) => (
+                    {yearScopedGrid.slice(1, 1 + MAGAZINE_SIDE_CARD_COUNT).map((a) => (
                       <Link
                         key={a.id}
                         href={`/news/${a.slug}`}
