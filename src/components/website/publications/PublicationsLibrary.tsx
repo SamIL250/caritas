@@ -13,6 +13,7 @@ import {
   readCategoryBehavior,
 } from "@/lib/publications";
 import { TESTIMONIES_SECTION_ANCHOR, type TestimonyRow } from "@/lib/testimonies";
+import { sortByPublishedNewest } from "@/lib/content-sort";
 import { TestimoniesSection } from "./TestimoniesSection";
 import { PublicationLockModal } from "./PublicationLockModal";
 import { ViewTracker } from "@/components/website/ViewTracker";
@@ -138,8 +139,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
   const [filter, setFilter] = useState<FilterKey>(defaultFilter);
   const [yearFilter, setYearFilter] = useState<number | "all">("all");
   const strategicFeatured = useMemo(() => {
-    const strat = publications.filter((p) => p.category === "strategic_plan");
-    return strat.find((p) => p.featured) ?? strat[0] ?? null;
+    return publications.find((p) => p.category === "strategic_plan" && p.featured) ?? null;
   }, [publications]);
 
   const showSection = (slug: string) => filter === slug;
@@ -182,9 +182,24 @@ export default function PublicationsLibrary({ publications, categories, testimon
     strategicFeatured &&
     matchesYearFilter(publicationYear(strategicFeatured), yearFilter);
 
+  const strategicPlanItems = useMemo(() => {
+    if (!strategicCat) return [];
+    return sortByPublishedNewest(publications.filter((p) => p.category === strategicCat.slug));
+  }, [publications, strategicCat]);
+
+  const strategicGridItems = useMemo(() => {
+    return strategicPlanItems.filter((row) => {
+      if (strategicFeatured && row.id === strategicFeatured.id) return false;
+      return matchesYearFilter(publicationYear(row), yearFilter);
+    });
+  }, [strategicPlanItems, strategicFeatured, yearFilter]);
+
+  const showStrategicSection = Boolean(strategicCat && showSection(strategicCat.slug));
+  const hasStrategicContent = Boolean(showStrategicFeatured || strategicGridItems.length > 0);
+
   const hasFilteredContent = useMemo(() => {
     if (yearFilter === "all") return true;
-    if (strategicCat && filter === strategicCat.slug && showStrategicFeatured) return true;
+    if (strategicCat && filter === strategicCat.slug) return hasStrategicContent;
     if (filter === TESTIMONIES_SECTION_ANCHOR) {
       return scopedTestimonies.some((row) => matchesYearFilter(testimonyYear(row), yearFilter));
     }
@@ -193,7 +208,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
     yearFilter,
     strategicCat,
     filter,
-    showStrategicFeatured,
+    hasStrategicContent,
     scopedPublications,
     scopedTestimonies,
   ]);
@@ -301,44 +316,74 @@ export default function PublicationsLibrary({ publications, categories, testimon
             </p>
           ) : null}
 
-          {filter !== TESTIMONIES_SECTION_ANCHOR && strategicFeatured && strategicCat && showSection("strategic_plan") && showStrategicFeatured ? (
+          {filter !== TESTIMONIES_SECTION_ANCHOR && showStrategicSection && hasStrategicContent ? (
             <section
               className="pub-section"
-              id={readCategoryBehavior(strategicCat).site_anchor || "strategic"}
+              id={readCategoryBehavior(strategicCat!).site_anchor || "strategic"}
               aria-labelledby="pub-strategic-heading"
             >
-              {(strategicFeatured as any).is_locked ? (
-                <div
-                  className="pub-featured"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setLockedPub(strategicFeatured)}
-                  onKeyDown={(e) => e.key === "Enter" && setLockedPub(strategicFeatured)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
-                </div>
-              ) : publicationHasPdf(strategicFeatured) ? (
-                <a
-                  href={publicationPrimaryHref(strategicFeatured)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pub-featured"
-                >
-                  <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
-                </a>
+              {strategicFeatured && showStrategicFeatured ? (
+                (strategicFeatured as any).is_locked ? (
+                  <div
+                    className="pub-featured"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setLockedPub(strategicFeatured)}
+                    onKeyDown={(e) => e.key === "Enter" && setLockedPub(strategicFeatured)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <FeaturedContent cat={strategicCat!} pub={strategicFeatured} />
+                  </div>
+                ) : publicationHasPdf(strategicFeatured) ? (
+                  <a
+                    href={publicationPrimaryHref(strategicFeatured)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pub-featured"
+                  >
+                    <FeaturedContent cat={strategicCat!} pub={strategicFeatured} />
+                  </a>
+                ) : (
+                  <div
+                    className="pub-featured"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setActivePublication(strategicFeatured)}
+                    onKeyDown={(e) => e.key === "Enter" && setActivePublication(strategicFeatured)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <FeaturedContent cat={strategicCat!} pub={strategicFeatured} />
+                  </div>
+                )
               ) : (
-                <div
-                  className="pub-featured"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setActivePublication(strategicFeatured)}
-                  onKeyDown={(e) => e.key === "Enter" && setActivePublication(strategicFeatured)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <FeaturedContent cat={strategicCat} pub={strategicFeatured} />
+                <div className="pub-section-head">
+                  <div className="pub-section-title-wrap">
+                    <div className="pub-section-eyebrow">
+                      {strategicCat!.icon ? <i className={strategicCat!.icon} aria-hidden /> : null}
+                      {strategicCat!.plural_label || strategicCat!.label}
+                    </div>
+                    <h2 className="pub-section-title" id="pub-strategic-heading">
+                      {yearFilter !== "all"
+                        ? `${strategicCat!.label} · ${yearFilter}`
+                        : strategicCat!.label}
+                    </h2>
+                  </div>
                 </div>
               )}
+
+              {strategicGridItems.length > 0 ? (
+                <div className={`pub-card-grid${showStrategicFeatured ? " pub-strategic-grid" : ""}`}>
+                  {strategicGridItems.map((p) => (
+                    <CategoryCard
+                      key={p.id}
+                      cat={strategicCat!}
+                      row={p}
+                      onOpenDrawer={setActivePublication}
+                      onLockedClick={setLockedPub}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </section>
           ) : null}
 

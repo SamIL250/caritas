@@ -586,6 +586,10 @@
   gap: 1.25rem;
 }
 
+.pub-strategic-grid {
+  margin-top: 2rem;
+}
+
 @media (max-width: 1000px) {
   .pub-card-grid {
     grid-template-columns: repeat(2, 1fr);
