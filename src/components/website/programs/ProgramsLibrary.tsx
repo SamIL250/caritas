@@ -388,13 +388,6 @@ function SuccessStoryCard({
     ? encodePublicationAssetUrl(story.cover_image_url)
     : null;
 
-  // Extract initials from title
-  const initials = story.title
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase())
-    .join("");
-
   const customFields = story.custom_fields as Record<string, any> || {};
   const href = publicationDetailHref(story);
 
@@ -414,14 +407,9 @@ function SuccessStoryCard({
         {story.tag_label ? <div className="story-img-tag">{story.tag_label}</div> : null}
       </div>
       <div className="story-body">
+        <h3 className="story-name">{story.title}</h3>
+        {story.period_label ? <div className="story-tag">{story.period_label}</div> : null}
         {story.excerpt ? <p className="story-quote">{story.excerpt}</p> : null}
-        <div className="story-person">
-          <div className={`story-avatar ${deptSlug}-avatar`}>{initials}</div>
-          <div className="story-person-info">
-            <div className="story-name">{story.title}</div>
-            {story.period_label ? <div className="story-tag">{story.period_label}</div> : null}
-          </div>
-        </div>
         {customFields.outcome ? (
           <div className={`story-outcome ${deptSlug}-outcome`}>
             <i className="fa-solid fa-arrow-trend-up"></i> {String(customFields.outcome)}

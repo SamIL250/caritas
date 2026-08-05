@@ -274,13 +274,13 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                     }
                   }}
                 >
-                  News & Updates <ChevronDown size={14} className="nav-inline-caret inline-block ml-1 opacity-60" />
+                  Stories and Updates <ChevronDown size={14} className="nav-inline-caret inline-block ml-1 opacity-60" />
                 </Link>
                 <button
                   type="button"
                   className="nav-submenu-toggle"
                   aria-expanded={openSub === 'news'}
-                  aria-label="Toggle News submenu"
+                  aria-label="Toggle Stories and Updates submenu"
                   onClick={() => toggleSub('news')}
                 >
                   <ChevronDown

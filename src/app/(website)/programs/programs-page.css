@@ -596,8 +596,32 @@
 .story-card:hover .story-img img { transform: scale(1.07); }
 .story-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 55%); }
 .story-img-tag { position: absolute; bottom: .75rem; left: .85rem; font-size: .6rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; background: rgba(0,0,0,.5); backdrop-filter: blur(8px); padding: .22rem .6rem; border-radius: 100px; }
-.story-body { padding: 1.35rem 1.35rem 1.15rem; flex: 1; display: flex; flex-direction: column; }
-.story-quote { font-size: .86rem; color: #4b5563; line-height: 1.75; margin-bottom: 1rem; flex: 1; font-style: italic; position: relative; padding-left: 1.1rem; }
+.story-body { padding: 1.35rem 1.35rem 1.15rem; flex: 1; display: flex; flex-direction: column; gap: 0.45rem; }
+.story-name {
+  font-size: .92rem;
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.story-tag { font-size: .7rem; color: #9ca3af; margin-top: -0.15rem; }
+.story-quote {
+  font-size: .84rem;
+  color: #4b5563;
+  line-height: 1.65;
+  margin: 0;
+  font-style: italic;
+  position: relative;
+  padding-left: 1.1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .story-quote::before { content: '"'; position: absolute; left: 0; top: -.1rem; font-size: 1.9rem; line-height: 1; font-style: normal; color: #e5e7eb; }
 .story-person { display: flex; align-items: center; gap: .7rem; margin-bottom: .85rem; }
 .story-avatar { 
@@ -613,8 +637,6 @@
   flex-shrink: 0; 
   background: linear-gradient(135deg, var(--dept-color, #1a1a1a), color-mix(in srgb, var(--dept-color, #1a1a1a) 60%, #000));
 }
-.story-name { font-size: .86rem; font-weight: 800; color: #111; }
-.story-tag { font-size: .7rem; color: #9ca3af; }
 .story-outcome { 
   display: flex; 
   align-items: center; 
