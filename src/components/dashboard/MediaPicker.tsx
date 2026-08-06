@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { getMedia, listMediaFolders } from "@/app/actions/media";
 import type { MediaFolderRow } from "@/app/actions/media";
 import { cloudinaryUrl } from "@/lib/cloudinary-url";
+import { MediaCaptionModal, type MediaCaptionDraft } from "@/components/dashboard/MediaCaptionModal";
 
 export interface PickedMediaItem {
   id: string;
@@ -25,6 +26,16 @@ interface MediaPickerProps {
   /** When set, new uploads from this picker go into this folder */
   uploadFolderId?: string | null;
 }
+
+type PendingImageUpload = {
+  file: File;
+  previewUrl: string;
+};
+
+type UploadCaptionFlow = {
+  files: PendingImageUpload[];
+  otherFiles: File[];
+};
 
 function buildFolderChain(currentId: string | null, flat: MediaFolderRow[]): MediaFolderRow[] {
   if (!currentId) return [];
@@ -58,6 +69,7 @@ export function MediaPicker({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [uploadCaptionFlow, setUploadCaptionFlow] = useState<UploadCaptionFlow | null>(null);
 
   const uploadIntoId = uploadFolderIdProp !== undefined ? uploadFolderIdProp : currentFolderId;
 
@@ -108,6 +120,7 @@ export function MediaPicker({
       setSearch("");
       setSelectedIds([]);
       setCurrentFolderId(null);
+      setUploadCaptionFlow(null);
     }, 0);
     return () => window.clearTimeout(t);
   }, [isOpen]);
@@ -157,7 +170,46 @@ export function MediaPicker({
     const files = Array.from(e.target.files || []);
     e.target.value = "";
     if (files.length === 0) return;
-    void uploadFiles(files, {});
+
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const otherFiles = files.filter((file) => !file.type.startsWith("image/"));
+
+    if (imageFiles.length > 0) {
+      setUploadCaptionFlow({
+        files: imageFiles.map((file) => ({
+          file,
+          previewUrl: URL.createObjectURL(file),
+        })),
+        otherFiles,
+      });
+      return;
+    }
+
+    void uploadFiles(otherFiles, {});
+  }
+
+  const uploadCaptionModalItems: MediaCaptionDraft[] = useMemo(() => {
+    if (!uploadCaptionFlow) return [];
+    return uploadCaptionFlow.files.map(({ file, previewUrl }) => ({
+      key: file.name,
+      label: file.name,
+      previewUrl,
+      caption: "",
+    }));
+  }, [uploadCaptionFlow]);
+
+  async function handleUploadCaptionConfirm(captionsByKey: Record<string, string>) {
+    if (!uploadCaptionFlow) return;
+
+    const captionsByName = Object.fromEntries(
+      uploadCaptionFlow.files.map(({ file }) => [file.name, captionsByKey[file.name] ?? ""]),
+    );
+    const allFiles = [
+      ...uploadCaptionFlow.files.map(({ file }) => file),
+      ...uploadCaptionFlow.otherFiles,
+    ];
+    setUploadCaptionFlow(null);
+    await uploadFiles(allFiles, captionsByName);
   }
 
   async function finishSelection(items: PickedMediaItem[]) {
@@ -344,6 +396,17 @@ export function MediaPicker({
           </div>
         </div>
       </div>
+
+      <MediaCaptionModal
+        open={uploadCaptionFlow !== null}
+        title="Add image captions"
+        description="Optionally add captions before uploading. Leave blank and click Upload to continue without captions."
+        requireCaptions={false}
+        confirmLabel="Upload"
+        items={uploadCaptionModalItems}
+        onCancel={() => setUploadCaptionFlow(null)}
+        onConfirm={(captionsByKey) => void handleUploadCaptionConfirm(captionsByKey)}
+      />
     </>
   );
 }
