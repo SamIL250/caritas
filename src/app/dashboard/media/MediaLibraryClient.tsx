@@ -106,6 +106,104 @@ function menuPositionFromPointer(e: React.MouseEvent) {
 
 const MEDIA_PAGE_SIZE = 20;
 
+type MediaSortField = "updated_at" | "filename" | "size_bytes";
+type MediaSortDirection = "asc" | "desc";
+
+const MEDIA_SORT_OPTIONS: { value: MediaSortField; label: string }[] = [
+  { value: "updated_at", label: "Date modified" },
+  { value: "filename", label: "Name" },
+  { value: "size_bytes", label: "Size" },
+];
+
+function sortMediaItems(
+  rows: MediaRow[],
+  field: MediaSortField,
+  direction: MediaSortDirection,
+): MediaRow[] {
+  return [...rows].sort((a, b) => {
+    let cmp = 0;
+    switch (field) {
+      case "updated_at": {
+        const ta = new Date(a.updated_at).getTime();
+        const tb = new Date(b.updated_at).getTime();
+        cmp = (Number.isFinite(ta) ? ta : 0) - (Number.isFinite(tb) ? tb : 0);
+        break;
+      }
+      case "filename":
+        cmp = a.filename.localeCompare(b.filename, undefined, { sensitivity: "base" });
+        break;
+      case "size_bytes":
+        cmp = (a.size_bytes ?? 0) - (b.size_bytes ?? 0);
+        break;
+      default: {
+        const _exhaustive: never = field;
+        return _exhaustive;
+      }
+    }
+
+    if (cmp !== 0) {
+      return direction === "asc" ? cmp : -cmp;
+    }
+
+    return a.filename.localeCompare(b.filename, undefined, { sensitivity: "base" });
+  });
+}
+
+function MediaSortBar({
+  sortField,
+  sortDirection,
+  onSortFieldChange,
+  onSortDirectionToggle,
+}: {
+  sortField: MediaSortField;
+  sortDirection: MediaSortDirection;
+  onSortFieldChange: (field: MediaSortField) => void;
+  onSortDirectionToggle: () => void;
+}) {
+  const directionLabel =
+    sortField === "filename"
+      ? sortDirection === "asc"
+        ? "A → Z"
+        : "Z → A"
+      : sortDirection === "asc"
+        ? "Ascending"
+        : "Descending";
+
+  return (
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-stone-200 bg-white px-3 py-2.5">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Sort by</span>
+        <select
+          value={sortField}
+          onChange={(e) => onSortFieldChange(e.target.value as MediaSortField)}
+          className="h-9 rounded-lg border border-stone-200 bg-white px-3 text-sm font-medium text-stone-700 focus:border-[#7A1515] focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20"
+          aria-label="Sort files by"
+        >
+          {MEDIA_SORT_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <Button
+        type="button"
+        variant="secondary"
+        className="h-9 gap-2 px-3"
+        onClick={onSortDirectionToggle}
+        aria-label={`Sort direction: ${directionLabel}`}
+      >
+        {sortDirection === "asc" ? (
+          <ChevronRight size={16} className="rotate-[-90deg]" aria-hidden />
+        ) : (
+          <ChevronRight size={16} className="rotate-90" aria-hidden />
+        )}
+        {directionLabel}
+      </Button>
+    </div>
+  );
+}
+
 function MediaPaginationBar({
   page,
   totalPages,
@@ -389,6 +487,8 @@ export default function MediaLibraryClient({
   const [pendingOtherUploads, setPendingOtherUploads] = useState<File[]>([]);
   const [captionEditItem, setCaptionEditItem] = useState<MediaRow | null>(null);
   const [page, setPage] = useState(1);
+  const [sortField, setSortField] = useState<MediaSortField>("updated_at");
+  const [sortDirection, setSortDirection] = useState<MediaSortDirection>("desc");
 
   const ctxMenuRef = useRef<HTMLDivElement | null>(null);
 
@@ -469,16 +569,21 @@ export default function MediaLibraryClient({
     [currentFolderId, foldersFlat],
   );
 
-  const totalPages = Math.max(1, Math.ceil(items.length / MEDIA_PAGE_SIZE));
+  const sortedItems = useMemo(
+    () => sortMediaItems(items, sortField, sortDirection),
+    [items, sortField, sortDirection],
+  );
+
+  const totalPages = Math.max(1, Math.ceil(sortedItems.length / MEDIA_PAGE_SIZE));
 
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * MEDIA_PAGE_SIZE;
-    return items.slice(start, start + MEDIA_PAGE_SIZE);
-  }, [items, page]);
+    return sortedItems.slice(start, start + MEDIA_PAGE_SIZE);
+  }, [sortedItems, page]);
 
   useEffect(() => {
     setPage(1);
-  }, [currentFolderId, trashMode]);
+  }, [currentFolderId, trashMode, sortField, sortDirection]);
 
   useEffect(() => {
     if (page > totalPages) setPage(totalPages);
@@ -708,6 +813,14 @@ export default function MediaLibraryClient({
               </div>
             ) : (
               <>
+                <MediaSortBar
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSortFieldChange={setSortField}
+                  onSortDirectionToggle={() =>
+                    setSortDirection((dir) => (dir === "asc" ? "desc" : "asc"))
+                  }
+                />
                 <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                   {paginatedItems.map((item) => (
                   <Card key={item.id} className="relative bg-white p-2">
@@ -758,7 +871,7 @@ export default function MediaLibraryClient({
                 <MediaPaginationBar
                   page={page}
                   totalPages={totalPages}
-                  totalItems={items.length}
+                  totalItems={sortedItems.length}
                   pageSize={MEDIA_PAGE_SIZE}
                   onPageChange={setPage}
                 />
@@ -794,6 +907,14 @@ export default function MediaLibraryClient({
                 </div>
               ) : (
                 <>
+                  <MediaSortBar
+                    sortField={sortField}
+                    sortDirection={sortDirection}
+                    onSortFieldChange={setSortField}
+                    onSortDirectionToggle={() =>
+                      setSortDirection((dir) => (dir === "asc" ? "desc" : "asc"))
+                    }
+                  />
                   <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {paginatedItems.map((item) => (
                     <DraggableFileCard
@@ -814,7 +935,7 @@ export default function MediaLibraryClient({
                   <MediaPaginationBar
                     page={page}
                     totalPages={totalPages}
-                    totalItems={items.length}
+                    totalItems={sortedItems.length}
                     pageSize={MEDIA_PAGE_SIZE}
                     onPageChange={setPage}
                   />
