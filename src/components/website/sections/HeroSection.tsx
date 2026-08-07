@@ -18,11 +18,11 @@ const HERO_SLIDE_EASE = [0.32, 0.72, 0, 1] as const;
 
 const heroSlideVariants = {
   enter: (dir: 1 | -1) => ({
-    x: dir === 1 ? '100vw' : '-100vw',
+    x: dir === 1 ? '100%' : '-100%',
   }),
   center: { x: 0 },
   exit: (dir: 1 | -1) => ({
-    x: dir === 1 ? '-100vw' : '100vw',
+    x: dir === 1 ? '-100%' : '100%',
   }),
 };
 
@@ -52,23 +52,21 @@ interface HeroSectionProps {
     badge_text?: string;
     secondary_cta_text?: string;
     secondary_cta_url?: string;
-    slides?: HeroSlide[]; // Support for multiple slides
+    slides?: HeroSlide[];
   };
 }
 
-export default function HeroSection({ 
-  heading, 
-  subheading, 
-  cta_text, 
-  cta_url, 
+export default function HeroSection({
+  heading,
+  subheading,
+  cta_text,
+  cta_url,
   image_url,
   options
 }: HeroSectionProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  /** +1 = advance (next / shorter forward path); -1 = retreat (prev / shorter backward path). */
   const [slideDir, setSlideDir] = useState<1 | -1>(1);
 
-  // Define default slide
   const defaultSlide: HeroSlide = {
     heading: heading || "Restoring Hearts for Better Rwanda",
     subheading: subheading || "Through strategic humanitarian programs, social development initiatives, and faith-driven service, Caritas Rwanda works to create lasting change for the most vulnerable.",
@@ -80,12 +78,10 @@ export default function HeroSection({
     secondary_cta_url: options?.secondary_cta_url || "#"
   };
 
-  // Combine default slide with any additional slides from options
-  const slides: HeroSlide[] = options?.slides?.length 
-    ? options.slides 
+  const slides: HeroSlide[] = options?.slides?.length
+    ? options.slides
     : [defaultSlide];
 
-  // Auto-play carousel — restart interval whenever slide changes so arrows/dots reset the 6s pause
   useEffect(() => {
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
@@ -117,205 +113,170 @@ export default function HeroSection({
   };
 
   const slide = slides[currentSlide];
-  const displayAlignment = options?.align || 'left';
-  const displayOpacity = options?.overlay_opacity ?? 0.55;
+  const displayAlignment = options?.align || 'center';
+  const displayOpacity = options?.overlay_opacity ?? 0.42;
   const displayTextColor = options?.text_color || '#ffffff';
 
-  const alignmentClass = displayAlignment === 'center' ? 'text-center items-center mx-auto' : displayAlignment === 'right' ? 'text-right items-end ml-auto' : 'text-left items-start';
-  
+  const alignmentClass =
+    displayAlignment === 'center'
+      ? 'hero-slider-frame__copy--center'
+      : displayAlignment === 'right'
+        ? 'hero-slider-frame__copy--right'
+        : 'hero-slider-frame__copy--left';
+
   const { openModal } = useDonation();
 
   const foundingYear = 1959;
   const yearsActive = new Date().getFullYear() - foundingYear;
-  
+
+  const renderCta = (ctaUrl: string, ctaText: string, primary = true) => {
+    const className = primary
+      ? 'hero-slider-cta hero-slider-cta--primary'
+      : 'hero-slider-cta hero-slider-cta--secondary';
+
+    if (ctaUrl === '#donate') {
+      return (
+        <button type="button" onClick={() => openModal()} className={className}>
+          {ctaText}
+        </button>
+      );
+    }
+
+    return (
+      <Link href={ctaUrl} className={className}>
+        {ctaText}
+      </Link>
+    );
+  };
+
   return (
-    <section className="relative hero-section-height flex items-end pb-20 md:items-center md:pb-0 pt-32 md:pt-32 lg:pt-20 overflow-hidden bg-stone-900 font-poppins">
-      {/* Hidden eager-loaded img elements so the browser discovers and fetches
-          hero background images as early as possible (background-image CSS is
-          discovered late; an <img> with fetchPriority is picked up in the preload
-          scanner). The first slide gets high priority for LCP. */}
-      <div aria-hidden className="sr-only">
-        {slides.map((s, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={`preload-img-${i}`}
-            src={s.image_url}
-            alt=""
-            fetchPriority={i === 0 ? 'high' : 'low'}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding={i === 0 ? 'sync' : 'async'}
-            width={1}
-            height={1}
-          />
-        ))}
-      </div>
-
-      {/* overflow-hidden clips sliding layers so nothing flashes the fallback bg between slides */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <AnimatePresence mode="sync" initial={false} custom={slideDir}>
-          <motion.div
-            key={`slide-bg-${currentSlide}`}
-            role="presentation"
-            custom={slideDir}
-            variants={heroSlideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={heroSlideTransition}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${slide.image_url})`,
-              backgroundPosition: 'center top',
-            }}
-          />
-        </AnimatePresence>
-      </div>
-      
-      {/* Dynamic Overlay - Matches original .hero-slide.active::after */}
-      <div 
-        className="absolute inset-0 z-1 bg-black/45 transition-opacity duration-1000"
-        style={{ opacity: displayOpacity }}
-      />
-      
-      {/* Top Dark Gradient for Header Contrast */}
-      <div className="absolute inset-x-0 top-0 h-40 z-1 bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
-      
-      {/* Radial Glow (Matches original .hero::before) */}
-      <div className="absolute inset-0 z-2 bg-[radial-gradient(circle_at_20%_50%,rgba(140,34,8,0.15)_0%,transparent_50%)] pointer-events-none" />
-      
-      <div className="container relative z-10 mx-auto px-4 md:px-12">
-        {/* Years Badge — positioned within container margins */}
-        <div className="hero-years-badge" aria-label={`${yearsActive} years of saving lives`}>
-          <div className="hero-years-circle">
-            <span className="hero-years-num">{yearsActive}</span>
-            <span className="hero-years-word">years of saving lives</span>
+    <section className="hero-section-home">
+      <div className="hero-section-home__inner">
+        <div className="hero-slider-shell">
+        <div className="hero-slider-frame">
+          <div aria-hidden className="sr-only">
+            {slides.map((s, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={`preload-img-${i}`}
+                src={s.image_url}
+                alt=""
+                fetchPriority={i === 0 ? 'high' : 'low'}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding={i === 0 ? 'sync' : 'async'}
+                width={1}
+                height={1}
+              />
+            ))}
           </div>
-        </div>
-        <div className={`flex flex-col max-w-4xl ${alignmentClass}`}>
-          <AnimatePresence mode="wait" initial={false} custom={slideDir}>
-            <motion.div
-              key={`slide-content-${currentSlide}`}
-              custom={slideDir}
-              variants={heroSlideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={heroSlideTransition}
-              className={`flex flex-col ${alignmentClass}`}
-            >
-              {slide.badge_text && (
-                <div className="inline-block px-6 py-2 rounded-full !bg-white/10 !border !border-white/20 !backdrop-blur-xl !text-[10px] md:!text-[11px] !font-black !text-white !uppercase !tracking-[0.3em] !mb-4 md:!mb-8 !shadow-xl !shadow-black/20">
-                  {slide.badge_text}
-                </div>
-              )}
 
-              <h1 
-                className="!text-[1.5rem] sm:!text-4xl md:!text-5xl lg:!text-6xl !font-black !leading-[1] !mb-8 !tracking-[-0.03em]"
-                style={{ 
-                  color: displayTextColor,
-                  textShadow: '0 10px 40px rgba(0,0,0,0.5)',
-                  wordSpacing: '-0.02em'
-                }}
+          <div className="hero-slider-frame__media">
+            <AnimatePresence mode="sync" initial={false} custom={slideDir}>
+              <motion.div
+                key={`slide-bg-${currentSlide}`}
+                role="presentation"
+                custom={slideDir}
+                variants={heroSlideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={heroSlideTransition}
+                className="hero-slider-frame__slide-bg"
+                style={{ backgroundImage: `url(${slide.image_url})` }}
+              />
+            </AnimatePresence>
+          </div>
+
+          <div
+            className="hero-slider-frame__overlay"
+            style={{ opacity: displayOpacity }}
+            aria-hidden
+          />
+
+          <div className="hero-years-watermark" aria-label={`${yearsActive} years of saving lives`}>
+            <span className="hero-years-watermark__num">{yearsActive}</span>
+            <span className="hero-years-watermark__label">
+              years of
+              <br />
+              saving lives
+            </span>
+          </div>
+
+          <div className="hero-slider-frame__content">
+            <AnimatePresence mode="wait" initial={false} custom={slideDir}>
+              <motion.div
+                key={`slide-content-${currentSlide}`}
+                custom={slideDir}
+                variants={heroSlideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={heroSlideTransition}
+                className={`hero-slider-frame__copy ${alignmentClass}`}
               >
-                {slide.heading}
-              </h1>
-              
-              <p 
-                className="!text-[1.1rem] md:!text-l !leading-[1.6] !mb-12 !max-w-2xl !opacity-90 !font-medium"
-                style={{ 
-                  color: displayTextColor,
-                  textShadow: '0 2px 10px rgba(0,0,0,0.3)'
-                }}
+                {slide.badge_text && (
+                  <p className="hero-slider-frame__badge">{slide.badge_text}</p>
+                )}
+
+                <h1
+                  className="hero-slider-frame__title"
+                  style={{ color: displayTextColor }}
+                >
+                  {slide.heading}
+                </h1>
+
+                <p
+                  className="hero-slider-frame__subtitle"
+                  style={{ color: displayTextColor }}
+                >
+                  {slide.subheading}
+                </p>
+
+                <div className="hero-slider-frame__actions">
+                  {slide.cta_url && slide.cta_text && renderCta(slide.cta_url, slide.cta_text, true)}
+                  {slide.secondary_cta_text &&
+                    renderCta(slide.secondary_cta_url || '#', slide.secondary_cta_text, false)}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {slides.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="Previous hero slide"
+                className="hero-carousel-btn hero-carousel-btn--prev"
               >
-                {slide.subheading}
-              </p>
-              
-              <div className="flex flex-wrap gap-6 !mt-2">
-                {slide.cta_url && slide.cta_text && (
-                  slide.cta_url === '#donate' ? (
-                    <button 
-                      onClick={() => openModal()}
-                      className="!px-12 !py-5 !bg-primary-orange !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-primary-orange-hover !transition-all hover:!scale-105 active:!scale-95 !shadow-[0_15px_40px_-10px_rgba(140,34,8,0.5)] !flex !items-center !gap-3 !group !relative !overflow-hidden"
-                    >
-                      <span className="relative z-10">{slide.cta_text}</span>
-                      <span className="relative z-10 group-hover:translate-x-1.5 !transition-transform !duration-300">→</span>
-                      <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                    </button>
-                  ) : (
-                    <Link 
-                      href={slide.cta_url}
-                      className="!px-12 !py-5 !bg-primary-orange !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-primary-orange-hover !transition-all hover:!scale-105 active:!scale-95 !shadow-[0_15px_40px_-10px_rgba(140,34,8,0.5)] !flex !items-center !gap-3 !group !relative !overflow-hidden"
-                    >
-                      <span className="relative z-10">{slide.cta_text}</span>
-                      <span className="relative z-10 group-hover:translate-x-1.5 !transition-transform !duration-300">→</span>
-                      <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                    </Link>
-                  )
-                )}
-                
-                {slide.secondary_cta_text && (
-                  slide.secondary_cta_url === '#donate' ? (
-                    <button 
-                      onClick={() => openModal()}
-                      className="!px-12 !py-5 !bg-white/5 !backdrop-blur-xl !border !border-white/20 !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-white/15 !transition-all hover:!scale-105 active:!scale-95 !flex !items-center !gap-2 !shadow-xl"
-                    >
-                      {slide.secondary_cta_text}
-                    </button>
-                  ) : (
-                    <Link 
-                      href={slide.secondary_cta_url || '#'}
-                      className="!px-12 !py-5 !bg-white/5 !backdrop-blur-xl !border !border-white/20 !text-white !font-black !uppercase !tracking-widest !text-[10px] !rounded-full hover:!bg-white/15 !transition-all hover:!scale-105 active:!scale-95 !flex !items-center !gap-2 !shadow-xl"
-                    >
-                      {slide.secondary_cta_text}
-                    </Link>
-                  )
-                )}
+                <ChevronLeft size={22} strokeWidth={2.25} aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="Next hero slide"
+                className="hero-carousel-btn hero-carousel-btn--next"
+              >
+                <ChevronRight size={22} strokeWidth={2.25} aria-hidden />
+              </button>
+
+              <div className="hero-slider-frame__dots">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => goToSlide(idx)}
+                    aria-label={`Go to slide ${idx + 1} of ${slides.length}`}
+                    aria-current={currentSlide === idx ? 'true' : undefined}
+                    className={`hero-slider-frame__dot${currentSlide === idx ? ' is-active' : ''}`}
+                  />
+                ))}
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </>
+          )}
+        </div>
         </div>
       </div>
-
-      {/* Carousel arrows */}
-      {slides.length > 1 && (
-        <>
-          <button
-            type="button"
-            onClick={goPrev}
-            aria-label="Previous hero slide"
-            className="hero-carousel-btn hero-carousel-btn--prev"
-          >
-            <ChevronLeft size={26} strokeWidth={2.25} aria-hidden />
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            aria-label="Next hero slide"
-            className="hero-carousel-btn hero-carousel-btn--next"
-          >
-            <ChevronRight size={26} strokeWidth={2.25} aria-hidden />
-          </button>
-        </>
-      )}
-
-      {/* Slide Indicators */}
-      {slides.length > 1 && (
-        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => goToSlide(idx)}
-              aria-label={`Go to slide ${idx + 1} of ${slides.length}`}
-              aria-current={currentSlide === idx ? 'true' : undefined}
-              className={`h-1.5 transition-all duration-500 rounded-full ${
-                currentSlide === idx ? 'w-10 bg-[#8c2208]' : 'w-4 bg-white/30 hover:bg-white/50'
-              }`}
-            />
-          ))}
-        </div>
-      )}
-
     </section>
   );
 }

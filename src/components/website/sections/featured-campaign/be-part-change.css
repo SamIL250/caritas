@@ -27,7 +27,7 @@
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 700;
-  font-family: var(--font-poppins), sans-serif;
+  font-family: var(--font-outfit), sans-serif;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 6px 28px rgba(145,19,19,0.32);

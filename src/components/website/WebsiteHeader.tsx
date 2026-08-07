@@ -95,13 +95,13 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
     }
   };
 
-  const headerClass = `site-header${solidNav ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}${suppressDropdowns ? ' nav-dropdowns-suppressed' : ''}`;
-  const containerClass = solidNav ? 'navbar-container scrolled' : 'navbar-container';
+  const headerClass = `site-header site-header--light${solidNav ? ' scrolled' : ''}${mobileMenuOpen ? ' menu-open' : ''}${suppressDropdowns ? ' nav-dropdowns-suppressed' : ''}`;
+  const containerClass = `navbar-container${solidNav ? ' scrolled' : ''}`;
 
   return (
     <header className={headerClass}>
       <div className={containerClass}>
-        <Link href="/" className={solidNav ? 'logo show-scroll-logo' : 'logo'} onClick={() => { closeNav(); closeModal(); }}>
+        <Link href="/" className="logo show-scroll-logo" onClick={() => { closeNav(); closeModal(); }}>
           <img src="/img/logo_caritas.webp" alt="Caritas Rwanda" className="logo-default" />
           <img src="/img/logo_bg.webp" alt="Caritas Rwanda" className="logo-scroll" />
         </Link>
@@ -134,12 +134,6 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
           onMouseLeave={() => setSuppressDropdowns(false)}
         >
           <ul>
-            <li>
-              <Link href="/" className={isActive('/') ? 'current' : ''} onClick={() => { closeNav(); closeModal(); }}>
-                Home
-              </Link>
-            </li>
-
             <li className={['has-dropdown', openSub === 'about' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
               <div className="nav-item-row">
                 <Link 
@@ -336,12 +330,6 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
               onToggle={() => toggleSub('publications')}
               onCloseNav={closeNav}
             />
-
-            <li>
-              <Link href="/metrics" className={isActive('/metrics') ? 'current' : ''} onClick={closeNav}>
-                Impact Metrics
-              </Link>
-            </li>
 
             <li>
               <Link href="/contact" onClick={closeNav}>

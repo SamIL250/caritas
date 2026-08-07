@@ -17,8 +17,8 @@
   --campaign-burgundy: var(--campaign-red);
   --campaign-burgundy-dark: var(--campaign-red-dark);
   --campaign-burgundy-border: #6a1d0a;
-  --font-campaign-heading: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-  --font-campaign-prose: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-campaign-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-campaign-prose: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   background: var(--campaign-page-bg);
 }
 
@@ -74,7 +74,7 @@
   color: #fff;
   line-height: 1.15;
   margin: 0 0 0.65rem;
-  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 }
 
 .campaign-detail-root .campaign-hero-location {
@@ -157,7 +157,7 @@
   font-weight: 900;
   color: #fff;
   line-height: 1.2;
-  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 }
 
 .campaign-detail-root .campaign-hero-stat-label {

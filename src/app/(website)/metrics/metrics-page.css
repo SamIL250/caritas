@@ -147,7 +147,7 @@
   color: rgba(255,255,255,0.9);
   font-size: 0.85rem;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-outfit), "Outfit", sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 0.01em;

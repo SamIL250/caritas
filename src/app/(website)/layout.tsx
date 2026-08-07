@@ -82,26 +82,12 @@ import { getMergedFooterSettings, getCookieConsentSettings } from "@/lib/site-se
 import { buildMediaCaptionRecord } from "@/lib/media-captions";
 import { loadAllMediaCaptions } from "@/lib/media-captions-server";
 
-import { Poppins, Inter, Playfair_Display } from "next/font/google";
+import { Outfit } from "next/font/google";
 
-const poppins = Poppins({
+const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-playfair",
+  variable: "--font-outfit",
   display: "swap",
 });
 
@@ -120,7 +106,7 @@ export default async function WebsiteLayout({
     <VolunteerProvider>
       <DonationProvider>
         <MediaCaptionProvider captions={buildMediaCaptionRecord(captionMap)}>
-        <div className={`website-root ${poppins.variable} ${inter.variable} ${playfair.variable}`}>
+        <div className={`website-root ${outfit.variable}`}>
           <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
           {/* FontAwesome */}
           <link

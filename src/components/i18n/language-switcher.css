@@ -260,34 +260,34 @@
   margin-top: 0.15rem;
 }
 
-/* Header variant: lighter look on hero (white nav before scroll) */
+/* Header variant: always on white navigation bar */
 .lang-switch--header .lang-switch__trigger {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.35);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #1f2937;
 }
 
 .lang-switch--header .lang-switch__trigger:hover {
-  background: rgba(255, 255, 255, 0.28);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: #fff;
+  border-color: rgba(122, 21, 21, 0.25);
 }
 
 .lang-switch--header .lang-switch__trigger[data-open="true"] {
-  border-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+  border-color: rgba(122, 21, 21, 0.35);
+  box-shadow: 0 0 0 1px rgba(122, 21, 21, 0.12);
 }
 
 .lang-switch--header .lang-switch__trigger-paren {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(15, 23, 42, 0.45);
 }
 
 .lang-switch--header .lang-switch__flag-ring {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(15, 23, 42, 0.12);
+  background: rgba(248, 250, 252, 0.95);
 }
 
 .lang-switch--header .lang-switch__chev {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(15, 23, 42, 0.45);
 }
 
 .navbar-container.scrolled .lang-switch--header .lang-switch__trigger {
