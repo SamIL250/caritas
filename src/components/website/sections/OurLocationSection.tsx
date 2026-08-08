@@ -39,79 +39,103 @@ export type OurLocationSectionProps = {
   show_cta?: boolean;
 };
 
+function MapCard({
+  iconClass,
+  title,
+  subtitle,
+  embedUrl,
+  iframeTitle,
+}: {
+  iconClass: string;
+  title: string;
+  subtitle: string;
+  embedUrl: string;
+  iframeTitle: string;
+}) {
+  return (
+    <article className="cr-location__card map-card">
+      <div className="cr-location__card-head map-card-header">
+        <div className="cr-location__card-icon map-card-icon" aria-hidden>
+          <i className={iconClass} />
+        </div>
+        <div className="cr-location__card-label map-card-label">
+          <h3>{title}</h3>
+          <p>{subtitle}</p>
+        </div>
+      </div>
+      {embedUrl ? (
+        <iframe
+          className="cr-location__embed"
+          src={embedUrl}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          title={iframeTitle}
+        />
+      ) : null}
+    </article>
+  );
+}
+
 export default function OurLocationSection(props: OurLocationSectionProps) {
   const c = { ...DEFAULTS, ...props };
   const aUrl = (c.map_a_embed_url || DEFAULTS.map_a_embed_url).trim();
   const bUrl = (c.map_b_embed_url || DEFAULTS.map_b_embed_url).trim();
   const showCta = props.show_cta === true;
-  const ctaLabel = (props.cta_label ?? c.cta_label ?? DEFAULT_CTA_LABEL).trim() || DEFAULT_CTA_LABEL;
-  const ctaUrl = (props.cta_url ?? c.cta_url ?? DEFAULT_CTA_URL).trim() || DEFAULT_CTA_URL;
+  const ctaLabel =
+    (props.cta_label ?? c.cta_label ?? DEFAULT_CTA_LABEL).trim() || DEFAULT_CTA_LABEL;
+  const ctaUrl =
+    (props.cta_url ?? c.cta_url ?? DEFAULT_CTA_URL).trim() || DEFAULT_CTA_URL;
 
   return (
-    <section className="map-section" id="our-location" aria-labelledby="our-location-title">
-      <div className="map-section-header">
-        <div className="map-eyebrow">
-          <i className="fa-solid fa-location-dot" aria-hidden />
-          {c.eyebrow}
-        </div>
-        <h2 id="our-location-title">
-          {c.heading} <span>{c.heading_accent}</span>
-        </h2>
-        <p>{c.subtext}</p>
-      </div>
+    <section
+      className="cr-location map-section"
+      id="our-location"
+      aria-labelledby="our-location-title"
+    >
+      <div className="cr-location__inner">
+        <header className="cr-location__header map-section-header">
+          <p className="cr-location__eyebrow map-eyebrow">
+            <i className="fa-solid fa-location-dot" aria-hidden />
+            {c.eyebrow}
+          </p>
+          <h2 className="cr-location__title" id="our-location-title">
+            {c.heading}{" "}
+            <span className="cr-location__title-accent">{c.heading_accent}</span>
+          </h2>
+          <p className="cr-location__subtitle">{c.subtext}</p>
+        </header>
 
-      <div className="map-grid">
-        <div className="map-card">
-          <div className="map-card-header">
-            <div className="map-card-icon" aria-hidden>
-              <i className="fa-solid fa-street-view" />
+        <div className="cr-location__shell">
+          <div className="cr-location__frame">
+            <div className="cr-location__grid map-grid">
+              <MapCard
+                iconClass="fa-solid fa-street-view"
+                title={c.map_a_title}
+                subtitle={c.map_a_subtitle}
+                embedUrl={aUrl}
+                iframeTitle="Caritas Rwanda Street View"
+              />
+              <MapCard
+                iconClass="fa-solid fa-map-pin"
+                title={c.map_b_title}
+                subtitle={c.map_b_subtitle}
+                embedUrl={bUrl}
+                iframeTitle="Caritas Rwanda HQ Location"
+              />
             </div>
-            <div className="map-card-label">
-              <h3>{c.map_a_title}</h3>
-              <p>{c.map_a_subtitle}</p>
-            </div>
-          </div>
-          {aUrl ? (
-            <iframe
-              src={aUrl}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Caritas Rwanda Street View"
-            />
-          ) : null}
-        </div>
 
-        <div className="map-card">
-          <div className="map-card-header">
-            <div className="map-card-icon" aria-hidden>
-              <i className="fa-solid fa-map-pin" />
-            </div>
-            <div className="map-card-label">
-              <h3>{c.map_b_title}</h3>
-              <p>{c.map_b_subtitle}</p>
-            </div>
+            {showCta ? (
+              <div className="cr-location__footer map-section-cta-wrap">
+                <Link href={ctaUrl} className="cr-location__cta map-section-cta">
+                  <i className="fa-solid fa-envelope" aria-hidden />
+                  {ctaLabel}
+                </Link>
+              </div>
+            ) : null}
           </div>
-          {bUrl ? (
-            <iframe
-              src={bUrl}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Caritas Rwanda HQ Location"
-            />
-          ) : null}
         </div>
       </div>
-
-      {showCta ? (
-        <div className="map-section-cta-wrap">
-          <Link href={ctaUrl} className="map-section-cta">
-            <i className="fa-solid fa-envelope" aria-hidden />
-            {ctaLabel}
-          </Link>
-        </div>
-      ) : null}
     </section>
   );
 }
