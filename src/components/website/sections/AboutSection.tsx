@@ -16,18 +16,40 @@ type FocusKey = 'mission' | 'values' | 'vision';
 type LabelPlacement = 'above' | 'below' | 'left' | 'right';
 
 const DIAGRAM = {
-  width: 960,
-  height: 680,
   center: { x: 480, y: 350 },
   mainRadius: 158,
   satelliteRadius: 38,
   orbitRadius: 252,
-  innerOrbitRadius: 58,
-  innerCircleSize: 88,
-  /** Extra space so satellite labels stay inside the SVG viewBox */
-  viewBoxPad: { x: 88, y: 48, right: 88, bottom: 52 },
-  viewBoxPadMobile: { x: 34, y: 30, right: 34, bottom: 34 },
+  innerOrbitRadius: 70,
+  innerCircleSize: 104,
 } as const;
+
+type DiagramViewport = {
+  viewBox: string;
+  viewW: number;
+  viewH: number;
+  originX: number;
+  originY: number;
+};
+
+function getDiagramViewport(isMobile: boolean): DiagramViewport {
+  const { center, orbitRadius, satelliteRadius } = DIAGRAM;
+  const labelPadX = isMobile ? 48 : 68;
+  const labelPadY = isMobile ? 38 : 50;
+  const cropRadius = orbitRadius + satelliteRadius;
+  const cropX = center.x - cropRadius - labelPadX;
+  const cropY = center.y - cropRadius - labelPadY;
+  const cropW = (cropRadius + labelPadX) * 2;
+  const cropH = (cropRadius + labelPadY) * 2;
+
+  return {
+    viewBox: `${cropX} ${cropY} ${cropW} ${cropH}`,
+    viewW: cropW,
+    viewH: cropH,
+    originX: cropX,
+    originY: cropY,
+  };
+}
 
 function useMobileDiagramLayout(maxWidth = 640) {
   const [mobile, setMobile] = useState(false);
@@ -43,10 +65,10 @@ function useMobileDiagramLayout(maxWidth = 640) {
   return mobile;
 }
 
-/** Equilateral triangle — mission & values top, vision bottom, all inside main ring */
+/** Equilateral triangle — 120° apart; vision at bottom, mission & values upper left/right */
 const INNER_FOCUS_ANGLES: Array<{ key: FocusKey; angle: number }> = [
-  { key: 'mission', angle: -130 },
-  { key: 'values', angle: -50 },
+  { key: 'mission', angle: -150 },
+  { key: 'values', angle: -30 },
   { key: 'vision', angle: 90 },
 ];
 
@@ -135,7 +157,7 @@ function polarPoint(cx: number, cy: number, radius: number, angleDeg: number) {
 }
 
 function valueFontSize(value: string, mobile = false) {
-  const bump = mobile ? 2 : 0;
+  const bump = mobile ? 5 : 0;
   if (value.length > 5) return 13 + bump;
   if (value.length > 3) return 16 + bump;
   return 21 + bump;
@@ -149,7 +171,7 @@ function splitLabel(label: string): string[] {
 }
 
 function labelFontSize(label: string, mobile = false) {
-  const bump = mobile ? 1.5 : 0;
+  const bump = mobile ? 3 : 0;
   if (label.length > 32) return 10 + bump;
   if (label.length > 22) return 11 + bump;
   return 12 + bump;
@@ -207,10 +229,7 @@ function AboutDiagram({
 }) {
   const isMobile = useMobileDiagramLayout();
   const { center, mainRadius, satelliteRadius, orbitRadius, innerOrbitRadius } = DIAGRAM;
-  const viewBoxPad = isMobile ? DIAGRAM.viewBoxPadMobile : DIAGRAM.viewBoxPad;
-  const viewW = DIAGRAM.width + viewBoxPad.x + viewBoxPad.right;
-  const viewH = DIAGRAM.height + viewBoxPad.y + viewBoxPad.bottom;
-  const viewBox = `${-viewBoxPad.x} ${-viewBoxPad.y} ${viewW} ${viewH}`;
+  const { viewBox, viewW, viewH, originX, originY } = getDiagramViewport(isMobile);
 
   const innerFocusPoints = INNER_FOCUS_ANGLES.map(({ key, angle }) => ({
     key,
@@ -222,7 +241,7 @@ function AboutDiagram({
   return (
     <div
       className={`cr-about-diagram${isMobile ? ' cr-about-diagram--mobile' : ''}`}
-      style={isMobile ? { aspectRatio: `${viewW} / ${viewH}` } : undefined}
+      style={{ aspectRatio: `${viewW} / ${viewH}` }}
     >
       <svg
         viewBox={viewBox}
@@ -306,8 +325,8 @@ function AboutDiagram({
           return 0;
         })
         .map((focus) => {
-        const leftPct = ((focus.x + viewBoxPad.x) / viewW) * 100;
-        const topPct = ((focus.y + viewBoxPad.y) / viewH) * 100;
+        const leftPct = ((focus.x - originX) / viewW) * 100;
+        const topPct = ((focus.y - originY) / viewH) * 100;
         const isActive = activeFocus === focus.key;
         const label = focus.key.toUpperCase();
 
@@ -409,7 +428,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
         <div className="cr-about-body">
           <div className="cr-about-visual">
             <ParallaxLayer speed={0.1} className="cr-about-visual__parallax">
-              <ScrollReveal direction="scale">
+              <ScrollReveal direction="scale" className="cr-about-visual__reveal">
                 <div className="cr-about-visual__frame">
                   <AboutDiagram
                     nodes={content.networkNodes!}
