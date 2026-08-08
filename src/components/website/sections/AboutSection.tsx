@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ComponentType } from 'react';
+import { useState, useEffect, type ComponentType } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Target, Heart, Eye } from 'lucide-react';
 import '@/app/home-about-section.css';
@@ -22,7 +22,24 @@ const DIAGRAM = {
   orbitRadius: 252,
   innerOrbitRadius: 58,
   innerCircleSize: 88,
+  /** Extra space so satellite labels stay inside the SVG viewBox */
+  viewBoxPad: { x: 88, y: 48, right: 88, bottom: 52 },
+  viewBoxPadMobile: { x: 34, y: 30, right: 34, bottom: 34 },
 } as const;
+
+function useMobileDiagramLayout(maxWidth = 640) {
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${maxWidth}px)`);
+    const sync = () => setMobile(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, [maxWidth]);
+
+  return mobile;
+}
 
 /** Equilateral triangle — mission & values top, vision bottom, all inside main ring */
 const INNER_FOCUS_ANGLES: Array<{ key: FocusKey; angle: number }> = [
@@ -115,10 +132,11 @@ function polarPoint(cx: number, cy: number, radius: number, angleDeg: number) {
   };
 }
 
-function valueFontSize(value: string) {
-  if (value.length > 5) return 13;
-  if (value.length > 3) return 16;
-  return 21;
+function valueFontSize(value: string, mobile = false) {
+  const bump = mobile ? 2 : 0;
+  if (value.length > 5) return 13 + bump;
+  if (value.length > 3) return 16 + bump;
+  return 21 + bump;
 }
 
 function splitLabel(label: string): string[] {
@@ -128,10 +146,11 @@ function splitLabel(label: string): string[] {
   return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
 }
 
-function labelFontSize(label: string) {
-  if (label.length > 32) return 10;
-  if (label.length > 22) return 11;
-  return 12;
+function labelFontSize(label: string, mobile = false) {
+  const bump = mobile ? 1.5 : 0;
+  if (label.length > 32) return 10 + bump;
+  if (label.length > 22) return 11 + bump;
+  return 12 + bump;
 }
 
 function getLabelPosition(
@@ -184,7 +203,12 @@ function AboutDiagram({
   activeFocus: FocusKey;
   onFocusChange: (key: FocusKey) => void;
 }) {
+  const isMobile = useMobileDiagramLayout();
   const { center, mainRadius, satelliteRadius, orbitRadius, innerOrbitRadius } = DIAGRAM;
+  const viewBoxPad = isMobile ? DIAGRAM.viewBoxPadMobile : DIAGRAM.viewBoxPad;
+  const viewW = DIAGRAM.width + viewBoxPad.x + viewBoxPad.right;
+  const viewH = DIAGRAM.height + viewBoxPad.y + viewBoxPad.bottom;
+  const viewBox = `${-viewBoxPad.x} ${-viewBoxPad.y} ${viewW} ${viewH}`;
 
   const innerFocusPoints = INNER_FOCUS_ANGLES.map(({ key, angle }) => ({
     key,
@@ -194,12 +218,16 @@ function AboutDiagram({
   const satelliteAngles = evenSatelliteAngles(nodes.length);
 
   return (
-    <div className="cr-about-diagram">
+    <div
+      className={`cr-about-diagram${isMobile ? ' cr-about-diagram--mobile' : ''}`}
+      style={isMobile ? { aspectRatio: `${viewW} / ${viewH}` } : undefined}
+    >
       <svg
-        viewBox={`0 0 ${DIAGRAM.width} ${DIAGRAM.height}`}
+        viewBox={viewBox}
         className="cr-about-diagram__svg"
         role="img"
         aria-label="Caritas Rwanda network infographic"
+        preserveAspectRatio="xMidYMid meet"
       >
         <circle
           cx={center.x}
@@ -242,7 +270,7 @@ function AboutDiagram({
                 textAnchor="middle"
                 dominantBaseline="central"
                 className="cr-about-diagram__satellite-value"
-                style={{ fontSize: valueFontSize(node.value) }}
+                style={{ fontSize: valueFontSize(node.value, isMobile) }}
               >
                 {node.value}
               </text>
@@ -252,7 +280,7 @@ function AboutDiagram({
                 textAnchor={labelPos.anchor}
                 dominantBaseline="central"
                 className="cr-about-diagram__satellite-label"
-                style={{ fontSize: labelFontSize(node.label) }}
+                style={{ fontSize: labelFontSize(node.label, isMobile) }}
               >
                 {labelLines.map((line, lineIndex) => (
                   <tspan
@@ -269,9 +297,15 @@ function AboutDiagram({
         })}
       </svg>
 
-      {innerFocusPoints.map((focus) => {
-        const leftPct = (focus.x / DIAGRAM.width) * 100;
-        const topPct = (focus.y / DIAGRAM.height) * 100;
+      {[...innerFocusPoints]
+        .sort((a, b) => {
+          if (a.key === activeFocus) return 1;
+          if (b.key === activeFocus) return -1;
+          return 0;
+        })
+        .map((focus) => {
+        const leftPct = ((focus.x + viewBoxPad.x) / viewW) * 100;
+        const topPct = ((focus.y + viewBoxPad.y) / viewH) * 100;
         const isActive = activeFocus === focus.key;
         const label = focus.key.toUpperCase();
 

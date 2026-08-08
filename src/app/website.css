@@ -1616,7 +1616,7 @@
         /* ── Homepage Hero (inset slider) ── */
         .hero-section-home {
             background: #ffffff;
-            padding: 5.75rem 0 2rem;
+            padding: 6.75rem 0 2rem;
         }
 
         .hero-section-home__inner {
@@ -1853,7 +1853,7 @@
 
         @media (max-width: 767px) {
             .hero-section-home {
-                padding-top: 5.25rem;
+                padding-top: 6rem;
                 padding-bottom: 1.25rem;
             }
 

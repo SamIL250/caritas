@@ -5,12 +5,16 @@
 section.cr-home-about {
   background: #ffffff;
   color: #111827;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 .cr-about-inner {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   padding: 5rem 1.5rem 4.5rem;
+  box-sizing: border-box;
 }
 
 .cr-about-header {
@@ -49,28 +53,43 @@ section.cr-home-about {
   grid-template-columns: minmax(0, 1.32fr) minmax(0, 0.68fr);
   gap: clamp(2rem, 3vw, 2.75rem);
   align-items: start;
+  min-width: 0;
+  width: 100%;
+}
+
+.cr-about-visual,
+.cr-about-detail {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .cr-about-visual__frame {
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
   background: #fafafa;
-  padding: clamp(1.25rem, 2vw, 1.75rem);
+  padding: clamp(0.75rem, 2vw, 1.75rem);
   display: flex;
   align-items: center;
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .cr-about-diagram {
   position: relative;
   width: 100%;
+  max-width: 100%;
   aspect-ratio: 960 / 680;
-  min-height: 420px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .cr-about-diagram__svg {
   display: block;
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .cr-about-diagram__main-ring {
@@ -106,6 +125,7 @@ section.cr-home-about {
 
 .cr-about-focus {
   position: absolute;
+  z-index: 1;
   width: 5.5rem;
   height: 5.5rem;
   max-width: 88px;
@@ -123,7 +143,15 @@ section.cr-home-about {
   justify-content: center;
   gap: 0.1rem;
   cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    z-index 0s;
+}
+
+.cr-about-focus:hover {
+  z-index: 2;
 }
 
 .cr-about-focus__eyebrow {
@@ -148,6 +176,10 @@ section.cr-home-about {
   border-color: #8c2208;
   color: #ffffff;
   outline: none;
+}
+
+.cr-about-focus.is-active {
+  z-index: 3;
 }
 
 .cr-about-detail {
@@ -203,6 +235,10 @@ section.cr-home-about {
   background: #ffffff;
   padding: 1.5rem 1.35rem 1.5rem 1.85rem;
   min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .cr-about-panel__accent {
@@ -333,7 +369,7 @@ section.cr-home-about {
 
 @media (max-width: 960px) {
   .cr-about-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .cr-about-detail {
@@ -343,19 +379,43 @@ section.cr-home-about {
   .cr-about-visual {
     order: 1;
   }
-
-  .cr-about-diagram {
-    min-height: 360px;
-  }
 }
 
 @media (max-width: 640px) {
   .cr-about-inner {
-    padding: 3.5rem 1rem 3rem;
+    padding: 3.5rem 0.75rem 3rem;
   }
 
   .cr-about-header {
     margin-bottom: 2rem;
+    padding: 0 0.25rem;
+  }
+
+  .cr-about-visual__frame {
+    padding: 0.2rem 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0.75rem;
+  }
+
+  .cr-about-diagram--mobile {
+    width: 100%;
+    min-height: clamp(21rem, 108vw, 27rem);
+  }
+
+  .cr-about-focus {
+    width: 4.85rem;
+    height: 4.85rem;
+    max-width: 78px;
+    max-height: 78px;
+  }
+
+  .cr-about-focus__eyebrow {
+    font-size: 0.52rem;
+  }
+
+  .cr-about-focus__label {
+    font-size: 0.62rem;
   }
 
   .cr-about-tabs {
@@ -372,8 +432,30 @@ section.cr-home-about {
     border-bottom: 0;
   }
 
+  .cr-about-panel {
+    padding: 1.25rem 1rem 1.25rem 1.45rem;
+  }
+
+  .cr-about-panel__accent {
+    left: 0.65rem;
+  }
+
+  .cr-about-cta-wrap {
+    justify-content: stretch;
+  }
+
+  .cr-about-cta {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.35;
+    font-size: 0.68rem;
+    padding: 0.75rem 1rem;
+  }
+
   .cr-about-diagram__satellite-label {
-    font-size: 10px;
+    font-size: 9px;
   }
 }
 
