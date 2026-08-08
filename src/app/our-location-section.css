@@ -194,6 +194,10 @@
   gap: 0.85rem;
 }
 
+.cr-location__grid > * {
+  min-width: 0;
+}
+
 @media (min-width: 768px) {
   .cr-location__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -70,6 +70,7 @@ export const metadata: Metadata = {
 
 import WebsiteHeader from "@/components/website/WebsiteHeader";
 import WebsiteFooter from "@/components/website/WebsiteFooter";
+import SmoothScrollProvider from "@/components/website/motion/SmoothScrollProvider";
 import { fetchNavMegaMenuData } from "@/lib/nav-mega-menu-data";
 import DonationModalWrapper from "@/components/website/DonationModalWrapper";
 import VolunteerModalWrapper from "@/components/website/VolunteerModalWrapper";
@@ -115,9 +116,11 @@ export default async function WebsiteLayout({
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           />
 
-          <WebsiteHeader navMegaMenu={navMegaMenu} />
-          <main>{children}</main>
-          <WebsiteFooter settings={footerSettings} />
+          <SmoothScrollProvider>
+            <WebsiteHeader navMegaMenu={navMegaMenu} />
+            <main>{children}</main>
+            <WebsiteFooter settings={footerSettings} />
+          </SmoothScrollProvider>
 
           {cookieSettings && <CookieConsentBanner settings={cookieSettings} />}
 

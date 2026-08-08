@@ -2,6 +2,8 @@
 
 import React, { useId, useState } from "react";
 import Link from "next/link";
+import ScrollReveal from "@/components/website/motion/ScrollReveal";
+import ParallaxLayer from "@/components/website/motion/ParallaxLayer";
 import {
   CANONICAL_PROGRAMS,
   PROGRAM_SLOT_LEARN_MORE_HREF,
@@ -145,7 +147,7 @@ export default function ProgramCards({
   return (
     <section className="cr-prog-tabs" id="programs" aria-labelledby="programs-heading">
       <div className="cr-prog-tabs__inner">
-        <div className="prog-tabs-header">
+        <ScrollReveal className="prog-tabs-header">
           <div className="prog-tabs-eyebrow">
             <i className="fa-solid fa-grid-2" aria-hidden /> {eyebrow}
           </div>
@@ -153,14 +155,16 @@ export default function ProgramCards({
             {heading}
           </h2>
           {subtitle ? <p className="prog-tabs-subtitle">{subtitle}</p> : null}
-        </div>
+        </ScrollReveal>
 
+        <ScrollReveal direction="scale" delay={0.08}>
         <div
           className="cr-prog-tabs__shell"
           style={{ '--prog-theme': activeColor } as React.CSSProperties}
         >
           <div className="cr-prog-tabs__frame">
             <div className="prog-tabs-body">
+              <ParallaxLayer speed={0.2} className="prog-image-col-wrap">
               <div className="prog-image-col" aria-hidden>
                 {slots.map((p, idx) => (
                   <img
@@ -175,7 +179,9 @@ export default function ProgramCards({
                   />
                 ))}
               </div>
+              </ParallaxLayer>
 
+              <ScrollReveal delay={0.14} className="prog-content-col-wrap">
               <div
                 className="prog-content-col"
                 style={{ backgroundColor: activeColor }}
@@ -262,9 +268,11 @@ export default function ProgramCards({
                   </div>
                 </div>
               </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );

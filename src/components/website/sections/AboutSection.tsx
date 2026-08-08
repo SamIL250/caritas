@@ -3,6 +3,8 @@
 import { useState, useEffect, type ComponentType } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Target, Heart, Eye } from 'lucide-react';
+import ScrollReveal from '@/components/website/motion/ScrollReveal';
+import ParallaxLayer from '@/components/website/motion/ParallaxLayer';
 import '@/app/home-about-section.css';
 
 interface NetworkNode {
@@ -393,23 +395,33 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
     <section className="cr-home-about">
       <div className="cr-about-inner">
         <header className="cr-about-header">
-          <p className="cr-about-eyebrow">Who we are</p>
-          <h2 className="cr-about-title">{content.title}</h2>
-          <p className="cr-about-subtitle">{content.subtitle}</p>
+          <ScrollReveal delay={0}>
+            <p className="cr-about-eyebrow">Who we are</p>
+          </ScrollReveal>
+          <ScrollReveal delay={0.08}>
+            <h2 className="cr-about-title">{content.title}</h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.16}>
+            <p className="cr-about-subtitle">{content.subtitle}</p>
+          </ScrollReveal>
         </header>
 
         <div className="cr-about-body">
           <div className="cr-about-visual">
-            <div className="cr-about-visual__frame">
-              <AboutDiagram
-                nodes={content.networkNodes!}
-                activeFocus={activeFocus}
-                onFocusChange={setActiveFocus}
-              />
-            </div>
+            <ParallaxLayer speed={0.1} className="cr-about-visual__parallax">
+              <ScrollReveal direction="scale">
+                <div className="cr-about-visual__frame">
+                  <AboutDiagram
+                    nodes={content.networkNodes!}
+                    activeFocus={activeFocus}
+                    onFocusChange={setActiveFocus}
+                  />
+                </div>
+              </ScrollReveal>
+            </ParallaxLayer>
           </div>
 
-          <div className="cr-about-detail">
+          <ScrollReveal direction="right" delay={0.12} className="cr-about-detail">
             <div className="cr-about-tabs" role="tablist" aria-label="About Caritas Rwanda">
               {FOCUS_ITEMS.map((item) => (
                 <button
@@ -440,7 +452,7 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
                 <ArrowRight size={16} strokeWidth={2} aria-hidden />
               </Link>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

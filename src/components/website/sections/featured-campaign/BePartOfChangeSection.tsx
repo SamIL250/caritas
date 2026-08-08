@@ -4,6 +4,8 @@ import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import "./be-part-change.css";
 
+import ScrollReveal from "@/components/website/motion/ScrollReveal";
+import ParallaxLayer from "@/components/website/motion/ParallaxLayer";
 import { useDonation } from "@/context/DonationContext";
 import type { CtaImpactPanel, CtaSidebarCard } from "@/components/website/sections/CTA";
 
@@ -213,6 +215,7 @@ export default function BePartOfChangeSection({
           id="bpcContent"
           aria-hidden={!isOpen}
         >
+          <ScrollReveal>
           <header className="cr-bpc-change__header">
             {displayEyebrow ? (
               <p className="cr-bpc-change__eyebrow">{displayEyebrow}</p>
@@ -229,11 +232,15 @@ export default function BePartOfChangeSection({
             </h2>
             <p className="cr-bpc-change__subtitle">{displayBody}</p>
           </header>
+          </ScrollReveal>
 
+          <ScrollReveal direction="scale" delay={0.1}>
           <div className="cr-bpc-change__shell">
             <div className="cr-bpc-change__frame">
               <div className="cr-bpc-change__grid">
+                <ScrollReveal delay={0.14} className="cr-bpc-change__feat-wrap">
                 <article className="cr-bpc-change__feat">
+                  <ParallaxLayer speed={0.12} className="cr-bpc-change__feat-media-wrap">
                   <div className="cr-bpc-change__feat-media">
                     {campaign?.featured_image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element -- CMS / external URLs
@@ -259,6 +266,7 @@ export default function BePartOfChangeSection({
                       </span>
                     ) : null}
                   </div>
+                  </ParallaxLayer>
 
                   <div className="cr-bpc-change__feat-body">
                     {campaign ? (
@@ -301,6 +309,7 @@ export default function BePartOfChangeSection({
                     )}
                   </div>
                 </article>
+                </ScrollReveal>
 
                 <aside className="cr-bpc-change__aside">
                   {sidebar_cards.map((card, idx) => {
@@ -377,6 +386,7 @@ export default function BePartOfChangeSection({
               </div>
             </div>
           </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

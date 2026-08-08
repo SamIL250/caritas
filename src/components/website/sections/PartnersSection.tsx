@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ScrollReveal from "@/components/website/motion/ScrollReveal";
 
 import {
   type Partner,
@@ -150,7 +151,7 @@ export default function PartnersSection({
         aria-labelledby="partners-section-title"
       >
         <div className="cr-partners__inner partners-inner">
-          <header className="cr-partners__header partners-header">
+          <ScrollReveal className="cr-partners__header partners-header">
             {eyebrow ? (
               <p className="cr-partners__eyebrow partners-eyebrow">
                 <i className="fa-solid fa-handshake" aria-hidden />
@@ -163,8 +164,9 @@ export default function PartnersSection({
             {subtitle ? (
               <p className="cr-partners__subtitle partners-subtitle">{subtitle}</p>
             ) : null}
-          </header>
+          </ScrollReveal>
 
+          <ScrollReveal direction="scale" delay={0.1}>
           <div className="cr-partners__shell">
             <div className="cr-partners__frame">
               <div className="cr-partners__slider partners-slider-wrap">
@@ -215,6 +217,7 @@ export default function PartnersSection({
               </div>
             </div>
           </div>
+          </ScrollReveal>
         </div>
       </section>
 

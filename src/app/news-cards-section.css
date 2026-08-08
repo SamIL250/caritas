@@ -177,6 +177,16 @@
   gap: 0.85rem;
 }
 
+.cr-stories__grid > * {
+  display: flex;
+  min-height: 0;
+}
+
+.cr-stories__grid > * > .cr-stories__card {
+  flex: 1;
+  width: 100%;
+}
+
 .cr-stories__grid--feature-only {
   max-width: 52rem;
   margin: 0 auto;

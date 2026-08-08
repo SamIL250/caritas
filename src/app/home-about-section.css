@@ -63,6 +63,10 @@ section.cr-home-about {
   max-width: 100%;
 }
 
+.cr-about-visual__parallax {
+  width: 100%;
+}
+
 .cr-about-visual__frame {
   padding: 4px;
   border: 2px solid #8c2208;

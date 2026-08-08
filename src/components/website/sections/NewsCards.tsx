@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import ScrollReveal from "@/components/website/motion/ScrollReveal";
+import { ScrollStagger, ScrollStaggerItem } from "@/components/website/motion/ScrollStagger";
 import VideoGallerySection, {
   type VideoGalleryLayout,
 } from "@/components/website/sections/VideoGallerySection";
@@ -164,6 +166,7 @@ function StoriesHeader({
   onSelectVideos: () => void;
 }) {
   return (
+    <ScrollReveal>
     <header className="cr-stories__header">
       <div className="cr-stories__intro">
         {eyebrow ? (
@@ -204,6 +207,7 @@ function StoriesHeader({
         </button>
       </div>
     </header>
+    </ScrollReveal>
   );
 }
 
@@ -374,9 +378,9 @@ export default function NewsCards({
 
               <div className="cr-stories__shell">
                 <div className="cr-stories__frame">
-                  <div className={gridClass}>
+                  <ScrollStagger className={gridClass}>
                     {slides.length > 0 && (
-                      <div
+                      <ScrollStaggerItem
                         className="cr-stories__featured"
                         role="region"
                         aria-label="Featured stories"
@@ -470,13 +474,25 @@ export default function NewsCards({
                             ))}
                           </div>
                         )}
-                      </div>
+                      </ScrollStaggerItem>
                     )}
 
-                    {side0 ? <SideStoryCard article={side0} /> : null}
-                    {side1 ? <SideStoryCard article={side1} /> : null}
-                    {side2 ? <SideStoryCard article={side2} /> : null}
-                  </div>
+                    {side0 ? (
+                      <ScrollStaggerItem>
+                        <SideStoryCard article={side0} />
+                      </ScrollStaggerItem>
+                    ) : null}
+                    {side1 ? (
+                      <ScrollStaggerItem>
+                        <SideStoryCard article={side1} />
+                      </ScrollStaggerItem>
+                    ) : null}
+                    {side2 ? (
+                      <ScrollStaggerItem>
+                        <SideStoryCard article={side2} />
+                      </ScrollStaggerItem>
+                    ) : null}
+                  </ScrollStagger>
 
                   {view_all_url && view_all_label ? (
                     <div className="cr-stories__footer">
@@ -516,7 +532,8 @@ export default function NewsCards({
 
               <div className="cr-stories__shell">
                 <div className="cr-stories__frame">
-                  <div className="cr-stories__video-wrap">
+                  <ScrollStagger key="videos-panel" className="cr-stories__video-wrap">
+                    <ScrollStaggerItem>
                     <VideoGallerySection
                       isNested
                       youtube_channel_url={
@@ -561,7 +578,8 @@ export default function NewsCards({
                       heading_accent=""
                       subtitle=""
                     />
-                  </div>
+                    </ScrollStaggerItem>
+                  </ScrollStagger>
                 </div>
               </div>
             </div>

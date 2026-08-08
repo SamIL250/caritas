@@ -39,6 +39,13 @@
             font-family: var(--font-outfit), "Outfit", sans-serif;
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            .website-root [data-cr-motion] {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
         /* ==================== NAVIGATION ==================== */
         header.site-header {
             position: fixed;

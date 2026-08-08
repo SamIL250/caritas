@@ -1,5 +1,9 @@
+'use client';
+
 import Link from "next/link";
 import React from "react";
+import ScrollReveal from "@/components/website/motion/ScrollReveal";
+import { ScrollStagger, ScrollStaggerItem } from "@/components/website/motion/ScrollStagger";
 
 const DEFAULTS = {
   eyebrow: "Find Us",
@@ -94,6 +98,7 @@ export default function OurLocationSection(props: OurLocationSectionProps) {
       aria-labelledby="our-location-title"
     >
       <div className="cr-location__inner">
+        <ScrollReveal>
         <header className="cr-location__header map-section-header">
           <p className="cr-location__eyebrow map-eyebrow">
             <i className="fa-solid fa-location-dot" aria-hidden />
@@ -105,10 +110,13 @@ export default function OurLocationSection(props: OurLocationSectionProps) {
           </h2>
           <p className="cr-location__subtitle">{c.subtext}</p>
         </header>
+        </ScrollReveal>
 
+        <ScrollReveal direction="scale" delay={0.1}>
         <div className="cr-location__shell">
           <div className="cr-location__frame">
-            <div className="cr-location__grid map-grid">
+            <ScrollStagger className="cr-location__grid map-grid">
+              <ScrollStaggerItem>
               <MapCard
                 iconClass="fa-solid fa-street-view"
                 title={c.map_a_title}
@@ -116,6 +124,8 @@ export default function OurLocationSection(props: OurLocationSectionProps) {
                 embedUrl={aUrl}
                 iframeTitle="Caritas Rwanda Street View"
               />
+              </ScrollStaggerItem>
+              <ScrollStaggerItem>
               <MapCard
                 iconClass="fa-solid fa-map-pin"
                 title={c.map_b_title}
@@ -123,7 +133,8 @@ export default function OurLocationSection(props: OurLocationSectionProps) {
                 embedUrl={bUrl}
                 iframeTitle="Caritas Rwanda HQ Location"
               />
-            </div>
+              </ScrollStaggerItem>
+            </ScrollStagger>
 
             {showCta ? (
               <div className="cr-location__footer map-section-cta-wrap">
@@ -135,6 +146,7 @@ export default function OurLocationSection(props: OurLocationSectionProps) {
             ) : null}
           </div>
         </div>
+        </ScrollReveal>
       </div>
     </section>
   );

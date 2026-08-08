@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDonation } from "@/context/DonationContext";
+import { useMotionSafe } from '@/components/website/motion/useMotionSafe';
 
 /** Shortest wrap-aware direction for carousel slides (+1 = incoming from right). */
 function navigateDirection(from: number, to: number, len: number): 1 | -1 {
@@ -125,6 +126,29 @@ export default function HeroSection({
         : 'hero-slider-frame__copy--left';
 
   const { openModal } = useDonation();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { reducedMotion } = useMotionSafe();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const mediaY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ['0%', reducedMotion ? '0%' : '15%'],
+  );
+  const contentY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, reducedMotion ? 0 : -24],
+  );
+  const contentOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.75, 1],
+    [1, 1, reducedMotion ? 1 : 0.88],
+  );
 
   const foundingYear = 1959;
   const yearsActive = new Date().getFullYear() - foundingYear;
@@ -150,7 +174,7 @@ export default function HeroSection({
   };
 
   return (
-    <section className="hero-section-home">
+    <section ref={sectionRef} className="hero-section-home">
       <div className="hero-section-home__inner">
         <div className="hero-slider-shell">
         <div className="hero-slider-frame">
@@ -171,6 +195,17 @@ export default function HeroSection({
           </div>
 
           <div className="hero-slider-frame__media">
+            <motion.div
+              className="hero-slider-frame__media-parallax"
+              style={{
+                y: mediaY,
+                height: '115%',
+                width: '100%',
+                position: 'absolute',
+                inset: 0,
+                willChange: reducedMotion ? undefined : 'transform',
+              }}
+            >
             <AnimatePresence mode="sync" initial={false} custom={slideDir}>
               <motion.div
                 key={`slide-bg-${currentSlide}`}
@@ -185,6 +220,7 @@ export default function HeroSection({
                 style={{ backgroundImage: `url(${slide.image_url})` }}
               />
             </AnimatePresence>
+            </motion.div>
           </div>
 
           <div
@@ -202,7 +238,10 @@ export default function HeroSection({
             </span>
           </div>
 
-          <div className="hero-slider-frame__content">
+          <motion.div
+            className="hero-slider-frame__content"
+            style={{ y: contentY, opacity: contentOpacity }}
+          >
             <AnimatePresence mode="wait" initial={false} custom={slideDir}>
               <motion.div
                 key={`slide-content-${currentSlide}`}
@@ -239,7 +278,7 @@ export default function HeroSection({
                 </div>
               </motion.div>
             </AnimatePresence>
-          </div>
+          </motion.div>
 
           {slides.length > 1 && (
             <>

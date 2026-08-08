@@ -42,6 +42,16 @@
   grid-template-columns: 1fr 1fr;
 }
 
+.cr-prog-tabs .prog-image-col-wrap,
+.cr-prog-tabs .prog-content-col-wrap {
+  min-height: 0;
+  height: 100%;
+}
+
+.cr-prog-tabs .prog-image-col-wrap > div {
+  height: 100%;
+}
+
 .cr-prog-tabs .prog-image-col {
   position: relative;
   min-height: 520px;
