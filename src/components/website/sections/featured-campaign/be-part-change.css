@@ -1,557 +1,486 @@
-/* Clean, flat design for "Be Part of the Change" section.
-   No gradients, no orbs, no dot-grid, no glassmorphism, no shimmer, no shadows. */
+/* ════════════════════════════════════════════════════
+   Be Part of the Change — fold / unfold support section
+   ════════════════════════════════════════════════════ */
 
-.featured-campaign-bpc-scope.bpc-section {
-  position: relative;
-  padding: 0 1.5rem;
-  background: linear-gradient(145deg, #ffffff 0%, #fdf4f4 55%, #f8f0f0 82%, #ffffff 100%);
-  overflow: hidden;
+.cr-bpc-change {
+  background: #ffffff;
+  color: #111827;
+  font-family: var(--font-outfit, "Outfit", sans-serif);
+  padding: 0 0 5rem;
+  box-sizing: border-box;
 }
 
-/* ── Fold / Unfold toggle ── */
-.featured-campaign-bpc-scope .bpc-toggle-row {
+.cr-bpc-change *,
+.cr-bpc-change *::before,
+.cr-bpc-change *::after {
+  box-sizing: border-box;
+}
+
+.cr-bpc-change__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Fold toggle ── */
+.cr-bpc-change__toggle-wrap {
   display: flex;
   justify-content: center;
-  padding: 2.8rem 1rem;
-  position: relative;
-  z-index: 2;
+  padding: 3rem 0 2.5rem;
 }
-.featured-campaign-bpc-scope .bpc-toggle-btn {
+
+.cr-bpc-change__toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.85rem 2.2rem;
-  background: #911313;
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  font-size: 1rem;
+  gap: 0.55rem;
+  padding: 0.72rem 1.45rem;
+  border-radius: 999px;
+  border: 1.5px solid #8c2208;
+  background: #8c2208;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.88rem;
   font-weight: 700;
-  font-family: var(--font-outfit), sans-serif;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 6px 28px rgba(145,19,19,0.32);
   letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
-.featured-campaign-bpc-scope .bpc-toggle-btn:hover {
-  background: #7a0f0f;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(145,19,19,0.42);
+
+.cr-bpc-change__toggle:hover {
+  background: #6f1a06;
+  border-color: #6f1a06;
 }
-.featured-campaign-bpc-scope .bpc-toggle-arrow {
-  font-size: 0.8rem;
-  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+
+.cr-bpc-change__toggle[aria-expanded="true"] {
+  background: #ffffff;
+  color: #8c2208;
 }
-.featured-campaign-bpc-scope .bpc-toggle-btn[aria-expanded="true"] .bpc-toggle-arrow {
+
+.cr-bpc-change__toggle[aria-expanded="true"]:hover {
+  background: rgba(140, 34, 8, 0.06);
+}
+
+.cr-bpc-change__toggle-arrow {
+  font-size: 0.72rem;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cr-bpc-change__toggle[aria-expanded="true"] .cr-bpc-change__toggle-arrow {
   transform: rotate(180deg);
 }
 
-/* ── Collapsible wrapper ── */
-.featured-campaign-bpc-scope .bpc-collapse {
+/* ── Collapse panel ── */
+.cr-bpc-change__collapse {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.65s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.4s ease,
-              padding 0.4s ease;
   opacity: 0;
+  transition:
+    max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease;
 }
-.featured-campaign-bpc-scope .bpc-collapse.open {
-  max-height: 4000px;
+
+.cr-bpc-change__collapse--open {
+  max-height: 5000px;
   opacity: 1;
-  padding-bottom: 4rem;
 }
 
-.featured-campaign-bpc-scope .bpc-orb {
-  position: absolute; border-radius: 50%;
-  pointer-events: none; z-index: 0;
-  will-change: transform;
-}
-.featured-campaign-bpc-scope .bpc-orb-1 {
-  width: 640px; height: 640px;
-  top: -220px; left: -160px;
-  background: radial-gradient(circle, rgba(145,19,19,0.08) 0%, transparent 65%);
-}
-.featured-campaign-bpc-scope .bpc-orb-2 {
-  width: 500px; height: 500px;
-  bottom: -160px; right: -120px;
-  background: radial-gradient(circle, rgba(145,19,19,0.06) 0%, transparent 65%);
-}
-.featured-campaign-bpc-scope .bpc-orb-3 { display: none; }
-.featured-campaign-bpc-scope .bpc-dot-grid {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(145,19,19,0.07) 1px, transparent 1px);
-  background-size: 30px 30px;
-  pointer-events: none; z-index: 0;
+/* ── Header ── */
+.cr-bpc-change__header {
+  max-width: 44rem;
+  margin-bottom: 2.25rem;
 }
 
-.featured-campaign-bpc-scope .bpc-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.featured-campaign-bpc-scope .bpc-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-.featured-campaign-bpc-scope .bpc-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(145, 19, 19, 0.09);
-  border: 1px solid rgba(145, 19, 19, 0.2);
-  color: #911313;
-  font-size: 0.65rem;
+.cr-bpc-change__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 0.28rem 0.9rem;
-  border-radius: 100px;
-  margin-bottom: 0.8rem;
+  color: #8c2208;
 }
-.featured-campaign-bpc-scope .bpc-title {
-  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
-  font-weight: 900;
-  color: #1a1a2e;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.6rem;
+
+.cr-bpc-change__title {
+  margin: 0;
+  font-size: clamp(2.35rem, 4.5vw, 3.35rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #111827;
 }
-.featured-campaign-bpc-scope .bpc-title span {
-  background: linear-gradient(135deg, #911313 0%, #c0392b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+
+.cr-bpc-change__title-accent {
+  color: #8c2208;
 }
-.featured-campaign-bpc-scope .bpc-subtitle {
-  font-size: 0.87rem;
-  color: #6b7280;
-  max-width: 520px;
-  margin: 0 auto;
-  line-height: 1.7;
+
+.cr-bpc-change__subtitle {
+  margin: 0.85rem 0 0;
+  font-size: 1.02rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #4b5563;
 }
-.featured-campaign-bpc-scope .bpc-grid {
+
+/* ── Themed shell ── */
+.cr-bpc-change__shell {
+  padding: 4px;
+  border: 2px solid #8c2208;
+  border-radius: calc(1.25rem + 6px);
+  background: #ffffff;
+}
+
+.cr-bpc-change__frame {
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #f5f2ed;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+/* ── Grid ── */
+.cr-bpc-change__grid {
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 1.4rem;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
   align-items: start;
 }
-@media (max-width: 900px) {
-  .featured-campaign-bpc-scope .bpc-grid {
-    grid-template-columns: 1fr;
+
+@media (min-width: 960px) {
+  .cr-bpc-change__grid {
+    grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
+    gap: 0.85rem;
   }
 }
-.featured-campaign-bpc-scope .glass-card {
+
+/* ── Featured campaign card ── */
+.cr-bpc-change__feat {
   background: #ffffff;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-.featured-campaign-bpc-scope .glass-card:hover {
-  border-color: rgba(145, 19, 19, 0.22);
-  box-shadow: 0 18px 44px rgba(145, 19, 19, 0.1);
-}
-.featured-campaign-bpc-scope .bpc-feat-card {
-  padding: 0;
+  border: 1px solid #e8e2d9;
+  border-radius: 1rem;
   overflow: hidden;
 }
-.featured-campaign-bpc-scope .bpc-feat-img-wrap {
+
+.cr-bpc-change__feat-media {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: clamp(15rem, 32vw, 18.5rem);
+  background: #e5e7eb;
   overflow: hidden;
-  background: #fef2f2;
 }
-.featured-campaign-bpc-scope .bpc-feat-img-wrap img {
+
+.cr-bpc-change__feat-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.featured-campaign-bpc-scope .bpc-feat-img-placeholder {
+
+.cr-bpc-change__feat-placeholder {
   width: 100%;
-  height: 300px;
-  background: #fef2f2;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  font-size: 4.5rem;
-  color: rgba(145, 19, 19, 0.35);
+  gap: 0.65rem;
+  color: rgba(140, 34, 8, 0.35);
+  font-size: 2.5rem;
 }
-.featured-campaign-bpc-scope .bpc-feat-img-label {
-  font-size: 0.72rem;
+
+.cr-bpc-change__feat-placeholder-label {
+  font-size: 0.68rem;
   font-weight: 700;
-  color: #6b7280;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  color: #9ca3af;
 }
-.featured-campaign-bpc-scope .bpc-feat-badge {
+
+.cr-bpc-change__feat-tag {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 0.85rem;
+  left: 0.85rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(145, 19, 19, 0.14);
-  color: #911313;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 1.2px;
+  gap: 0.35rem;
+  padding: 0.28rem 0.72rem;
+  border-radius: 999px;
+  background: #8c2208;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 0.3rem 0.85rem;
-  border-radius: 100px;
 }
-.featured-campaign-bpc-scope .bpc-feat-body {
-  padding: 1.8rem;
+
+.cr-bpc-change__feat-body {
+  padding: clamp(1.15rem, 2vw, 1.5rem);
 }
-.featured-campaign-bpc-scope .bpc-feat-name {
-  font-size: 1.55rem;
-  font-weight: 800;
-  color: #1f2937;
-  margin-bottom: 0.35rem;
-  line-height: 1.2;
+
+.cr-bpc-change__feat-name {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: #111827;
 }
-.featured-campaign-bpc-scope .bpc-feat-location {
-  font-size: 0.78rem;
-  color: #6b7280;
-  margin-bottom: 1.1rem;
+
+.cr-bpc-change__feat-location {
+  margin: 0 0 0.85rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6b7280;
 }
-.featured-campaign-bpc-scope .bpc-feat-story {
-  font-size: 0.9rem;
+
+.cr-bpc-change__feat-story {
+  margin: 0 0 1.25rem;
+  padding-left: 0.85rem;
+  border-left: 3px solid #8c2208;
+  font-size: 0.92rem;
+  line-height: 1.7;
   color: #4b5563;
-  line-height: 1.78;
-  margin-bottom: 1.5rem;
-  border-left: 2px solid rgba(145, 19, 19, 0.28);
-  padding-left: 1rem;
 }
-.featured-campaign-bpc-scope .bpc-progress-wrap {
-  margin-bottom: 1.4rem;
-}
-.featured-campaign-bpc-scope .bpc-progress-labels {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.55rem;
-}
-.featured-campaign-bpc-scope .bpc-raised {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #1f2937;
-}
-.featured-campaign-bpc-scope .bpc-goal {
-  font-size: 0.78rem;
-  color: #6b7280;
-}
-.featured-campaign-bpc-scope .bpc-bar-track {
-  width: 100%;
-  height: 9px;
-  background: #e5e7eb;
-  border-radius: 100px;
-  overflow: hidden;
-}
-.featured-campaign-bpc-scope .bpc-bar-fill {
-  height: 100%;
-  background: #911313;
-  border-radius: 100px;
-}
-.featured-campaign-bpc-scope .bpc-stats-row {
-  display: flex;
-  gap: 1.6rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.8rem;
-}
-.featured-campaign-bpc-scope .bpc-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-.featured-campaign-bpc-scope .bpc-stat-num {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #1f2937;
-  line-height: 1;
-}
-.featured-campaign-bpc-scope .bpc-stat-label {
-  font-size: 0.67rem;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  font-weight: 600;
-}
-.featured-campaign-bpc-scope .bpc-donate-btn {
+
+.cr-bpc-change__feat-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.45rem;
   width: 100%;
-  background: #911313;
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 0.95rem 1.5rem;
-  border-radius: 100px;
+  padding: 0.82rem 1.25rem;
   border: none;
-  cursor: pointer;
+  border-radius: 999px;
+  background: #8c2208;
+  color: #ffffff;
   font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
   transition: background 0.2s ease;
 }
-.featured-campaign-bpc-scope .bpc-donate-btn:hover {
-  background: #7a0f0f;
+
+.cr-bpc-change__feat-btn:hover {
+  background: #6f1a06;
 }
-.featured-campaign-bpc-scope .bpc-link-discuss {
+
+.cr-bpc-change__feat-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  margin-top: 0.85rem;
+  gap: 0.35rem;
   width: 100%;
+  margin-top: 0.75rem;
   font-size: 0.82rem;
   font-weight: 600;
   color: #6b7280;
   text-decoration: none;
   transition: color 0.2s ease;
 }
-.featured-campaign-bpc-scope .bpc-link-discuss:hover {
-  color: #911313;
+
+.cr-bpc-change__feat-link:hover {
+  color: #8c2208;
 }
-.featured-campaign-bpc-scope .bpc-empty-hint {
-  font-size: 0.88rem;
-  color: #6b7280;
-  line-height: 1.65;
+
+.cr-bpc-change__empty {
   margin: 0;
+  padding: 1rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #6b7280;
   text-align: center;
-  padding: 0.5rem 0 0;
 }
-.featured-campaign-bpc-scope .bpc-right-col {
+
+/* ── Sidebar support cards ── */
+.cr-bpc-change__aside {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 0.85rem;
 }
-.featured-campaign-bpc-scope .bpc-small-card {
-  padding: 1.3rem;
+
+.cr-bpc-change__card {
   display: flex;
-  gap: 1.1rem;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  background: #ffffff;
+  border: 1px solid #e8e2d9;
+  border-radius: 1rem;
+  overflow: hidden;
 }
-.featured-campaign-bpc-scope .bpc-avatar {
-  width: 68px;
-  height: 68px;
-  border-radius: 16px;
-  background: #fef2f2;
+
+.cr-bpc-change__card-thumb {
+  width: 5.75rem;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-  color: rgba(145, 19, 19, 0.35);
-  flex-shrink: 0;
+  background: #f3f4f6;
+  color: rgba(140, 34, 8, 0.35);
+  font-size: 1.5rem;
   overflow: hidden;
 }
-.featured-campaign-bpc-scope .bpc-avatar img {
+
+.cr-bpc-change__card-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
-.featured-campaign-bpc-scope .bpc-small-info {
+
+.cr-bpc-change__card-body {
   flex: 1;
   min-width: 0;
-}
-.featured-campaign-bpc-scope .bpc-small-tag {
-  font-size: 0.6rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: #911313;
-  margin-bottom: 0.28rem;
+  padding: 0.85rem 1rem;
   display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cr-bpc-change__card-tag {
+  display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bpc-tag-color, #8c2208);
 }
-.featured-campaign-bpc-scope .bpc-small-name {
+
+.cr-bpc-change__card-name {
+  margin: 0;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.28rem;
+  line-height: 1.3;
+  color: #111827;
 }
-.featured-campaign-bpc-scope .bpc-small-desc {
-  font-size: 0.76rem;
-  color: #6b7280;
+
+.cr-bpc-change__card-desc {
+  margin: 0;
+  font-size: 0.8rem;
   line-height: 1.55;
-  margin-bottom: 0.7rem;
+  color: #6b7280;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.featured-campaign-bpc-scope .bpc-small-bar-track {
-  width: 100%;
-  height: 5px;
-  background: #e5e7eb;
-  border-radius: 100px;
-  overflow: hidden;
-  margin-bottom: 0.35rem;
-}
-.featured-campaign-bpc-scope .bpc-small-bar-fill {
-  height: 100%;
-  background: #5ba9c4;
-  border-radius: 100px;
-}
-.featured-campaign-bpc-scope .bpc-small-bar-fill--teal {
-  background: #1f7a6e;
-}
-.featured-campaign-bpc-scope .bpc-small-progress-text {
-  font-size: 0.66rem;
-  color: #6b7280;
-  display: flex;
-  justify-content: space-between;
-}
-.featured-campaign-bpc-scope .bpc-small-donate {
+
+.cr-bpc-change__card-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  margin-top: 0.75rem;
-  background: transparent;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.38rem 0.85rem;
+  border-radius: 999px;
   border: 1.5px solid #d1d5db;
+  background: #ffffff;
   color: #374151;
-  font-size: 0.72rem;
+  font-family: inherit;
+  font-size: 0.74rem;
   font-weight: 700;
-  padding: 0.32rem 0.9rem;
-  border-radius: 100px;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
-.featured-campaign-bpc-scope .bpc-small-donate:hover {
-  border-color: #911313;
-  color: #911313;
-  background: #fef2f2;
+
+.cr-bpc-change__card-btn:hover {
+  border-color: #8c2208;
+  color: #8c2208;
 }
-.featured-campaign-bpc-scope .bpc-impact-panel {
-  padding: 1.6rem;
-  background: linear-gradient(135deg, #fef2f2, #fff7f7);
-  border-color: rgba(145, 19, 19, 0.14);
-  box-shadow: 0 4px 20px rgba(145, 19, 19, 0.07);
-}
-.featured-campaign-bpc-scope .bpc-impact-header {
+
+/* ── Bottom CTAs ── */
+.cr-bpc-change__bottom {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1.4rem;
-}
-.featured-campaign-bpc-scope .bpc-impact-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: rgba(145, 19, 19, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #911313;
-  font-size: 0.85rem;
-}
-.featured-campaign-bpc-scope .bpc-impact-title {
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #6b7280;
-}
-.featured-campaign-bpc-scope .bpc-impact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.1rem;
-}
-.featured-campaign-bpc-scope .bpc-impact-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-.featured-campaign-bpc-scope .bpc-impact-num {
-  font-size: 1.55rem;
-  font-weight: 900;
-  color: #1f2937;
-  line-height: 1;
-}
-.featured-campaign-bpc-scope .bpc-impact-label {
-  font-size: 0.67rem;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-.featured-campaign-bpc-scope .bpc-cta-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 1rem;
-  margin-top: 3.5rem;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.35rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid #e8e2d9;
 }
-.featured-campaign-bpc-scope .bpc-cta-primary {
+
+.cr-bpc-change__bottom-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  background: #911313;
-  color: #fff;
-  font-size: 0.92rem;
-  font-weight: 700;
-  padding: 0.88rem 2.4rem;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: background 0.2s ease;
+  gap: 0.45rem;
+  padding: 0.82rem 1.65rem;
+  border-radius: 999px;
   font-family: inherit;
-  border: none;
-  cursor: pointer;
-}
-.featured-campaign-bpc-scope .bpc-cta-primary:hover {
-  background: #7a0f0f;
-}
-.featured-campaign-bpc-scope .bpc-cta-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #374151;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.cr-bpc-change__bottom-btn--primary {
+  border: 1.5px solid #8c2208;
+  background: #8c2208;
+  color: #ffffff;
+}
+
+.cr-bpc-change__bottom-btn--primary:hover {
+  background: #6f1a06;
+  border-color: #6f1a06;
+}
+
+.cr-bpc-change__bottom-btn--ghost {
   border: 1.5px solid #d1d5db;
-  padding: 0.88rem 1.6rem;
-  border-radius: 100px;
-  transition: all 0.2s ease;
+  background: #ffffff;
+  color: #374151;
 }
-.featured-campaign-bpc-scope .bpc-cta-ghost:hover {
-  color: #911313;
-  border-color: #911313;
-  background: #fef2f2;
+
+.cr-bpc-change__bottom-btn--ghost:hover {
+  border-color: #8c2208;
+  color: #8c2208;
 }
-@media (max-width: 600px) {
-  .featured-campaign-bpc-scope .bpc-title {
-    font-size: 2.2rem;
+
+/* ── Mobile ── */
+@media (max-width: 639px) {
+  .cr-bpc-change {
+    padding-bottom: 3.5rem;
   }
-  .featured-campaign-bpc-scope .bpc-feat-body {
-    padding: 1.3rem;
+
+  .cr-bpc-change__toggle-wrap {
+    padding: 2.5rem 0 2rem;
   }
-  .featured-campaign-bpc-scope .bpc-stats-row {
-    gap: 1rem;
+
+  .cr-bpc-change__toggle {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.82rem;
   }
-  .featured-campaign-bpc-scope .bpc-cta-row {
+
+  .cr-bpc-change__bottom {
     flex-direction: column;
     align-items: stretch;
   }
-  .featured-campaign-bpc-scope .bpc-cta-primary,
-  .featured-campaign-bpc-scope .bpc-cta-ghost {
+
+  .cr-bpc-change__bottom-btn {
     width: 100%;
     justify-content: center;
   }
+}
+
+/* Dashboard CMS preview */
+.page-editor-section-preview .cr-bpc-change {
+  padding-bottom: 2.5rem;
+}
+
+.page-editor-section-preview .cr-bpc-change__inner {
+  max-width: 100%;
+  padding: 0;
+}
+
+.page-editor-section-preview .cr-bpc-change__toggle-wrap {
+  padding: 1.5rem 0 1.25rem;
+}
+
+.page-editor-section-preview .cr-bpc-change__frame {
+  padding: 1rem;
 }

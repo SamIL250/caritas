@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import "./be-part-change.css";
 
@@ -42,6 +42,12 @@ export type BePartOfChangeSectionProps = {
   bottom_secondary_text?: string;
   bottom_secondary_url?: string;
   campaign: BePartCampaignVM | null;
+};
+
+const TAG_COLORS: Record<string, string> = {
+  rose: "#8c2208",
+  sky: "#5ba9c4",
+  teal: "#1f7a6e",
 };
 
 function iconClass(raw: string) {
@@ -137,9 +143,9 @@ function DonateOrLink({
   );
 }
 
-function smallTagStyle(tone: string | undefined): CSSProperties | undefined {
-  if (tone === "teal") return { color: "#7fccdf" };
-  return undefined;
+function tagStyle(tone: string | undefined): CSSProperties | undefined {
+  const color = TAG_COLORS[tone || "rose"] ?? TAG_COLORS.rose;
+  return { "--bpc-tag-color": color } as CSSProperties;
 }
 
 function primaryDonateHref(campaign: BePartCampaignVM | null, raw: string): string {
@@ -149,8 +155,6 @@ function primaryDonateHref(campaign: BePartCampaignVM | null, raw: string): stri
   }
   return u;
 }
-
-import { useState } from "react";
 
 function primaryModalId(campaign: BePartCampaignVM | null, raw: string): string | null {
   const u = (raw || "").trim() || "#donate";
@@ -185,175 +189,195 @@ export default function BePartOfChangeSection({
   const discussUrl = (campaign?.discussion_url || "").trim();
 
   return (
-    <section className="featured-campaign-bpc-scope bpc-section" id={anchor_id}>
-      <div className="bpc-orb bpc-orb-1" aria-hidden></div>
-      <div className="bpc-orb bpc-orb-2" aria-hidden></div>
-      <div className="bpc-orb bpc-orb-3" aria-hidden></div>
-      <div className="bpc-dot-grid" aria-hidden></div>
-
-      <div className="bpc-toggle-row">
-        <button 
-          className="bpc-toggle-btn" 
-          aria-expanded={isOpen} 
-          aria-controls="bpcContent"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <i className="fa-solid fa-hands-holding-heart" aria-hidden />
-          <span className="bpc-toggle-label">Fold me to support</span>
-          <i className="fa-solid fa-chevron-down bpc-toggle-arrow" aria-hidden />
-        </button>
-      </div>
-
-      <div className={`bpc-collapse ${isOpen ? "open" : ""}`} id="bpcContent" aria-hidden={!isOpen}>
-        <div className="bpc-inner">
-        <div className="bpc-header">
-          {displayEyebrow ? (
-            <div className="bpc-eyebrow">
-              {displayEyebrow}
-            </div>
-          ) : null}
-          <h2 className="bpc-title">
-            {line2 ? (
-              <>
-                {line1}{' '}
-                <span>{line2}</span>
-              </>
-            ) : (
-              line1
-            )}
-          </h2>
-          <p className="bpc-subtitle">{displayBody}</p>
+    <section className="cr-bpc-change featured-campaign-bpc-scope" id={anchor_id}>
+      <div className="cr-bpc-change__inner">
+        <div className="cr-bpc-change__toggle-wrap">
+          <button
+            type="button"
+            className="cr-bpc-change__toggle"
+            aria-expanded={isOpen}
+            aria-controls="bpcContent"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <i className="fa-solid fa-hands-holding-heart" aria-hidden />
+            <span>Fold me to support</span>
+            <i
+              className="fa-solid fa-chevron-down cr-bpc-change__toggle-arrow"
+              aria-hidden
+            />
+          </button>
         </div>
 
-        <div className="bpc-grid">
-          <div className="glass-card bpc-feat-card">
-            <div className="bpc-feat-img-wrap">
-              {campaign?.featured_image_url ? (
-                // eslint-disable-next-line @next/next/no-img-element -- CMS / external URLs
-                <img
-                  src={campaign.featured_image_url}
-                  alt={campaign.image_alt || ""}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  loading="lazy"
-                />
-              ) : (
-                <div className="bpc-feat-img-placeholder" aria-hidden>
-                  <i className="fa-solid fa-image" />
-                  <span className="bpc-feat-img-label">Campaign image</span>
-                </div>
-              )}
-              {campaign && (campaign.category_label || "").trim() ? (
-                <span className="bpc-feat-badge">
-                  {campaign.category_icon ? (
-                    <i className={iconClass(campaign.category_icon)} aria-hidden />
-                  ) : null}
-                  &nbsp; {campaign.category_label}
-                </span>
-              ) : null}
-            </div>
-            <div className="bpc-feat-body">
-              {campaign ? (
+        <div
+          className={`cr-bpc-change__collapse${isOpen ? " cr-bpc-change__collapse--open" : ""}`}
+          id="bpcContent"
+          aria-hidden={!isOpen}
+        >
+          <header className="cr-bpc-change__header">
+            {displayEyebrow ? (
+              <p className="cr-bpc-change__eyebrow">{displayEyebrow}</p>
+            ) : null}
+            <h2 className="cr-bpc-change__title">
+              {line2 ? (
                 <>
-                  {(campaign.title || "").trim() ? (
-                    <h3 className="bpc-feat-name">{campaign.title}</h3>
-                  ) : null}
-                  {(campaign.location_label || "").trim() ? (
-                    <p className="bpc-feat-location">
-                      <i className="fa-solid fa-location-dot" aria-hidden />
-                      {campaign.location_label}
-                    </p>
-                  ) : null}
-                  {(campaign.excerpt || "").trim() ? (
-                    <p className="bpc-feat-story">{campaign.excerpt}</p>
-                  ) : null}
-                  <DonateOrLink
-                    href={primaryDonateHref(campaign, pbUrl)}
-                    className="bpc-donate-btn"
-                    modalCampaignId={primaryModalId(campaign, pbUrl)}
-                  >
-                    {pbText}
-                  </DonateOrLink>
-                  {discussLabel && discussUrl ? (
-                    <CtaSecondaryLink href={discussUrl} className="bpc-link-discuss">
-                      <i className="fa-regular fa-comments" aria-hidden />
-                      {discussLabel}
-                    </CtaSecondaryLink>
-                  ) : null}
+                  {line1}{" "}
+                  <span className="cr-bpc-change__title-accent">{line2}</span>
                 </>
               ) : (
-                <p className="bpc-empty-hint">
-                  No campaign is featured on the home page yet. In the dashboard, open{" "}
-                  <strong>Campaigns</strong> and turn on <strong>Feature on home page</strong> for a published
-                  campaign.
-                </p>
+                line1
               )}
-            </div>
-          </div>
+            </h2>
+            <p className="cr-bpc-change__subtitle">{displayBody}</p>
+          </header>
 
-          <div className="bpc-right-col">
-            {sidebar_cards.map((card, idx) => {
-              const tone = card.category_tone || "rose";
-              const btnText = (card.button_text || "Support").trim();
-              const btnUrl = (card.button_url || "#donate").trim() || "#donate";
-              return (
-                <div key={`${card.name}-${idx}`} className="glass-card bpc-small-card">
-                  <div className="bpc-avatar">
-                    {card.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={card.image_url} alt={card.image_alt || ""} loading="lazy" />
+          <div className="cr-bpc-change__shell">
+            <div className="cr-bpc-change__frame">
+              <div className="cr-bpc-change__grid">
+                <article className="cr-bpc-change__feat">
+                  <div className="cr-bpc-change__feat-media">
+                    {campaign?.featured_image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- CMS / external URLs
+                      <img
+                        src={campaign.featured_image_url}
+                        alt={campaign.image_alt || ""}
+                        loading="lazy"
+                      />
                     ) : (
-                      <i className="fa-regular fa-user" aria-hidden />
+                      <div className="cr-bpc-change__feat-placeholder" aria-hidden>
+                        <i className="fa-solid fa-image" />
+                        <span className="cr-bpc-change__feat-placeholder-label">
+                          Campaign image
+                        </span>
+                      </div>
+                    )}
+                    {campaign && (campaign.category_label || "").trim() ? (
+                      <span className="cr-bpc-change__feat-tag">
+                        {campaign.category_icon ? (
+                          <i className={iconClass(campaign.category_icon)} aria-hidden />
+                        ) : null}
+                        {campaign.category_label}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="cr-bpc-change__feat-body">
+                    {campaign ? (
+                      <>
+                        {(campaign.title || "").trim() ? (
+                          <h3 className="cr-bpc-change__feat-name">{campaign.title}</h3>
+                        ) : null}
+                        {(campaign.location_label || "").trim() ? (
+                          <p className="cr-bpc-change__feat-location">
+                            <i className="fa-solid fa-location-dot" aria-hidden />
+                            {campaign.location_label}
+                          </p>
+                        ) : null}
+                        {(campaign.excerpt || "").trim() ? (
+                          <p className="cr-bpc-change__feat-story">{campaign.excerpt}</p>
+                        ) : null}
+                        <DonateOrLink
+                          href={primaryDonateHref(campaign, pbUrl)}
+                          className="cr-bpc-change__feat-btn"
+                          modalCampaignId={primaryModalId(campaign, pbUrl)}
+                        >
+                          {pbText}
+                        </DonateOrLink>
+                        {discussLabel && discussUrl ? (
+                          <CtaSecondaryLink
+                            href={discussUrl}
+                            className="cr-bpc-change__feat-link"
+                          >
+                            <i className="fa-regular fa-comments" aria-hidden />
+                            {discussLabel}
+                          </CtaSecondaryLink>
+                        ) : null}
+                      </>
+                    ) : (
+                      <p className="cr-bpc-change__empty">
+                        No campaign is featured on the home page yet. In the dashboard, open{" "}
+                        <strong>Campaigns</strong> and turn on{" "}
+                        <strong>Feature on home page</strong> for a published campaign.
+                      </p>
                     )}
                   </div>
-                  <div className="bpc-small-info">
-                    {(card.category_label || "").trim() ? (
-                      <p className="bpc-small-tag" style={smallTagStyle(tone)}>
-                        {card.category_icon ? (
-                          <i className={iconClass(card.category_icon)} aria-hidden />
-                        ) : null}
-                        {card.category_label}
-                      </p>
-                    ) : null}
-                    {(card.name || "").trim() ? <p className="bpc-small-name">{card.name}</p> : null}
-                    {(card.description || "").trim() ? (
-                      <p className="bpc-small-desc">{card.description}</p>
-                    ) : null}
-                    <DonateOrLink href={btnUrl} className="bpc-small-donate" modalCampaignId={card.modal_campaign_id ?? null}>
-                      {btnText}
-                    </DonateOrLink>
-                  </div>
-                </div>
-              );
-            })}
+                </article>
 
+                <aside className="cr-bpc-change__aside">
+                  {sidebar_cards.map((card, idx) => {
+                    const tone = card.category_tone || "rose";
+                    const btnText = (card.button_text || "Support").trim();
+                    const btnUrl = (card.button_url || "#donate").trim() || "#donate";
+                    return (
+                      <div key={`${card.name}-${idx}`} className="cr-bpc-change__card">
+                        <div className="cr-bpc-change__card-thumb">
+                          {card.image_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={card.image_url} alt={card.image_alt || ""} loading="lazy" />
+                          ) : (
+                            <i className="fa-regular fa-user" aria-hidden />
+                          )}
+                        </div>
+                        <div className="cr-bpc-change__card-body">
+                          {(card.category_label || "").trim() ? (
+                            <p
+                              className="cr-bpc-change__card-tag"
+                              style={tagStyle(tone)}
+                            >
+                              {card.category_icon ? (
+                                <i className={iconClass(card.category_icon)} aria-hidden />
+                              ) : null}
+                              {card.category_label}
+                            </p>
+                          ) : null}
+                          {(card.name || "").trim() ? (
+                            <p className="cr-bpc-change__card-name">{card.name}</p>
+                          ) : null}
+                          {(card.description || "").trim() ? (
+                            <p className="cr-bpc-change__card-desc">{card.description}</p>
+                          ) : null}
+                          <DonateOrLink
+                            href={btnUrl}
+                            className="cr-bpc-change__card-btn"
+                            modalCampaignId={card.modal_campaign_id ?? null}
+                          >
+                            {btnText}
+                          </DonateOrLink>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </aside>
+              </div>
 
-
-            <div className="bpc-cta-row">
-              {(bottom_primary_text || "").trim() ? (
-                <DonateOrLink
-                  href={primaryDonateHref(campaign, (bottom_primary_url || "#donate").trim() || "#donate")}
-                  className="bpc-cta-primary"
-                  modalCampaignId={primaryModalId(
-                    campaign,
-                    (bottom_primary_url || "#donate").trim() || "#donate",
-                  )}
-                >
-                  {bottom_primary_text.trim()}
-                </DonateOrLink>
-              ) : null}
-              {(bottom_secondary_text || "").trim() ? (
-                <CtaSecondaryLink
-                  href={(bottom_secondary_url || "#").trim() || "#"}
-                  className="bpc-cta-ghost"
-                >
-                  <i className="fa-solid fa-people-group" aria-hidden />
-                  {bottom_secondary_text.trim()}
-                </CtaSecondaryLink>
-              ) : null}
+              <div className="cr-bpc-change__bottom">
+                {(bottom_primary_text || "").trim() ? (
+                  <DonateOrLink
+                    href={primaryDonateHref(
+                      campaign,
+                      (bottom_primary_url || "#donate").trim() || "#donate",
+                    )}
+                    className="cr-bpc-change__bottom-btn cr-bpc-change__bottom-btn--primary"
+                    modalCampaignId={primaryModalId(
+                      campaign,
+                      (bottom_primary_url || "#donate").trim() || "#donate",
+                    )}
+                  >
+                    {bottom_primary_text.trim()}
+                  </DonateOrLink>
+                ) : null}
+                {(bottom_secondary_text || "").trim() ? (
+                  <CtaSecondaryLink
+                    href={(bottom_secondary_url || "#").trim() || "#"}
+                    className="cr-bpc-change__bottom-btn cr-bpc-change__bottom-btn--ghost"
+                  >
+                    <i className="fa-solid fa-people-group" aria-hidden />
+                    {bottom_secondary_text.trim()}
+                  </CtaSecondaryLink>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </section>
   );
