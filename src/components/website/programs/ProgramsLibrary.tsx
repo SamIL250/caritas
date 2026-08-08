@@ -223,28 +223,36 @@ export default function ProgramsLibrary({
             )}
 
             {libraryConfig.show_news && activeNewsArticles.length > 0 && (
-              <div className="prog-news-section">
-                <div className="prog-news-header">
-                  <span className="prog-news-label">{cat.label}</span>
-                  <h3 className="prog-news-title">Latest News</h3>
-                  <p className="prog-news-sub">
-                    Updates and stories from the {cat.label.toLowerCase()} department.
-                  </p>
-                </div>
+              <section className="prog-editorial prog-editorial--news" aria-labelledby={`prog-news-title-${cat.slug}`}>
+                <div className="prog-editorial__inner">
+                  <header className="prog-editorial__header">
+                    <p className="prog-editorial__eyebrow">{cat.label}</p>
+                    <h3 id={`prog-news-title-${cat.slug}`} className="prog-editorial__title">
+                      Latest News
+                    </h3>
+                    <p className="prog-editorial__lead">
+                      Updates and stories from the {cat.label.toLowerCase()} department.
+                    </p>
+                  </header>
 
-                <div className="prog-news-grid">
-                  {activeNewsArticles.slice(0, NEWS_VISIBLE).map((article) => (
-                    <NewsCard key={article.id} article={article} />
-                  ))}
-                </div>
+                  <div className="prog-editorial__shell">
+                    <div className="prog-editorial__frame">
+                      <div className="prog-news-list">
+                        {activeNewsArticles.slice(0, NEWS_VISIBLE).map((article) => (
+                          <NewsCard key={article.id} article={article} />
+                        ))}
+                      </div>
 
-                <div className="prog-news-footer">
-                  <Link href={categoryNewsHref(cat.slug)} className="prog-news-view-more">
-                    View more stories
-                    <i className="fa-solid fa-arrow-right" aria-hidden />
-                  </Link>
+                      <div className="prog-editorial__footer">
+                        <Link href={categoryNewsHref(cat.slug)} className="prog-editorial__cta">
+                          View more stories
+                          <i className="fa-solid fa-arrow-right" aria-hidden />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </section>
             )}
           </div>
         );
@@ -337,53 +345,51 @@ function SuccessStoriesSection({
   const hasMoreStories = stories.length > visibleCount;
 
   return (
-    <div className="prog-success-section">
-      <div className="prog-success-header">
-        <span className={`stories-eyebrow ${category.slug}-peyebrow`}>
-          <i className="fa-solid fa-star mr-2" />
-          Success Stories
-        </span>
-        <h3 className="prog-success-title">Lives Transformed Through {category.label}</h3>
-        <p className="prog-success-sub">
-          Real stories of dignity restored and lives rebuilt across Rwanda&apos;s communities.
-        </p>
-      </div>
+    <section className="prog-editorial prog-editorial--stories" aria-labelledby={`prog-stories-title-${category.slug}`}>
+      <div className="prog-editorial__inner">
+        <header className="prog-editorial__header">
+          <p className="prog-editorial__eyebrow">
+            <i className="fa-solid fa-star" aria-hidden />
+            Success Stories
+          </p>
+          <h3 id={`prog-stories-title-${category.slug}`} className="prog-editorial__title">
+            Lives Transformed Through {category.label}
+          </h3>
+          <p className="prog-editorial__lead">
+            Real stories of dignity restored and lives rebuilt across Rwanda&apos;s communities.
+          </p>
+        </header>
 
-      <div className="prog-success-grid">
-        {visibleStories.map((story) => (
-          <SuccessStoryCard
-            key={story.id}
-            story={story}
-            deptSlug={category.slug}
-          />
-        ))}
-      </div>
+        <div className="prog-editorial__shell">
+          <div className="prog-editorial__frame">
+            <div className="prog-stories-grid">
+              {visibleStories.map((story) => (
+                <SuccessStoryCard key={story.id} story={story} />
+              ))}
+            </div>
 
-      {hasMoreStories ? (
-        <div className="prog-success-load-more-wrap">
-          <button
-            type="button"
-            className="prog-success-load-more-btn"
-            onClick={() => setRowsVisible((rows) => rows + 1)}
-          >
-            Load more
-          </button>
+            {hasMoreStories ? (
+              <div className="prog-editorial__footer">
+                <button
+                  type="button"
+                  className="prog-editorial__cta prog-editorial__cta--button"
+                  onClick={() => setRowsVisible((rows) => rows + 1)}
+                >
+                  Load more stories
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
-      ) : null}
-    </div>
+      </div>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
 /* Success Story Card                                                 */
 /* ------------------------------------------------------------------ */
-function SuccessStoryCard({
-  story,
-  deptSlug,
-}: {
-  story: PublicationRow;
-  deptSlug: string;
-}) {
+function SuccessStoryCard({ story }: { story: PublicationRow }) {
   const imageUrl = story.cover_image_url?.trim()
     ? encodePublicationAssetUrl(story.cover_image_url)
     : null;
@@ -392,28 +398,29 @@ function SuccessStoryCard({
   const href = publicationDetailHref(story);
 
   return (
-    <Link
-      href={href}
-      className="story-card cursor-pointer"
-    >
-      <div className="story-img">
+    <Link href={href} className="prog-story-card">
+      <div className="prog-story-card__media">
         {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={imageUrl} alt={story.cover_image_alt || story.title} />
         ) : (
-          <div style={{ background: "#f3f4f6", width: "100%", height: "100%" }} />
+          <div className="prog-story-card__media-placeholder" aria-hidden />
         )}
-        <div className="story-img-overlay"></div>
-        {story.tag_label ? <div className="story-img-tag">{story.tag_label}</div> : null}
       </div>
-      <div className="story-body">
-        <h3 className="story-name">{story.title}</h3>
-        {story.period_label ? <div className="story-tag">{story.period_label}</div> : null}
-        {story.excerpt ? <p className="story-quote">{story.excerpt}</p> : null}
+      <div className="prog-story-card__body">
+        {story.tag_label ? (
+          <span className="prog-story-card__tag">{story.tag_label}</span>
+        ) : null}
+        <h4 className="prog-story-card__title">{story.title}</h4>
+        {story.period_label ? (
+          <span className="prog-story-card__period">{story.period_label}</span>
+        ) : null}
+        {story.excerpt ? <p className="prog-story-card__excerpt">{story.excerpt}</p> : null}
         {customFields.outcome ? (
-          <div className={`story-outcome ${deptSlug}-outcome`}>
-            <i className="fa-solid fa-arrow-trend-up"></i> {String(customFields.outcome)}
-          </div>
+          <p className="prog-story-card__outcome">
+            <i className="fa-solid fa-arrow-trend-up" aria-hidden />
+            {String(customFields.outcome)}
+          </p>
         ) : null}
       </div>
     </Link>
@@ -556,22 +563,23 @@ function NewsCard({
         <img
           src={article.image_url}
           alt={article.image_alt || article.title}
-          className="prog-news-image"
+          className="prog-news-card__thumb"
         />
       ) : (
-        <div className="prog-news-image" style={{ background: "#f3f4f6" }} />
+        <div className="prog-news-card__thumb prog-news-card__thumb--empty" aria-hidden />
       )}
 
-      <div className="prog-news-body">
+      <div className="prog-news-card__body">
         {article.published_at ? (
-          <span className="prog-news-date">{formatPublishedDate(article.published_at)}</span>
+          <span className="prog-news-card__date">{formatPublishedDate(article.published_at)}</span>
         ) : null}
-        <h4 className="prog-news-name">{article.title}</h4>
+        <h4 className="prog-news-card__title">{article.title}</h4>
         {article.excerpt ? (
-          <p className="prog-news-desc">{article.excerpt}</p>
+          <p className="prog-news-card__excerpt">{article.excerpt}</p>
         ) : null}
-        <span className="prog-news-read">
+        <span className="prog-news-card__link">
           Read article
+          <i className="fa-solid fa-arrow-right" aria-hidden />
         </span>
       </div>
     </Link>
