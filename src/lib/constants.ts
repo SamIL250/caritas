@@ -195,8 +195,8 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
   },
   news_cards: {
     eyebrow: "Latest from Caritas Rwanda",
-    heading: "News &",
-    heading_highlight: "Stories",
+    heading: "Stories &",
+    heading_highlight: "Updates",
     subtitle: "Inspiring stories from the communities we serve",
     view_all_url: "/news",
     view_all_label: "View All News & Stories",

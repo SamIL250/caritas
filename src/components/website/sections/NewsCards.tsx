@@ -3,7 +3,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import VideoGallerySection from "@/components/website/sections/VideoGallerySection";
+import VideoGallerySection, {
+  type VideoGalleryLayout,
+} from "@/components/website/sections/VideoGallerySection";
 
 export type NewsArticle = {
   title: string;
@@ -18,9 +20,9 @@ export type NewsArticle = {
 
 export interface NewsCardsProps {
   eyebrow?: string;
-  /** Text before the highlighted span, e.g. "News &" */
+  /** Text before the highlighted span, e.g. "Stories &" */
   heading?: string;
-  /** Gradient span text, e.g. "Stories" */
+  /** Accent span text, e.g. "Updates" */
   heading_highlight?: string;
   subtitle?: string;
   view_all_url?: string;
@@ -41,10 +43,10 @@ const DEFAULT_ARTICLES: NewsArticle[] = [
     excerpt:
       "24 field agents from the Gera Ku Ntego Youth Project in Rwamagana and Kayonza have officially graduated as Private Service Providers, marking a milestone in their entrepreneurship journey.",
     date: "March 30, 2026",
-    tag: "News",
+    tag: "Development",
     image_url:
       "https://caritasrwanda.org/wp-content/uploads/2026/03/162A9069-scaled.jpg",
-    link_url: "https://caritasrwanda.org/"
+    link_url: "https://caritasrwanda.org/",
   },
   {
     title: "2026 General Assembly of Caritas Rwanda",
@@ -54,7 +56,7 @@ const DEFAULT_ARTICLES: NewsArticle[] = [
     tag: "Organizational",
     image_url:
       "https://caritasrwanda.org/wp-content/uploads/2026/03/162A8733-scaled.jpg",
-    link_url: "https://caritasrwanda.org/"
+    link_url: "https://caritasrwanda.org/",
   },
   {
     title: "Caritas Humanitarian Conference in Kigali",
@@ -64,12 +66,28 @@ const DEFAULT_ARTICLES: NewsArticle[] = [
     tag: "International",
     image_url:
       "https://caritasrwanda.org/wp-content/uploads/2026/03/162A7732-scaled.jpg",
-    link_url: "https://caritasrwanda.org/"
-  }
+    link_url: "https://caritasrwanda.org/",
+  },
 ];
+
+const TAG_COLORS: Record<string, string> = {
+  development: "#8c2208",
+  health: "#1f7a6e",
+  organizational: "#c45c00",
+  international: "#5ba9c4",
+  news: "#911313",
+  social: "#911313",
+  article: "#8c2208",
+  stories: "#8c2208",
+};
 
 function articleImage(a: NewsArticle) {
   return (a.image_url || a.thumbnail || "").trim();
+}
+
+function tagColor(tag?: string) {
+  const key = (tag || "news").toLowerCase().replace(/[\s_-]+/g, "");
+  return TAG_COLORS[key] ?? "#8c2208";
 }
 
 function isExternal(href: string) {
@@ -107,8 +125,16 @@ function dbArticlesToNewsArticles(rows: any[]): NewsArticle[] {
     title: a.title,
     excerpt: a.excerpt || "",
     date: a.published_at
-      ? new Date(a.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
-      : new Date(a.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }),
+      ? new Date(a.published_at).toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : new Date(a.created_at).toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
     image_url: a.image_url || "",
     link_url: `/news/${a.slug}`,
     tag: a.category,
@@ -116,10 +142,136 @@ function dbArticlesToNewsArticles(rows: any[]): NewsArticle[] {
   }));
 }
 
+function StoriesHeader({
+  eyebrow,
+  heading,
+  headingHighlight,
+  subtitle,
+  newsTabLabel,
+  videoTabLabel,
+  showVideos,
+  onSelectNews,
+  onSelectVideos,
+}: {
+  eyebrow?: string;
+  heading: string;
+  headingHighlight: string;
+  subtitle?: string;
+  newsTabLabel: string;
+  videoTabLabel: string;
+  showVideos: boolean;
+  onSelectNews: () => void;
+  onSelectVideos: () => void;
+}) {
+  return (
+    <header className="cr-stories__header">
+      <div className="cr-stories__intro">
+        {eyebrow ? (
+          <p className="cr-stories__eyebrow">
+            <i className="fa-solid fa-rss" aria-hidden />
+            {eyebrow}
+          </p>
+        ) : null}
+        <h2 className="cr-stories__title" id="stories-section-title">
+          {heading}{" "}
+          <span className="cr-stories__title-accent">{headingHighlight}</span>
+        </h2>
+        {subtitle ? <p className="cr-stories__subtitle">{subtitle}</p> : null}
+      </div>
+
+      <div className="cr-stories__tabs" role="tablist" aria-label="Stories media">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={!showVideos}
+          aria-controls="cr-stories-panel-news"
+          onClick={onSelectNews}
+          className={`cr-stories__tab${!showVideos ? " cr-stories__tab--active" : ""}`}
+        >
+          <i className="fa-solid fa-newspaper" aria-hidden />
+          {newsTabLabel}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={showVideos}
+          aria-controls="cr-stories-panel-videos"
+          onClick={onSelectVideos}
+          className={`cr-stories__tab cr-stories__tab--video${showVideos ? " cr-stories__tab--active" : ""}`}
+        >
+          <i className="fa-brands fa-youtube" aria-hidden />
+          {videoTabLabel}
+        </button>
+      </div>
+    </header>
+  );
+}
+
+function SideStoryCard({ article }: { article: NewsArticle }) {
+  const img = articleImage(article);
+  const color = tagColor(article.tag);
+
+  const inner = (
+    <>
+      <div
+        className="cr-stories__card-thumb"
+        style={
+          img
+            ? { backgroundImage: `url('${img.replace(/'/g, "%27")}')` }
+            : undefined
+        }
+        role="img"
+        aria-label=""
+      />
+      <div className="cr-stories__card-body">
+        <div className="cr-stories__card-meta">
+          {article.tag ? (
+            <span
+              className="cr-stories__card-tag"
+              style={{ "--story-tag-color": color } as React.CSSProperties}
+            >
+              {article.tag}
+            </span>
+          ) : (
+            <span />
+          )}
+          {article.date ? (
+            <span className="cr-stories__card-date">
+              <i className="fa-regular fa-calendar" aria-hidden />
+              {article.date}
+            </span>
+          ) : null}
+        </div>
+        <h3 className="cr-stories__card-title">{article.title}</h3>
+        {article.excerpt ? (
+          <p className="cr-stories__card-excerpt">{article.excerpt}</p>
+        ) : null}
+        <span className="cr-stories__card-action">
+          Read Story <i className="fa-solid fa-arrow-right" aria-hidden />
+        </span>
+      </div>
+    </>
+  );
+
+  if (article.link_url) {
+    return (
+      <StoryLink
+        href={article.link_url}
+        className="cr-stories__card"
+        openInNew={article.open_in_new}
+      >
+        {inner}
+      </StoryLink>
+    );
+  }
+
+  return <article className="cr-stories__card">{inner}</article>;
+}
+
 export default function NewsCards({
   eyebrow = "Latest from Caritas Rwanda",
-  heading = "News &",
-  heading_highlight = "Media",
+  heading = "Stories &",
+  heading_highlight = "Updates",
   subtitle = "Inspiring stories from the communities we serve",
   view_all_url = "/news",
   view_all_label = "View All News & Stories",
@@ -127,7 +279,7 @@ export default function NewsCards({
   video_tab_label = "Click to see Video",
   youtube_channel_url,
   articles: articlesProp,
-  videoGalleryProps
+  videoGalleryProps,
 }: NewsCardsProps) {
   const [dbArticles, setDbArticles] = useState<NewsArticle[] | null>(null);
 
@@ -148,7 +300,9 @@ export default function NewsCards({
         if (cancelled || !data) return;
         setDbArticles(dbArticlesToNewsArticles(data));
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [articlesProp]);
 
   const list =
@@ -157,6 +311,7 @@ export default function NewsCards({
       : dbArticles && dbArticles.length > 0
         ? dbArticles
         : DEFAULT_ARTICLES;
+
   const slides = list.slice(0, Math.min(3, list.length));
   const [active, setActive] = useState(0);
   const [showVideos, setShowVideos] = useState(false);
@@ -166,7 +321,13 @@ export default function NewsCards({
   const side0 = n >= 2 ? list[1] : null;
   const side1 = n >= 3 ? list[2] : null;
   const side2 = n >= 4 ? list[3] : null;
-  const showSides = side0;
+  const showSides = Boolean(side0);
+
+  const gridClass = showSides
+    ? side2
+      ? "cr-stories__grid cr-stories__grid--three-sides"
+      : "cr-stories__grid"
+    : "cr-stories__grid cr-stories__grid--feature-only";
 
   const advance = useCallback(() => {
     if (slides.length <= 1) return;
@@ -179,334 +340,229 @@ export default function NewsCards({
     return () => clearInterval(t);
   }, [slides.length, advance]);
 
+  const videoProps = videoGalleryProps as Record<string, unknown> | undefined;
+
   return (
-    <section className="stories" id="stories" aria-labelledby="stories-section-title">
-      <div className="container-wide">
-        <div style={{ overflow: 'hidden' }}>
+    <section
+      className="cr-stories stories"
+      id="stories"
+      aria-labelledby="stories-section-title"
+    >
+      <div className="cr-stories__inner">
+        <div className="cr-stories__viewport">
           <div
-            style={{
-              display: 'flex',
-              transition: 'transform 0.55s cubic-bezier(0.4, 0, 0.2, 1)',
-              transform: showVideos ? 'translateX(-100%)' : 'translateX(0)',
-            }}
+            className={`cr-stories__panels${showVideos ? " cr-stories__panels--videos" : ""}`}
           >
-            {/* ── SLIDE 1: Full News & Stories section ── */}
-            <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 0 : 'auto', overflow: showVideos ? 'hidden' : 'visible' }}>
-              <div className="stories-header" style={{ paddingTop: 0 }}>
-                {/* Header row: eyebrow left + two tab buttons right */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
-                  <div>
-                    {eyebrow ? (
-                      <div className="section-eyebrow" style={{ marginBottom: '0.75rem' }}>
-                        <i className="fa-solid fa-rss" aria-hidden />
-                        {eyebrow}
-                      </div>
-                    ) : <div />}
-                    <h2 className="section-title" id="stories-section-title" style={{ marginBottom: subtitle ? '0.4rem' : 0 }}>
-                      {heading} <span>{heading_highlight}</span>
-                    </h2>
-                    {subtitle ? <p className="section-subtitle" style={{ marginBottom: 0 }}>{subtitle}</p> : null}
-                  </div>
+            {/* News panel */}
+            <div
+              className="cr-stories__panel cr-stories__panel--news"
+              id="cr-stories-panel-news"
+              role="tabpanel"
+              aria-hidden={showVideos}
+            >
+              <StoriesHeader
+                eyebrow={eyebrow}
+                heading={heading}
+                headingHighlight={heading_highlight}
+                subtitle={subtitle}
+                newsTabLabel={news_tab_label}
+                videoTabLabel={video_tab_label}
+                showVideos={showVideos}
+                onSelectNews={() => setShowVideos(false)}
+                onSelectVideos={() => setShowVideos(true)}
+              />
 
-                  {/* Two tab buttons — matching legacy mh-tab style */}
-                  <div className="mh-tabs" role="tablist" style={{ flexShrink: 0, alignSelf: 'flex-start' }}>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={!showVideos}
-                      aria-controls="mhPanelNews"
-                      onClick={() => setShowVideos(false)}
-                      className={`mh-tab${!showVideos ? ' active' : ''}`}
-                    >
-                      <i className="fa-solid fa-newspaper" aria-hidden />
-                      {news_tab_label}
-                    </button>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={showVideos}
-                      aria-controls="mhPanelVideos"
-                      onClick={() => setShowVideos(true)}
-                      className={`mh-tab${showVideos ? ' active' : ''}`}
-                    >
-                      <i className="fa-brands fa-youtube" aria-hidden />
-                      {video_tab_label}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={
-                  showSides
-                    ? side2
-                      ? "stories-magazine stories-magazine--three-sides"
-                      : "stories-magazine"
-                    : "stories-magazine stories-magazine--feature-only"
-                }
-              >
-                {slides.length > 0 && (
-                  <div className="story-featured" role="region" aria-label="Featured stories" aria-roledescription="carousel">
-                    {slides.map((article, idx) => (
+              <div className="cr-stories__shell">
+                <div className="cr-stories__frame">
+                  <div className={gridClass}>
+                    {slides.length > 0 && (
                       <div
-                        key={idx}
-                        className={idx === activeSlide ? "feat-slide active" : "feat-slide"}
-                        aria-hidden={idx !== activeSlide}
+                        className="cr-stories__featured"
+                        role="region"
+                        aria-label="Featured stories"
+                        aria-roledescription="carousel"
                       >
-                        <div
-                          className="feat-slide-img"
-                          style={
-                            articleImage(article)
-                              ? { backgroundImage: `url('${articleImage(article).replace(/'/g, "%27")}')` }
-                              : { background: "#1a2a3a" }
-                          }
-                        />
-                        <div className="feat-slide-overlay" aria-hidden />
-                        <div className="feat-slide-content">
-                          {article.tag ? (
-                            <span className="story-feat-tag">
-                              <i className="fa-solid fa-circle-dot" style={{ fontSize: "0.55rem" }} aria-hidden />
-                              {article.tag}
-                            </span>
-                          ) : null}
-                          {article.date ? (
-                            <div className="story-feat-date">
-                              <i className="fa-regular fa-calendar" aria-hidden />
-                              {article.date}
-                            </div>
-                          ) : null}
-                          <h3>{article.title}</h3>
-                          {article.excerpt ? <p>{article.excerpt}</p> : null}
-                          {article.link_url ? (
-                            <StoryLink
-                              href={article.link_url}
-                              className="story-feat-link"
-                              openInNew={article.open_in_new}
+                        {slides.map((article, idx) => {
+                          const img = articleImage(article);
+                          return (
+                            <div
+                              key={`${article.title}-${idx}`}
+                              className={
+                                idx === activeSlide
+                                  ? "cr-stories__slide cr-stories__slide--active"
+                                  : "cr-stories__slide"
+                              }
+                              aria-hidden={idx !== activeSlide}
                             >
-                              Read Full Story <i className="fa-solid fa-arrow-right" aria-hidden />
-                            </StoryLink>
-                          ) : null}
-                        </div>
-                      </div>
-                    ))}
-                    {slides.length > 1 && (
-                      <div className="feat-dots" role="tablist" aria-label="Choose story">
-                        {slides.map((_, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            role="tab"
-                            aria-selected={i === activeSlide}
-                            className={i === activeSlide ? "feat-dot active" : "feat-dot"}
-                            onClick={() => setActive(i)}
-                            aria-label={`Story ${i + 1} of ${slides.length}`}
-                          />
-                        ))}
+                              <div
+                                className="cr-stories__slide-media"
+                                style={
+                                  img
+                                    ? {
+                                        backgroundImage: `url('${img.replace(/'/g, "%27")}')`,
+                                      }
+                                    : undefined
+                                }
+                              />
+                              <div className="cr-stories__slide-panel">
+                                <div className="cr-stories__slide-meta">
+                                  {article.tag ? (
+                                    <span className="cr-stories__slide-tag">
+                                      {article.tag}
+                                    </span>
+                                  ) : null}
+                                  {article.date ? (
+                                    <span className="cr-stories__slide-date">
+                                      <i
+                                        className="fa-regular fa-calendar"
+                                        aria-hidden
+                                      />
+                                      {article.date}
+                                    </span>
+                                  ) : null}
+                                </div>
+                                <h3 className="cr-stories__slide-title">
+                                  {article.title}
+                                </h3>
+                                {article.excerpt ? (
+                                  <p className="cr-stories__slide-excerpt">
+                                    {article.excerpt}
+                                  </p>
+                                ) : null}
+                                {article.link_url ? (
+                                  <StoryLink
+                                    href={article.link_url}
+                                    className="cr-stories__slide-link"
+                                    openInNew={article.open_in_new}
+                                  >
+                                    Read Full Story{" "}
+                                    <i
+                                      className="fa-solid fa-arrow-right"
+                                      aria-hidden
+                                    />
+                                  </StoryLink>
+                                ) : null}
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        {slides.length > 1 && (
+                          <div
+                            className="cr-stories__dots"
+                            role="tablist"
+                            aria-label="Choose story"
+                          >
+                            {slides.map((_, i) => (
+                              <button
+                                key={i}
+                                type="button"
+                                role="tab"
+                                aria-selected={i === activeSlide}
+                                className={
+                                  i === activeSlide
+                                    ? "cr-stories__dot cr-stories__dot--active"
+                                    : "cr-stories__dot"
+                                }
+                                onClick={() => setActive(i)}
+                                aria-label={`Story ${i + 1} of ${slides.length}`}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
+
+                    {side0 ? <SideStoryCard article={side0} /> : null}
+                    {side1 ? <SideStoryCard article={side1} /> : null}
+                    {side2 ? <SideStoryCard article={side2} /> : null}
                   </div>
-                )}
 
-                {side0 && (
-                  <article className="story-small">
-                    <div
-                      className="story-small-image"
-                      style={
-                        articleImage(side0)
-                          ? { backgroundImage: `url('${articleImage(side0).replace(/'/g, "%27")}')` }
-                          : { background: "#1a2a3a" }
-                      }
-                      role="img"
-                      aria-label=""
-                    />
-                    <div className="story-small-body">
-                      <div className="story-small-meta">
-                        {side0.tag ? <span className="story-small-tag">{side0.tag}</span> : null}
-                        {side0.date ? (
-                          <span className="story-small-date">
-                            <i className="fa-regular fa-calendar" aria-hidden /> {side0.date}
-                          </span>
-                        ) : null}
-                      </div>
-                      <h3>{side0.title}</h3>
-                      {side0.excerpt ? <p>{side0.excerpt}</p> : null}
-                      {side0.link_url ? (
-                        <StoryLink
-                          href={side0.link_url}
-                          className="story-read"
-                          openInNew={side0.open_in_new}
-                        >
-                          Read Story <i className="fa-solid fa-arrow-right" aria-hidden />
-                        </StoryLink>
-                      ) : null}
+                  {view_all_url && view_all_label ? (
+                    <div className="cr-stories__footer">
+                      <StoryLink
+                        href={view_all_url}
+                        className="cr-stories__cta"
+                        openInNew={isExternal(view_all_url)}
+                      >
+                        <i className="fa-solid fa-newspaper" aria-hidden />
+                        {view_all_label}
+                        <i className="fa-solid fa-arrow-right" aria-hidden />
+                      </StoryLink>
                     </div>
-                  </article>
-                )}
-
-                {side1 && (
-                  <article className="story-small">
-                    <div
-                      className="story-small-image"
-                      style={
-                        articleImage(side1)
-                          ? { backgroundImage: `url('${articleImage(side1).replace(/'/g, "%27")}')` }
-                          : { background: "#1a2a3a" }
-                      }
-                      role="img"
-                      aria-label=""
-                    />
-                    <div className="story-small-body">
-                      <div className="story-small-meta">
-                        {side1.tag ? <span className="story-small-tag">{side1.tag}</span> : null}
-                        {side1.date ? (
-                          <span className="story-small-date">
-                            <i className="fa-regular fa-calendar" aria-hidden /> {side1.date}
-                          </span>
-                        ) : null}
-                      </div>
-                      <h3>{side1.title}</h3>
-                      {side1.excerpt ? <p>{side1.excerpt}</p> : null}
-                      {side1.link_url ? (
-                        <StoryLink
-                          href={side1.link_url}
-                          className="story-read"
-                          openInNew={side1.open_in_new}
-                        >
-                          Read Story <i className="fa-solid fa-arrow-right" aria-hidden />
-                        </StoryLink>
-                      ) : null}
-                    </div>
-                  </article>
-                )}
-
-                {side2 && (
-                  <article className="story-small">
-                    <div
-                      className="story-small-image"
-                      style={
-                        articleImage(side2)
-                          ? { backgroundImage: `url('${articleImage(side2).replace(/'/g, "%27")}')` }
-                          : { background: "#1a2a3a" }
-                      }
-                      role="img"
-                      aria-label=""
-                    />
-                    <div className="story-small-body">
-                      <div className="story-small-meta">
-                        {side2.tag ? <span className="story-small-tag">{side2.tag}</span> : null}
-                        {side2.date ? (
-                          <span className="story-small-date">
-                            <i className="fa-regular fa-calendar" aria-hidden /> {side2.date}
-                          </span>
-                        ) : null}
-                      </div>
-                      <h3>{side2.title}</h3>
-                      {side2.excerpt ? <p>{side2.excerpt}</p> : null}
-                      {side2.link_url ? (
-                        <StoryLink
-                          href={side2.link_url}
-                          className="story-read"
-                          openInNew={side2.open_in_new}
-                        >
-                          Read Story <i className="fa-solid fa-arrow-right" aria-hidden />
-                        </StoryLink>
-                      ) : null}
-                    </div>
-                  </article>
-                )}
-              </div>
-
-              {view_all_url && view_all_label && (
-                <div className="stories-cta">
-                  <StoryLink
-                    href={view_all_url}
-                    openInNew={isExternal(view_all_url)}
-                  >
-                    <i className="fa-solid fa-newspaper" aria-hidden />
-                    {view_all_label}
-                    <i className="fa-solid fa-arrow-right" aria-hidden />
-                  </StoryLink>
+                  ) : null}
                 </div>
-              )}
+              </div>
             </div>
 
-            {/* ── SLIDE 2: Full Stories in Motion section (white background) ── */}
-            <div style={{ width: '100%', flexShrink: 0, height: showVideos ? 'auto' : 0, overflow: showVideos ? 'visible' : 'hidden' }}>
-              <div className="stories-header" style={{ paddingTop: 0 }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '0.25rem' }}>
-                  <div>
-                    <div className="section-eyebrow" style={{ marginBottom: '0.75rem' }}>
-                      <i className="fa-solid fa-rss" aria-hidden />
-                      Stay Informed
-                    </div>
-                    <h2 className="section-title">
-                      Stories in <span>Motion</span>
-                    </h2>
-                    <p className="section-subtitle" style={{ marginBottom: 0 }}>Watch our impactful work across communities</p>
-                  </div>
+            {/* Video panel */}
+            <div
+              className="cr-stories__panel cr-stories__panel--videos"
+              id="cr-stories-panel-videos"
+              role="tabpanel"
+              aria-hidden={!showVideos}
+            >
+              <StoriesHeader
+                eyebrow="Stay Informed"
+                heading="Stories in"
+                headingHighlight="Motion"
+                subtitle="Watch our impactful work across communities"
+                newsTabLabel={news_tab_label}
+                videoTabLabel={video_tab_label}
+                showVideos={showVideos}
+                onSelectNews={() => setShowVideos(false)}
+                onSelectVideos={() => setShowVideos(true)}
+              />
 
-                  <div className="mh-tabs" role="tablist" style={{ display: 'flex', gap: '0.75rem', flexShrink: 0, alignSelf: 'flex-start' }}>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={false}
-                      aria-controls="mhPanelNews"
-                      onClick={() => setShowVideos(false)}
-                      className="mh-tab"
-                    >
-                      <i className="fa-solid fa-newspaper" aria-hidden />
-                      {news_tab_label}
-                    </button>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={true}
-                      aria-controls="mhPanelVideos"
-                      onClick={() => setShowVideos(true)}
-                      className="mh-tab active"
-                    >
-                      <i className="fa-brands fa-youtube" aria-hidden />
-                      {video_tab_label}
-                    </button>
+              <div className="cr-stories__shell">
+                <div className="cr-stories__frame">
+                  <div className="cr-stories__video-wrap">
+                    <VideoGallerySection
+                      isNested
+                      youtube_channel_url={
+                        youtube_channel_url ||
+                        (videoProps?.youtube_channel_url as string | undefined)
+                      }
+                      layout={
+                        (videoProps?.layout as VideoGalleryLayout | undefined) ||
+                        "grid"
+                      }
+                      videos={
+                        (videoProps?.videos as unknown[]) || [
+                          {
+                            key: "1",
+                            youtube_id: "dQw4w9WgXcQ",
+                            title: "Caritas Rwanda in Action",
+                            description:
+                              "See how our programs are transforming communities across Rwanda.",
+                            category: "Highlights",
+                          },
+                          {
+                            key: "2",
+                            youtube_id: "dQw4w9WgXcQ",
+                            title: "Community Health Outreach",
+                            description:
+                              "Bringing healthcare services to remote communities.",
+                            category: "Health",
+                          },
+                          {
+                            key: "3",
+                            youtube_id: "dQw4w9WgXcQ",
+                            title: "Sustainable Development Goals",
+                            description:
+                              "Working towards a better future for all Rwandans.",
+                            category: "Development",
+                          },
+                        ]
+                      }
+                      {...videoProps}
+                      eyebrow=""
+                      heading_lead=""
+                      heading_accent=""
+                      subtitle=""
+                    />
                   </div>
                 </div>
-              </div>
-
-              <div style={{ marginTop: '1.5rem' }}>
-                <VideoGallerySection 
-                  isNested={true}
-                  youtube_channel_url={youtube_channel_url || (videoGalleryProps as any)?.youtube_channel_url}
-                  layout={(videoGalleryProps as any)?.layout || "grid"}
-                  videos={(videoGalleryProps as any)?.videos || [
-                    {
-                      key: '1',
-                      youtube_id: 'dQw4w9WgXcQ',
-                      title: 'Caritas Rwanda in Action',
-                      description: 'See how our programs are transforming communities across Rwanda.',
-                      category: 'Highlights'
-                    },
-                    {
-                      key: '2',
-                      youtube_id: 'dQw4w9WgXcQ',
-                      title: 'Community Health Outreach',
-                      description: 'Bringing healthcare services to remote communities.',
-                      category: 'Health'
-                    },
-                    {
-                      key: '3',
-                      youtube_id: 'dQw4w9WgXcQ',
-                      title: 'Sustainable Development Goals',
-                      description: 'Working towards a better future for all Rwandans.',
-                      category: 'Development'
-                    }
-                  ]}
-                  {...(videoGalleryProps as any)}
-                  // Ensure these headings stay empty so we don't get duplicate titles inside NewsCards
-                  eyebrow={""}
-                  heading_lead={""}
-                  heading_accent={""}
-                  subtitle={""}
-                />
               </div>
             </div>
           </div>
