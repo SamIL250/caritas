@@ -82,6 +82,8 @@ import Divider from '@/components/website/sections/Divider';
 import ProgramCards from '@/components/website/sections/ProgramCards';
 import OurLocationSection from '@/components/website/sections/OurLocationSection';
 import PageHeroSection from '@/components/website/sections/PageHeroSection';
+import AboutSectionNav from '@/components/website/about/AboutSectionNav';
+import { ABOUT_SECTION_NAV } from '@/lib/about-section-nav';
 import StatsBannerSection from '@/components/website/sections/StatsBannerSection';
 import FeaturedQuoteSection from '@/components/website/sections/FeaturedQuoteSection';
 import TimelineSection from '@/components/website/sections/TimelineSection';
@@ -698,16 +700,22 @@ export default function PageEditorClient({
           }))
           : [];
         return (
-          <PageHeroSection
-            eyebrow={(o.badge_text as string) || 'About Caritas Rwanda'}
-            heading={localState.heading}
-            headingAccent={typeof o.heading_accent === 'string' ? o.heading_accent : ''}
-            subheading={localState.subheading}
-            imageUrl={localState.image_url}
-            breadcrumbLabel="About Us"
-            quickNav={qn}
-            quickNavHint="Unfold"
-          />
+          <>
+            <PageHeroSection
+              eyebrow={(o.badge_text as string) || 'About Caritas Rwanda'}
+              heading={localState.heading}
+              headingAccent={typeof o.heading_accent === 'string' ? o.heading_accent : ''}
+              subheading={localState.subheading}
+              imageUrl={localState.image_url}
+              breadcrumbLabel="About Us"
+            />
+            <AboutSectionNav
+              items={qn.length > 0 ? qn : [...ABOUT_SECTION_NAV]}
+              activeHref={null}
+              onSelect={() => {}}
+              preview
+            />
+          </>
         );
       }
       if (page.slug === 'news') {

@@ -28,6 +28,14 @@
             scroll-behavior: smooth;
         }
 
+        html.lenis {
+            scroll-behavior: auto !important;
+        }
+
+        html.lenis body {
+            overscroll-behavior: auto;
+        }
+
         body {
             font-family: var(--font-outfit), "Outfit", sans-serif;
             line-height: 1.6;
@@ -1899,6 +1907,60 @@
             .hero-slider-frame__subtitle {
                 margin-bottom: 1.25rem;
             }
+        }
+
+        /* ── Inner-page hero (About, Contact, etc.) — same inset shell as home ── */
+        .hero-section-page .hero-slider-frame__copy--page {
+            max-width: 760px;
+        }
+
+        .hero-section-page .hero-slider-frame__title {
+            color: #ffffff;
+        }
+
+        .hero-section-page .hero-slider-frame__title span {
+            color: inherit;
+        }
+
+        .hero-section-page .hero-slider-frame__badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 1.05rem;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.28);
+        }
+
+        .hero-section-page .hero-slider-frame__overlay {
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.38) 0%,
+                rgba(0, 0, 0, 0.52) 48%,
+                rgba(0, 0, 0, 0.66) 100%
+            );
+        }
+
+        .hero-section-page .hero-breadcrumb {
+            margin-top: 0.65rem;
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .hero-section-page .hero-breadcrumb a {
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .hero-section-page .hero-breadcrumb a:hover {
+            color: #ffffff;
+        }
+
+        .hero-section-page .hero-breadcrumb span[aria-hidden] {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .hero-section-page .hero-breadcrumb span:last-child {
+            color: rgba(255, 255, 255, 0.72);
         }
 
         .hero-contents-wrapper {
@@ -6458,8 +6520,9 @@
             color: #fff;
         }
 
-        /* About page categories — solid dark red (Donate color, no gradient ring) */
-        .page-hero--with-quick-nav .qnav-pill {
+        /* About page categories — solid dark red (legacy page-hero + inset page hero) */
+        .page-hero--with-quick-nav .qnav-pill,
+        .hero-section-page--with-quick-nav .qnav-pill {
             background: #8c2208;
             border: none;
             color: #ffffff;
@@ -6469,7 +6532,8 @@
             transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
         }
 
-        .page-hero--with-quick-nav .qnav-pill:hover {
+        .page-hero--with-quick-nav .qnav-pill:hover,
+        .hero-section-page--with-quick-nav .qnav-pill:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 18px rgba(140, 34, 8, 0.45);
             background: #701a05;
@@ -6477,7 +6541,8 @@
             color: #fff;
         }
 
-        .page-hero--with-quick-nav .qnav-pill.is-active {
+        .page-hero--with-quick-nav .qnav-pill.is-active,
+        .hero-section-page--with-quick-nav .qnav-pill.is-active {
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(140, 34, 8, 0.5);
             background: #701a05;
@@ -6485,13 +6550,15 @@
             color: #fff;
         }
 
-        .page-hero--with-quick-nav .qnav-pill:active {
+        .page-hero--with-quick-nav .qnav-pill:active,
+        .hero-section-page--with-quick-nav .qnav-pill:active {
             transform: translateY(0);
             background: #5a1505;
         }
 
         @media (max-width: 768px) {
-            .page-hero--with-quick-nav .page-hero-inner {
+            .page-hero--with-quick-nav .page-hero-inner,
+            .hero-section-page--with-quick-nav .hero-slider-frame__copy--page {
                 max-width: 760px;
             }
 
@@ -6525,7 +6592,7 @@
         }
 
         .about-page-section-panel {
-            scroll-margin-top: 5rem;
+            scroll-margin-top: 6rem;
         }
 
         body.about-section-active .website-footer {
