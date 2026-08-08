@@ -18,24 +18,31 @@ export type PartnersSectionProps = {
   items?: Partner[];
 };
 
-function PartnerCard({ partner, className }: { partner: Partner; className?: string }) {
+function PartnerCard({
+  partner,
+  className,
+}: {
+  partner: Partner;
+  className?: string;
+}) {
   const url = (partner.url || "").trim();
   const img = (
     <img
-      className="partner-logo"
+      className="cr-partners__logo"
       src={partner.logo_url}
       alt={partner.name}
       loading="lazy"
     />
   );
-  const label = <span className="partner-name">{partner.name}</span>;
+  const label = <span className="cr-partners__name">{partner.name}</span>;
+  const cardClass = `cr-partners__card${className ? ` ${className}` : ""}`;
 
   if (url) {
     const external = /^https?:\/\//i.test(url);
     return (
       <a
         href={url}
-        className={`partner-card${className ? " " + className : ""}`}
+        className={cardClass}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {img}
@@ -45,7 +52,7 @@ function PartnerCard({ partner, className }: { partner: Partner; className?: str
   }
 
   return (
-    <div className={`partner-card${className ? " " + className : ""}`}>
+    <div className={cardClass}>
       {img}
       {label}
     </div>
@@ -91,11 +98,20 @@ export default function PartnersSection({
     return () => cancelAnimationFrame(rafRef.current);
   }, [list.length]);
 
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [modalOpen]);
+
   const scrollStep = useCallback(() => {
     const track = trackRef.current;
     if (!track) return 200;
-    const card = track.querySelector<HTMLElement>(".partner-card");
-    return (card?.offsetWidth ?? 180) + 24;
+    const card = track.querySelector<HTMLElement>(".cr-partners__card");
+    return (card?.offsetWidth ?? 180) + 14;
   }, []);
 
   const scrollPrev = useCallback(() => {
@@ -107,7 +123,9 @@ export default function PartnersSection({
       if (posRef.current > 0) posRef.current -= half;
       track.style.transform = `translateX(${posRef.current}px)`;
     }
-    setTimeout(() => { pausedRef.current = false; }, 3000);
+    setTimeout(() => {
+      pausedRef.current = false;
+    }, 3000);
   }, [scrollStep]);
 
   const scrollNext = useCallback(() => {
@@ -119,93 +137,112 @@ export default function PartnersSection({
       if (Math.abs(posRef.current) >= half - 1) posRef.current += half;
       track.style.transform = `translateX(${posRef.current}px)`;
     }
-    setTimeout(() => { pausedRef.current = false; }, 3000);
+    setTimeout(() => {
+      pausedRef.current = false;
+    }, 3000);
   }, [scrollStep]);
 
   return (
     <>
-      <section className="partners-section" id="partners" aria-labelledby="partners-section-title">
-        <div className="partners-inner">
-          <div className="partners-header">
+      <section
+        className="cr-partners partners-section"
+        id="partners"
+        aria-labelledby="partners-section-title"
+      >
+        <div className="cr-partners__inner partners-inner">
+          <header className="cr-partners__header partners-header">
             {eyebrow ? (
-              <div className="partners-eyebrow">
+              <p className="cr-partners__eyebrow partners-eyebrow">
                 <i className="fa-solid fa-handshake" aria-hidden />
                 {eyebrow}
-              </div>
+              </p>
             ) : null}
-            <h2 className="partners-title" id="partners-section-title">
+            <h2 className="cr-partners__title partners-title" id="partners-section-title">
               {title}
             </h2>
-            {subtitle ? <p className="partners-subtitle">{subtitle}</p> : null}
-          </div>
+            {subtitle ? (
+              <p className="cr-partners__subtitle partners-subtitle">{subtitle}</p>
+            ) : null}
+          </header>
 
-          <div className="partners-slider-wrap">
-            <button
-              type="button"
-              className="partner-arrow"
-              onClick={scrollPrev}
-              aria-label="Previous"
-            >
-              <ChevronLeft size={18} strokeWidth={2.5} aria-hidden />
-            </button>
+          <div className="cr-partners__shell">
+            <div className="cr-partners__frame">
+              <div className="cr-partners__slider partners-slider-wrap">
+                <button
+                  type="button"
+                  className="cr-partners__arrow partner-arrow"
+                  onClick={scrollPrev}
+                  aria-label="Previous partners"
+                >
+                  <ChevronLeft size={18} strokeWidth={2.5} aria-hidden />
+                </button>
 
-            <div
-              className="partners-grid"
-              onMouseEnter={() => { pausedRef.current = true; }}
-              onMouseLeave={() => { pausedRef.current = false; }}
-            >
-              <div ref={trackRef} className="partners-track">
-                {[...list, ...list].map((p, i) => (
-                  <PartnerCard key={`${p.name}-${i}`} partner={p} />
-                ))}
+                <div
+                  className="cr-partners__viewport partners-grid"
+                  onMouseEnter={() => {
+                    pausedRef.current = true;
+                  }}
+                  onMouseLeave={() => {
+                    pausedRef.current = false;
+                  }}
+                >
+                  <div ref={trackRef} className="cr-partners__track partners-track">
+                    {[...list, ...list].map((p, i) => (
+                      <PartnerCard key={`${p.name}-${i}`} partner={p} />
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="cr-partners__arrow partner-arrow"
+                  onClick={scrollNext}
+                  aria-label="Next partners"
+                >
+                  <ChevronRight size={18} strokeWidth={2.5} aria-hidden />
+                </button>
+              </div>
+
+              <div className="cr-partners__footer partners-footer">
+                <button
+                  type="button"
+                  className="cr-partners__view-all partners-view-all-btn"
+                  onClick={() => setModalOpen(true)}
+                >
+                  <i className="fa-solid fa-grip" aria-hidden />
+                  View All Partners
+                </button>
               </div>
             </div>
-
-            <button
-              type="button"
-              className="partner-arrow"
-              onClick={scrollNext}
-              aria-label="Next"
-            >
-              <ChevronRight size={18} strokeWidth={2.5} aria-hidden />
-            </button>
-          </div>
-
-          <div className="partners-footer">
-            <button
-              type="button"
-              className="partners-view-all-btn"
-              onClick={() => setModalOpen(true)}
-            >
-              <i className="fa-solid fa-grip" aria-hidden />
-              View All Partners
-            </button>
           </div>
         </div>
       </section>
 
       <div
-        className={`partners-modal-overlay${modalOpen ? " is-open" : ""}`}
-        onClick={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}
-        onKeyDown={(e) => { if (e.key === "Escape") setModalOpen(false); }}
+        className={`cr-partners__overlay partners-modal-overlay${modalOpen ? " cr-partners__overlay--open is-open" : ""}`}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setModalOpen(false);
+        }}
         role="dialog"
         aria-modal="true"
         aria-label="All Partners"
-        tabIndex={-1}
+        aria-hidden={!modalOpen}
       >
-        <div className="partners-modal">
-          <div className="partners-modal-header">
-            <h3>All Our <span>Partners</span></h3>
+        <div className="cr-partners__modal partners-modal">
+          <div className="cr-partners__modal-header partners-modal-header">
+            <h3 className="cr-partners__modal-title">
+              All Our <span className="cr-partners__modal-title-accent">Partners</span>
+            </h3>
             <button
               type="button"
-              className="partners-modal-close"
+              className="cr-partners__modal-close partners-modal-close"
               onClick={() => setModalOpen(false)}
               aria-label="Close"
             >
-              <i className="fa-solid fa-xmark" />
+              <i className="fa-solid fa-xmark" aria-hidden />
             </button>
           </div>
-          <div className="partners-modal-grid">
+          <div className="cr-partners__modal-grid partners-modal-grid">
             {list.map((p, i) => (
               <PartnerCard key={`modal-${p.name}-${i}`} partner={p} />
             ))}
