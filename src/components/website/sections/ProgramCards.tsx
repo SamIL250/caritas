@@ -140,114 +140,128 @@ export default function ProgramCards({
     </>
   );
 
+  const activeColor = PROGRAM_COLORS[activeKey];
+
   return (
     <section className="cr-prog-tabs" id="programs" aria-labelledby="programs-heading">
-      <div className="prog-tabs-header">
-        <div className="prog-tabs-eyebrow">
-          <i className="fa-solid fa-grid-2" aria-hidden /> {eyebrow}
-        </div>
-        <h2 className="prog-tabs-title" id="programs-heading">
-          {heading}
-        </h2>
-        {subtitle ? <p className="prog-tabs-subtitle">{subtitle}</p> : null}
-      </div>
-
-      <div className="prog-tabs-body">
-        <div className="prog-image-col" aria-hidden>
-          {slots.map((p, idx) => (
-            <img
-              key={PROGRAM_TAB_KEYS[idx]}
-              src={p.image_url}
-              alt=""
-              className={`prog-img${idx === activeIdx ? " active" : ""}`}
-              width={1200}
-              height={900}
-              loading="lazy"
-              decoding="async"
-            />
-          ))}
-        </div>
-
-        <div className="prog-content-col" style={{ background: PROGRAM_COLORS[activeKey], transition: 'background 0.45s ease' }}>
-          <div
-            className="prog-nav"
-            role="tablist"
-            aria-label="Program categories"
-            onKeyDown={(e) => {
-              if (e.key === "ArrowRight") {
-                e.preventDefault();
-                cycle(1);
-              } else if (e.key === "ArrowLeft") {
-                e.preventDefault();
-                cycle(-1);
-              } else if (e.key === "Home") {
-                e.preventDefault();
-                setActiveIdx(0);
-              } else if (e.key === "End") {
-                e.preventDefault();
-                setActiveIdx(slots.length - 1);
-              }
-            }}
-          >
-            {slots.map((p, idx) => {
-              const tabKey = PROGRAM_TAB_KEYS[idx];
-              const chip = (p.tab_label || p.title).trim();
-              const selected = idx === activeIdx;
-              return (
-                <button
-                  key={tabKey}
-                  type="button"
-                  role="tab"
-                  id={`${tabIdPrefix}-${idx}`}
-                  data-tab={tabKey}
-                  aria-selected={selected}
-                  aria-controls={panelId}
-                  tabIndex={selected ? 0 : -1}
-                  className={`prog-tab-btn${selected ? " active" : ""}`}
-                  style={{ background: PROGRAM_COLORS[tabKey] }}
-                  onClick={() => setActiveIdx(idx)}
-                >
-                  <div className="prog-tab-icon">
-                    <i className={iconClasses(p.icon)} aria-hidden />
-                  </div>
-                  <span className="prog-tab-label">
-                    <TabLabelLines label={chip} />
-                  </span>
-                </button>
-              );
-            })}
+      <div className="cr-prog-tabs__inner">
+        <div className="prog-tabs-header">
+          <div className="prog-tabs-eyebrow">
+            <i className="fa-solid fa-grid-2" aria-hidden /> {eyebrow}
           </div>
+          <h2 className="prog-tabs-title" id="programs-heading">
+            {heading}
+          </h2>
+          {subtitle ? <p className="prog-tabs-subtitle">{subtitle}</p> : null}
+        </div>
 
-          <div
-            className="prog-content-area"
-            id={panelId}
-            role="tabpanel"
-            data-panel={activeKey}
-            aria-labelledby={`${tabIdPrefix}-${activeIdx}`}
-          >
-            <div key={activeKey} className="prog-content-inner anim-in">
-              <span className="prog-tag">
-                <i className={iconClasses(active.icon)} aria-hidden />
-                &nbsp; Program Area
-              </span>
-              <h3 className="prog-heading">{active.title}</h3>
-              <p className="prog-desc">{active.description}</p>
-              <ul className="prog-bullets">
-                {bullets.map((b) => (
-                  <li key={b}>
-                    <i className="fa-solid fa-circle-check" aria-hidden /> {b}
-                  </li>
+        <div
+          className="cr-prog-tabs__shell"
+          style={{ '--prog-theme': activeColor } as React.CSSProperties}
+        >
+          <div className="cr-prog-tabs__frame">
+            <div className="prog-tabs-body">
+              <div className="prog-image-col" aria-hidden>
+                {slots.map((p, idx) => (
+                  <img
+                    key={PROGRAM_TAB_KEYS[idx]}
+                    src={p.image_url}
+                    alt=""
+                    className={`prog-img${idx === activeIdx ? " active" : ""}`}
+                    width={1200}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ))}
-              </ul>
-              {isHash ? (
-                <a href={href} className="prog-learn-btn">
-                  {learnInner}
-                </a>
-              ) : (
-                <Link href={href} className="prog-learn-btn">
-                  {learnInner}
-                </Link>
-              )}
+              </div>
+
+              <div
+                className="prog-content-col"
+                style={{ backgroundColor: activeColor }}
+              >
+                <div
+                  className="prog-nav"
+                  role="tablist"
+                  aria-label="Program categories"
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowRight") {
+                      e.preventDefault();
+                      cycle(1);
+                    } else if (e.key === "ArrowLeft") {
+                      e.preventDefault();
+                      cycle(-1);
+                    } else if (e.key === "Home") {
+                      e.preventDefault();
+                      setActiveIdx(0);
+                    } else if (e.key === "End") {
+                      e.preventDefault();
+                      setActiveIdx(slots.length - 1);
+                    }
+                  }}
+                >
+                  {slots.map((p, idx) => {
+                    const tabKey = PROGRAM_TAB_KEYS[idx];
+                    const chip = (p.tab_label || p.title).trim();
+                    const selected = idx === activeIdx;
+                    return (
+                      <button
+                        key={tabKey}
+                        type="button"
+                        role="tab"
+                        id={`${tabIdPrefix}-${idx}`}
+                        data-tab={tabKey}
+                        aria-selected={selected}
+                        aria-controls={panelId}
+                        tabIndex={selected ? 0 : -1}
+                        className={`prog-tab-btn${selected ? " active" : ""}`}
+                        style={{ backgroundColor: PROGRAM_COLORS[tabKey] }}
+                        onClick={() => setActiveIdx(idx)}
+                      >
+                        <div className="prog-tab-icon">
+                          <i className={iconClasses(p.icon)} aria-hidden />
+                        </div>
+                        <span className="prog-tab-label">
+                          <TabLabelLines label={chip} />
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div
+                  className="prog-content-area"
+                  id={panelId}
+                  role="tabpanel"
+                  data-panel={activeKey}
+                  aria-labelledby={`${tabIdPrefix}-${activeIdx}`}
+                >
+                  <div key={activeKey} className="prog-content-inner">
+                    <span className="prog-tag">
+                      <i className={iconClasses(active.icon)} aria-hidden />
+                      Program Area
+                    </span>
+                    <h3 className="prog-heading">{active.title}</h3>
+                    <p className="prog-desc">{active.description}</p>
+                    <ul className="prog-bullets">
+                      {bullets.map((b) => (
+                        <li key={b}>
+                          <i className="fa-solid fa-circle-check" aria-hidden /> {b}
+                        </li>
+                      ))}
+                    </ul>
+                    {isHash ? (
+                      <a href={href} className="prog-learn-btn">
+                        {learnInner}
+                      </a>
+                    ) : (
+                      <Link href={href} className="prog-learn-btn">
+                        {learnInner}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

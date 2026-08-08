@@ -11004,50 +11004,14 @@
   background-position: center top !important;
 }
 
-/* ── 3. PROGRAM TABS: Mobile horizontal scroll tabs ──────── */
+/* ── 3. PROGRAM TABS: Mobile tweaks (see program-tabs-section.css) ── */
 @media (max-width: 860px) {
-  .cr-prog-tabs {
-    padding: 2.5rem 0 2.5rem;
-  }
   .cr-prog-tabs .prog-tabs-header {
-    padding: 0 1rem;
     margin-bottom: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .cr-prog-tabs {
-    padding: 2rem 0;
-  }
-  /* Horizontal scrollable tabs instead of cramped 2x2 grid */
-  .cr-prog-tabs .prog-nav {
-    display: flex !important;
-    flex-direction: row;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    grid-template-columns: unset;
-    gap: 0;
-    padding: 0;
-    scroll-snap-type: x mandatory;
-  }
-  .cr-prog-tabs .prog-nav::-webkit-scrollbar { display: none; }
-
-  .cr-prog-tabs .prog-tab-btn {
-    flex: 0 0 auto;
-    min-width: 70px;
-    padding: 0.8rem 0.5rem;
-    scroll-snap-align: start;
-  }
-  .cr-prog-tabs .prog-tab-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
-  }
-  .cr-prog-tabs .prog-tab-label {
-    font-size: 0.5rem;
-    max-width: 58px;
-  }
   .cr-prog-tabs .prog-content-area {
     padding: 1.25rem 1rem;
   }
