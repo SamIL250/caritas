@@ -31,8 +31,8 @@ export default function FooterNewsletterForm(props: Props) {
 
   return (
     <>
-      <div className="ft-col-heading">{props.heading}</div>
-      <p className="ft-newsletter-text">{props.description}</p>
+      {props.heading ? <div className="ft-col-heading">{props.heading}</div> : null}
+      {props.description ? <p className="ft-newsletter-text">{props.description}</p> : null}
       <form className="ft-newsletter-form" onSubmit={onSubmit} noValidate>
         <input
           className="ft-newsletter-input"

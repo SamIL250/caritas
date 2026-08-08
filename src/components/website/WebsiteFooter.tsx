@@ -1,9 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useDonation } from '@/context/DonationContext';
 import { FOOTER_DEFAULTS, type FooterSettings } from '@/lib/footer-settings';
-import { isExternalOrSpecialHref } from '@/lib/footer-nav';
 import FooterNewsletterForm from '@/components/website/FooterNewsletterForm';
 
 const DEFAULT_LOGO = '/img/logo_caritas.webp';
@@ -12,36 +10,7 @@ type WebsiteFooterProps = {
   settings?: FooterSettings;
 };
 
-function NavOrExternal({
-  href,
-  className,
-  children,
-}: {
-  href: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  if (isExternalOrSpecialHref(href)) {
-    return (
-      <a
-        href={href}
-        className={className}
-        target={href.startsWith('mailto:') || href.startsWith('tel:') ? undefined : '_blank'}
-        rel={href.startsWith('mailto:') || href.startsWith('tel:') ? undefined : 'noopener noreferrer'}
-      >
-        {children}
-      </a>
-    );
-  }
-  return (
-    <Link href={href} className={className}>
-      {children}
-    </Link>
-  );
-}
-
 export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterProps) {
-  const { openModal } = useDonation();
   const s = settingsProp ?? FOOTER_DEFAULTS;
   const logoSrc = (s.brand.logoUrl && s.brand.logoUrl.trim()) || DEFAULT_LOGO;
 
@@ -56,116 +25,124 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
   const hasSystems = s.systems.links.length > 0;
 
   return (
-    <footer className="website-footer">
-      <div className="ft-blob-1" />
-      <div className="ft-blob-2" />
+    <footer className="cr-footer website-footer">
+      <div className="cr-footer__main">
+        <div className="cr-footer__inner">
+          <div className="footer-grid">
+            <div className="footer-col">
+              <img
+                src={logoSrc}
+                alt={s.bottom.orgName}
+                className="footer-logo"
+              />
+              <div className="ft-socials">
+                {socialEntries.map(({ key, icon, label }) => {
+                  const url = s.social[key].trim();
+                  if (!url) return null;
+                  return (
+                    <a
+                      key={key}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ft-social-btn"
+                      aria-label={label}
+                    >
+                      {key === 'twitter' ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src="/img/x-logo.png"
+                          alt="X"
+                          className="ft-x-icon"
+                          width={14}
+                          height={14}
+                        />
+                      ) : (
+                        <i className={icon} />
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
 
-      <div className="footer-grid">
-        <div className="footer-col">
-          <img
-            src={logoSrc}
-            alt={s.bottom.orgName}
-            className="footer-logo"
-          />
-          <div className="ft-socials">
-            {socialEntries.map(({ key, icon, label }) => {
-              const url = s.social[key].trim();
-              if (!url) return null;
-              return (
-                <a
-                  key={key}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ft-social-btn"
-                  aria-label={label}
-                >
-                  {key === 'twitter' ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src="/img/x-logo.png"
-                      alt="X"
-                      className="ft-x-icon"
-                      width={14}
-                      height={14}
-                    />
-                  ) : (
-                    <i className={icon} />
-                  )}
-                </a>
-              );
-            })}
-          </div>
-        </div>
+            <div className="footer-col">
+              <div className="ft-col-heading">Contact Us</div>
+              <div className="ft-chip">
+                <div className="ft-chip-icon">
+                  <i className="fa-solid fa-location-dot" />
+                </div>
+                <div>
+                  <div className="ft-chip-label">{s.contact.addressLabel}</div>
+                  <div className="ft-chip-value">{s.contact.address}</div>
+                </div>
+              </div>
+              <div className="ft-chip">
+                <div className="ft-chip-icon">
+                  <i className="fa-solid fa-phone" />
+                </div>
+                <div>
+                  <div className="ft-chip-label">{s.contact.phoneLabel}</div>
+                  <div className="ft-chip-value">{s.contact.phone}</div>
+                </div>
+              </div>
+              <div className="ft-chip">
+                <div className="ft-chip-icon">
+                  <i className="fa-solid fa-envelope" />
+                </div>
+                <div>
+                  <div className="ft-chip-label">{s.contact.emailLabel}</div>
+                  <div className="ft-chip-value">{s.contact.email}</div>
+                </div>
+              </div>
+            </div>
 
-        <div className="footer-col">
-          <div className="ft-col-heading">Contact Us</div>
-          <div className="ft-chip">
-            <div className="ft-chip-icon">
-              <i className="fa-solid fa-location-dot" />
-            </div>
-            <div>
-              <div className="ft-chip-label">{s.contact.addressLabel}</div>
-              <div className="ft-chip-value">{s.contact.address}</div>
-            </div>
-          </div>
-          <div className="ft-chip">
-            <div className="ft-chip-icon">
-              <i className="fa-solid fa-phone" />
-            </div>
-            <div>
-              <div className="ft-chip-label">{s.contact.phoneLabel}</div>
-              <div className="ft-chip-value">{s.contact.phone}</div>
-            </div>
-          </div>
-          <div className="ft-chip">
-            <div className="ft-chip-icon">
-              <i className="fa-solid fa-envelope" />
-            </div>
-            <div>
-              <div className="ft-chip-label">{s.contact.emailLabel}</div>
-              <div className="ft-chip-value">{s.contact.email}</div>
-            </div>
-          </div>
-        </div>
+            {hasSystems && (
+              <div className="footer-col">
+                <div className="ft-col-heading">{s.systems.heading}</div>
+                <ul className="ft-links">
+                  {s.systems.links.map((link, i) => (
+                    <li key={`sys-${i}`}>
+                      <a href={link.href} target="_blank" rel="noopener noreferrer">
+                        <span className="ft-sys-name">{link.label}</span>
+                        {link.description && (
+                          <span className="ft-sys-desc">{link.description}</span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-        {hasSystems && (
-          <div className="footer-col">
-            <div className="ft-col-heading">{s.systems.heading}</div>
-            <ul className="ft-links">
-              {s.systems.links.map((link, i) => (
-                <li key={`sys-${i}`}>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer">
-                    <span className="ft-sys-name">{link.label}</span>
-                    {link.description && <span className="ft-sys-desc">{link.description}</span>}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div className="footer-col">
+              <div className="ft-col-heading">{s.newsletter.heading}</div>
+              <p className="ft-newsletter-text">{s.newsletter.description}</p>
+              <FooterNewsletterForm
+                heading=""
+                description=""
+                placeholder={s.newsletter.placeholder}
+                buttonLabel={s.newsletter.buttonLabel}
+              />
+            </div>
           </div>
-        )}
-
-        <div className="footer-col">
-          <div className="ft-col-heading">Stay Updated</div>
-          <p className="ft-newsletter-text">
-            Subscribe to our newsletter and get the latest stories, program updates, and impact reports delivered to your inbox.
-          </p>
-          <FooterNewsletterForm
-            heading=""
-            description=""
-            placeholder="your@email.com"
-            buttonLabel="Subscribe"
-          />
         </div>
       </div>
 
       <div className="ft-bottom">
         <div className="ft-bottom-inner">
           <div className="ft-bottom-left">
-            <div>&copy; {new Date().getFullYear()} Caritas Rwanda. All rights reserved.</div>
-            <div className="ft-developer">
-              Designed &amp; developed by <a href="https://lerony.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}><strong>Lerony</strong></a>
+            <div>
+              &copy; {new Date().getFullYear()} {s.bottom.orgName}. All rights reserved.
             </div>
+            {s.bottom.showDeveloperCredit ? (
+              <div className="ft-developer">
+                Designed &amp; developed by{' '}
+                <a href="https://lerony.com" target="_blank" rel="noopener noreferrer">
+                  <strong>{s.bottom.developerCredit}</strong>
+                </a>
+              </div>
+            ) : null}
           </div>
           <div className="ft-bottom-links">
             {s.legalLinks.map((link, i) => (
