@@ -64,10 +64,10 @@ section.cr-home-about {
 }
 
 .cr-about-visual__frame {
-  border: 1px solid #e5e7eb;
-  border-radius: 1rem;
-  background: #fafafa;
-  padding: clamp(0.75rem, 2vw, 1.75rem);
+  padding: 4px;
+  border: 2px solid #8c2208;
+  border-radius: calc(1rem + 6px);
+  background: #ffffff;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -82,6 +82,10 @@ section.cr-home-about {
   aspect-ratio: 960 / 680;
   min-height: 0;
   overflow: hidden;
+  border-radius: 1rem;
+  background: #fafafa;
+  padding: clamp(0.75rem, 2vw, 1.75rem);
+  box-sizing: border-box;
 }
 
 .cr-about-diagram__svg {
@@ -392,10 +396,13 @@ section.cr-home-about {
   }
 
   .cr-about-visual__frame {
-    padding: 0.2rem 0;
-    border-left: 0;
-    border-right: 0;
+    border-radius: calc(0.75rem + 6px);
+  }
+
+  .cr-about-diagram,
+  .cr-about-diagram--mobile {
     border-radius: 0.75rem;
+    padding: 0.35rem 0.15rem;
   }
 
   .cr-about-diagram--mobile {
