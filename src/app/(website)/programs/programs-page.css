@@ -9,49 +9,36 @@
 .prog-page-root {
   background: #ffffff;
   color: #1a1a1a;
-  overflow-x: clip; /* clip instead of hidden allows position: sticky to work */
 }
 
-/* ==================== TAB BAR ==================== */
+/* ==================== DEPARTMENT TABS (matches news filter bar) ==================== */
 
-.prog-tab-bar {
+.prog-page-root .prog-dept-tabs {
+  display: block;
   position: sticky;
-  top: 66px;
+  top: 70px;
   z-index: 200;
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.prog-tab-bar.is-stuck {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-}
-
-.prog-tab-inner {
+.prog-page-root .prog-dept-tabs__inner {
   max-width: 1240px;
-  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: stretch;
-  justify-content: space-between;
   padding: 0 1.5rem;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 
-@media (max-width: 768px) {
-  .prog-tab-inner {
-    justify-content: flex-start;
-    gap: 0.5rem;
-  }
-}
-
-.prog-tab-inner::-webkit-scrollbar {
+.prog-page-root .prog-dept-tabs__inner::-webkit-scrollbar {
   display: none;
 }
 
-.prog-tab-btn {
+.prog-page-root .prog-dept-tabs__tab {
   display: inline-flex;
   align-items: center;
   padding: 1rem 1.5rem;
@@ -60,45 +47,42 @@
   font-family: inherit;
   background: none;
   border: none;
-  border-bottom: 2.5px solid color-mix(in srgb, var(--dept-color, #1a1a1a) 15%, transparent);
+  border-bottom: 2.5px solid transparent;
   cursor: pointer;
-  color: var(--dept-color, #1a1a1a);
-  opacity: 0.65;
+  color: #6b7280;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, font-weight 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   position: relative;
   bottom: -1px;
 }
 
-.prog-tab-btn:hover {
-  opacity: 0.85;
-  background-color: color-mix(in srgb, var(--dept-color, #1a1a1a) 5%, transparent);
+.prog-page-root .prog-dept-tabs__tab:hover {
+  color: #374151;
+  background-color: #f9fafb;
 }
 
-.prog-tab-btn.active {
-  opacity: 1;
-  border-bottom-color: var(--dept-color, #1a1a1a);
-  font-weight: 800;
-}
-
-.prog-tab-count {
-  display: inline-block;
-  margin-left: 0.4rem;
-  font-size: 0.65rem;
+.prog-page-root .prog-dept-tabs__tab.is-active {
+  color: var(--dept-color, #a5280d);
+  border-bottom-color: var(--dept-color, #a5280d);
   font-weight: 700;
-  color: #9ca3af;
-  background: #f3f4f6;
-  padding: 0.08rem 0.45rem;
-  border-radius: 100px;
-  line-height: 1.4;
 }
 
-.prog-tab-btn.active .prog-tab-count {
-  color: var(--dept-color, #1a1a1a);
-  background: color-mix(in srgb, var(--dept-color, #1a1a1a) 8%, transparent);
+@media (max-width: 768px) {
+  .prog-page-root .prog-dept-tabs {
+    top: 60px;
+  }
+
+  .prog-page-root .prog-dept-tabs__tab {
+    padding: 0.85rem 1rem;
+    font-size: 0.72rem;
+  }
+
+  .prog-page-root .prog-dept-tabs__inner {
+    padding: 0 1rem;
+  }
 }
 
 /* ==================== TAB PANELS ==================== */
@@ -114,47 +98,74 @@
 /* ==================== PANEL HEADER ==================== */
 
 .prog-panel-header {
-  position: relative;
-  padding: 3.5rem 1.5rem 2.5rem;
-  background-color: color-mix(in srgb, var(--dept-color, #1a1a1a) 10%, #fafafa);
-  border-bottom: 2px solid color-mix(in srgb, var(--dept-color, #1a1a1a) 15%, #e5e7eb);
+  padding: clamp(2.25rem, 4vw, 3rem) 1.5rem clamp(1.75rem, 3vw, 2.25rem);
+  background: color-mix(in srgb, var(--dept-color, #8c2208) 5%, #ffffff);
+  border-bottom: 1px solid color-mix(in srgb, var(--dept-color, #8c2208) 16%, #ece8e2);
 }
 
+.prog-panel-header__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.prog-panel-header__eyebrow {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dept-color, #8c2208);
+}
+
+.prog-panel-header__title {
+  margin: 0;
+  max-width: 44rem;
+  font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--dept-color, #111827);
+}
+
+.prog-panel-header__lead {
+  margin: 0.85rem 0 0;
+  max-width: 38rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #4b5563;
+}
+
+/* Legacy aliases — dashboard previews / older markup */
 .prog-panel-header-inner {
   max-width: 1240px;
   margin: 0 auto;
 }
 
 .prog-panel-eyebrow {
-  display: inline-block;
-  font-size: 0.68rem;
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--dept-color, #1a1a1a);
-  background: color-mix(in srgb, var(--dept-color, #1a1a1a) 14%, transparent);
-  padding: 0.3rem 0.9rem;
-  border-radius: 100px;
-  margin-bottom: 1rem;
-  border: 1px solid color-mix(in srgb, var(--dept-color, #1a1a1a) 20%, transparent);
+  color: var(--dept-color, #8c2208);
 }
 
 .prog-panel-title {
-  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-  font-weight: 800;
-  color: var(--dept-color, #111111);
-  line-height: 1.15;
+  margin: 0;
+  max-width: 44rem;
+  font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.12;
   letter-spacing: -0.02em;
-  margin: 0 0 0.75rem;
-  max-width: 700px;
+  color: var(--dept-color, #111827);
 }
 
 .prog-panel-desc {
-  font-size: 0.95rem;
+  margin: 0.85rem 0 0;
+  max-width: 38rem;
+  font-size: 1rem;
+  line-height: 1.65;
   color: #4b5563;
-  line-height: 1.7;
-  max-width: 600px;
-  margin: 0;
 }
 
 .prog-panel-stats {
@@ -190,8 +201,8 @@
 /* ==================== PROGRAM CARD SECTION (with Rwanda map) ==================== */
 
 .prog-ref-section {
-  background: #f8f7f5;
-  padding: 3rem 1.5rem 5rem;
+  background: color-mix(in srgb, var(--dept-color, #8c2208) 4%, #f7f3ef);
+  padding: 2.5rem 1.5rem 4.5rem;
   position: relative;
   overflow: hidden;
   clip-path: inset(0);
@@ -438,6 +449,13 @@
   margin: 2rem auto;
 }
 
+.prog-empty--compact {
+  padding: 2.25rem 1.5rem;
+  margin: 0 auto 0.5rem;
+  max-width: 1240px;
+  font-size: 0.88rem;
+}
+
 /* ==================== EDITORIAL SECTIONS (Stories + News) ==================== */
 
 .prog-editorial {
@@ -539,6 +557,47 @@
 
 .prog-editorial__cta--button {
   appearance: none;
+}
+
+/* ── Department accent (inherits --dept-color from .prog-panel) ── */
+
+.prog-panel .prog-editorial__eyebrow {
+  color: var(--dept-color, #8c2208);
+}
+
+.prog-panel .prog-editorial__shell {
+  border-color: var(--dept-color, #8c2208);
+}
+
+.prog-panel .prog-editorial__cta {
+  border-color: var(--dept-color, #8c2208);
+  color: var(--dept-color, #8c2208);
+}
+
+.prog-panel .prog-editorial__cta:hover {
+  background: var(--dept-color, #8c2208);
+  color: #ffffff;
+}
+
+.prog-panel .prog-story-card:hover {
+  border-color: var(--dept-color, #8c2208);
+}
+
+.prog-panel .prog-story-card__tag {
+  color: var(--dept-color, #8c2208);
+  background: color-mix(in srgb, var(--dept-color, #8c2208) 8%, transparent);
+}
+
+.prog-panel .prog-story-card__outcome i {
+  color: var(--dept-color, #8c2208);
+}
+
+.prog-panel .prog-news-card:hover {
+  border-color: var(--dept-color, #8c2208);
+}
+
+.prog-panel .prog-news-card__link {
+  color: var(--dept-color, #8c2208);
 }
 
 /* ── Success story cards ── */
@@ -1223,17 +1282,8 @@
 /* ==================== RESPONSIVE ==================== */
 
 @media (max-width: 768px) {
-  .prog-tab-bar {
-    top: 64px;
-  }
-
-  .prog-tab-btn {
-    padding: 0.85rem 1rem;
-    font-size: 0.72rem;
-  }
-
   .prog-panel-header {
-    padding: 2rem 1rem 1.5rem;
+    padding-inline: 1rem;
   }
 
   .prog-ref-section {

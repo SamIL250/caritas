@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   encodeProgramAssetUrl,
   formatProgramDate,
@@ -53,7 +53,6 @@ export default function ProgramsLibrary({
 
   const [activeTab, setActiveTab] = useState<string>(sortedCategories[0]?.slug || "");
   const [activeProgram, setActiveProgram] = useState<(ProgramRow & any) | null>(null);
-  const tabBarRef = useRef<HTMLDivElement>(null);
 
   // Sync tab from URL hash
   useEffect(() => {
@@ -94,10 +93,6 @@ export default function ProgramsLibrary({
     };
   }, [sortedCategories]);
 
-  const sentinelRef = useRef<HTMLDivElement>(null);
-
-  // Rely on native CSS `position: sticky` for the tab bar.
-
   // Close drawers on Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -121,44 +116,39 @@ export default function ProgramsLibrary({
     window.history.replaceState(null, "", `#${slug}`);
   }
 
-  const activeCategory = sortedCategories.find((c) => c.slug === activeTab);
-  const activeStories = successStories.filter(
-    (s) => s.department_id === activeCategory?.id,
-  );
-  const activeNewsArticles = useMemo(() => {
-    if (!activeCategory) return [];
-    return sortByPublishedNewest(
-      news.filter((a) => a.department_id === activeCategory.id),
-    );
-  }, [news, activeCategory]);
-
   function categoryNewsHref(slug: string) {
     return `/news?topic=${encodeURIComponent(slug)}`;
   }
 
+  function storiesForCategory(categoryId: string) {
+    return successStories.filter((s) => s.department_id === categoryId);
+  }
+
+  function newsForCategory(categoryId: string) {
+    return sortByPublishedNewest(
+      news.filter((a) => a.department_id === categoryId),
+    );
+  }
+
   return (
     <>
-      {/* ── Sticky Tab Bar ── */}
-      <div ref={sentinelRef} style={{ height: 0, margin: 0, padding: 0, border: 0 }} />
-      <div className="prog-tab-bar" ref={tabBarRef}>
-        <div className="prog-tab-inner">
+      {/* ── Department navigation ── */}
+      <div className="prog-dept-tabs" role="navigation" aria-label="Program departments">
+        <div className="prog-dept-tabs__inner" role="tablist" aria-label="Departments">
           {sortedCategories.map((cat) => {
-            const count = programs.filter((p) => p.category === cat.slug).length;
+            const isActive = activeTab === cat.slug;
             return (
               <button
                 key={cat.id}
                 type="button"
                 id={`tab-${cat.slug}`}
-                className={`prog-tab-btn${activeTab === cat.slug ? " active" : ""}`}
+                className={`prog-dept-tabs__tab${isActive ? " is-active" : ""}`}
                 onClick={() => switchTab(cat.slug)}
-                aria-selected={activeTab === cat.slug}
+                aria-selected={isActive}
                 role="tab"
-                style={{ "--dept-color": cat.accent || "#1a1a1a" } as React.CSSProperties}
+                style={{ "--dept-color": cat.accent || "#a5280d" } as React.CSSProperties}
               >
-                {cat.plural_label || cat.label}
-                {count > 0 && (
-                  <span className="prog-tab-count">{count}</span>
-                )}
+                {cat.label}
               </button>
             );
           })}
@@ -170,9 +160,22 @@ export default function ProgramsLibrary({
         if (activeTab !== cat.slug) return null;
 
         const items = programs.filter((p) => p.category === cat.slug);
-        if (items.length === 0) {
+        const categoryStories = storiesForCategory(cat.id);
+        const categoryNews = newsForCategory(cat.id);
+        const showStories =
+          libraryConfig.show_success_stories && categoryStories.length > 0;
+        const showNews = libraryConfig.show_news && categoryNews.length > 0;
+        const hasPrograms = items.length > 0;
+
+        if (!hasPrograms && !showStories && !showNews) {
           return (
-            <div key={cat.id} className="prog-panel active" role="tabpanel" aria-labelledby={`tab-${cat.slug}`}>
+            <div
+              key={cat.id}
+              className="prog-panel active"
+              role="tabpanel"
+              aria-labelledby={`tab-${cat.slug}`}
+              style={{ "--dept-color": cat.accent || "#1a1a1a" } as React.CSSProperties}
+            >
               <div className="prog-empty">
                 Programs are coming soon for this pillar.
               </div>
@@ -188,41 +191,42 @@ export default function ProgramsLibrary({
             aria-labelledby={`tab-${cat.slug}`}
             style={{ "--dept-color": cat.accent || "#1a1a1a" } as React.CSSProperties}
           >
-            {/* ── Panel Header ── */}
-            <div className="prog-panel-header">
-              <div className="prog-panel-header-inner">
-                <div className="prog-panel-eyebrow">
-                  {cat.label}
-                </div>
-                <h2 className="prog-panel-title">
+            <header className="prog-panel-header">
+              <div className="prog-panel-header__inner">
+                <p className="prog-panel-header__eyebrow">{cat.label}</p>
+                <h2 className="prog-panel-header__title">
                   {cat.description || `${cat.label} Programs`}
                 </h2>
-                <p className="prog-panel-desc">
+                <p className="prog-panel-header__lead">
                   Explore the projects and initiatives under the {cat.label.toLowerCase()} department, serving communities across Rwanda.
                 </p>
-
               </div>
-            </div>
+            </header>
 
-            {/* ── Program Cards Section (with Rwanda map background) ── */}
-            <div className="prog-ref-section">
-              <RwandaMapBackground />
-              <div className="prog-ref-inner">
-                <ProgramBubbleGallery
-                  items={items}
-                  initialCount={libraryConfig.bubble_initial_count}
-                  viewAllLabel={libraryConfig.view_all_label}
-                  viewAllLessLabel={libraryConfig.view_all_less_label}
-                  onClick={(p) => setActiveProgram(p)}
-                />
+            {hasPrograms ? (
+              <div className="prog-ref-section">
+                <RwandaMapBackground />
+                <div className="prog-ref-inner">
+                  <ProgramBubbleGallery
+                    items={items}
+                    initialCount={libraryConfig.bubble_initial_count}
+                    viewAllLabel={libraryConfig.view_all_label}
+                    viewAllLessLabel={libraryConfig.view_all_less_label}
+                    onClick={(p) => setActiveProgram(p)}
+                  />
+                </div>
               </div>
-            </div>
-
-            {libraryConfig.show_success_stories && activeStories.length > 0 && (
-              <SuccessStoriesSection stories={activeStories} category={cat} />
+            ) : (
+              <div className="prog-empty prog-empty--compact">
+                Programs are coming soon for this pillar.
+              </div>
             )}
 
-            {libraryConfig.show_news && activeNewsArticles.length > 0 && (
+            {showStories ? (
+              <SuccessStoriesSection stories={categoryStories} category={cat} />
+            ) : null}
+
+            {showNews ? (
               <section className="prog-editorial prog-editorial--news" aria-labelledby={`prog-news-title-${cat.slug}`}>
                 <div className="prog-editorial__inner">
                   <header className="prog-editorial__header">
@@ -238,7 +242,7 @@ export default function ProgramsLibrary({
                   <div className="prog-editorial__shell">
                     <div className="prog-editorial__frame">
                       <div className="prog-news-list">
-                        {activeNewsArticles.slice(0, NEWS_VISIBLE).map((article) => (
+                        {categoryNews.slice(0, NEWS_VISIBLE).map((article) => (
                           <NewsCard key={article.id} article={article} />
                         ))}
                       </div>
@@ -253,7 +257,7 @@ export default function ProgramsLibrary({
                   </div>
                 </div>
               </section>
-            )}
+            ) : null}
           </div>
         );
       })}

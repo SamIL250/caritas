@@ -48,7 +48,7 @@
   pointer-events: none;
 }
 
-/* Sticky filter tabs — matching programs page tab bar style */
+/* Sticky filter tabs — underline bar (shared with programs page) */
 .news-page-root .news-filter-bar {
   position: sticky;
   top: 70px;
