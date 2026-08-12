@@ -8,7 +8,7 @@ export const DEFAULT_PUBLICATION_LANGUAGES = [
 
 export type PublicationLanguageOption = { code: string; label: string };
 
-const DEFAULT_CODES = new Set(
+const DEFAULT_CODES: Set<string> = new Set(
   DEFAULT_PUBLICATION_LANGUAGES.map((l) => l.code),
 );
 
