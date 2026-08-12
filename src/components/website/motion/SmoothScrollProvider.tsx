@@ -62,6 +62,14 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
         lerp: 0.1,
         smoothWheel: true,
         respectReducedMotion: true,
+        prevent: (node: HTMLElement | null) => {
+          if (!node) return false;
+          if (node.closest?.("[data-lenis-prevent]")) return true;
+          if (node.closest?.(".cb-panel, .cb-body, .donation-modal-form-area, .donation-modal-overlay")) {
+            return true;
+          }
+          return false;
+        },
       }}
     >
       <LenisLayoutSync />

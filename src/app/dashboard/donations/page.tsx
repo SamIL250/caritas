@@ -420,6 +420,12 @@ export default function DonationsPage() {
               Donation history
             </button>
             <Link
+              href="/dashboard/donations/subscriptions"
+              className="inline-flex items-center border-b-2 border-transparent px-6 py-3 text-sm font-bold text-stone-400 transition-all hover:text-stone-600"
+            >
+              Recurring gifts
+            </Link>
+            <Link
               href="/dashboard/donations/general"
               className="inline-flex items-center border-b-2 border-transparent px-6 py-3 text-sm font-bold text-stone-400 transition-all hover:text-stone-600"
             >

@@ -5,6 +5,10 @@ import { stripe } from "@/lib/stripe";
 import type { CheckoutRecurrence } from "@/lib/donation-frequency";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { buildDonationInsertFromCheckoutSession } from "@/lib/checkout-session-donation";
+import {
+  linkDonationToSubscription,
+  upsertDonationSubscriptionFromStripe,
+} from "@/lib/donation-subscriptions";
 
 function checkoutSuccessUrlWithSessionPlaceholder(baseUrl: string): string {
   if (baseUrl.includes("session_id=")) return baseUrl;
@@ -36,6 +40,7 @@ export async function createDonationSession(data: {
       campaignName: data.campaignName,
       donorMessage: (data.donorMessage ?? "").slice(0, 2000),
       donorName: (data.donorName ?? "").slice(0, 500),
+      donorEmail: (data.donorEmail ?? "").slice(0, 320),
       donorType: data.donorType ?? "individual",
       organizationName: (data.organizationName ?? "").slice(0, 500),
       organizationContactName: (data.organizationContactName ?? "").slice(0, 500),
@@ -131,7 +136,7 @@ export async function finalizeStripeCheckoutSession(
 
   try {
     const session = await stripe.checkout.sessions.retrieve(id, {
-      expand: ["payment_intent"],
+      expand: ["payment_intent", "subscription"],
     });
 
     const ps = session.payment_status as string;
@@ -165,7 +170,36 @@ export async function finalizeStripeCheckoutSession(
       return { ok: false, error: error.message };
     }
 
+    if (session.mode === "subscription" && session.subscription) {
+      const subId =
+        typeof session.subscription === "string"
+          ? session.subscription
+          : session.subscription.id;
+      try {
+        const sub = await stripe.subscriptions.retrieve(subId);
+        const subscriptionRowId = await upsertDonationSubscriptionFromStripe(sub, {
+          checkoutSessionId: session.id,
+          donorEmail:
+            session.customer_details?.email ?? session.customer_email ?? null,
+          amountOverride: session.amount_total ?? null,
+        });
+        if (subscriptionRowId) {
+          const { data: created } = await supabase
+            .from("donations")
+            .select("id")
+            .eq("stripe_payment_intent_id", row.stripe_payment_intent_id)
+            .maybeSingle();
+          if (created?.id) {
+            await linkDonationToSubscription(created.id, subscriptionRowId);
+          }
+        }
+      } catch (subErr) {
+        console.error("finalizeStripeCheckoutSession subscription upsert:", subErr);
+      }
+    }
+
     revalidatePath("/dashboard/donations");
+    revalidatePath("/dashboard/donations/subscriptions");
     revalidatePath("/donations");
     revalidatePath("/");
     return { ok: true };

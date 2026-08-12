@@ -6,6 +6,7 @@ import "./be-part-change.css";
 
 import ScrollReveal from "@/components/website/motion/ScrollReveal";
 import ParallaxLayer from "@/components/website/motion/ParallaxLayer";
+import ExpandableText from "@/components/website/ExpandableText";
 import { useDonation } from "@/context/DonationContext";
 import type { CtaImpactPanel, CtaSidebarCard } from "@/components/website/sections/CTA";
 
@@ -178,7 +179,7 @@ export default function BePartOfChangeSection({
   bottom_secondary_url = "#",
   campaign,
 }: BePartOfChangeSectionProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const displayEyebrow = (eyebrow || "").trim();
   const { line1, line2 } = formatLegacyHeading(heading, heading_accent);
   const displayBody =
@@ -202,7 +203,7 @@ export default function BePartOfChangeSection({
             onClick={() => setIsOpen(!isOpen)}
           >
             <i className="fa-solid fa-hands-holding-heart" aria-hidden />
-            <span>Fold me to support</span>
+            <span>{isOpen ? "Hide support section" : "Fold me to support"}</span>
             <i
               className="fa-solid fa-chevron-down cr-bpc-change__toggle-arrow"
               aria-hidden
@@ -230,7 +231,11 @@ export default function BePartOfChangeSection({
                 line1
               )}
             </h2>
-            <p className="cr-bpc-change__subtitle">{displayBody}</p>
+            <ExpandableText
+              text={displayBody}
+              lines={2}
+              className="cr-bpc-change__subtitle"
+            />
           </header>
           </ScrollReveal>
 
@@ -281,7 +286,11 @@ export default function BePartOfChangeSection({
                           </p>
                         ) : null}
                         {(campaign.excerpt || "").trim() ? (
-                          <p className="cr-bpc-change__feat-story">{campaign.excerpt}</p>
+                          <ExpandableText
+                            text={campaign.excerpt}
+                            lines={2}
+                            className="cr-bpc-change__feat-story"
+                          />
                         ) : null}
                         <DonateOrLink
                           href={primaryDonateHref(campaign, pbUrl)}
@@ -312,77 +321,83 @@ export default function BePartOfChangeSection({
                 </ScrollReveal>
 
                 <aside className="cr-bpc-change__aside">
-                  {sidebar_cards.map((card, idx) => {
-                    const tone = card.category_tone || "rose";
-                    const btnText = (card.button_text || "Support").trim();
-                    const btnUrl = (card.button_url || "#donate").trim() || "#donate";
-                    return (
-                      <div key={`${card.name}-${idx}`} className="cr-bpc-change__card">
-                        <div className="cr-bpc-change__card-thumb">
-                          {card.image_url ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={card.image_url} alt={card.image_alt || ""} loading="lazy" />
-                          ) : (
-                            <i className="fa-regular fa-user" aria-hidden />
-                          )}
-                        </div>
-                        <div className="cr-bpc-change__card-body">
-                          {(card.category_label || "").trim() ? (
-                            <p
-                              className="cr-bpc-change__card-tag"
-                              style={tagStyle(tone)}
-                            >
-                              {card.category_icon ? (
-                                <i className={iconClass(card.category_icon)} aria-hidden />
-                              ) : null}
-                              {card.category_label}
-                            </p>
-                          ) : null}
-                          {(card.name || "").trim() ? (
-                            <p className="cr-bpc-change__card-name">{card.name}</p>
-                          ) : null}
+                  <div className="cr-bpc-change__aside-list">
+                    {sidebar_cards.map((card, idx) => {
+                      const tone = card.category_tone || "rose";
+                      const btnText = (card.button_text || "Support").trim();
+                      const btnUrl = (card.button_url || "#donate").trim() || "#donate";
+                      return (
+                        <div key={`${card.name}-${idx}`} className="cr-bpc-change__card">
+                          <div className="cr-bpc-change__card-thumb">
+                            {card.image_url ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={card.image_url} alt={card.image_alt || ""} loading="lazy" />
+                            ) : (
+                              <i className="fa-regular fa-user" aria-hidden />
+                            )}
+                          </div>
+                          <div className="cr-bpc-change__card-body">
+                            {(card.category_label || "").trim() ? (
+                              <p
+                                className="cr-bpc-change__card-tag"
+                                style={tagStyle(tone)}
+                              >
+                                {card.category_icon ? (
+                                  <i className={iconClass(card.category_icon)} aria-hidden />
+                                ) : null}
+                                {card.category_label}
+                              </p>
+                            ) : null}
+                            {(card.name || "").trim() ? (
+                              <p className="cr-bpc-change__card-name">{card.name}</p>
+                            ) : null}
                           {(card.description || "").trim() ? (
-                            <p className="cr-bpc-change__card-desc">{card.description}</p>
+                            <ExpandableText
+                              text={card.description}
+                              lines={2}
+                              className="cr-bpc-change__card-desc"
+                            />
                           ) : null}
-                          <DonateOrLink
-                            href={btnUrl}
-                            className="cr-bpc-change__card-btn"
-                            modalCampaignId={card.modal_campaign_id ?? null}
-                          >
-                            {btnText}
-                          </DonateOrLink>
+                            <DonateOrLink
+                              href={btnUrl}
+                              className="cr-bpc-change__card-btn"
+                              modalCampaignId={card.modal_campaign_id ?? null}
+                            >
+                              {btnText}
+                            </DonateOrLink>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </aside>
-              </div>
+                      );
+                    })}
+                  </div>
 
-              <div className="cr-bpc-change__bottom">
-                {(bottom_primary_text || "").trim() ? (
-                  <DonateOrLink
-                    href={primaryDonateHref(
-                      campaign,
-                      (bottom_primary_url || "#donate").trim() || "#donate",
-                    )}
-                    className="cr-bpc-change__bottom-btn cr-bpc-change__bottom-btn--primary"
-                    modalCampaignId={primaryModalId(
-                      campaign,
-                      (bottom_primary_url || "#donate").trim() || "#donate",
-                    )}
-                  >
-                    {bottom_primary_text.trim()}
-                  </DonateOrLink>
-                ) : null}
-                {(bottom_secondary_text || "").trim() ? (
-                  <CtaSecondaryLink
-                    href={(bottom_secondary_url || "#").trim() || "#"}
-                    className="cr-bpc-change__bottom-btn cr-bpc-change__bottom-btn--ghost"
-                  >
-                    <i className="fa-solid fa-people-group" aria-hidden />
-                    {bottom_secondary_text.trim()}
-                  </CtaSecondaryLink>
-                ) : null}
+                  <div className="cr-bpc-change__bottom">
+                    {(bottom_primary_text || "").trim() ? (
+                      <DonateOrLink
+                        href={primaryDonateHref(
+                          campaign,
+                          (bottom_primary_url || "#donate").trim() || "#donate",
+                        )}
+                        className="cr-bpc-change__bottom-btn cr-bpc-change__bottom-btn--primary"
+                        modalCampaignId={primaryModalId(
+                          campaign,
+                          (bottom_primary_url || "#donate").trim() || "#donate",
+                        )}
+                      >
+                        {bottom_primary_text.trim()}
+                      </DonateOrLink>
+                    ) : null}
+                    {(bottom_secondary_text || "").trim() ? (
+                      <CtaSecondaryLink
+                        href={(bottom_secondary_url || "#").trim() || "#"}
+                        className="cr-bpc-change__bottom-btn cr-bpc-change__bottom-btn--ghost"
+                      >
+                        <i className="fa-solid fa-people-group" aria-hidden />
+                        {bottom_secondary_text.trim()}
+                      </CtaSecondaryLink>
+                    ) : null}
+                  </div>
+                </aside>
               </div>
             </div>
           </div>

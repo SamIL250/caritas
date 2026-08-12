@@ -137,10 +137,34 @@ export default function WebsiteFooter({ settings: settingsProp }: WebsiteFooterP
             </div>
             {s.bottom.showDeveloperCredit ? (
               <div className="ft-developer">
-                Designed &amp; developed by{' '}
-                <a href="https://lerony.com" target="_blank" rel="noopener noreferrer">
-                  <strong>{s.bottom.developerCredit}</strong>
+                <a
+                  href="https://lerony.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ft-developer__brand"
+                  title="Lerony — IT Technology and Innovation in Kigali"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/img/lerony_logo.png"
+                    alt="Lerony"
+                    className="ft-developer__logo"
+                    width={88}
+                    height={28}
+                    loading="lazy"
+                  />
                 </a>
+                <span>
+                  Designed &amp; developed by{" "}
+                  <a
+                    href="https://lerony.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Lerony — IT Technology and Innovation in Kigali"
+                  >
+                    <strong>{s.bottom.developerCredit || "Lerony"}</strong>
+                  </a>
+                </span>
               </div>
             ) : null}
           </div>

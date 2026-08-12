@@ -4,6 +4,7 @@ import React, { useId, useState } from "react";
 import Link from "next/link";
 import ScrollReveal from "@/components/website/motion/ScrollReveal";
 import ParallaxLayer from "@/components/website/motion/ParallaxLayer";
+import ExpandableText from "@/components/website/ExpandableText";
 import {
   CANONICAL_PROGRAMS,
   PROGRAM_SLOT_LEARN_MORE_HREF,
@@ -248,7 +249,11 @@ export default function ProgramCards({
                       Program Area
                     </span>
                     <h3 className="prog-heading">{active.title}</h3>
-                    <p className="prog-desc">{active.description}</p>
+                    <ExpandableText
+                      text={active.description}
+                      lines={2}
+                      className="prog-desc"
+                    />
                     <ul className="prog-bullets">
                       {bullets.map((b) => (
                         <li key={b}>

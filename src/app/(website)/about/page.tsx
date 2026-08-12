@@ -149,7 +149,16 @@ export default async function AboutPage() {
       case "map_section":
         break;
       case "timeline":
-        panels[anchor] = <HistoryBentoSection key={section.id} />;
+        panels[anchor] = (
+          <HistoryBentoSection
+            key={section.id}
+            {...(section.content &&
+            typeof section.content === "object" &&
+            !Array.isArray(section.content)
+              ? (section.content as Record<string, unknown>)
+              : {})}
+          />
+        );
         break;
       case "pillar_cards":
         panels[anchor] = (

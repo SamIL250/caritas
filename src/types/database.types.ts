@@ -388,6 +388,7 @@ export interface Database {
           community_campaign_id: string | null
           payment_method: string
           stripe_metadata: Json
+          donation_subscription_id: string | null
           created_at: string
         }
         Insert: {
@@ -408,6 +409,7 @@ export interface Database {
           community_campaign_id?: string | null
           payment_method?: string
           stripe_metadata?: Json
+          donation_subscription_id?: string | null
           created_at?: string
         }
         Update: {
@@ -428,7 +430,119 @@ export interface Database {
           community_campaign_id?: string | null
           payment_method?: string
           stripe_metadata?: Json
+          donation_subscription_id?: string | null
           created_at?: string
+        }
+        Relationships: []
+      }
+      donation_subscriptions: {
+        Row: {
+          id: string
+          stripe_subscription_id: string
+          stripe_customer_id: string | null
+          stripe_checkout_session_id: string | null
+          community_campaign_id: string | null
+          campaign_name: string | null
+          donor_email: string | null
+          donor_name: string | null
+          donor_type: string
+          organization_name: string | null
+          organization_contact_name: string | null
+          donor_phone: string | null
+          donor_address: string | null
+          donor_message: string | null
+          amount: number
+          currency: string
+          interval: string
+          interval_count: number
+          status:
+            | 'incomplete'
+            | 'active'
+            | 'paused'
+            | 'past_due'
+            | 'canceled'
+            | 'unpaid'
+            | 'incomplete_expired'
+          cancel_at_period_end: boolean
+          current_period_end: string | null
+          canceled_at: string | null
+          paused_at: string | null
+          last_donation_id: string | null
+          stripe_metadata: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          stripe_subscription_id: string
+          stripe_customer_id?: string | null
+          stripe_checkout_session_id?: string | null
+          community_campaign_id?: string | null
+          campaign_name?: string | null
+          donor_email?: string | null
+          donor_name?: string | null
+          donor_type?: string
+          organization_name?: string | null
+          organization_contact_name?: string | null
+          donor_phone?: string | null
+          donor_address?: string | null
+          donor_message?: string | null
+          amount: number
+          currency?: string
+          interval?: string
+          interval_count?: number
+          status?:
+            | 'incomplete'
+            | 'active'
+            | 'paused'
+            | 'past_due'
+            | 'canceled'
+            | 'unpaid'
+            | 'incomplete_expired'
+          cancel_at_period_end?: boolean
+          current_period_end?: string | null
+          canceled_at?: string | null
+          paused_at?: string | null
+          last_donation_id?: string | null
+          stripe_metadata?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          stripe_subscription_id?: string
+          stripe_customer_id?: string | null
+          stripe_checkout_session_id?: string | null
+          community_campaign_id?: string | null
+          campaign_name?: string | null
+          donor_email?: string | null
+          donor_name?: string | null
+          donor_type?: string
+          organization_name?: string | null
+          organization_contact_name?: string | null
+          donor_phone?: string | null
+          donor_address?: string | null
+          donor_message?: string | null
+          amount?: number
+          currency?: string
+          interval?: string
+          interval_count?: number
+          status?:
+            | 'incomplete'
+            | 'active'
+            | 'paused'
+            | 'past_due'
+            | 'canceled'
+            | 'unpaid'
+            | 'incomplete_expired'
+          cancel_at_period_end?: boolean
+          current_period_end?: string | null
+          canceled_at?: string | null
+          paused_at?: string | null
+          last_donation_id?: string | null
+          stripe_metadata?: Json
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -871,6 +985,8 @@ export interface Database {
           updated_at: string
           is_locked: boolean
           access_password: string | null
+          language: string
+          language_label: string
         }
         Insert: {
           id?: string
@@ -899,6 +1015,8 @@ export interface Database {
           updated_at?: string
           is_locked?: boolean
           access_password?: string | null
+          language?: string
+          language_label?: string
         }
         Update: {
           id?: string
@@ -927,6 +1045,8 @@ export interface Database {
           updated_at?: string
           is_locked?: boolean
           access_password?: string | null
+          language?: string
+          language_label?: string
         }
         Relationships: []
       }

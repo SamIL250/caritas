@@ -25,9 +25,9 @@ export type NewsCmsSection = {
 };
 
 const DEFAULT_META = {
-  title: "News & Updates — Caritas Rwanda",
+  title: "Stories and Updates — Caritas Rwanda",
   description:
-    "Latest news, stories and updates from Caritas Rwanda — serving communities across all dioceses.",
+    "Latest stories and updates from Caritas Rwanda — serving communities across all dioceses.",
 };
 
 function parseHeroToChrome(hero: Record<string, unknown> | null): NewsPageChrome {
@@ -43,7 +43,7 @@ function parseHeroToChrome(hero: Record<string, unknown> | null): NewsPageChrome
       ? options.badge_text
       : "Latest from Caritas Rwanda";
 
-  const headlinePrefix = typeof hero?.heading === "string" ? hero.heading : "News &";
+  const headlinePrefix = typeof hero?.heading === "string" ? hero.heading : "Stories and";
   const headlineAccent =
     typeof options.heading_accent === "string" && options.heading_accent.trim()
       ? options.heading_accent
@@ -68,7 +68,7 @@ function chromeFromSettings(s: NewsPageSettings | null): NewsPageChrome {
   if (!s) {
     return {
       eyebrow: "Latest from Caritas Rwanda",
-      headlinePrefix: "News &",
+      headlinePrefix: "Stories and",
       headlineAccent: "Updates",
       intro: "",
       heroImageUrl: null,
@@ -79,7 +79,7 @@ function chromeFromSettings(s: NewsPageSettings | null): NewsPageChrome {
 
   return {
     eyebrow: (s.hero_eyebrow || "Latest from Caritas Rwanda").trim(),
-    headlinePrefix: (s.hero_headline_prefix || "News &").trim(),
+    headlinePrefix: (s.hero_headline_prefix || "Stories and").trim(),
     headlineAccent: (s.hero_headline_accent || "Updates").trim(),
     intro: (s.hero_intro ?? "").trim(),
     heroImageUrl: img ? img : null,

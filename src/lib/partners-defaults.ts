@@ -108,4 +108,34 @@ export const DEFAULT_PARTNERS: Partner[] = [
     logo_url: "/img/Ethical Artificial Intelligence for Human Development  EAiD.png",
     url: "https://eaid.org",
   },
+  {
+    name: "Lerony",
+    logo_url: "/img/lerony_logo.png",
+    url: "https://lerony.com",
+  },
 ];
+
+/** Ensure Lerony (site technology partner) is always present in partner grids. */
+export function ensureLeronyPartner(partners: Partner[]): Partner[] {
+  const list = filterPartnersForDisplay(partners);
+  const hasLerony = list.some((p) => /^lerony$/i.test(String(p.name || "").trim()));
+  if (hasLerony) {
+    return list.map((p) =>
+      /^lerony$/i.test(String(p.name || "").trim())
+        ? {
+            ...p,
+            logo_url: p.logo_url?.trim() || "/img/lerony_logo.png",
+            url: p.url?.trim() || "https://lerony.com",
+          }
+        : p,
+    );
+  }
+  return [
+    ...list,
+    {
+      name: "Lerony",
+      logo_url: "/img/lerony_logo.png",
+      url: "https://lerony.com",
+    },
+  ];
+}

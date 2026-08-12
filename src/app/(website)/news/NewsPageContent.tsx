@@ -8,8 +8,8 @@ import type { PublishedNewsArticle } from "./get-news-data";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
 
 import NewsArticlesFeed from "@/components/website/news/NewsArticlesFeed";
+import NewsLandingHero from "@/components/website/news/NewsLandingHero";
 import NewsNewsletterFooter from "@/components/website/news/NewsNewsletterFooter";
-import PageHeroSection from "@/components/website/sections/PageHeroSection";
 
 import "./news-page.css";
 
@@ -53,38 +53,33 @@ export default function NewsPageContent({
     setDepartmentFilter(resolveDepartmentFilter(initialTopic, departmentPillars));
   }, [initialTopic, departmentPillars]);
 
-  // original-website/news.html has no dedicated hero image — use slide4 (community) which fits the news context
-  const heroImage =
-    chrome.heroImageUrl?.trim() || "/img/slide4.webp";
-
   const headlineAccent = (chrome.headlineAccent || "Updates").trim();
-  const headlinePrefix = (chrome.headlinePrefix || "News &").trim();
+  const headlinePrefix = (chrome.headlinePrefix || "Stories and").trim();
 
   return (
     <div className="news-page-root bg-[#f7f5f2]">
-      <PageHeroSection
-        imageUrl={heroImage}
+      <NewsLandingHero
         eyebrow={chrome.eyebrow || "Latest from Caritas Rwanda"}
-        heading={`${headlinePrefix} ${headlineAccent}`}
-        headingAccent={headlineAccent}
-        subheading={chrome.intro}
-        breadcrumbLabel="News"
+        headlinePrefix={headlinePrefix}
+        headlineAccent={headlineAccent}
+        intro={chrome.intro}
+        heroImageUrl={chrome.heroImageUrl}
+        breadcrumbLabel="Stories and Updates"
       >
-        {/* Search bar rendered inside the hero as children */}
         <div className="news-hero-search">
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search articles…"
-            aria-label="Search news articles"
+            aria-label="Search stories and updates"
             autoComplete="off"
           />
           <span className="search-icon">
             <i className="fa-solid fa-magnifying-glass" aria-hidden />
           </span>
         </div>
-      </PageHeroSection>
+      </NewsLandingHero>
 
       {cmsSections.map((section) => {
         if (!section.visible) return null;

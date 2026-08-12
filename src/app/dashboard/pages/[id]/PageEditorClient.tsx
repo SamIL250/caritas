@@ -121,8 +121,10 @@ import ProgramsPartnerSectionEditor from '@/components/dashboard/pages/ProgramsP
 import FeaturedCampaignSectionPreview from '@/components/dashboard/pages/FeaturedCampaignSectionPreview';
 import type { PublishedNewsArticle } from '@/app/(website)/news/get-news-data';
 import type { PublicationCategoryRow, PublicationRow } from '@/lib/publications';
+import type { TestimonyRow } from '@/lib/testimonies';
 import type { ProgramCategoryRow, ProgramRow } from '@/lib/programs';
 import type { NewsArticleRow } from '@/lib/news';
+import type { ProgramDepartmentOption } from '@/lib/program-departments';
 import { saveProgramBubbleDrafts, type ProgramBubbleDraft } from '@/app/actions/programs';
 import {
   applyProgramBubbleDrafts,
@@ -134,9 +136,12 @@ import { ImageIcon } from 'lucide-react';
 
 import '@/app/website-cms-section-preview.css';
 import '@/app/home-about-section.css';
+import '@/app/impact-at-glance-section.css';
+import '@/app/(website)/metrics/metrics-page.css';
 import '@/app/program-tabs-section.css';
 import '@/app/resources-impact-section.css';
 import '@/app/about-page-editor-preview.css';
+import '@/app/page-hero-editor-preview.css';
 import '@/app/video-gallery-section.css';
 import '@/app/news-cards-section.css';
 import '@/app/partners-section.css';
@@ -221,11 +226,13 @@ interface PageEditorProps {
   newsFeedPreview?: {
     featuredArticle: PublishedNewsArticle | null;
     gridArticles: PublishedNewsArticle[];
+    departmentPillars: ProgramDepartmentOption[];
   } | null;
   /** When editing the Publications CMS page: published rows + categories for the library preview. */
   publicationsFeedPreview?: {
     publications: PublicationRow[];
     categories: PublicationCategoryRow[];
+    testimonies: TestimonyRow[];
   } | null;
   /** When editing the Programs CMS page: published programs for library preview. */
   programsPreview?: {
@@ -730,10 +737,11 @@ export default function PageEditorClient({
               eyebrow={(typeof o.badge_text === 'string' && o.badge_text.trim())
                 ? String(o.badge_text)
                 : 'Latest from Caritas Rwanda'}
-              headlinePrefix={typeof localState.heading === 'string' ? localState.heading : 'News &'}
+              headlinePrefix={typeof localState.heading === 'string' ? localState.heading : 'Stories and'}
               headlineAccent={accent}
               intro={typeof localState.subheading === 'string' ? localState.subheading : ''}
               heroImageUrl={typeof localState.image_url === 'string' ? localState.image_url : null}
+              breadcrumbLabel="Stories and Updates"
             >
               <div className="news-hero-search">
                 <input
@@ -747,11 +755,6 @@ export default function PageEditorClient({
                   <i className="fa-solid fa-magnifying-glass" />
                 </span>
               </div>
-              <nav className="news-breadcrumb mt-3" aria-label="Breadcrumb">
-                <Link href="/">Home</Link>
-                <span aria-hidden>›</span>
-                <span>News</span>
-              </nav>
             </NewsLandingHero>
           </div>
         );
@@ -866,32 +869,73 @@ export default function PageEditorClient({
         );
       }
       case 'partners': return <PartnersSection {...props} />;
-      case 'news_cards': return <NewsCards {...props} />;
+      case 'news_cards': {
+        const videoGallery = sections.find((s: { type?: string }) => s.type === 'video_gallery');
+        const videoContent =
+          videoGallery?.content &&
+          typeof videoGallery.content === 'object' &&
+          !Array.isArray(videoGallery.content)
+            ? (videoGallery.content as Record<string, unknown>)
+            : undefined;
+        return (
+          <NewsCards
+            {...props}
+            videoGalleryProps={
+              (props.videoGalleryProps as Record<string, unknown> | undefined) || videoContent
+            }
+          />
+        );
+      }
       case 'contact_info': return <ContactInfo {...props} />;
-      case 'faq_section': return <FaqSection {...props} />;
+      case 'faq_section':
+        return page.slug === 'home' ? (
+          <div className="space-y-3 px-4 py-6">
+            <p className="rounded-lg border border-amber-100 bg-amber-50 p-3 text-[10px] leading-relaxed text-amber-800">
+              FAQ is not rendered on the live homepage. Edit it here for other uses, or move it to another page.
+            </p>
+            <FaqSection {...props} />
+          </div>
+        ) : (
+          <FaqSection {...props} />
+        );
       case 'gallery': return <Gallery {...props} />;
       case 'divider': return <Divider />;
       case 'program_cards': return <ProgramCards {...props} />;
       case 'map_section':
         return <OurLocationSection {...props} show_cta={page.slug === 'home'} />;
       case 'stats_banner':
-        return isAboutPage ? null : <StatsBannerSection {...props} />;
+        return isAboutPage ? (
+          <div className="px-6 py-10 text-center text-sm text-stone-500">
+            Stats banner is not shown on the About page layout.
+          </div>
+        ) : (
+          <StatsBannerSection {...props} />
+        );
       case 'featured_quote':
         if (isAboutPage) {
           const c = props as Record<string, unknown>;
           return (
-            <ChairpersonSection
-              name={c.name as string}
-              title={c.subtitle as string}
-              quote={c.quote as string}
-              meta={c.meta as string}
-              photoUrl={(c.photo_url as string) || "/img/Chairperson/anaclet.jpg"}
-            />
+            <div className="space-y-3">
+              <p className="px-4 pt-3 text-[10px] leading-relaxed text-amber-800 bg-amber-50 border border-amber-100 rounded-lg mx-4 mt-4 p-3">
+                Preview only — the live About page does not render this chairperson block from this section.
+              </p>
+              <ChairpersonSection
+                name={c.name as string}
+                title={c.subtitle as string}
+                quote={c.quote as string}
+                meta={c.meta as string}
+                photoUrl={(c.photo_url as string) || "/img/Chairperson/anaclet.jpg"}
+              />
+            </div>
           );
         }
         return <FeaturedQuoteSection {...props} />;
       case 'timeline':
-        return isAboutPage ? <HistoryBentoSection /> : <TimelineSection {...props} />;
+        return isAboutPage ? (
+          <HistoryBentoSection {...props} />
+        ) : (
+          <TimelineSection {...props} />
+        );
       case 'pillar_cards':
         return isAboutPage ? (
           <MissionVisionValuesSection showValues={false} {...parseMissionVisionContent(props)} />
@@ -907,12 +951,24 @@ export default function PageEditorClient({
       case 'network_section': return <NetworkSection {...props} showFullInfo={page.slug === 'diocesan'} />;
       case 'diocese_map_section': return <DioceseMapSection {...props} />;
       case 'leadership_grid': return <LeadershipGridSection {...props} />;
-      case 'video_gallery': return <VideoGallerySection {...props} />;
+      case 'video_gallery':
+        return page.slug === 'home' ? (
+          <div className="space-y-3">
+            <p className="mx-4 mt-4 rounded-lg border border-sky-100 bg-sky-50 p-3 text-[10px] leading-relaxed text-sky-900">
+              On the homepage, this gallery appears inside <strong>Stories &amp; Updates</strong> (video tab).
+              Select that section to preview the combined layout.
+            </p>
+            <VideoGallerySection {...props} />
+          </div>
+        ) : (
+          <VideoGallerySection {...props} />
+        );
       case 'news_article_feed':
         return (
           <NewsFeedSectionPreview
             featuredArticle={newsFeedPreview?.featuredArticle ?? null}
             gridArticles={newsFeedPreview?.gridArticles ?? []}
+            departmentPillars={newsFeedPreview?.departmentPillars ?? []}
           />
         );
       case 'publications_library':
@@ -920,6 +976,7 @@ export default function PageEditorClient({
           <PublicationsFeedSectionPreview
             publications={publicationsFeedPreview?.publications ?? []}
             categories={publicationsFeedPreview?.categories ?? []}
+            testimonies={publicationsFeedPreview?.testimonies ?? []}
           />
         );
       case 'programs_library':
@@ -974,7 +1031,7 @@ export default function PageEditorClient({
             content: s.content || {},
           }));
         return (
-          <div className="max-w-[1100px] mx-auto px-4 py-6">
+          <div className="w-full">
             <ImpactAtGlanceSection {...props} allProgramSections={allProgramSections} />
           </div>
         );
@@ -1749,14 +1806,20 @@ function SectionForm({
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</label>
             <div className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl border border-stone-100">
               <div className="w-16 h-10 rounded-lg bg-stone-200 overflow-hidden flex-shrink-0">
-                {value && <img src={value} className="w-full h-full object-cover" />}
+                {value ? (
+                  <img src={value} className="w-full h-full object-cover" alt="" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-stone-400">
+                    <ImageIcon size={18} aria-hidden />
+                  </div>
+                )}
               </div>
               <Button
                 variant="secondary"
                 className="h-8 px-3 text-xs"
                 onClick={() => setShowMediaPicker(key)}
               >
-                Replace
+                {value ? 'Replace' : 'Choose image'}
               </Button>
             </div>
             {showMediaPicker === key && (
@@ -1953,30 +2016,46 @@ function SectionForm({
         <div className="space-y-6">
           {renderOptionField('Top Badge Text', 'badge_text', 'text')}
           {renderField('Heading', 'heading', 'text')}
-          {renderField('Subheading', 'subheading', 'textarea')}
-          <div className="grid grid-cols-2 gap-4">
-            {renderField('Primary Button Text', 'cta_text', 'text')}
-            {renderField('Primary Button URL', 'cta_url', 'text')}
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {renderOptionField('Secondary Button Text', 'secondary_cta_text', 'text')}
-            {renderOptionField('Secondary Button URL', 'secondary_cta_url', 'text')}
-          </div>
-          {renderField('Background Image', 'image_url', 'image')}
-          {renderOptionAlignment('Text Alignment')}
-          <div className="grid grid-cols-2 gap-4">
-            {renderOptionSlider('Overlay Opacity', 'overlay_opacity')}
-            {renderOptionColor('Text Color', 'text_color')}
-          </div>
-
           {pageSlug && pageSlug !== 'home' ? (
+            <>
+              {renderOptionField(
+                pageSlug === 'news' || pageSlug === 'publications' || pageSlug === 'programs'
+                  ? 'Heading accent (second phrase)'
+                  : 'Heading accent phrase',
+                'heading_accent',
+                'text',
+              )}
+              <p className="text-[9px] text-stone-400 -mt-4">
+                {pageSlug === 'news' || pageSlug === 'publications' || pageSlug === 'programs'
+                  ? 'Shown after the heading on the live page (e.g. heading “Stories and” + accent “Updates”).'
+                  : 'Highlights this exact phrase inside the heading when it appears in the heading text.'}
+              </p>
+            </>
+          ) : null}
+          {renderField('Subheading', 'subheading', 'textarea')}
+          {renderField('Background Image', 'image_url', 'image')}
+          {pageSlug === 'home' ? (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                {renderField('Primary Button Text', 'cta_text', 'text')}
+                {renderField('Primary Button URL', 'cta_url', 'text')}
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {renderOptionField('Secondary Button Text', 'secondary_cta_text', 'text')}
+                {renderOptionField('Secondary Button URL', 'secondary_cta_url', 'text')}
+              </div>
+              {renderOptionAlignment('Text Alignment')}
+              <div className="grid grid-cols-2 gap-4">
+                {renderOptionSlider('Overlay Opacity', 'overlay_opacity')}
+                {renderOptionColor('Text Color', 'text_color')}
+              </div>
+            </>
+          ) : null}
+
+          {pageSlug === 'about' ? (
             <div className="pt-6 border-t border-stone-200 space-y-4">
               <p className="text-[10px] font-bold uppercase text-stone-500 tracking-wider">
-                Interior banner
-              </p>
-              {renderOptionField('Heading accent phrase', 'heading_accent', 'text')}
-              <p className="text-[9px] text-stone-400 -mt-2">
-                Highlights this exact phrase inside the heading (gradient span).
+                About page anchors
               </p>
               <div className="space-y-2">
                 <p className="text-[10px] font-bold uppercase text-stone-400">Quick anchors</p>
@@ -2051,6 +2130,7 @@ function SectionForm({
             </div>
           ) : null}
 
+          {pageSlug === 'home' ? (
           <div className="pt-6 border-t border-stone-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-black text-stone-900 uppercase tracking-widest">Carousel Slides</h3>
@@ -2101,6 +2181,7 @@ function SectionForm({
               )}
             </div>
           </div>
+          ) : null}
         </div>
       );
     case 'text_block':
@@ -3002,16 +3083,6 @@ function SectionForm({
       );
     }
     case 'featured_campaign': {
-      const impact = state.impact_panel || {};
-      const patchImpact = (key: string, v: unknown) => {
-        onChange('impact_panel', { ...impact, [key]: v });
-      };
-      const patchImpactItem = (i: number, key: string, v: string) => {
-        const list = [...(impact.items || [])];
-        list[i] = { ...list[i], [key]: v };
-        onChange('impact_panel', { ...impact, items: list });
-      };
-
       return (
         <div className="space-y-6">
           <p className="text-[10px] leading-relaxed text-stone-500">
@@ -3045,90 +3116,10 @@ function SectionForm({
             {renderField('Bottom secondary text', 'bottom_secondary_text', 'text')}
             {renderField('Bottom secondary URL', 'bottom_secondary_url', 'text')}
           </div>
-
-          <div className="space-y-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-              Our collective impact panel
-            </p>
-            <p className="text-[10px] leading-snug text-stone-500">
-              Title, icon (Font Awesome class), and stat cells shown below the sidebar cards on the homepage.
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-stone-400">Panel title</label>
-                <input
-                  className="w-full rounded-lg border border-stone-200 p-2 text-xs outline-none focus:border-[#7A1515] focus:ring-2 focus:ring-[#7A1515]/15"
-                  placeholder="Our collective impact"
-                  value={(impact.title as string) ?? ''}
-                  onChange={(e) => patchImpact('title', e.target.value)}
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-stone-400">Panel icon class</label>
-                <input
-                  className="w-full rounded-lg border border-stone-200 p-2 text-xs outline-none focus:border-[#7A1515] focus:ring-2 focus:ring-[#7A1515]/15"
-                  placeholder="fa-chart-line"
-                  value={(impact.icon as string) ?? ''}
-                  onChange={(e) => patchImpact('icon', e.target.value)}
-                />
-              </div>
-            </div>
-            <ul className="space-y-2">
-              {(impact.items || []).map((it: Record<string, string>, i: number) => (
-                <li key={i} className="relative flex gap-2 rounded-lg border border-stone-100 bg-stone-50 p-2">
-                  <button
-                    type="button"
-                    className="absolute right-1 top-1 text-stone-300 hover:text-red-500"
-                    onClick={() => {
-                      const next = (impact.items || []).filter((_: unknown, j: number) => j !== i);
-                      patchImpact('items', next);
-                    }}
-                    aria-label={`Remove impact stat ${i + 1}`}
-                  >
-                    <X size={14} />
-                  </button>
-                  <input
-                    className="flex-1 rounded border border-stone-200 px-2 py-1 text-xs"
-                    placeholder="Number (e.g. 150K+)"
-                    value={it.num || ''}
-                    onChange={(e) => patchImpactItem(i, 'num', e.target.value)}
-                  />
-                  <input
-                    className="flex-1 rounded border border-stone-200 px-2 py-1 text-xs"
-                    placeholder="Label"
-                    value={it.label || ''}
-                    onChange={(e) => patchImpactItem(i, 'label', e.target.value)}
-                  />
-                </li>
-              ))}
-            </ul>
-            <Button
-              type="button"
-              variant="secondary"
-              className="h-8 text-xs"
-              onClick={() =>
-                patchImpact('items', [...(impact.items || []), { num: '', label: '' }])
-              }
-            >
-              <Plus size={12} className="mr-1" />
-              Add impact cell
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              className="h-8 text-xs"
-              onClick={() =>
-                patchImpact('items', [
-                  { num: '150K+', label: 'Lives transformed' },
-                  { num: '67+', label: 'Years of service' },
-                  { num: '9', label: 'Dioceses covered' },
-                  { num: '8K', label: 'Active volunteers' },
-                ])
-              }
-            >
-              Load sample four stats
-            </Button>
-          </div>
+          <p className="rounded-xl border border-stone-200 bg-stone-50 p-3 text-[10px] leading-relaxed text-stone-500">
+            Campaign image, title, location, and sidebar cards update from published campaigns — not from
+            this form — so the preview matches the live homepage.
+          </p>
         </div>
       );
     }
@@ -4317,6 +4308,11 @@ function SectionForm({
     case 'timeline':
       return (
         <div className="space-y-4">
+          {pageSlug === 'about' ? (
+            <p className="rounded-lg border border-emerald-100 bg-emerald-50 p-3 text-[10px] leading-relaxed text-emerald-900">
+              About history uses the mosaic layout on the live site. Edits below update that mosaic preview and the public About page.
+            </p>
+          ) : null}
           {renderField('Eyebrow', 'eyebrow', 'text')}
           <div className="space-y-1">
             <label className="text-[10px] font-bold uppercase text-stone-400">Eyebrow icon class</label>
@@ -4331,8 +4327,8 @@ function SectionForm({
           {renderField('Subtitle', 'subtitle', 'textarea', { rows: 3 })}
           {renderField('Section ID (anchors)', 'anchor_id', 'text')}
           <p className="text-[10px] leading-relaxed text-stone-500">
-            Mosaic layout: optional <strong>badge</strong> (shown before year in the pill), <strong>card tone</strong>, and{' '}
-            <strong>icon</strong> (<code className="text-stone-600">fa-seedling</code>). Leave tone on Auto for the default rhythm.
+            Mosaic cards: optional <strong>badge</strong>, <strong>card tone</strong>, <strong>icon</strong>, and{" "}
+            <strong>background image</strong>. Use **double asterisks** for bold in the body.
           </p>
           <p className="text-[10px] font-bold uppercase text-stone-400">Timeline items</p>
           <ul className="space-y-3">
@@ -4388,10 +4384,11 @@ function SectionForm({
                           onChange('items', list);
                         }}
                       >
-                        <option value="">Auto (recommended)</option>
-                        <option value="accent">Accent (terracotta)</option>
+                        <option value="">Auto</option>
+                        <option value="crimson">Crimson</option>
                         <option value="navy">Navy</option>
-                        <option value="neutral">Neutral (white)</option>
+                        <option value="light">Light</option>
+                        <option value="gold">Gold</option>
                       </select>
                     </div>
                     <div className="space-y-1">
@@ -4429,6 +4426,19 @@ function SectionForm({
                     }}
                     placeholder="Description (**bold** ok)"
                   />
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold uppercase text-stone-400">Background image URL</label>
+                    <input
+                      className="w-full rounded border border-stone-200 p-2 text-xs"
+                      value={row.image_url ?? ''}
+                      onChange={(e) => {
+                        const list = [...(state.items || [])];
+                        list[idx] = { ...list[idx], image_url: e.target.value };
+                        onChange('items', list);
+                      }}
+                      placeholder="/img/… or https://…"
+                    />
+                  </div>
                 </div>
               </li>
             ))}
@@ -4440,7 +4450,7 @@ function SectionForm({
             onClick={() =>
               onChange('items', [
                 ...(state.items || []),
-                { year: '', badge: '', title: '', body: '', tone: '', icon: '' },
+                { year: '', badge: '', title: '', body: '', tone: '', icon: '', image_url: '' },
               ])
             }
           >
@@ -5271,6 +5281,40 @@ function SectionForm({
                         }}
                         placeholder="Role"
                       />
+                      <div className="grid grid-cols-2 gap-1">
+                        <input
+                          className="rounded border border-stone-200 p-1 text-[10px]"
+                          value={m.period ?? ''}
+                          onChange={(e) => {
+                            patchGroups((list) => {
+                              const mem = [...(list[gi].members || [])];
+                              mem[mi] = { ...mem[mi], era_gap: false, period: e.target.value };
+                              list[gi] = { ...list[gi], members: mem };
+                            });
+                          }}
+                          placeholder="Period — e.g. 3 yrs / Present"
+                        />
+                        <input
+                          className="rounded border border-stone-200 p-1 text-[10px]"
+                          value={m.duration ?? ''}
+                          onChange={(e) => {
+                            const raw = e.target.value.trim();
+                            const parsed = raw === '' ? undefined : Number(raw);
+                            patchGroups((list) => {
+                              const mem = [...(list[gi].members || [])];
+                              mem[mi] = {
+                                ...mem[mi],
+                                era_gap: false,
+                                duration:
+                                  parsed !== undefined && !Number.isNaN(parsed) ? parsed : undefined,
+                              };
+                              list[gi] = { ...list[gi], members: mem };
+                            });
+                          }}
+                          placeholder="Width years — e.g. 3"
+                          inputMode="numeric"
+                        />
+                      </div>
                       <div className="flex flex-wrap items-center gap-2">
                         {m.photo_url ? (
                           <img
@@ -6288,13 +6332,33 @@ function SectionForm({
       return (
         <div className="space-y-6">
           <p className="text-[10px] text-stone-500 leading-relaxed">
-            Impact at a Glance — bubble banner with KPI numbers. Edit the label, title, and individual KPI items below.
+            Large photo cards in a left/right carousel. Edit titles, numbers, images; add or remove cards below. Only the first N cards are shown on the site (keeps the page light).
           </p>
           {renderField('Badge label', 'label', 'text')}
           {renderField('Title prefix', 'title', 'text')}
           {renderField('Title accent word', 'title_accent', 'text')}
+          {renderField('Intro text (header band)', 'body', 'textarea')}
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+              Max cards on site (1–12)
+            </label>
+            <input
+              type="number"
+              min={1}
+              max={12}
+              value={state.max_cards ?? 6}
+              onChange={(e) => {
+                const n = parseInt(e.target.value, 10);
+                onChange('max_cards', Number.isFinite(n) ? Math.min(12, Math.max(1, n)) : 6);
+              }}
+              className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515]"
+            />
+            <p className="text-[9px] text-stone-400">
+              Extra cards stay in CMS but are not rendered until you raise this limit.
+            </p>
+          </div>
           <div className="space-y-1">
-            <p className="text-[10px] font-bold uppercase text-stone-400">KPI Items (drag handle to reorder)</p>
+            <p className="text-[10px] font-bold uppercase text-stone-400">KPI Items (fallback if no program cards)</p>
             {(state.kpis || []).map((kpi: any, idx: number) => (
               <div
                 key={idx}
@@ -6361,59 +6425,84 @@ function SectionForm({
                     }}
                   />
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-bold text-stone-400 uppercase">Color</span>
-                    <input
-                      type="color"
-                      className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
-                      value={kpi.color || '#ff9a6c'}
-                      onChange={(e) => {
-                        const list = [...(state.kpis || [])];
-                        list[idx] = { ...list[idx], color: e.target.value };
-                        onChange('kpis', list);
-                      }}
-                    />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-bold text-stone-400 uppercase">Size</span>
-                    <select
-                      className="rounded-lg border border-stone-200 p-2 text-xs bg-white"
-                      value={kpi.size || 'sm'}
-                      onChange={(e) => {
-                        const list = [...(state.kpis || [])];
-                        list[idx] = { ...list[idx], size: e.target.value };
-                        onChange('kpis', list);
-                      }}
-                    >
-                      <option value="xs">XS</option>
-                      <option value="sm">SM</option>
-                      <option value="lg">LG</option>
-                      <option value="xl">XL</option>
-                    </select>
-                  </div>
-                </div>
+                <input
+                  className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                  placeholder="Card image URL (optional)"
+                  value={kpi.image_url || ''}
+                  onChange={(e) => {
+                    const list = [...(state.kpis || [])];
+                    list[idx] = { ...list[idx], image_url: e.target.value };
+                    onChange('kpis', list);
+                  }}
+                />
+                <button
+                  type="button"
+                  className="w-full py-1.5 text-[10px] font-bold text-stone-500 border border-dashed border-stone-200 rounded-lg hover:border-[#7A1515] hover:text-[#7A1515]"
+                  onClick={() => setShowMediaPicker(`impact_kpi_img_${idx}`)}
+                >
+                  {kpi.image_url ? 'Change KPI image' : 'Select KPI image'}
+                </button>
+                {showMediaPicker === `impact_kpi_img_${idx}` && (
+                  <MediaPicker
+                    isOpen
+                    onClose={() => setShowMediaPicker(null)}
+                    onSelect={(m: any) => {
+                      const list = [...(state.kpis || [])];
+                      list[idx] = { ...list[idx], image_url: m.url };
+                      onChange('kpis', list);
+                      setShowMediaPicker(null);
+                    }}
+                  />
+                )}
               </div>
             ))}
             <button
               type="button"
               className="w-full py-2 border-2 border-dashed border-stone-200 rounded-xl text-xs font-bold text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515] transition-all"
-              onClick={() => onChange('kpis', [...(state.kpis || []), { value: '', label: '', color: '#ff9a6c', size: 'sm' }])}
+              onClick={() => onChange('kpis', [...(state.kpis || []), { value: '', label: '', color: '#ff9a6c', size: 'sm', image_url: '' }])}
             >
               + Add KPI
             </button>
           </div>
 
-          {/* Programs (Read More section) */}
+          {/* Programs (photo cards) */}
           <div className="space-y-1">
-            <p className="text-[10px] font-bold uppercase text-stone-400">Programs (Read More Cards)</p>
+            <p className="text-[10px] font-bold uppercase text-stone-400">Program photo cards</p>
             <p className="text-[9px] text-stone-400 leading-relaxed -mt-0.5">
-              Each program appears as a card in the "Read More" dropdown. Add descriptions and stats for each program pillar.
+              Drag to reorder. Stat 1 = large number on the card; stat 2 = smaller line above. Click a card on the site to open that programme.
             </p>
             {(state.programs || []).map((prog: any, idx: number) => (
-              <div key={idx} className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2">
+              <div
+                key={idx}
+                className="rounded-xl border border-stone-100 bg-stone-50 p-3 space-y-2"
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData('text/plain', String(idx));
+                  e.dataTransfer.effectAllowed = 'move';
+                  (e.currentTarget as HTMLElement).style.opacity = '0.4';
+                }}
+                onDragEnd={(e) => {
+                  (e.currentTarget as HTMLElement).style.opacity = '';
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'move';
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+                  if (isNaN(fromIdx) || fromIdx === idx) return;
+                  const list = [...(state.programs || [])];
+                  const [moved] = list.splice(fromIdx, 1);
+                  list.splice(idx, 0, moved);
+                  onChange('programs', list);
+                }}
+              >
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-bold text-stone-500 uppercase">Program {idx + 1}</p>
+                  <div className="flex items-center gap-2">
+                    <i className="fa-solid fa-grip-vertical text-stone-300 text-[11px] cursor-grab" />
+                    <p className="text-[10px] font-bold text-stone-500 uppercase">Card {idx + 1}</p>
+                  </div>
                   <button
                     type="button"
                     className="text-[9px] text-red-400 hover:text-red-600 font-bold uppercase"
@@ -6423,7 +6512,7 @@ function SectionForm({
                       onChange('programs', list);
                     }}
                   >
-                    Remove
+                    Delete card
                   </button>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -6448,10 +6537,53 @@ function SectionForm({
                     }}
                   />
                 </div>
+                {prog.image_url ? (
+                  <div className="relative w-full h-28 rounded-lg overflow-hidden bg-stone-200 border border-stone-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={prog.image_url} alt="" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      className="absolute bottom-2 right-2 text-[10px] font-bold bg-white/95 text-stone-700 px-2 py-1 rounded-md border border-stone-200"
+                      onClick={() => setShowMediaPicker(`impact_prog_img_${idx}`)}
+                    >
+                      Change image
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="w-full h-20 rounded-lg border-2 border-dashed border-stone-200 text-xs font-bold text-stone-400 hover:border-[#7A1515] hover:text-[#7A1515]"
+                    onClick={() => setShowMediaPicker(`impact_prog_img_${idx}`)}
+                  >
+                    Select card image
+                  </button>
+                )}
+                {showMediaPicker === `impact_prog_img_${idx}` && (
+                  <MediaPicker
+                    isOpen
+                    onClose={() => setShowMediaPicker(null)}
+                    onSelect={(m: any) => {
+                      const list = [...(state.programs || [])];
+                      list[idx] = { ...list[idx], image_url: m.url };
+                      onChange('programs', list);
+                      setShowMediaPicker(null);
+                    }}
+                  />
+                )}
+                <input
+                  className="w-full rounded-lg border border-stone-200 p-2 text-xs"
+                  placeholder="Or paste image URL"
+                  value={prog.image_url || ''}
+                  onChange={(e) => {
+                    const list = [...(state.programs || [])];
+                    list[idx] = { ...list[idx], image_url: e.target.value };
+                    onChange('programs', list);
+                  }}
+                />
                 <textarea
                   className="w-full rounded-lg border border-stone-200 p-2 text-xs"
-                  rows={3}
-                  placeholder="Program description"
+                  rows={2}
+                  placeholder="Short description (fallback if fewer than 2 stats)"
                   value={prog.description || ''}
                   onChange={(e) => {
                     const list = [...(state.programs || [])];
@@ -6471,23 +6603,23 @@ function SectionForm({
                     }}
                   />
                   <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-bold text-stone-400 uppercase">Color</span>
+                    <span className="text-[9px] font-bold text-stone-400 uppercase">Accent</span>
                     <input
                       type="color"
                       className="w-8 h-8 p-0 border-0 rounded cursor-pointer"
-                      value={prog.accent_color || '#911313'}
+                      value={prog.accent_color || '#8c2208'}
                       onChange={(e) => {
                         const list = [...(state.programs || [])];
                         list[idx] = { ...list[idx], accent_color: e.target.value };
                         onChange('programs', list);
                       }}
                     />
-                    <span className="text-[9px] font-mono text-stone-400 uppercase">{prog.accent_color || '#911313'}</span>
+                    <span className="text-[9px] font-mono text-stone-400 uppercase">{prog.accent_color || '#8c2208'}</span>
                   </div>
                 </div>
                 {/* Per-program stats */}
                 <div className="pt-1 space-y-1.5">
-                  <p className="text-[9px] font-bold text-stone-400 uppercase">Stats (drag handle to reorder)</p>
+                  <p className="text-[9px] font-bold text-stone-400 uppercase">Numbers (editable — 1 = large, 2 = small line)</p>
                   {(prog.stats || []).map((st: any, si: number) => (
                     <div
                       key={si}
@@ -6520,7 +6652,7 @@ function SectionForm({
                       <i className="fa-solid fa-grip-vertical text-stone-300 text-[11px] cursor-grab"></i>
                       <input
                         className="w-[70px] rounded border border-stone-200 p-1 text-[11px]"
-                        placeholder="Value"
+                        placeholder="Number"
                         value={st.value || ''}
                         onChange={(e) => {
                           const list = [...(state.programs || [])];
@@ -6532,7 +6664,7 @@ function SectionForm({
                       />
                       <input
                         className="flex-1 rounded border border-stone-200 p-1 text-[11px]"
-                        placeholder="Label"
+                        placeholder="Label (e.g. Children Reached)"
                         value={st.label || ''}
                         onChange={(e) => {
                           const list = [...(state.programs || [])];
@@ -6613,14 +6745,18 @@ function SectionForm({
                     name: '',
                     description: '',
                     icon: 'fa-chart-bar',
-                    accent_color: '#911313',
+                    accent_color: '#8c2208',
                     slug: '',
-                    stats: [],
+                    image_url: '',
+                    stats: [
+                      { value: '', label: '' },
+                      { value: '', label: '' },
+                    ],
                   },
                 ])
               }
             >
-              + Add Program
+              + Add program card
             </button>
           </div>
         </div>

@@ -202,7 +202,7 @@
 
 .prog-ref-section {
   background: color-mix(in srgb, var(--dept-color, #8c2208) 4%, #f7f3ef);
-  padding: 2.5rem 1.5rem 4.5rem;
+  padding: 2rem 1.5rem 2.25rem;
   position: relative;
   overflow: hidden;
   clip-path: inset(0);
@@ -460,7 +460,7 @@
 
 .prog-editorial {
   background: #ffffff;
-  padding: clamp(2.75rem, 4vw, 3.75rem) 1.5rem clamp(3rem, 4.5vw, 4.25rem);
+  padding: clamp(2rem, 3.5vw, 2.75rem) 1.5rem clamp(2.25rem, 3.5vw, 3rem);
 }
 
 .prog-editorial--stories {
@@ -1035,16 +1035,21 @@
 
 .drawer-hero-img {
   width: 100%;
-  height: 220px;
+  max-height: min(52vh, 420px);
   overflow: hidden;
   flex-shrink: 0;
   background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .drawer-hero-img img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-height: min(52vh, 420px);
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
 
@@ -1287,7 +1292,7 @@
   }
 
   .prog-ref-section {
-    padding: 2rem 0.75rem 3.5rem;
+    padding: 1.5rem 0.75rem 1.75rem;
   }
 
   .prog-ref-list {
@@ -1410,7 +1415,7 @@
 .bubble-green { background-color:#5A9E6E; } .bubble-green::after { background:linear-gradient(180deg, rgba(90,158,110,.38) 0%, rgba(45,105,65,.52) 100%); }
 
 /* ── VIEW ALL BUTTON ── */
-.bubble-viewall-wrap { text-align:center; width:100%; margin-top: 1rem; }
+.bubble-viewall-wrap { text-align:center; width:100%; margin-top: 0.75rem; margin-bottom: 0; }
 .bubble-viewall-btn { display:inline-flex; align-items:center; gap:.5rem; padding:.55rem 1.8rem; background:transparent; border:2px solid #8B1A1A; border-radius:100px; color:#8B1A1A; font-size:.82rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s, color .2s, transform .15s; }
 .bubble-viewall-btn:hover { background:#8B1A1A; color:#fff; transform:translateY(-2px); }
 .bubble-viewall-btn.active { background:#8B1A1A; color:#fff; }

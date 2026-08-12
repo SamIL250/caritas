@@ -1,19 +1,22 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
+import { useCallback, useRef } from "react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import ScrollReveal from "@/components/website/motion/ScrollReveal";
 
 export type KpiItem = {
   value: string;
   label: string;
   color?: string;
-  size?: 'xs' | 'sm' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "lg" | "xl";
+  image_url?: string;
 };
 
 export type ProgramStat = {
   value: string;
   label: string;
-  size?: 'xs' | 'sm' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "lg" | "xl";
   color?: string;
 };
 
@@ -26,6 +29,7 @@ export type ProgramLink = {
   icon: string;
   accent_color: string;
   slug?: string;
+  image_url?: string;
   stats?: ProgramStat[];
 };
 
@@ -33,42 +37,107 @@ export type ImpactAtGlanceContent = {
   label?: string;
   title?: string;
   title_accent?: string;
+  body?: string;
+  /** Max cards rendered on the site (keeps page light). Default 6. */
+  max_cards?: number;
   kpis?: KpiItem[];
   programs?: ProgramLink[];
 };
 
-/* Map metrics tab_key → programs page category slug */
 const tabKeyToSlug: Record<string, string> = {
-  health: 'health',
-  social: 'social-welfare',
-  development: 'development',
-  admin: 'finance-administration',
+  health: "health",
+  social: "social-welfare",
+  development: "development",
+  admin: "finance-administration",
 };
 
-function hexToRgba(hex: string, alpha: number): string {
-  const h = hex.replace('#', '');
-  const r = parseInt(h.substring(0, 2), 16);
-  const g = parseInt(h.substring(2, 4), 16);
-  const b = parseInt(h.substring(4, 6), 16);
-  return `rgba(${r},${g},${b},${alpha})`;
+const DEFAULT_CARD_IMAGES = [
+  "/img/health.JPG.webp",
+  "/img/slide2.webp",
+  "/img/slide3.webp",
+  "/img/slide1.webp",
+  "/img/slide4.webp",
+  "/img/slide5.webp",
+];
+
+const DEFAULT_MAX_CARDS = 6;
+
+type ImpactCard = {
+  key: string;
+  name: string;
+  href: string;
+  imageUrl: string;
+  statSmall: string | null;
+  statLargeValue: string;
+  statLargeLabel: string;
+};
+
+function clampMaxCards(raw: unknown): number {
+  const n = typeof raw === "number" ? raw : parseInt(String(raw ?? ""), 10);
+  if (!Number.isFinite(n) || n < 1) return DEFAULT_MAX_CARDS;
+  return Math.min(12, Math.max(1, Math.floor(n)));
+}
+
+function buildCards(
+  programs: ProgramLink[],
+  kpis: KpiItem[],
+  maxCards: number,
+): ImpactCard[] {
+  const fromPrograms =
+    programs.length > 0
+      ? programs.map((p, i) => {
+          const slug = p.slug || tabKeyToSlug[p.tab_key] || p.tab_key;
+          const stats = p.stats || [];
+          const primary = stats[0];
+          const secondary = stats[1];
+          return {
+            key: `${p.tab_key || "prog"}-${i}`,
+            name: p.name || p.tab_label || "Programme",
+            href: `/programs#${slug}`,
+            imageUrl:
+              (p.image_url || "").trim() ||
+              DEFAULT_CARD_IMAGES[i % DEFAULT_CARD_IMAGES.length],
+            statSmall: secondary
+              ? `${secondary.value} ${secondary.label}`.trim()
+              : (p.description || "").trim() || null,
+            statLargeValue: primary?.value || "",
+            statLargeLabel: primary?.label || "",
+          };
+        })
+      : kpis.map((kpi, i) => ({
+          key: `kpi-${i}`,
+          name: kpi.label || "Impact",
+          href: "/programs",
+          imageUrl:
+            (kpi.image_url || "").trim() ||
+            DEFAULT_CARD_IMAGES[i % DEFAULT_CARD_IMAGES.length],
+          statSmall: null,
+          statLargeValue: kpi.value || "",
+          statLargeLabel: kpi.label || "",
+        }));
+
+  return fromPrograms.slice(0, maxCards);
 }
 
 export default function ImpactAtGlanceSection({
   label,
   title,
   title_accent,
+  body,
+  max_cards,
   kpis,
   programs,
   allProgramSections,
 }: ImpactAtGlanceContent & {
-  allProgramSections?: { tab_key: string; tab_label: string; tab_icon: string; content: any }[];
+  allProgramSections?: {
+    tab_key: string;
+    tab_label: string;
+    tab_icon: string;
+    content: any;
+  }[];
 }) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
-  const ddRef = useRef<HTMLDivElement>(null);
-
-  const bubbleKpis = kpis || [];
-  const modalKpis = kpis || [];
+  const trackRef = useRef<HTMLDivElement>(null);
+  const maxCards = clampMaxCards(max_cards);
 
   const programLinks: ProgramLink[] =
     programs && programs.length > 0
@@ -78,232 +147,130 @@ export default function ImpactAtGlanceSection({
           return {
             tab_key: s.tab_key,
             tab_label: s.tab_label,
-            tab_icon: s.tab_icon || 'fa-chart-bar',
+            tab_icon: s.tab_icon || "fa-chart-bar",
             name: c?.name || s.tab_label,
-            description: c?.description || '',
-            icon: c?.icon || s.tab_icon || 'fa-chart-bar',
-            accent_color: c?.accent_color || '#911313',
+            description: c?.description || "",
+            icon: c?.icon || s.tab_icon || "fa-chart-bar",
+            accent_color: c?.accent_color || "#8c2208",
             slug: tabKeyToSlug[s.tab_key] || s.tab_key,
+            image_url: c?.image_url || "",
             stats: c?.stats || [],
           };
         });
 
-  const selectedProgramData = selectedProgram
-    ? programLinks.find(p => (p.slug || tabKeyToSlug[p.tab_key] || p.tab_key) === selectedProgram)
-    : null;
+  const cards = buildCards(programLinks, kpis || [], maxCards);
+  if (cards.length === 0) return null;
 
-  function toggleDropdown() {
-    setShowDropdown((v) => !v);
-  }
+  const titleLead = title || "Caritas Rwanda by the";
+  const titleAccent = title_accent || "Numbers";
+  const intro =
+    (body || "").trim() ||
+    "A transparent look at our reach across programmes — healthcare, social welfare, development, and administration.";
 
-  function closeDropdown() {
-    setShowDropdown(false);
-  }
+  const scrollByCard = useCallback((dir: -1 | 1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>(".cr-impact__card");
+    const step = card ? card.offsetWidth + 16 : el.clientWidth * 0.75;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  }, []);
 
-  useEffect(() => {
-    function handler(e: KeyboardEvent) {
-      if (e.key === 'Escape' && showDropdown) {
-        closeDropdown();
-      }
-    }
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [showDropdown]);
-
-  useEffect(() => {
-    function handler(e: MouseEvent) {
-      if (ddRef.current && !ddRef.current.contains(e.target as Node) && showDropdown) {
-        closeDropdown();
-      }
-    }
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [showDropdown]);
-
-  if (!kpis || kpis.length === 0) return null;
+  const showArrows = cards.length > 1;
 
   return (
-    <>
-      <div className="ig-banner sr">
-        <div className="ig-banner-orb1"></div>
-        <div className="ig-banner-orb2"></div>
-        <div className="ig-banner-inner">
-          <div className="ig-banner-label">&#9654; {label || 'Impact at a Glance'} &#9654;</div>
-          <div className="ig-banner-title">
-            {title || 'Caritas Rwanda by the'} <span>{title_accent || 'Numbers'}</span>
-          </div>
-          <div className="ig-bubbles">
-            {bubbleKpis.map((kpi, i) => {
-              const defaultSizes = ['sm', 'lg', 'xl', 'lg', 'sm'];
-              const sizeClass = kpi.size ? `ig-bubble-${kpi.size}` : `ig-bubble-${defaultSizes[i] || 'sm'}`;
-              const offsetClasses = ['ig-bubble-offset', '', '', '', 'ig-bubble-offset'];
-              const color = kpi.color || '#ff9a6c';
-              return (
-                <div
-                  key={i}
-                  className={`ig-bubble ${sizeClass} ${offsetClasses[i] || ''}`}
-                  style={{
-                    background: hexToRgba(color, 0.35),
-                    borderColor: hexToRgba(color, 0.3),
-                  }}
-                >
-                  <div className="ig-bubble-val">{kpi.value}</div>
-                  <div className="ig-bubble-lbl">{kpi.label}</div>
-                </div>
-              );
-            })}
-          </div>
-
-          {programLinks.length > 0 && (
-            <div className="rm-wrap" ref={ddRef}>
-              <button className="rm-btn" onClick={toggleDropdown} type="button">
-                <i className="fa-solid fa-grid-2" aria-hidden></i> Read More{' '}
-                <i
-                  className={`fa-solid fa-chevron-down rm-caret ${showDropdown ? 'rm-caret-open' : ''}`}
-                  aria-hidden
-                ></i>
-              </button>
-              <div className={`rm-panel ${showDropdown ? 'rm-panel-open' : ''}`}>
-                {programLinks.map((p) => {
-                  const programSlug = p.slug || tabKeyToSlug[p.tab_key] || p.tab_key;
-                  const accent = p.accent_color || '#911313';
-                  return (
-                    <button
-                      key={p.tab_key}
-                      type="button"
-                      className="rm-card"
-                      style={{
-                        borderColor: hexToRgba(accent, 0.15),
-                      }}
-                      onMouseEnter={(e) => {
-                        const el = e.currentTarget;
-                        el.style.borderColor = hexToRgba(accent, 0.35);
-                        el.style.background = hexToRgba(accent, 0.04);
-                      }}
-                      onMouseLeave={(e) => {
-                        const el = e.currentTarget;
-                        el.style.borderColor = hexToRgba(accent, 0.15);
-                        el.style.background = '';
-                      }}
-                      onClick={() => setSelectedProgram(programSlug)}
-                      aria-label={`View ${p.name} programs impact`}
-                    >
-                      <div
-                        className="rm-card-icon"
-                        style={{
-                          background: hexToRgba(accent, 0.1),
-                          color: accent,
-                        }}
-                      >
-                        <i className={`fa-solid ${p.icon}`} aria-hidden></i>
-                      </div>
-                      <div className="rm-card-name" style={{ color: accent }}>{p.name}</div>
-                      <div className="rm-card-desc">{p.description}</div>
-                      <div className="rm-card-arrow" style={{ color: accent }}>
-                        <i className="fa-solid fa-arrow-right" aria-hidden></i> View impact stats
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+    <section className="cr-impact" aria-labelledby="cr-impact-title">
+      <div className="cr-impact__band">
+        <div className="cr-impact__band-inner">
+          <ScrollReveal>
+            <div>
+              {(label || "").trim() ? (
+                <p className="cr-impact__eyebrow">{label}</p>
+              ) : null}
+              <h2 id="cr-impact-title" className="cr-impact__title">
+                {titleLead}{" "}
+                <span className="cr-impact__title-accent">{titleAccent}</span>
+              </h2>
             </div>
-          )}
+          </ScrollReveal>
+          <ScrollReveal delay={0.08}>
+            <p className="cr-impact__body">{intro}</p>
+          </ScrollReveal>
         </div>
       </div>
 
-      {/* ── Bubbles Modal ── */}
-      <div
-        id="bubblesModal"
-        className={`bubbles-modal ${selectedProgram ? 'open' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Impact at a Glance"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setSelectedProgram(null);
-        }}
-      >
-        <div className="bm-card">
-          <button className="bm-close" onClick={() => setSelectedProgram(null)} aria-label="Close">
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-          {selectedProgramData ? (
-            <>
-              <div className="bm-label">&#9654; {selectedProgramData.name} &#9654;</div>
-              <div className="bm-title">{selectedProgramData.name}</div>
-              <div className="bm-bubbles">
-                {(selectedProgramData.stats || []).map((s, i) => {
-                  const defaultClasses = ['bm-xl', 'bm-lg', 'bm-sm', 'bm-xs', 'bm-sm', 'bm-xs'];
-                  const sizeClass = s.size ? `bm-${s.size}` : (defaultClasses[i] || 'bm-sm');
-                  const statColor = s.color || selectedProgramData.accent_color;
-                  return (
-                    <div
-                      key={i}
-                      className={`bm-bubble ${sizeClass}`}
-                      style={statColor ? {
-                        background: hexToRgba(statColor, 0.45),
-                        borderColor: hexToRgba(statColor, 0.3),
-                      } : undefined}
-                    >
-                      <div className="bm-val">{s.value}</div>
-                      <div className="bm-lbl">{s.label}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="bm-label">&#9654; {label || 'Impact at a Glance'} &#9654;</div>
-              <div className="bm-title">
-                {title || 'Caritas Rwanda by the'} <span>{title_accent || 'Numbers'}</span>
-              </div>
-              <div className="bm-bubbles">
-                {modalKpis.map((kpi, i) => {
-                  const defaultSizes = ['xs', 'sm', 'lg', 'xl', 'lg', 'sm'];
-                  const sizeClass = kpi.size ? `bm-${kpi.size}` : `bm-${defaultSizes[i] || 'sm'}`;
-                  const color = kpi.color || '#ff9a6c';
-                  return (
-                    <div
-                      key={i}
-                      className={`bm-bubble ${sizeClass}`}
-                      style={{
-                        background: hexToRgba(color, 0.45),
-                        borderColor: hexToRgba(color, 0.3),
-                      }}
-                    >
-                      <div className="bm-val">{kpi.value}</div>
-                      <div className="bm-lbl">{kpi.label}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
-          <div className="bm-footer">
-            {selectedProgram && (
-              <>
-                <button
-                  className="bm-view-btn bm-explore-btn"
-                  onClick={() => {
-                    setSelectedProgram(null);
-                    setShowDropdown(true);
-                  }}
-                  type="button"
+      <div className="cr-impact__cards-wrap">
+        <div className="cr-impact__carousel">
+          {showArrows ? (
+            <button
+              type="button"
+              className="cr-impact__nav cr-impact__nav--prev"
+              onClick={() => scrollByCard(-1)}
+              aria-label="Previous impact cards"
+            >
+              <ChevronLeft size={22} strokeWidth={2.25} aria-hidden />
+            </button>
+          ) : null}
+
+          <div
+            ref={trackRef}
+            className="cr-impact__track"
+            role="list"
+            aria-label="Impact metrics"
+          >
+            {cards.map((card) => (
+              <Link
+                key={card.key}
+                href={card.href}
+                className="cr-impact__card"
+                role="listitem"
+              >
+                <div
+                  className={`cr-impact__card-media${card.imageUrl ? "" : " cr-impact__card-media--fallback"}`}
                 >
-                  <i className="fa-solid fa-arrow-left"></i> Explore more
-                </button>
-                <Link
-                  href={`/programs#${selectedProgram}`}
-                  className="bm-view-btn"
-                  onClick={() => setSelectedProgram(null)}
-                >
-                  Continue to Programme <i className="fa-solid fa-arrow-right"></i>
-                </Link>
-              </>
-            )}
+                  {card.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- CMS / static public URLs
+                    <img
+                      src={card.imageUrl}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : null}
+                </div>
+                <div className="cr-impact__card-shade" aria-hidden />
+                <div className="cr-impact__card-body">
+                  {card.statSmall ? (
+                    <p className="cr-impact__stat-sm">{card.statSmall}</p>
+                  ) : null}
+                  {card.statLargeValue ? (
+                    <p className="cr-impact__stat-lg">
+                      <strong>{card.statLargeValue}</strong>
+                      {card.statLargeLabel}
+                    </p>
+                  ) : null}
+                  <div className="cr-impact__card-foot">
+                    <h3 className="cr-impact__card-name">{card.name}</h3>
+                    <span className="cr-impact__card-arrow" aria-hidden>
+                      <i className="fa-solid fa-arrow-right" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
+
+          {showArrows ? (
+            <button
+              type="button"
+              className="cr-impact__nav cr-impact__nav--next"
+              onClick={() => scrollByCard(1)}
+              aria-label="Next impact cards"
+            >
+              <ChevronRight size={22} strokeWidth={2.25} aria-hidden />
+            </button>
+          ) : null}
         </div>
       </div>
-    </>
+    </section>
   );
 }

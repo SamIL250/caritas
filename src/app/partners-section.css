@@ -1,13 +1,21 @@
 /* Neutralize legacy website.css alias classes on this section */
 .cr-partners.partners-section {
   background: #ffffff !important;
-  padding: 5rem 0 4.5rem !important;
+  padding: 3rem 0 2.75rem !important;
   overflow: visible !important;
 }
 
 .cr-partners .partners-inner {
   max-width: 1400px !important;
   padding: 0 1.5rem;
+}
+
+@media (max-width: 639px) {
+  .cr-partners .partners-inner,
+  .cr-partners__inner {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
 }
 
 .cr-partners .partners-header {
@@ -86,7 +94,7 @@
   background: #ffffff;
   color: #111827;
   font-family: var(--font-outfit, "Outfit", sans-serif);
-  padding: 5rem 0 4.5rem;
+  padding: 3rem 0 2.75rem;
   box-sizing: border-box;
 }
 
@@ -293,7 +301,11 @@
   width: 100%;
   max-width: 56rem;
   max-height: 85vh;
+  overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   padding: clamp(1.25rem, 3vw, 2rem);
   border-radius: 1rem;
   border: 2px solid #8c2208;
@@ -355,7 +367,7 @@
 /* ── Mobile ── */
 @media (max-width: 639px) {
   .cr-partners {
-    padding: 3.5rem 0 3rem;
+    padding: 2.25rem 0 2rem;
   }
 
   .cr-partners__header {

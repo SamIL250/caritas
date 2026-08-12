@@ -30,13 +30,16 @@ export type FrequencyChoiceMeta = {
   selection: DonationFrequencySelection;
 };
 
-/** Build selectable frequencies from campaign row (general donation uses one_time only). */
+/** Build selectable frequencies from campaign row (general donation: one-time + monthly). */
 export function frequencyChoicesForCampaign(
   row: DonationCampaignFrequencyRow | null
 ): FrequencyChoiceMeta[] {
   const out: FrequencyChoiceMeta[] = [];
   if (!row) {
-    return [{ id: "one_time", label: "One-time", selection: { kind: "one_time" } }];
+    return [
+      { id: "one_time", label: "One-time", selection: { kind: "one_time" } },
+      { id: "month", label: "Monthly", selection: { kind: "month" } },
+    ];
   }
   if (row.frequency_one_time !== false) {
     out.push({ id: "one_time", label: "One-time", selection: { kind: "one_time" } });
@@ -64,7 +67,10 @@ export function frequencyChoicesForCampaign(
     });
   }
   if (out.length === 0) {
-    return [{ id: "one_time", label: "One-time", selection: { kind: "one_time" } }];
+    return [
+      { id: "one_time", label: "One-time", selection: { kind: "one_time" } },
+      { id: "month", label: "Monthly", selection: { kind: "month" } },
+    ];
   }
   return out;
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import ScrollReveal from "@/components/website/motion/ScrollReveal";
 import { ScrollStagger, ScrollStaggerItem } from "@/components/website/motion/ScrollStagger";
+import ExpandableText from "@/components/website/ExpandableText";
 import VideoGallerySection, {
   type VideoGalleryLayout,
 } from "@/components/website/sections/VideoGallerySection";
@@ -429,9 +430,11 @@ export default function NewsCards({
                                   {article.title}
                                 </h3>
                                 {article.excerpt ? (
-                                  <p className="cr-stories__slide-excerpt">
-                                    {article.excerpt}
-                                  </p>
+                                  <ExpandableText
+                                    text={article.excerpt}
+                                    lines={2}
+                                    className="cr-stories__slide-excerpt"
+                                  />
                                 ) : null}
                                 {article.link_url ? (
                                   <StoryLink

@@ -93,7 +93,7 @@ export default function NavigationPage() {
     { id: '1', label: 'Home', url: '/', visible: true },
     { id: '2', label: 'About Us', url: '/about', visible: true },
     { id: '3', label: 'What We Do', url: '/what-we-do', visible: true },
-    { id: '4', label: 'News', url: '/news', visible: true },
+    { id: '4', label: 'Stories and Updates', url: '/news', visible: true },
     { id: '5', label: 'Contact', url: '/contact', visible: false },
   ]);
 

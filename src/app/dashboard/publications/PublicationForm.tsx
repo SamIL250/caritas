@@ -26,7 +26,91 @@ import {
   type NewsRichTextEditorHandle,
 } from "@/components/dashboard/news/NewsRichTextEditor";
 import type { ProgramDepartmentOption } from "@/lib/program-departments";
+import {
+  DEFAULT_PUBLICATION_LANGUAGES,
+  isDefaultPublicationLanguage,
+  normalizePublicationLanguageCode,
+} from "@/lib/publication-languages";
 import { Lock, EyeOff } from "lucide-react";
+
+function PublicationLanguageFields({
+  initialCode,
+  initialLabel,
+}: {
+  initialCode: string;
+  initialLabel: string;
+}) {
+  const normalized = normalizePublicationLanguageCode(initialCode || "en");
+  const startsCustom = Boolean(initialCode) && !isDefaultPublicationLanguage(normalized);
+  const [mode, setMode] = useState<"preset" | "other">(startsCustom ? "other" : "preset");
+  const [preset, setPreset] = useState(
+    startsCustom ? "en" : isDefaultPublicationLanguage(normalized) ? normalized : "en",
+  );
+  const [customLabel, setCustomLabel] = useState(
+    startsCustom ? initialLabel || initialCode : "",
+  );
+
+  const resolvedCode =
+    mode === "other"
+      ? normalizePublicationLanguageCode(customLabel || "other")
+      : preset;
+  const resolvedLabel = mode === "other" ? customLabel.trim() : "";
+
+  return (
+    <div className="space-y-3 rounded-xl border border-stone-100 bg-stone-50/80 p-3">
+      <div className="space-y-1">
+        <label
+          className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+          htmlFor="language_select"
+        >
+          Language
+        </label>
+        <select
+          id="language_select"
+          className="h-9 w-full rounded-md border border-stone-200 bg-white px-3 text-sm"
+          value={mode === "other" ? "__other__" : preset}
+          onChange={(e) => {
+            if (e.target.value === "__other__") {
+              setMode("other");
+              return;
+            }
+            setMode("preset");
+            setPreset(e.target.value);
+          }}
+        >
+          {DEFAULT_PUBLICATION_LANGUAGES.map((l) => (
+            <option key={l.code} value={l.code}>
+              {l.label}
+            </option>
+          ))}
+          <option value="__other__">Other (add language)…</option>
+        </select>
+        <p className="text-[11px] text-stone-400">
+          Used to classify this file on the public publications page (Language filter).
+        </p>
+      </div>
+      {mode === "other" ? (
+        <div className="space-y-1">
+          <label
+            className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+            htmlFor="language_custom_label"
+          >
+            Custom language name
+          </label>
+          <Input
+            id="language_custom_label"
+            value={customLabel}
+            onChange={(e) => setCustomLabel(e.target.value)}
+            placeholder="e.g. Swahili, German"
+            required
+          />
+        </div>
+      ) : null}
+      <input type="hidden" name="language" value={resolvedCode} />
+      <input type="hidden" name="language_label" value={resolvedLabel} />
+    </div>
+  );
+}
 
 type Props = {
   mode: "create" | "edit";
@@ -272,6 +356,11 @@ export function PublicationForm({
               />
             </div>
 
+            <PublicationLanguageFields
+              initialCode={(source as { language?: string } | null | undefined)?.language ?? "en"}
+              initialLabel={(source as { language_label?: string } | null | undefined)?.language_label ?? ""}
+            />
+
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="published_at">
@@ -426,12 +515,12 @@ export function PublicationForm({
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold uppercase tracking-wider text-stone-500" htmlFor="meta_line">
-                  Meta line (file size, language, etc.)
+                  Meta line (file size, pages, etc.)
                 </label>
                 <Input
                   id="meta_line"
                   name="meta_line"
-                  placeholder="PDF · EN / FR"
+                  placeholder="PDF · 24 pages"
                   defaultValue={source?.meta_line ?? ""}
                 />
               </div>

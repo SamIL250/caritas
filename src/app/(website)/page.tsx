@@ -40,6 +40,18 @@ export default async function LandingPage() {
     await ensureHomeFindUsSection(pageId);
   }
 
+  const { data: homeImpactCheck } = await supabase
+    .from("sections")
+    .select("id")
+    .eq("page_id", pageId)
+    .eq("type", "impact_at_glance")
+    .maybeSingle();
+
+  if (!homeImpactCheck) {
+    const { ensureHomeImpactAtGlanceSection } = await import("@/app/actions/init-impact-section");
+    await ensureHomeImpactAtGlanceSection(pageId);
+  }
+
   // 2. Fetch Hero
   const { data: hero } = await supabase
     .from('hero_content')

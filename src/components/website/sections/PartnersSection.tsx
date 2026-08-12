@@ -7,7 +7,7 @@ import ScrollReveal from "@/components/website/motion/ScrollReveal";
 import {
   type Partner,
   DEFAULT_PARTNERS,
-  filterPartnersForDisplay,
+  ensureLeronyPartner,
 } from "@/lib/partners-defaults";
 
 export type { Partner } from "@/lib/partners-defaults";
@@ -66,7 +66,7 @@ export default function PartnersSection({
   subtitle = "Working together with trusted global and local organizations to deliver lasting impact across Rwanda.",
   items: itemsProp,
 }: PartnersSectionProps) {
-  const list = filterPartnersForDisplay(
+  const list = ensureLeronyPartner(
     itemsProp && itemsProp.length > 0 ? itemsProp : DEFAULT_PARTNERS,
   );
 
@@ -221,17 +221,24 @@ export default function PartnersSection({
         </div>
       </section>
 
-      <div
-        className={`cr-partners__overlay partners-modal-overlay${modalOpen ? " cr-partners__overlay--open is-open" : ""}`}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setModalOpen(false);
-        }}
-        role="dialog"
-        aria-modal="true"
-        aria-label="All Partners"
-        aria-hidden={!modalOpen}
-      >
-        <div className="cr-partners__modal partners-modal">
+        <div
+          className={`cr-partners__overlay partners-modal-overlay${modalOpen ? " cr-partners__overlay--open is-open" : ""}`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setModalOpen(false);
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="All Partners"
+          aria-hidden={!modalOpen}
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+        >
+          <div
+            className="cr-partners__modal partners-modal"
+            data-lenis-prevent
+            data-lenis-prevent-wheel
+            onWheel={(e) => e.stopPropagation()}
+          >
           <div className="cr-partners__modal-header partners-modal-header">
             <h3 className="cr-partners__modal-title">
               All Our <span className="cr-partners__modal-title-accent">Partners</span>

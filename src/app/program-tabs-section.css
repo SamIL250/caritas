@@ -1,6 +1,6 @@
 .cr-prog-tabs {
   background: #ffffff;
-  padding: 5rem 0 4.5rem;
+  padding: 3rem 0 2.75rem;
   box-sizing: border-box;
   font-family: var(--font-outfit, 'Outfit', sans-serif);
   color: #111827;
@@ -211,10 +211,29 @@
 }
 
 .cr-prog-tabs .prog-desc {
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.88);
-  line-height: 1.7;
   margin: 0 0 1.35rem;
+}
+
+.cr-prog-tabs .prog-desc,
+.cr-prog-tabs .prog-desc .cr-expandable__text {
+  font-size: 1.02rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.6;
+}
+
+.cr-prog-tabs .prog-desc .cr-expandable__toggle {
+  color: #ffffff;
+  border: none;
+  background: transparent;
+  font-size: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.cr-prog-tabs .prog-desc .cr-expandable__toggle:hover {
+  background: transparent;
+  border-color: transparent;
+  color: #ffffff;
 }
 
 .cr-prog-tabs .prog-bullets {
@@ -282,11 +301,11 @@
 
 @media (max-width: 768px) {
   .cr-prog-tabs {
-    padding: 3.5rem 0 3rem;
+    padding: 2.25rem 0 2rem;
   }
 
   .cr-prog-tabs__inner {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
   }
 
   .cr-prog-tabs__shell {
@@ -345,8 +364,9 @@
   margin-bottom: 0.65rem;
 }
 
-.page-editor-section-preview .cr-prog-tabs .prog-content-area .prog-desc {
-  font-size: 0.72rem;
+.page-editor-section-preview .cr-prog-tabs .prog-content-area .prog-desc,
+.page-editor-section-preview .cr-prog-tabs .prog-content-area .prog-desc .cr-expandable__text {
+  font-size: 0.85rem;
   margin-bottom: 0.85rem;
 }
 

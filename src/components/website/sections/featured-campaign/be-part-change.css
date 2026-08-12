@@ -6,7 +6,7 @@
   background: #ffffff;
   color: #111827;
   font-family: var(--font-outfit, "Outfit", sans-serif);
-  padding: 0 0 5rem;
+  padding: 2rem 0 2.5rem;
   box-sizing: border-box;
 }
 
@@ -26,7 +26,16 @@
 .cr-bpc-change__toggle-wrap {
   display: flex;
   justify-content: center;
-  padding: 3rem 0 2.5rem;
+  padding: 0 0 1.25rem;
+}
+
+/* Collapsed: keep the strip compact so it doesn’t look like an empty section gap */
+.cr-bpc-change:has(.cr-bpc-change__toggle[aria-expanded="false"]) {
+  padding: 1.25rem 0 1.5rem;
+}
+
+.cr-bpc-change:has(.cr-bpc-change__toggle[aria-expanded="false"]) .cr-bpc-change__toggle-wrap {
+  padding: 0;
 }
 
 .cr-bpc-change__toggle {
@@ -114,10 +123,21 @@
 
 .cr-bpc-change__subtitle {
   margin: 0.85rem 0 0;
-  font-size: 1.02rem;
+  max-width: 40rem;
+}
+
+.cr-bpc-change__subtitle,
+.cr-bpc-change__subtitle .cr-expandable__text {
+  font-size: 1.08rem;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.6;
   color: #4b5563;
+}
+
+.cr-bpc-change__subtitle .cr-expandable__toggle {
+  color: #8c2208;
+  font-size: inherit;
+  font-weight: 700;
 }
 
 /* ── Themed shell ── */
@@ -237,9 +257,19 @@
   margin: 0 0 1.25rem;
   padding-left: 0.85rem;
   border-left: 3px solid #8c2208;
-  font-size: 0.92rem;
-  line-height: 1.7;
-  color: #4b5563;
+}
+
+.cr-bpc-change__feat-story,
+.cr-bpc-change__feat-story .cr-expandable__text {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.cr-bpc-change__feat-story .cr-expandable__toggle {
+  color: #8c2208;
+  font-size: inherit;
+  font-weight: 700;
 }
 
 .cr-bpc-change__feat-btn {
@@ -297,6 +327,41 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  min-width: 0;
+}
+
+.cr-bpc-change__aside-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+@media (min-width: 960px) {
+  .cr-bpc-change__aside {
+    /* Keep CTAs under the list without forcing the left featured card taller */
+    align-self: stretch;
+  }
+
+  .cr-bpc-change__aside-list {
+    /* Many campaigns: scroll the list, keep bottom CTAs visible */
+    flex: 1 1 auto;
+    max-height: min(28rem, 58vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 0.15rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(140, 34, 8, 0.35) transparent;
+  }
+
+  .cr-bpc-change__aside-list::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .cr-bpc-change__aside-list::-webkit-scrollbar-thumb {
+    background: rgba(140, 34, 8, 0.35);
+    border-radius: 999px;
+  }
 }
 
 .cr-bpc-change__card {
@@ -359,14 +424,19 @@
 
 .cr-bpc-change__card-desc {
   margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.55;
-  color: #6b7280;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+}
+
+.cr-bpc-change__card-desc,
+.cr-bpc-change__card-desc .cr-expandable__text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.cr-bpc-change__card-desc .cr-expandable__toggle {
+  color: #8c2208;
+  font-size: inherit;
+  font-weight: 700;
 }
 
 .cr-bpc-change__card-btn {
@@ -393,29 +463,46 @@
   color: #8c2208;
 }
 
-/* ── Bottom CTAs ── */
+/* ── Bottom CTAs (under sidebar campaign list on desktop) ── */
 .cr-bpc-change__bottom {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 1.35rem;
-  padding-top: 1.35rem;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin-top: 0.15rem;
+  padding-top: 0.85rem;
   border-top: 1px solid #e8e2d9;
+  flex-shrink: 0;
 }
 
 .cr-bpc-change__bottom-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
-  padding: 0.82rem 1.65rem;
+  flex: 1 1 auto;
+  min-width: min(100%, 9.5rem);
+  padding: 0.72rem 1.1rem;
   border-radius: 999px;
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-decoration: none;
+  text-align: center;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+@media (min-width: 960px) {
+  .cr-bpc-change__bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cr-bpc-change__bottom-btn {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .cr-bpc-change__bottom-btn--primary {
@@ -443,11 +530,19 @@
 /* ── Mobile ── */
 @media (max-width: 639px) {
   .cr-bpc-change {
-    padding-bottom: 3.5rem;
+    padding: 1.5rem 0 1.75rem;
+  }
+
+  .cr-bpc-change:has(.cr-bpc-change__toggle[aria-expanded="false"]) {
+    padding: 1rem 0 1.15rem;
+  }
+
+  .cr-bpc-change__inner {
+    padding: 0 0.75rem;
   }
 
   .cr-bpc-change__toggle-wrap {
-    padding: 2.5rem 0 2rem;
+    padding: 0 0 1rem;
   }
 
   .cr-bpc-change__toggle {
@@ -459,11 +554,17 @@
   .cr-bpc-change__bottom {
     flex-direction: column;
     align-items: stretch;
+    margin-top: 0.35rem;
   }
 
   .cr-bpc-change__bottom-btn {
     width: 100%;
+    min-width: 0;
     justify-content: center;
+  }
+
+  .cr-bpc-change__card-thumb {
+    width: 4.75rem;
   }
 }
 

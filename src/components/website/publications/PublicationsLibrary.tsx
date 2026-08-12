@@ -14,12 +14,47 @@ import {
 } from "@/lib/publications";
 import { TESTIMONIES_SECTION_ANCHOR, type TestimonyRow } from "@/lib/testimonies";
 import { sortByPublishedNewest } from "@/lib/content-sort";
+import {
+  mergePublicationLanguageOptions,
+  normalizePublicationLanguageCode,
+  publicationLanguageLabel,
+} from "@/lib/publication-languages";
 import { TestimoniesSection } from "./TestimoniesSection";
 import { PublicationLockModal } from "./PublicationLockModal";
 import { ViewTracker } from "@/components/website/ViewTracker";
 import { MediaFigure } from "@/components/website/MediaCaptionProvider";
 
 type FilterKey = string;
+type LangFilter = string | "all";
+
+function publicationLanguageCode(row: PublicationRow): string {
+  const raw = (row as { language?: string | null }).language;
+  return normalizePublicationLanguageCode(raw || "en");
+}
+
+function matchesLangFilter(row: PublicationRow, langFilter: LangFilter): boolean {
+  if (langFilter === "all") return true;
+  return publicationLanguageCode(row) === langFilter;
+}
+
+function matchesYearFilter(year: number | null, yearFilter: number | "all"): boolean {
+  if (yearFilter === "all") return true;
+  return year === yearFilter;
+}
+
+function scrollPublicationContentIntoView(anchorId?: string) {
+  const bar = document.querySelector<HTMLElement>(".pub-filter-bar");
+  const target =
+    document.querySelector<HTMLElement>(".pub-main-layout") ||
+    (anchorId ? document.getElementById(anchorId) : null);
+  if (!target) return;
+  /* Sticky stack: site header (70) + filter bar — keep content flush underneath */
+  const offset = 70 + (bar?.offsetHeight ?? 56) + 6;
+  const top = target.getBoundingClientRect().top + window.scrollY - offset;
+  const delta = target.getBoundingClientRect().top - offset;
+  if (Math.abs(delta) < 20) return;
+  window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+}
 
 function defaultPublicationFilter(
   strategicCat: PublicationCategoryRow | null,
@@ -109,11 +144,6 @@ function testimonyYear(row: Pick<TestimonyRow, "published_at">): number | null {
   return itemYear(row.published_at);
 }
 
-function matchesYearFilter(year: number | null, yearFilter: number | "all"): boolean {
-  if (yearFilter === "all") return true;
-  return year === yearFilter;
-}
-
 export default function PublicationsLibrary({ publications, categories, testimonies = [] }: Props) {
   const [activePublication, setActivePublication] = useState<PublicationRow | null>(null);
   const [lockedPub, setLockedPub] = useState<PublicationRow | null>(null);
@@ -138,6 +168,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
 
   const [filter, setFilter] = useState<FilterKey>(defaultFilter);
   const [yearFilter, setYearFilter] = useState<number | "all">("all");
+  const [langFilter, setLangFilter] = useState<LangFilter>("all");
   const strategicFeatured = useMemo(() => {
     return publications.find((p) => p.category === "strategic_plan" && p.featured) ?? null;
   }, [publications]);
@@ -158,6 +189,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
   const availableYears = useMemo(() => {
     const years = new Set<number>();
     for (const publication of scopedPublications) {
+      if (!matchesLangFilter(publication, langFilter)) continue;
       const year = publicationYear(publication);
       if (year !== null) years.add(year);
     }
@@ -166,10 +198,18 @@ export default function PublicationsLibrary({ publications, categories, testimon
       if (year !== null) years.add(year);
     }
     return [...years].sort((a, b) => b - a);
-  }, [scopedPublications, scopedTestimonies]);
+  }, [scopedPublications, scopedTestimonies, langFilter]);
+
+  const availableLanguages = useMemo(() => {
+    const codes = scopedPublications.map((p) => publicationLanguageCode(p));
+    return mergePublicationLanguageOptions(codes).filter((opt) =>
+      codes.includes(opt.code),
+    );
+  }, [scopedPublications]);
 
   useEffect(() => {
     setYearFilter("all");
+    setLangFilter("all");
   }, [filter]);
 
   useEffect(() => {
@@ -178,9 +218,16 @@ export default function PublicationsLibrary({ publications, categories, testimon
     }
   }, [availableYears, yearFilter]);
 
+  useEffect(() => {
+    if (langFilter !== "all" && !availableLanguages.some((l) => l.code === langFilter)) {
+      setLangFilter("all");
+    }
+  }, [availableLanguages, langFilter]);
+
   const showStrategicFeatured =
     strategicFeatured &&
-    matchesYearFilter(publicationYear(strategicFeatured), yearFilter);
+    matchesYearFilter(publicationYear(strategicFeatured), yearFilter) &&
+    matchesLangFilter(strategicFeatured, langFilter);
 
   const strategicPlanItems = useMemo(() => {
     if (!strategicCat) return [];
@@ -190,22 +237,32 @@ export default function PublicationsLibrary({ publications, categories, testimon
   const strategicGridItems = useMemo(() => {
     return strategicPlanItems.filter((row) => {
       if (strategicFeatured && row.id === strategicFeatured.id) return false;
-      return matchesYearFilter(publicationYear(row), yearFilter);
+      return (
+        matchesYearFilter(publicationYear(row), yearFilter) &&
+        matchesLangFilter(row, langFilter)
+      );
     });
-  }, [strategicPlanItems, strategicFeatured, yearFilter]);
+  }, [strategicPlanItems, strategicFeatured, yearFilter, langFilter]);
 
   const showStrategicSection = Boolean(strategicCat && showSection(strategicCat.slug));
   const hasStrategicContent = Boolean(showStrategicFeatured || strategicGridItems.length > 0);
 
   const hasFilteredContent = useMemo(() => {
-    if (yearFilter === "all") return true;
+    const yearOk = yearFilter === "all";
+    const langOk = langFilter === "all";
+    if (yearOk && langOk) return true;
     if (strategicCat && filter === strategicCat.slug) return hasStrategicContent;
     if (filter === TESTIMONIES_SECTION_ANCHOR) {
       return scopedTestimonies.some((row) => matchesYearFilter(testimonyYear(row), yearFilter));
     }
-    return scopedPublications.some((row) => matchesYearFilter(publicationYear(row), yearFilter));
+    return scopedPublications.some(
+      (row) =>
+        matchesYearFilter(publicationYear(row), yearFilter) &&
+        matchesLangFilter(row, langFilter),
+    );
   }, [
     yearFilter,
+    langFilter,
     strategicCat,
     filter,
     hasStrategicContent,
@@ -233,9 +290,11 @@ export default function PublicationsLibrary({ publications, categories, testimon
     const key = filterKeyFromAnchor(raw, strategicCat, sortedCategories);
     if (!key) return;
     setFilter(key);
-    window.setTimeout(() => {
-      document.getElementById(raw)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 120);
+    window.requestAnimationFrame(() => {
+      window.setTimeout(() => {
+        scrollPublicationContentIntoView(raw);
+      }, 50);
+    });
   }, [defaultFilter, strategicCat, sortedCategories]);
 
   useEffect(() => {
@@ -310,9 +369,9 @@ export default function PublicationsLibrary({ publications, categories, testimon
 
       <div className="pub-main-layout">
         <div className="pub-main-content">
-          {yearFilter !== "all" && !hasFilteredContent ? (
+          {(yearFilter !== "all" || langFilter !== "all") && !hasFilteredContent ? (
             <p className="pub-empty-filtered">
-              No publications from {yearFilter} in this selection. Try another year or category.
+              No publications match these filters. Try another year or language.
             </p>
           ) : null}
 
@@ -401,6 +460,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
                     anchor={anchor}
                     visible={visible}
                     yearFilter={yearFilter}
+                    langFilter={langFilter}
                     onOpenDrawer={setActivePublication}
                     onLockedClick={setLockedPub}
                   />
@@ -417,12 +477,23 @@ export default function PublicationsLibrary({ publications, categories, testimon
           />
         </div>
 
-        {availableYears.length > 0 ? (
-          <PublicationsYearFilter
-            years={availableYears}
-            value={yearFilter}
-            onChange={setYearFilter}
-          />
+        {(availableYears.length > 0 || availableLanguages.length > 0) ? (
+          <aside className="pub-side-filters" aria-label="Filter publications">
+            {availableLanguages.length > 0 ? (
+              <PublicationsLangFilter
+                languages={availableLanguages}
+                value={langFilter}
+                onChange={setLangFilter}
+              />
+            ) : null}
+            {availableYears.length > 0 ? (
+              <PublicationsYearFilter
+                years={availableYears}
+                value={yearFilter}
+                onChange={setYearFilter}
+              />
+            ) : null}
+          </aside>
         ) : null}
       </div>
 
@@ -630,6 +701,7 @@ function CategorySection({
   anchor,
   visible,
   yearFilter,
+  langFilter,
   onOpenDrawer,
   onLockedClick,
 }: {
@@ -638,26 +710,21 @@ function CategorySection({
   anchor: string;
   visible: boolean;
   yearFilter: number | "all";
+  langFilter: LangFilter;
   onOpenDrawer: (row: PublicationRow) => void;
   onLockedClick: (row: PublicationRow) => void;
 }) {
   const headingId = `pub-${cat.slug}-heading`;
   const gridClass = gridClassForKind(cat.kind, cat.slug);
-  const filteredItems = items.filter((row) =>
-    matchesYearFilter(publicationYear(row), yearFilter),
+  const filteredItems = items.filter(
+    (row) =>
+      matchesYearFilter(publicationYear(row), yearFilter) &&
+      matchesLangFilter(row, langFilter),
   );
 
-  if (!visible) {
-    return (
-      <section
-        className="pub-section pub-section--hidden"
-        id={anchor}
-        aria-labelledby={headingId}
-      />
-    );
-  }
+  if (!visible) return null;
 
-  if (yearFilter !== "all" && filteredItems.length === 0) {
+  if ((yearFilter !== "all" || langFilter !== "all") && filteredItems.length === 0) {
     return null;
   }
 
@@ -674,7 +741,11 @@ function CategorySection({
             {cat.plural_label || cat.label}
           </div>
           <h2 className="pub-section-title" id={headingId}>
-            {yearFilter !== "all" ? `${cat.label} · ${yearFilter}` : cat.label}
+            {cat.label}
+            {yearFilter !== "all" ? ` · ${yearFilter}` : ""}
+            {langFilter !== "all"
+              ? ` · ${publicationLanguageLabel(langFilter)}`
+              : ""}
           </h2>
         </div>
       </div>
@@ -722,6 +793,12 @@ function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: Publicat
       : "Download PDF"
     : "Read more";
 
+  const langCode = publicationLanguageCode(row);
+  const langLabel = publicationLanguageLabel(
+    langCode,
+    (row as { language_label?: string | null }).language_label,
+  );
+
   /* 3. Card content (image + body, same structure for all types) */
   const cardContent = (
     <>
@@ -743,6 +820,7 @@ function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: Publicat
             <i className="fa-solid fa-lock" aria-hidden />
           </div>
         ) : null}
+        <span className="pub-card-lang-badge">{langLabel}</span>
       </div>
 
       {/* Body */}
@@ -921,6 +999,41 @@ function PublicationDrawer({
   );
 }
 
+function PublicationsLangFilter({
+  languages,
+  value,
+  onChange,
+}: {
+  languages: { code: string; label: string }[];
+  value: LangFilter;
+  onChange: (lang: LangFilter) => void;
+}) {
+  return (
+    <div className="pub-facet-filter" aria-label="Filter publications by language">
+      <span className="pub-facet-filter-label">Language</span>
+      <button
+        type="button"
+        className={`pub-facet-filter-btn${value === "all" ? " is-active" : ""}`}
+        onClick={() => onChange("all")}
+        aria-pressed={value === "all"}
+      >
+        All
+      </button>
+      {languages.map((lang) => (
+        <button
+          key={lang.code}
+          type="button"
+          className={`pub-facet-filter-btn${value === lang.code ? " is-active" : ""}`}
+          onClick={() => onChange(lang.code)}
+          aria-pressed={value === lang.code}
+        >
+          {lang.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function PublicationsYearFilter({
   years,
   value,
@@ -931,11 +1044,11 @@ function PublicationsYearFilter({
   onChange: (year: number | "all") => void;
 }) {
   return (
-    <aside className="pub-year-filter" aria-label="Filter publications by year">
-      <span className="pub-year-filter-label">Year</span>
+    <div className="pub-facet-filter" aria-label="Filter publications by year">
+      <span className="pub-facet-filter-label">Year</span>
       <button
         type="button"
-        className={`pub-year-filter-btn${value === "all" ? " is-active" : ""}`}
+        className={`pub-facet-filter-btn${value === "all" ? " is-active" : ""}`}
         onClick={() => onChange("all")}
         aria-pressed={value === "all"}
       >
@@ -945,13 +1058,13 @@ function PublicationsYearFilter({
         <button
           key={year}
           type="button"
-          className={`pub-year-filter-btn${value === year ? " is-active" : ""}`}
+          className={`pub-facet-filter-btn${value === year ? " is-active" : ""}`}
           onClick={() => onChange(year)}
           aria-pressed={value === year}
         >
           {year}
         </button>
       ))}
-    </aside>
+    </div>
   );
 }

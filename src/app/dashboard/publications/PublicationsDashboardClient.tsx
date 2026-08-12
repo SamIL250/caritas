@@ -4,15 +4,19 @@ import React, { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  ArrowUpRight,
   BookOpen,
+  Filter,
   LayoutTemplate,
   Lock,
   Plus,
+  Search,
   Settings2,
+  Star,
   User,
+  X,
 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { Topbar } from "@/components/layout/Topbar";
 import {
   DashboardPaginationBar,
   DASHBOARD_LIST_PAGE_SIZE,
@@ -35,15 +39,28 @@ type Tab =
   | { key: "settings"; label: string; kind: "settings" }
   | { key: string; label: string; kind: "category"; category: PublicationCategoryRow };
 
+type StatusFilter = "all" | "published" | "draft";
+
 function tabFromSearch(raw: string | null): string {
   if (!raw || !raw.trim()) return "all";
   return raw.trim();
 }
 
+function dedupeById<T extends { id: string }>(rows: T[]): T[] {
+  const seen = new Set<string>();
+  const out: T[] = [];
+  for (const row of rows) {
+    if (seen.has(row.id)) continue;
+    seen.add(row.id);
+    out.push(row);
+  }
+  return out;
+}
+
 function PublicationsDashboardClient({
-  items,
+  items: itemsProp,
   categories,
-  testimonies,
+  testimonies: testimoniesProp,
   publicationsPageEditorHref,
 }: {
   items: PublicationRow[];
@@ -55,10 +72,17 @@ function PublicationsDashboardClient({
   const searchParams = useSearchParams();
   const tabKey = tabFromSearch(searchParams.get("tab"));
 
+  const items = useMemo(() => dedupeById(itemsProp), [itemsProp]);
+  const testimonies = useMemo(() => dedupeById(testimoniesProp), [testimoniesProp]);
+
   const [delId, setDelId] = useState<string | null>(null);
   const [delTestimonyId, setDelTestimonyId] = useState<string | null>(null);
   const [deletingPending, startDeleting] = useTransition();
-  const [showLockedOnly, setShowLockedOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [featuredOnly, setFeaturedOnly] = useState(false);
+  const [lockedOnly, setLockedOnly] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const sortedCategories = useMemo(
     () =>
@@ -71,7 +95,12 @@ function PublicationsDashboardClient({
   const tabs: Tab[] = useMemo(() => {
     const all: Tab[] = [{ key: "all", label: "All", kind: "all" }];
     sortedCategories.forEach((c) =>
-      all.push({ key: c.slug, label: c.plural_label || c.label, kind: "category", category: c }),
+      all.push({
+        key: c.slug,
+        label: c.plural_label || c.label,
+        kind: "category",
+        category: c,
+      }),
     );
     all.push({ key: "testimonies", label: "Testimonies", kind: "testimonies" });
     all.push({ key: "settings", label: "Categories", kind: "settings" });
@@ -83,7 +112,7 @@ function PublicationsDashboardClient({
     const published = items.filter((p) => p.status === "published").length;
     const drafts = items.filter((p) => p.status === "draft").length;
     const featured = items.filter((p) => p.featured).length;
-    const locked = items.filter((p) => (p as any).is_locked).length;
+    const locked = items.filter((p) => Boolean((p as { is_locked?: boolean }).is_locked)).length;
     const byCategory: Record<string, number> = {};
     items.forEach((p) => {
       byCategory[p.category] = (byCategory[p.category] ?? 0) + 1;
@@ -121,14 +150,74 @@ function PublicationsDashboardClient({
   }
 
   const activeTab = tabs.find((t) => t.key === tabKey) ?? tabs[0];
-  const activeCategory =
-    activeTab.kind === "category" ? activeTab.category : null;
+  const activeCategory = activeTab.kind === "category" ? activeTab.category : null;
   const isTestimoniesTab = activeTab.kind === "testimonies";
+  const isSettingsTab = activeTab.kind === "settings";
 
-  const filteredItems = (activeCategory
-    ? items.filter((r) => r.category === activeCategory.slug)
-    : items
-  ).filter((r) => (showLockedOnly ? (r as any).is_locked : true));
+  const filteredPublications = useMemo(() => {
+    let list = activeCategory
+      ? items.filter((r) => r.category === activeCategory.slug)
+      : items;
+
+    if (statusFilter !== "all") {
+      list = list.filter((r) => r.status === statusFilter);
+    }
+    if (featuredOnly) {
+      list = list.filter((r) => Boolean(r.featured));
+    }
+    if (lockedOnly) {
+      list = list.filter((r) => Boolean((r as { is_locked?: boolean }).is_locked));
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      list = list.filter((r) => {
+        const hay = [
+          r.title,
+          r.slug,
+          r.category,
+          r.excerpt ?? "",
+          r.meta_line ?? "",
+          r.tag_label ?? "",
+          r.period_label ?? "",
+        ]
+          .join(" ")
+          .toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    return list;
+  }, [items, activeCategory, statusFilter, featuredOnly, lockedOnly, searchQuery]);
+
+  const filteredTestimonies = useMemo(() => {
+    if (!searchQuery.trim()) return testimonies;
+    const q = searchQuery.trim().toLowerCase();
+    return testimonies.filter((t) => {
+      const hay = [t.title, t.slug, t.excerpt ?? ""]
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }, [testimonies, searchQuery]);
+
+  const listForPagination = isTestimoniesTab ? filteredTestimonies : filteredPublications;
+  const totalPages = Math.max(1, Math.ceil(listForPagination.length / DASHBOARD_LIST_PAGE_SIZE));
+  const paginatedPublications = useMemo(() => {
+    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
+    return filteredPublications.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
+  }, [filteredPublications, currentPage]);
+  const paginatedTestimonies = useMemo(() => {
+    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
+    return filteredTestimonies.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
+  }, [filteredTestimonies, currentPage]);
+
+  const filterKey = `${tabKey}|${statusFilter}|${featuredOnly}|${lockedOnly}|${searchQuery.trim()}`;
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterKey]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
 
   const newPublicationHref = activeCategory
     ? `/dashboard/publications/new?category=${encodeURIComponent(activeCategory.slug)}`
@@ -144,172 +233,340 @@ function PublicationsDashboardClient({
     ? "/dashboard/publications/testimonies/new"
     : newPublicationHref;
 
-  return (
-    <div className="space-y-10">
-      <section className="rounded-2xl bg-stone-100/55 px-6 py-7 sm:px-8 sm:py-8">
-        <div className="relative">
-          <div className="relative flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-            <div className="flex min-w-0 gap-5">
-              <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[#7A1515] text-white">
-                <BookOpen className="size-7" strokeWidth={1.75} aria-hidden />
-              </div>
-              <div className="min-w-0 space-y-2">
-                <div>
-                  <h2 className="text-lg font-bold tracking-tight text-stone-900 sm:text-xl">
-                    Publications library
-                  </h2>
-                  <p className="mt-1 max-w-xl text-sm leading-relaxed text-stone-500">
-                    Annual reports, newsletters, strategic plan, success stories and updates — manage one
-                    library, broken into categories so each type uses the right form.
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium text-stone-500">
-                  <a
-                    href="/publications"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white/85 px-3 py-1 text-[#7A1515] transition-colors hover:bg-white"
-                  >
-                    Open /publications <ArrowUpRight className="size-3.5 opacity-70" aria-hidden />
-                  </a>
-                  {publicationsPageEditorHref ? (
-                    <Link
-                      href={publicationsPageEditorHref}
-                      className="inline-flex items-center gap-1.5 text-stone-600 underline decoration-stone-300/90 underline-offset-2 hover:text-[#7A1515]"
-                    >
-                      Page layout & hero
-                    </Link>
-                  ) : (
-                    <Link
-                      href="/dashboard/pages"
-                      className="text-stone-500 underline decoration-stone-200 underline-offset-2 hover:text-[#7A1515]"
-                    >
-                      Pages — migration pending for Publications CMS page
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
+  function clearFilters() {
+    setSearchQuery("");
+    setStatusFilter("all");
+    setFeaturedOnly(false);
+    setLockedOnly(false);
+  }
 
-            <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-              {publicationsPageEditorHref ? (
-                <Link
-                  href={publicationsPageEditorHref}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-stone-800 transition-colors hover:bg-stone-50/95"
-                >
-                  <LayoutTemplate className="size-4 text-stone-500" aria-hidden />
-                  Edit layout
-                </Link>
-              ) : null}
-              {activeTab.kind !== "settings" ? (
-                <Link
-                  href={newItemHref}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#7A1515] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#651212]"
-                >
-                  <Plus className="size-5" strokeWidth={2.25} aria-hidden />
-                  {newCtaLabel}
-                </Link>
-              ) : null}
+  const hasActiveFilters =
+    Boolean(searchQuery.trim()) ||
+    statusFilter !== "all" ||
+    featuredOnly ||
+    lockedOnly;
+
+  return (
+    <div className="w-full max-w-full">
+      <Topbar
+        title="Publications"
+        subtitle={
+          <>
+            PDFs, newsletters, stories and external updates published on{" "}
+            <Link
+              href="/publications"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-stone-600 underline decoration-stone-300 underline-offset-[3px] hover:text-[#7A1515]"
+            >
+              /publications
+            </Link>
+            .
+          </>
+        }
+        actions={
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            {publicationsPageEditorHref ? (
+              <Link
+                href={publicationsPageEditorHref}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white px-4 text-sm font-semibold text-stone-800 transition-colors hover:bg-stone-50"
+              >
+                <LayoutTemplate className="size-4 text-stone-500" aria-hidden />
+                Edit layout
+              </Link>
+            ) : null}
+            {!isSettingsTab ? (
+              <Link
+                href={newItemHref}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#7A1515] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#651212]"
+              >
+                <Plus className="size-4" strokeWidth={2.25} aria-hidden />
+                {newCtaLabel}
+              </Link>
+            ) : null}
+          </div>
+        }
+      />
+
+      <div className="space-y-6">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="-mx-1 overflow-x-auto flex-1">
+            <div className="flex min-w-max flex-wrap gap-1 border-b border-stone-200 px-1 pb-px">
+              {tabs.map((t) => {
+                const active = t.key === activeTab.key;
+                const showBadge =
+                  t.kind === "category" || t.kind === "all" || t.kind === "testimonies";
+                const badgeCount =
+                  t.kind === "all"
+                    ? counts.total
+                    : t.kind === "testimonies"
+                      ? testimonies.length
+                      : t.kind === "category"
+                        ? counts.byCategory[t.category.slug] ?? 0
+                        : 0;
+                return (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => setTab(t.key)}
+                    className={`relative -mb-px inline-flex items-center gap-2 rounded-t-lg px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                      active
+                        ? "border border-b-0 border-stone-200 bg-white text-[#7A1515]"
+                        : "border border-transparent text-stone-500 hover:bg-stone-50 hover:text-stone-800"
+                    }`}
+                  >
+                    {t.kind === "settings" ? <Settings2 className="size-3.5" aria-hidden /> : null}
+                    {t.kind === "testimonies" ? <User className="size-3.5" aria-hidden /> : null}
+                    {t.kind === "category" ? (
+                      <PublicationCategoryIcon
+                        icon={t.category.icon}
+                        accent={t.category.accent}
+                        size={18}
+                        className="!rounded-md"
+                      />
+                    ) : null}
+                    {t.label}
+                    {showBadge ? (
+                      <span
+                        className={`rounded-full px-1.5 py-0.5 text-[10px] font-extrabold ${
+                          active ? "bg-[#7A1515]/10 text-[#7A1515]" : "bg-stone-100 text-stone-500"
+                        }`}
+                      >
+                        {badgeCount}
+                      </span>
+                    ) : null}
+                  </button>
+                );
+              })}
             </div>
           </div>
-
-          {counts.total > 0 ? (
-            <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-6 border-t border-stone-200/60 pt-8 sm:gap-x-14">
-              <Stat label="Total" value={counts.total} />
-              <Stat label="Live" value={counts.published} tone="emerald" />
-              <Stat label="Drafts" value={counts.drafts} tone="amber" />
-              <Stat label="Featured" value={counts.featured} />
-              <Stat label="Locked" value={counts.locked} />
-              <Stat label="Categories" value={categories.length} />
-            </dl>
-          ) : null}
         </div>
-      </section>
 
-      <div className="flex items-center justify-between">
-        <div className="-mx-1 overflow-x-auto flex-1">
-          <div className="flex min-w-max flex-wrap gap-1 border-b border-stone-200 px-1 pb-px">
-            {tabs.map((t) => {
-              const active = t.key === activeTab.key;
-              const showBadge = t.kind === "category" || t.kind === "all" || t.kind === "testimonies";
-              const badgeCount =
-                t.kind === "all"
-                  ? counts.total
-                  : t.kind === "testimonies"
-                    ? testimonies.length
-                    : t.kind === "category"
-                      ? counts.byCategory[t.category.slug] ?? 0
-                      : 0;
-              return (
-                <button
-                  key={t.key}
-                  type="button"
-                  onClick={() => setTab(t.key)}
-                  className={`relative -mb-px inline-flex items-center gap-2 rounded-t-lg px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                    active
-                      ? "border border-b-0 border-stone-200 bg-white text-[#7A1515]"
-                      : "border border-transparent text-stone-500 hover:bg-stone-50 hover:text-stone-800"
-                  }`}
-                >
-                  {t.kind === "settings" ? <Settings2 className="size-3.5" aria-hidden /> : null}
-                  {t.kind === "testimonies" ? <User className="size-3.5" aria-hidden /> : null}
-                  {t.kind === "category" ? (
-                    <PublicationCategoryIcon
-                      icon={t.category.icon}
-                      accent={t.category.accent}
-                      size={18}
-                      className="!rounded-md"
+        {isSettingsTab ? (
+          <PublicationsCategoriesPanel categories={sortedCategories} />
+        ) : (
+          <>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="relative min-w-[200px] flex-1">
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
+                  size={16}
+                  aria-hidden
+                />
+                <input
+                  type="search"
+                  placeholder={
+                    isTestimoniesTab
+                      ? "Search testimonies by name, title…"
+                      : "Search by title, slug, category…"
+                  }
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-xl border border-stone-200 bg-white py-2 pl-9 pr-4 text-sm outline-none focus:border-[#7A1515] focus:ring-2 focus:ring-[#7A1515]/15"
+                />
+              </div>
+
+              {!isTestimoniesTab ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <Filter size={16} className="text-stone-400" aria-hidden />
+                    {(["all", "published", "draft"] as const).map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setStatusFilter(s)}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                          statusFilter === s
+                            ? "bg-[#7A1515] text-white"
+                            : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                        }`}
+                      >
+                        {s === "all" ? "All" : s === "published" ? "Published" : "Draft"}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setFeaturedOnly((v) => !v)}
+                    aria-pressed={featuredOnly}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                      featuredOnly
+                        ? "bg-amber-100 text-amber-900 ring-1 ring-amber-200"
+                        : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                    }`}
+                  >
+                    <Star
+                      className={`size-3.5 ${featuredOnly ? "fill-amber-500 text-amber-500" : ""}`}
+                      aria-hidden
                     />
-                  ) : null}
-                  {t.label}
-                  {showBadge ? (
-                    <span
-                      className={`rounded-full px-1.5 py-0.5 text-[10px] font-extrabold ${
-                        active ? "bg-[#7A1515]/10 text-[#7A1515]" : "bg-stone-100 text-stone-500"
+                    Featured
+                  </button>
+
+                  {counts.locked > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => setLockedOnly((v) => !v)}
+                      aria-pressed={lockedOnly}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                        lockedOnly
+                          ? "bg-[#8c2208]/10 text-[#8c2208] ring-1 ring-[#8c2208]/20"
+                          : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                       }`}
                     >
-                      {badgeCount}
-                    </span>
+                      <Lock size={13} aria-hidden />
+                      Locked
+                    </button>
                   ) : null}
+                </>
+              ) : null}
+
+              {hasActiveFilters ? (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 hover:text-stone-800"
+                >
+                  <X size={14} aria-hidden />
+                  Clear
                 </button>
-              );
-            })}
-          </div>
-        </div>
+              ) : null}
 
-        {counts.locked > 0 && !isTestimoniesTab ? (
-          <button
-            type="button"
-            onClick={() => setShowLockedOnly((v) => !v)}
-            className={`ml-4 inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
-              showLockedOnly
-                ? "bg-[#8c2208]/10 text-[#8c2208]"
-                : "bg-stone-100 text-stone-500 hover:bg-stone-200"
-            }`}
-          >
-            <Lock size={13} aria-hidden />
-            {showLockedOnly ? "Showing locked" : "Show locked"}
-          </button>
-        ) : null}
+              <p className="ml-auto text-xs tabular-nums text-stone-400">
+                {listForPagination.length}{" "}
+                {isTestimoniesTab
+                  ? `of ${testimonies.length}`
+                  : activeCategory
+                    ? `in ${activeCategory.label}`
+                    : `of ${counts.total}`}
+                {listForPagination.length > DASHBOARD_LIST_PAGE_SIZE
+                  ? ` · page ${currentPage} of ${totalPages}`
+                  : ""}
+              </p>
+            </div>
+
+            {isTestimoniesTab ? (
+              filteredTestimonies.length === 0 ? (
+                <EmptyState
+                  icon={<User className="size-10 text-[#7A1515]/45" strokeWidth={1.25} aria-hidden />}
+                  title={
+                    hasActiveFilters ? "No testimonies match your search" : "No testimonies yet"
+                  }
+                  description={
+                    hasActiveFilters
+                      ? "Try adjusting your search."
+                      : "Testimonies appear under the Publications page in their own tab."
+                  }
+                  actionHref={hasActiveFilters ? undefined : "/dashboard/publications/testimonies/new"}
+                  actionLabel="New testimony"
+                  onClear={hasActiveFilters ? clearFilters : undefined}
+                />
+              ) : (
+                <div>
+                  <div className="mb-5">
+                    <h3 className="text-sm font-bold text-stone-900">Testimonies</h3>
+                    <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
+                      Inspirational stories with detail pages at /publications/testimonies/[slug].
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    {paginatedTestimonies.map((row) => (
+                      <TestimonyRowItem
+                        key={row.id}
+                        row={row}
+                        onDelete={(id) => setDelTestimonyId(id)}
+                      />
+                    ))}
+                  </div>
+                  <DashboardPaginationBar
+                    page={currentPage}
+                    totalPages={totalPages}
+                    totalItems={filteredTestimonies.length}
+                    pageSize={DASHBOARD_LIST_PAGE_SIZE}
+                    itemLabel={filteredTestimonies.length === 1 ? "item" : "items"}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
+              )
+            ) : filteredPublications.length === 0 ? (
+              <EmptyState
+                icon={
+                  activeCategory ? (
+                    <PublicationCategoryIcon
+                      icon={activeCategory.icon}
+                      accent={activeCategory.accent}
+                      size={56}
+                    />
+                  ) : (
+                    <BookOpen
+                      className="size-10 text-[#7A1515]/45"
+                      strokeWidth={1.25}
+                      aria-hidden
+                    />
+                  )
+                }
+                title={
+                  hasActiveFilters
+                    ? "No publications match your filters"
+                    : activeCategory
+                      ? `No ${(activeCategory.plural_label || activeCategory.label).toLowerCase()} yet`
+                      : "No publications yet"
+                }
+                description={
+                  hasActiveFilters
+                    ? "Try adjusting your search or filter criteria."
+                    : activeCategory?.description ||
+                      "Add your first publication to surface it on /publications when published."
+                }
+                actionHref={hasActiveFilters ? undefined : newPublicationHref}
+                actionLabel={newCtaLabel}
+                onClear={hasActiveFilters ? clearFilters : undefined}
+              />
+            ) : (
+              <div>
+                <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    {activeCategory ? (
+                      <PublicationCategoryIcon
+                        icon={activeCategory.icon}
+                        accent={activeCategory.accent}
+                        size={28}
+                      />
+                    ) : null}
+                    <div>
+                      <h3 className="text-sm font-bold text-stone-900">
+                        {activeCategory ? activeCategory.label : "All publications"}
+                      </h3>
+                      <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
+                        {activeCategory?.description ||
+                          "Every category in one list, newest updates first."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {paginatedPublications.map((row) => (
+                    <PublicationRowItem
+                      key={row.id}
+                      row={row}
+                      category={categoryById.get(row.category_id)}
+                      onDelete={(id) => setDelId(id)}
+                    />
+                  ))}
+                </div>
+                <DashboardPaginationBar
+                  page={currentPage}
+                  totalPages={totalPages}
+                  totalItems={filteredPublications.length}
+                  pageSize={DASHBOARD_LIST_PAGE_SIZE}
+                  itemLabel={filteredPublications.length === 1 ? "item" : "items"}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
+            )}
+          </>
+        )}
       </div>
-
-      {activeTab.kind === "settings" ? (
-        <PublicationsCategoriesPanel categories={sortedCategories} />
-      ) : isTestimoniesTab ? (
-        <TestimoniesListPanel
-          items={testimonies}
-          onDelete={(id) => setDelTestimonyId(id)}
-        />
-      ) : (
-        <PublicationsListPanel
-          activeCategory={activeCategory}
-          items={filteredItems}
-          allCategoryById={categoryById}
-          onDelete={(id) => setDelId(id)}
-          newPublicationHref={newPublicationHref}
-          newCtaLabel={newCtaLabel}
-        />
-      )}
 
       <ConfirmDialog
         isOpen={delId !== null}
@@ -336,235 +593,49 @@ function PublicationsDashboardClient({
   );
 }
 
-function TestimoniesListPanel({
-  items,
-  onDelete,
+function EmptyState({
+  icon,
+  title,
+  description,
+  actionHref,
+  actionLabel,
+  onClear,
 }: {
-  items: TestimonyRow[];
-  onDelete: (id: string) => void;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  actionHref?: string;
+  actionLabel?: string;
+  onClear?: () => void;
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(items.length / DASHBOARD_LIST_PAGE_SIZE));
-  const paginatedItems = useMemo(() => {
-    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
-    return items.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
-  }, [items, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [items]);
-
-  if (items.length === 0) {
-    return (
-      <div className="py-16 text-center">
-        <div className="mx-auto flex max-w-md flex-col items-center">
-          <div className="mb-6 flex size-24 items-center justify-center rounded-full bg-stone-100">
-            <User className="size-10 text-[#7A1515]/45" strokeWidth={1.25} aria-hidden />
-          </div>
-          <h3 className="text-lg font-semibold text-stone-900">No testimonies yet</h3>
-          <p className="mt-2 max-w-sm text-sm leading-relaxed text-stone-500">
-            Testimonies appear under the Publications page in their own tab — separate from publication categories.
-          </p>
+  return (
+    <div className="py-16 text-center">
+      <div className="mx-auto flex max-w-md flex-col items-center">
+        <div className="mb-6 flex size-24 items-center justify-center rounded-full bg-stone-100">
+          {icon}
+        </div>
+        <h3 className="text-lg font-semibold text-stone-900">{title}</h3>
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-stone-500">{description}</p>
+        {onClear ? (
+          <button
+            type="button"
+            onClick={onClear}
+            className="mt-6 text-sm font-semibold text-[#7A1515] hover:underline"
+          >
+            Clear filters
+          </button>
+        ) : null}
+        {actionHref && actionLabel ? (
           <Link
-            href="/dashboard/publications/testimonies/new"
+            href={actionHref}
             className="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#7A1515] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#651212]"
           >
-            <Plus className="size-5" aria-hidden /> New testimony
+            <Plus className="size-5" aria-hidden /> {actionLabel}
           </Link>
-        </div>
+        ) : null}
       </div>
-    );
-  }
-
-  return (
-    <div>
-      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
-        <div>
-          <h3 className="text-sm font-bold text-stone-900">Testimonies</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
-            Inspirational stories with rich text detail pages at /publications/testimonies/[slug].
-          </p>
-        </div>
-        <p className="text-xs tabular-nums text-stone-400">
-          {items.length} {items.length === 1 ? "item" : "items"}
-          {items.length > DASHBOARD_LIST_PAGE_SIZE ? ` · page ${currentPage} of ${totalPages}` : ""}
-        </p>
-      </div>
-      <div className="flex flex-col gap-3">
-        {paginatedItems.map((row) => (
-          <TestimonyRowItem key={row.id} row={row} onDelete={onDelete} />
-        ))}
-      </div>
-      <DashboardPaginationBar
-        page={currentPage}
-        totalPages={totalPages}
-        totalItems={items.length}
-        pageSize={DASHBOARD_LIST_PAGE_SIZE}
-        itemLabel={items.length === 1 ? "item" : "items"}
-        onPageChange={setCurrentPage}
-      />
     </div>
   );
 }
 
 export default PublicationsDashboardClient;
-
-function Stat({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: number;
-  tone?: "emerald" | "amber";
-}) {
-  const valueColor =
-    tone === "emerald"
-      ? "text-emerald-700"
-      : tone === "amber"
-        ? "text-amber-700/90"
-        : "text-stone-900";
-  return (
-    <div>
-      <dt className="text-[11px] font-semibold uppercase tracking-wider text-stone-400">{label}</dt>
-      <dd className={`mt-1 text-2xl font-bold tabular-nums tracking-tight ${valueColor}`}>{value}</dd>
-    </div>
-  );
-}
-
-function PublicationsListPanel({
-  activeCategory,
-  items,
-  allCategoryById,
-  onDelete,
-  newPublicationHref,
-  newCtaLabel,
-}: {
-  activeCategory: PublicationCategoryRow | null;
-  items: PublicationRow[];
-  allCategoryById: Map<string, PublicationCategoryRow>;
-  onDelete: (id: string) => void;
-  newPublicationHref: string;
-  newCtaLabel: string;
-}) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(items.length / DASHBOARD_LIST_PAGE_SIZE));
-  const paginatedItems = useMemo(() => {
-    const start = (currentPage - 1) * DASHBOARD_LIST_PAGE_SIZE;
-    return items.slice(start, start + DASHBOARD_LIST_PAGE_SIZE);
-  }, [items, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [items, activeCategory?.id]);
-
-  if (items.length === 0) {
-    return (
-      <div className="py-16 text-center">
-        <div className="mx-auto flex max-w-md flex-col items-center">
-          <div className="mb-6 flex size-24 items-center justify-center rounded-full bg-stone-100">
-            {activeCategory ? (
-              <PublicationCategoryIcon
-                icon={activeCategory.icon}
-                accent={activeCategory.accent}
-                size={56}
-              />
-            ) : (
-              <BookOpen className="size-10 text-[#7A1515]/45" strokeWidth={1.25} aria-hidden />
-            )}
-          </div>
-          <h3 className="text-lg font-semibold text-stone-900">
-            {activeCategory ? `No ${activeCategory.plural_label.toLowerCase() || activeCategory.label.toLowerCase()} yet` : "No publications yet"}
-          </h3>
-          <p className="mt-2 max-w-sm text-sm leading-relaxed text-stone-500">
-            {activeCategory?.description ||
-              "Add your first publication to surface it on /publications when published."}
-          </p>
-          <Link
-            href={newPublicationHref}
-            className="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#7A1515] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#651212]"
-          >
-            <Plus className="size-5" aria-hidden /> {newCtaLabel}
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (activeCategory) {
-    return (
-      <div>
-        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <PublicationCategoryIcon icon={activeCategory.icon} accent={activeCategory.accent} size={28} />
-            <div>
-              <h3 className="text-sm font-bold text-stone-900">{activeCategory.label}</h3>
-              {activeCategory.description ? (
-                <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
-                  {activeCategory.description}
-                </p>
-              ) : null}
-            </div>
-          </div>
-          <p className="text-xs tabular-nums text-stone-400">
-            {items.length} {items.length === 1 ? "item" : "items"}
-            {items.length > DASHBOARD_LIST_PAGE_SIZE ? ` · page ${currentPage} of ${totalPages}` : ""}
-          </p>
-        </div>
-        <div className="flex flex-col gap-3">
-          {paginatedItems.map((row) => (
-            <PublicationRowItem
-              key={row.id}
-              row={row}
-              category={allCategoryById.get(row.category_id)}
-              onDelete={onDelete}
-            />
-          ))}
-        </div>
-        <DashboardPaginationBar
-          page={currentPage}
-          totalPages={totalPages}
-          totalItems={items.length}
-          pageSize={DASHBOARD_LIST_PAGE_SIZE}
-          itemLabel={items.length === 1 ? "item" : "items"}
-          onPageChange={setCurrentPage}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
-        <div>
-          <h3 className="text-sm font-bold text-stone-900">All publications</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
-            Every category in one list, newest updates first.
-          </p>
-        </div>
-        <p className="text-xs tabular-nums text-stone-400">
-          {items.length} {items.length === 1 ? "item" : "items"}
-          {items.length > DASHBOARD_LIST_PAGE_SIZE ? ` · page ${currentPage} of ${totalPages}` : ""}
-        </p>
-      </div>
-      <div className="flex flex-col gap-3">
-        {paginatedItems.map((row) => (
-          <PublicationRowItem
-            key={row.id}
-            row={row}
-            category={allCategoryById.get(row.category_id)}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
-      <DashboardPaginationBar
-        page={currentPage}
-        totalPages={totalPages}
-        totalItems={items.length}
-        pageSize={DASHBOARD_LIST_PAGE_SIZE}
-        itemLabel={items.length === 1 ? "item" : "items"}
-        onPageChange={setCurrentPage}
-      />
-    </div>
-  );
-}

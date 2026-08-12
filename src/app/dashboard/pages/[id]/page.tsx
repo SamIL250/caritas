@@ -6,6 +6,7 @@ import { fetchPublishedArticles } from "@/app/(website)/news/get-news-data";
 import {
   fetchPublicationCategories,
   fetchPublishedPublications,
+  fetchPublishedTestimonies,
 } from "@/app/(website)/publications/get-publications-data";
 import {
   fetchProgramCategories,
@@ -13,6 +14,7 @@ import {
   fetchPublishedSuccessStories,
   fetchPublishedNews,
 } from "@/app/(website)/programs/get-programs-data";
+import { fetchProgramDepartmentOptions } from "@/lib/program-departments";
 
 export default async function PageEditor({
   params,
@@ -35,13 +37,27 @@ export default async function PageEditor({
   if (!page) notFound();
 
   const newsFeedPreview =
-    page.slug === "news" ? await fetchPublishedArticles() : null;
+    page.slug === "news"
+      ? await Promise.all([
+          fetchPublishedArticles(),
+          fetchProgramDepartmentOptions(supabase),
+        ]).then(([articles, departmentPillars]) => ({
+          ...articles,
+          departmentPillars,
+        }))
+      : null;
 
   const publicationsFeedPreview =
     page.slug === "publications"
-      ? await Promise.all([fetchPublishedPublications(), fetchPublicationCategories()]).then(
-          ([publications, categories]) => ({ publications, categories }),
-        )
+      ? await Promise.all([
+          fetchPublishedPublications(),
+          fetchPublicationCategories(),
+          fetchPublishedTestimonies(),
+        ]).then(([publications, categories, testimonies]) => ({
+          publications,
+          categories,
+          testimonies,
+        }))
       : null;
 
   const programsPreview =

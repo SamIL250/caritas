@@ -5,7 +5,7 @@
 /* Neutralize legacy website.css alias classes */
 .cr-location.map-section {
   background: #ffffff !important;
-  padding: 5rem 0 4.5rem !important;
+  padding: 3rem 0 2.75rem !important;
   overflow: visible !important;
 }
 
@@ -133,6 +133,12 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+@media (max-width: 639px) {
+  .cr-location__inner {
+    padding: 0 0.75rem;
+  }
 }
 
 .cr-location__header {
@@ -285,7 +291,7 @@
 
 @media (max-width: 639px) {
   .cr-location.map-section {
-    padding: 3.5rem 0 3rem !important;
+    padding: 2.25rem 0 2rem !important;
   }
 
   .cr-location__header {

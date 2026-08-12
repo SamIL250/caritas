@@ -300,7 +300,31 @@
 }
 
 .cr-footer .ft-developer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.75rem;
   margin-top: 0.15rem;
+}
+
+.cr-footer .ft-developer__brand {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.cr-footer .ft-developer__logo {
+  height: 22px;
+  width: auto;
+  max-width: 110px;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+}
+
+.cr-footer .ft-developer__brand:hover .ft-developer__logo {
+  opacity: 1;
 }
 
 .cr-footer .ft-developer strong,

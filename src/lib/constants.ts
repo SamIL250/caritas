@@ -31,7 +31,7 @@ import {
   HelpCircle,
   Eye
 } from "lucide-react";
-import { DEFAULT_PARTNERS } from "@/lib/partners-defaults";
+import { DEFAULT_PARTNERS, ensureLeronyPartner } from "@/lib/partners-defaults";
 import { LEADERSHIP_CHRONICLE_DEFAULT_CONTENT } from "@/lib/about-leadership-defaults";
 import {
   DEFAULT_MVV_STATEMENTS,
@@ -191,7 +191,7 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     title: "Our Partners",
     subtitle:
       "Working together with trusted global and local organizations to deliver lasting impact across Rwanda.",
-    items: DEFAULT_PARTNERS.map((p) => ({ ...p }))
+    items: ensureLeronyPartner(DEFAULT_PARTNERS.map((p) => ({ ...p }))),
   },
   news_cards: {
     eyebrow: "Latest from Caritas Rwanda",
@@ -496,12 +496,14 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     label: "Impact at a Glance",
     title: "Caritas Rwanda by the",
     title_accent: "Numbers",
+    body: "A transparent look at our reach across programmes — healthcare, social welfare, development, and administration across Rwanda.",
+    max_cards: 6,
     kpis: [
-      { value: "500K+", label: "Beneficiaries Reached Annually", color: "#ff9a6c", size: "xl" },
-      { value: "9", label: "Diocesan Caritas Offices Nationwide", color: "#4ade80", size: "lg" },
-      { value: "50+", label: "Active Programmes", color: "#60a5fa", size: "sm" },
-      { value: "12+", label: "Global Partners", color: "#c084fc", size: "lg" },
-      { value: "120K+", label: "Families Supported", color: "#fbbf24", size: "sm" },
+      { value: "500K+", label: "Beneficiaries Reached Annually", color: "#ff9a6c", size: "xl", image_url: "/img/slide1.webp" },
+      { value: "9", label: "Diocesan Caritas Offices Nationwide", color: "#4ade80", size: "lg", image_url: "/img/slide2.webp" },
+      { value: "50+", label: "Active Programmes", color: "#60a5fa", size: "sm", image_url: "/img/slide3.webp" },
+      { value: "12+", label: "Global Partners", color: "#c084fc", size: "lg", image_url: "/img/slide4.webp" },
+      { value: "120K+", label: "Families Supported", color: "#fbbf24", size: "sm", image_url: "/img/slide5.webp" },
     ],
     programs: [
       {
@@ -511,8 +513,9 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
         name: 'Health & ECD',
         description: 'Early Childhood Development & community health',
         icon: 'fa-heart-pulse',
-        accent_color: '#dc2626',
+        accent_color: '#8c2208',
         slug: 'health',
+        image_url: '/img/health.JPG.webp',
         stats: [
           { value: '15,000+', label: 'Children Reached' },
           { value: '7', label: 'Dioceses Active' },
@@ -526,8 +529,9 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
         name: 'Social Welfare',
         description: 'Savings groups, family support & community care',
         icon: 'fa-people-roof',
-        accent_color: '#2563eb',
+        accent_color: '#8c2208',
         slug: 'social-welfare',
+        image_url: '/img/slide2.webp',
         stats: [
           { value: '4,500+', label: 'Households' },
           { value: '35%', label: 'Income Growth' },
@@ -541,8 +545,9 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
         name: 'Development',
         description: 'Livelihoods, agriculture & youth entrepreneurship',
         icon: 'fa-seedling',
-        accent_color: '#16a34a',
+        accent_color: '#8c2208',
         slug: 'development',
+        image_url: '/img/slide3.webp',
         stats: [
           { value: '3,500+', label: 'Households' },
           { value: '24', label: 'PSPs Graduated' },
@@ -556,8 +561,9 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
         name: 'Administration & Finance',
         description: 'Governance, capacity building & resource management',
         icon: 'fa-building-columns',
-        accent_color: '#7c3aed',
+        accent_color: '#8c2208',
         slug: 'finance-administration',
+        image_url: '/img/slide1.webp',
         stats: [
           { value: '9', label: 'Dioceses Aligned' },
           { value: '29th', label: 'General Assembly' },
@@ -640,5 +646,5 @@ export const SECTION_LABELS: Record<string, string> = {
   metrics_program: "Metrics Program Tab",
   metrics_reach: "Metrics Reach Tab",
   faq_section: "FAQ Section",
-  impact_at_glance: "Impact at a Glance",
+  impact_at_glance: "Impact metrics (cards)",
 };

@@ -5,6 +5,10 @@ import { revalidatePath } from "next/cache";
 import type { Database, Json } from "@/types/database.types";
 import { slugify } from "@/lib/news";
 import { readCategoryBehavior, readFieldSchema } from "@/lib/publications";
+import {
+  isDefaultPublicationLanguage,
+  normalizePublicationLanguageCode,
+} from "@/lib/publication-languages";
 
 type Status = Database["public"]["Enums"]["publication_status"];
 
@@ -16,6 +20,19 @@ async function requireUser() {
   } = await supabase.auth.getUser();
   if (error || !user) throw new Error("You must be signed in.");
   return { supabase, user };
+}
+
+function parseLanguageFields(form: FormData): {
+  language: string;
+  language_label: string;
+} {
+  const rawCode = String(form.get("language") || "en");
+  const language = normalizePublicationLanguageCode(rawCode);
+  const labelRaw = String(form.get("language_label") || "").trim();
+  const language_label = isDefaultPublicationLanguage(language)
+    ? ""
+    : labelRaw || language;
+  return { language, language_label };
 }
 
 function parsePublishedAtField(form: FormData): string | null {
@@ -163,6 +180,7 @@ export async function createPublication(form: FormData): Promise<{ error?: strin
     const period_label = String(form.get("period_label") || "").trim();
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
+    const { language, language_label } = parseLanguageFields(form);
     const featured = form.get("featured") === "on";
     const lockFields = await resolveAccessPassword(supabase, form);
     if (lockFields.error) return { error: lockFields.error };
@@ -203,6 +221,8 @@ export async function createPublication(form: FormData): Promise<{ error?: strin
       period_label,
       tag_label,
       tag_icon,
+      language,
+      language_label,
       featured,
       is_locked,
       access_password,
@@ -255,6 +275,7 @@ export async function updatePublication(
     const period_label = String(form.get("period_label") || "").trim();
     const tag_label = String(form.get("tag_label") || "").trim();
     const tag_icon = String(form.get("tag_icon") || "").trim();
+    const { language, language_label } = parseLanguageFields(form);
     const featured = form.get("featured") === "on";
     const lockFields = await resolveAccessPassword(supabase, form, publicationId);
     if (lockFields.error) return { error: lockFields.error };
@@ -289,6 +310,8 @@ export async function updatePublication(
         period_label,
         tag_label,
         tag_icon,
+        language,
+        language_label,
         featured,
         is_locked,
         access_password,

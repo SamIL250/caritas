@@ -11,7 +11,27 @@ type HistoryCard = {
   span?: 1 | 2 | 3;
 };
 
-const historyCards: HistoryCard[] = [
+export type HistoryBentoItemInput = {
+  year?: string;
+  badge?: string;
+  title?: string;
+  body?: string;
+  icon?: string;
+  tone?: string;
+  image_url?: string;
+  span?: number;
+};
+
+export type HistoryBentoSectionProps = {
+  eyebrow?: string;
+  eyebrow_icon?: string;
+  title?: string;
+  subtitle?: string;
+  anchor_id?: string;
+  items?: HistoryBentoItemInput[];
+};
+
+const DEFAULT_CARDS: HistoryCard[] = [
   {
     year: "1959",
     eraPill: "Founding",
@@ -84,26 +104,100 @@ const historyCards: HistoryCard[] = [
   },
 ];
 
-export default function HistoryBentoSection() {
+const TONE_CYCLE: HistoryCard["variant"][] = ["crimson", "light", "navy", "gold"];
+const FALLBACK_IMAGES = [
+  "/img/bg_3.webp",
+  "/img/bg_1.webp",
+  "/img/slide1.webp",
+  "/img/slide4.webp",
+];
+
+function markdownLiteToHtml(raw: string): string {
+  return raw
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+}
+
+function normalizeIcon(raw?: string): string | undefined {
+  const t = (raw || "").trim();
+  if (!t) return undefined;
+  if (t.startsWith("fa-")) return t.replace(/^fa-solid\s+/i, "");
+  return `fa-${t.replace(/^fa-?/i, "")}`;
+}
+
+function mapTone(tone: string | undefined, index: number): HistoryCard["variant"] {
+  const t = (tone || "").trim().toLowerCase();
+  if (t === "crimson" || t === "navy" || t === "light" || t === "gold") return t;
+  if (t === "dark" || t === "blue") return "navy";
+  if (t === "red" || t === "rose" || t === "accent") return "crimson";
+  if (t === "warm" || t === "amber") return "gold";
+  if (t === "neutral" || t === "white") return "light";
+  return TONE_CYCLE[index % TONE_CYCLE.length];
+}
+
+function mapSpan(span: number | undefined, index: number, total: number): 1 | 2 | 3 {
+  if (span === 1 || span === 2 || span === 3) return span;
+  if (total <= 3) return index === 0 ? 2 : 1;
+  if (index === total - 1) return 3;
+  return index % 3 === 0 ? 2 : 1;
+}
+
+function mapCmsItems(items: HistoryBentoItemInput[]): HistoryCard[] {
+  return items
+    .map((item, index) => {
+      const year = String(item.year || "").trim();
+      const title = String(item.title || "").trim();
+      if (!year && !title) return null;
+      const bodyRaw = String(item.body || "").trim();
+      return {
+        year: year || "—",
+        eraPill: String(item.badge || "").trim() || "Milestone",
+        eraPillIcon: normalizeIcon(item.icon),
+        title: title || year,
+        body: bodyRaw ? markdownLiteToHtml(bodyRaw) : "",
+        imageUrl:
+          String(item.image_url || "").trim() ||
+          FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
+        variant: mapTone(item.tone, index),
+        span: mapSpan(typeof item.span === "number" ? item.span : undefined, index, items.length),
+      } satisfies HistoryCard;
+    })
+    .filter((c): c is HistoryCard => Boolean(c));
+}
+
+export default function HistoryBentoSection(props: HistoryBentoSectionProps = {}) {
+  const eyebrow = (props.eyebrow || "Our History").trim() || "Our History";
+  const eyebrowIcon = normalizeIcon(props.eyebrow_icon) || "fa-clock-rotate-left";
+  const title =
+    (props.title || "Six Decades of Faith & Service").trim() ||
+    "Six Decades of Faith & Service";
+  const subtitle =
+    (props.subtitle || "").trim() ||
+    "From a small charity established by Catholic Bishops to a nationwide humanitarian network — our journey spans over 66 years of unwavering service to the most vulnerable Rwandans.";
+  const anchor = (props.anchor_id || "history").trim() || "history";
+
+  const cards =
+    Array.isArray(props.items) && props.items.length > 0
+      ? mapCmsItems(props.items)
+      : DEFAULT_CARDS;
+
   return (
-    <section className="about-history-section" id="history">
+    <section className="about-history-section" id={anchor}>
       <div className="container">
         <div className="head-center">
           <div className="sub-section-label">
-            <i className="fa-solid fa-clock-rotate-left" aria-hidden /> Our History
+            <i className={`fa-solid ${eyebrowIcon}`} aria-hidden /> {eyebrow}
           </div>
-          <h2 className="sub-section-title">Six Decades of Faith &amp; Service</h2>
-          <p className="sub-section-subtitle">
-            From a small charity established by Catholic Bishops to a nationwide
-            humanitarian network — our journey spans over 66 years of unwavering
-            service to the most vulnerable Rwandans.
-          </p>
+          <h2 className="sub-section-title">{title}</h2>
+          {subtitle ? <p className="sub-section-subtitle">{subtitle}</p> : null}
         </div>
 
         <div className="about-hist-bento">
-          {historyCards.map((card, i) => (
+          {cards.map((card, i) => (
             <div
-              key={i}
+              key={`${card.year}-${card.title}-${i}`}
               className={`about-hist-card about-hist-card--${card.variant}${card.span && card.span > 1 ? ` about-hist-span${card.span}` : ""}`}
               style={{ backgroundImage: `url(${card.imageUrl})` }}
             >
@@ -118,10 +212,12 @@ export default function HistoryBentoSection() {
                 <span className="about-hist-year-tag">{card.year}</span>
               </div>
               <div className="about-hist-title">{card.title}</div>
-              <div
-                className="about-hist-body"
-                dangerouslySetInnerHTML={{ __html: card.body }}
-              />
+              {card.body ? (
+                <div
+                  className="about-hist-body"
+                  dangerouslySetInnerHTML={{ __html: card.body }}
+                />
+              ) : null}
             </div>
           ))}
         </div>

@@ -26,6 +26,7 @@ import {
   ShieldCheck,
   Lock,
   BarChart3,
+  RefreshCw,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
@@ -59,7 +60,11 @@ const navGroups: {
       ] },
       { name: "Campaigns", href: "/dashboard/community-campaigns", icon: Megaphone },
       { name: "Media", href: "/dashboard/media", icon: ImageIcon },
-      { name: "Donations", href: "/dashboard/donations", icon: Heart },
+      { name: "Donations", href: "/dashboard/donations", icon: Heart, children: [
+        { name: "Overview", href: "/dashboard/donations", icon: Heart },
+        { name: "Recurring", href: "/dashboard/donations/subscriptions", icon: RefreshCw },
+        { name: "General", href: "/dashboard/donations/general", icon: Heart },
+      ] },
       { name: "Volunteers", href: "/dashboard/volunteers", icon: HandHeart },
       { name: "Events", href: "/dashboard/events", icon: CalendarDays },
       { name: "Newsletter", href: "/dashboard/newsletter", icon: Mail },

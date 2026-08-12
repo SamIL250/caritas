@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, type ComponentType } from 'react';
+import { useState, useEffect, type ComponentType, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Target, Heart, Eye } from 'lucide-react';
 import ScrollReveal from '@/components/website/motion/ScrollReveal';
-import ParallaxLayer from '@/components/website/motion/ParallaxLayer';
 import '@/app/home-about-section.css';
 
 interface NetworkNode {
@@ -17,11 +16,12 @@ type LabelPlacement = 'above' | 'below' | 'left' | 'right';
 
 const DIAGRAM = {
   center: { x: 480, y: 350 },
-  mainRadius: 158,
-  satelliteRadius: 38,
-  orbitRadius: 252,
-  innerOrbitRadius: 70,
-  innerCircleSize: 104,
+  mainRadius: 124,
+  satelliteRadius: 30,
+  orbitRadius: 196,
+  innerOrbitRadius: 54,
+  /** Focus pill diameter in SVG user units — keep CSS pills in sync via % */
+  innerCircleSize: 80,
 } as const;
 
 type DiagramViewport = {
@@ -32,15 +32,109 @@ type DiagramViewport = {
   originY: number;
 };
 
-function getDiagramViewport(isMobile: boolean): DiagramViewport {
-  const { center, orbitRadius, satelliteRadius } = DIAGRAM;
-  const labelPadX = isMobile ? 48 : 68;
-  const labelPadY = isMobile ? 38 : 50;
-  const cropRadius = orbitRadius + satelliteRadius;
-  const cropX = center.x - cropRadius - labelPadX;
-  const cropY = center.y - cropRadius - labelPadY;
-  const cropW = (cropRadius + labelPadX) * 2;
-  const cropH = (cropRadius + labelPadY) * 2;
+function getLabelPosition(
+  satellite: { x: number; y: number },
+  placement: LabelPlacement,
+  lineCount: number,
+) {
+  const { satelliteRadius } = DIAGRAM;
+  const gap = 10;
+  const blockHeight = lineCount * 13;
+
+  switch (placement) {
+    case 'above':
+      return {
+        x: satellite.x,
+        y: satellite.y - satelliteRadius - gap - blockHeight / 2 + 6,
+        anchor: 'middle' as const,
+      };
+    case 'below':
+      return {
+        x: satellite.x,
+        y: satellite.y + satelliteRadius + gap + blockHeight / 2,
+        anchor: 'middle' as const,
+      };
+    case 'left':
+      return {
+        x: satellite.x - satelliteRadius - gap,
+        y: satellite.y + (lineCount > 1 ? -6 : 0),
+        anchor: 'end' as const,
+      };
+    case 'right':
+      return {
+        x: satellite.x + satelliteRadius + gap,
+        y: satellite.y + (lineCount > 1 ? -6 : 0),
+        anchor: 'start' as const,
+      };
+    default: {
+      const _exhaustive: never = placement;
+      return _exhaustive;
+    }
+  }
+}
+
+/** Tight crop around satellites, labels, and inner focus pills. */
+function getDiagramViewport(nodes: NetworkNode[], isMobile: boolean): DiagramViewport {
+  const { center, orbitRadius, satelliteRadius, innerOrbitRadius, innerCircleSize } = DIAGRAM;
+  const edgePad = isMobile ? 16 : 20;
+  const focusHalf = innerCircleSize / 2;
+  const angles = evenSatelliteAngles(nodes.length);
+
+  let minX = center.x - DIAGRAM.mainRadius;
+  let maxX = center.x + DIAGRAM.mainRadius;
+  let minY = center.y - DIAGRAM.mainRadius;
+  let maxY = center.y + DIAGRAM.mainRadius;
+
+  /* Inner Mission / Values / Vision pills (HTML overlays sized to match). */
+  INNER_FOCUS_ANGLES.forEach(({ angle }) => {
+    const p = polarPoint(center.x, center.y, innerOrbitRadius, angle);
+    minX = Math.min(minX, p.x - focusHalf);
+    maxX = Math.max(maxX, p.x + focusHalf);
+    minY = Math.min(minY, p.y - focusHalf);
+    maxY = Math.max(maxY, p.y + focusHalf);
+  });
+
+  angles.forEach((angle, index) => {
+    const node = nodes[index];
+    if (!node) return;
+
+    const satellite = polarPoint(center.x, center.y, orbitRadius, angle);
+    const lines = splitLabel(node.label);
+    const placement = labelPlacementForAngle(angle);
+    const fontSize = labelFontSize(node.label, isMobile);
+    const longest = Math.max(...lines.map((l) => l.length), 1);
+    const textHalfW = (longest * fontSize * 0.52) / 2;
+    const blockH = lines.length * fontSize * 1.25;
+    const gap = 10;
+
+    minX = Math.min(minX, satellite.x - satelliteRadius);
+    maxX = Math.max(maxX, satellite.x + satelliteRadius);
+    minY = Math.min(minY, satellite.y - satelliteRadius);
+    maxY = Math.max(maxY, satellite.y + satelliteRadius);
+
+    if (placement === 'above') {
+      minY = Math.min(minY, satellite.y - satelliteRadius - gap - blockH);
+      minX = Math.min(minX, satellite.x - textHalfW);
+      maxX = Math.max(maxX, satellite.x + textHalfW);
+    } else if (placement === 'below') {
+      maxY = Math.max(maxY, satellite.y + satelliteRadius + gap + blockH);
+      minX = Math.min(minX, satellite.x - textHalfW);
+      maxX = Math.max(maxX, satellite.x + textHalfW);
+    } else if (placement === 'left') {
+      minX = Math.min(minX, satellite.x - satelliteRadius - gap - textHalfW * 2);
+      minY = Math.min(minY, satellite.y - blockH / 2);
+      maxY = Math.max(maxY, satellite.y + blockH / 2);
+    } else {
+      maxX = Math.max(maxX, satellite.x + satelliteRadius + gap + textHalfW * 2);
+      minY = Math.min(minY, satellite.y - blockH / 2);
+      maxY = Math.max(maxY, satellite.y + blockH / 2);
+    }
+  });
+
+  const cropX = minX - edgePad;
+  const cropY = minY - edgePad;
+  const cropW = maxX - minX + edgePad * 2;
+  const cropH = maxY - minY + edgePad * 2;
 
   return {
     viewBox: `${cropX} ${cropY} ${cropW} ${cropH}`,
@@ -177,47 +271,6 @@ function labelFontSize(label: string, mobile = false) {
   return 12 + bump;
 }
 
-function getLabelPosition(
-  satellite: { x: number; y: number },
-  placement: LabelPlacement,
-  lineCount: number,
-) {
-  const { satelliteRadius } = DIAGRAM;
-  const gap = 10;
-  const blockHeight = lineCount * 13;
-
-  switch (placement) {
-    case 'above':
-      return {
-        x: satellite.x,
-        y: satellite.y - satelliteRadius - gap - blockHeight / 2 + 6,
-        anchor: 'middle' as const,
-      };
-    case 'below':
-      return {
-        x: satellite.x,
-        y: satellite.y + satelliteRadius + gap + blockHeight / 2,
-        anchor: 'middle' as const,
-      };
-    case 'left':
-      return {
-        x: satellite.x - satelliteRadius - gap,
-        y: satellite.y + (lineCount > 1 ? -6 : 0),
-        anchor: 'end' as const,
-      };
-    case 'right':
-      return {
-        x: satellite.x + satelliteRadius + gap,
-        y: satellite.y + (lineCount > 1 ? -6 : 0),
-        anchor: 'start' as const,
-      };
-    default: {
-      const _exhaustive: never = placement;
-      return _exhaustive;
-    }
-  }
-}
-
 function AboutDiagram({
   nodes,
   activeFocus,
@@ -228,8 +281,11 @@ function AboutDiagram({
   onFocusChange: (key: FocusKey) => void;
 }) {
   const isMobile = useMobileDiagramLayout();
-  const { center, mainRadius, satelliteRadius, orbitRadius, innerOrbitRadius } = DIAGRAM;
-  const { viewBox, viewW, viewH, originX, originY } = getDiagramViewport(isMobile);
+  const { center, mainRadius, satelliteRadius, orbitRadius, innerOrbitRadius, innerCircleSize } =
+    DIAGRAM;
+  const { viewBox, viewW, viewH, originX, originY } = getDiagramViewport(nodes, isMobile);
+  /* Map SVG focus diameter → % of diagram width (height follows via aspect-ratio). */
+  const focusSizePct = (innerCircleSize / viewW) * 100;
 
   const innerFocusPoints = INNER_FOCUS_ANGLES.map(({ key, angle }) => ({
     key,
@@ -241,7 +297,13 @@ function AboutDiagram({
   return (
     <div
       className={`cr-about-diagram${isMobile ? ' cr-about-diagram--mobile' : ''}`}
-      style={{ aspectRatio: `${viewW} / ${viewH}` }}
+      style={
+        {
+          ['--cr-about-ar-w' as string]: viewW,
+          ['--cr-about-ar-h' as string]: viewH,
+          ['--cr-about-focus-size' as string]: `${focusSizePct}%`,
+        } as CSSProperties
+      }
     >
       <svg
         viewBox={viewBox}
@@ -427,17 +489,15 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
 
         <div className="cr-about-body">
           <div className="cr-about-visual">
-            <ParallaxLayer speed={0.1} className="cr-about-visual__parallax">
-              <ScrollReveal direction="scale" className="cr-about-visual__reveal">
-                <div className="cr-about-visual__frame">
-                  <AboutDiagram
-                    nodes={content.networkNodes!}
-                    activeFocus={activeFocus}
-                    onFocusChange={setActiveFocus}
-                  />
-                </div>
-              </ScrollReveal>
-            </ParallaxLayer>
+            <ScrollReveal direction="up" className="cr-about-visual__reveal">
+              <div className="cr-about-visual__frame">
+                <AboutDiagram
+                  nodes={content.networkNodes!}
+                  activeFocus={activeFocus}
+                  onFocusChange={setActiveFocus}
+                />
+              </div>
+            </ScrollReveal>
           </div>
 
           <ScrollReveal direction="right" delay={0.12} className="cr-about-detail">

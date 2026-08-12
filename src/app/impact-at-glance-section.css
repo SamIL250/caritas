@@ -1,0 +1,327 @@
+/* ═══════════════════════════════════════════════════════════
+   Impact at a Glance — large photo cards + horizontal carousel
+   Header band uses footer brand red (#8c2208).
+   ═══════════════════════════════════════════════════════════ */
+
+.cr-impact {
+  --cr-impact-brand: #8c2208;
+  --cr-impact-brand-deep: #6e1a06;
+  --cr-impact-card-w: min(86vw, 22.5rem);
+  margin: 0;
+  padding: 0 0 2.75rem;
+  font-family: var(--font-outfit, "Outfit", sans-serif);
+  background: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .cr-impact {
+    --cr-impact-card-w: 24rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .cr-impact {
+    --cr-impact-card-w: 26rem;
+  }
+}
+
+.cr-impact__band {
+  background: var(--cr-impact-brand);
+  color: #ffffff;
+  padding: 2.25rem 1.25rem 3.25rem;
+}
+
+.cr-impact__band-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem 2.5rem;
+  align-items: end;
+}
+
+@media (min-width: 800px) {
+  .cr-impact__band {
+    padding: 2.85rem 1.75rem 3.75rem;
+  }
+
+  .cr-impact__band-inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+.cr-impact__eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.cr-impact__title {
+  margin: 0;
+  font-size: clamp(1.85rem, 3.4vw, 2.85rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.cr-impact__title-accent {
+  font-family: var(--font-display, Georgia, "Times New Roman", serif);
+  font-style: italic;
+  font-weight: 600;
+  color: #f5d4a8;
+}
+
+.cr-impact__body {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 34rem;
+}
+
+.cr-impact__cards-wrap {
+  max-width: 1280px;
+  margin: -2.35rem auto 0;
+  padding: 0 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .cr-impact__cards-wrap {
+    padding: 0 1rem;
+    margin-top: -2.85rem;
+  }
+}
+
+.cr-impact__carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cr-impact__track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0.35rem 0.25rem 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.cr-impact__track::-webkit-scrollbar {
+  display: none;
+}
+
+.cr-impact__nav {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, #8c2208 35%, #e7e5e4);
+  background: #ffffff;
+  color: #8c2208;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(60, 20, 10, 0.12);
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    transform 0.18s ease;
+  z-index: 2;
+}
+
+.cr-impact__nav:hover {
+  background: #8c2208;
+  border-color: #8c2208;
+  color: #ffffff;
+  transform: scale(1.04);
+}
+
+.cr-impact__nav:focus-visible {
+  outline: 2px solid #8c2208;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .cr-impact__nav {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+}
+
+.cr-impact__card {
+  position: relative;
+  flex: 0 0 var(--cr-impact-card-w);
+  width: var(--cr-impact-card-w);
+  scroll-snap-align: start;
+  display: block;
+  min-height: 28rem;
+  border-radius: 1.15rem;
+  overflow: hidden;
+  text-decoration: none;
+  color: #ffffff;
+  isolation: isolate;
+  box-shadow: 0 16px 40px rgba(60, 20, 10, 0.2);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+@media (min-width: 768px) {
+  .cr-impact__card {
+    min-height: 30rem;
+  }
+}
+
+.cr-impact__card:hover,
+.cr-impact__card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 48px rgba(60, 20, 10, 0.28);
+  outline: none;
+}
+
+.cr-impact__card-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cr-impact__card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.45s ease;
+}
+
+.cr-impact__card:hover .cr-impact__card-media img {
+  transform: scale(1.07);
+}
+
+.cr-impact__card-media--fallback {
+  background: linear-gradient(
+    155deg,
+    var(--cr-impact-brand) 0%,
+    var(--cr-impact-brand-deep) 55%,
+    #3f1006 100%
+  );
+}
+
+.cr-impact__card-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 8, 4, 0.12) 0%,
+    rgba(20, 8, 4, 0.22) 38%,
+    rgba(80, 20, 8, 0.74) 72%,
+    rgba(60, 14, 5, 0.94) 100%
+  );
+  pointer-events: none;
+}
+
+.cr-impact__card-body {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.6rem 1.4rem 1.45rem;
+  gap: 0.65rem;
+}
+
+.cr-impact__stat-sm {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.cr-impact__stat-lg {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.cr-impact__stat-lg strong {
+  display: block;
+  font-size: clamp(2.15rem, 3.4vw, 2.85rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 0.2rem;
+}
+
+.cr-impact__card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.cr-impact__card-name {
+  margin: 0;
+  font-family: var(--font-display, Georgia, "Times New Roman", serif);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.cr-impact__card-arrow {
+  flex-shrink: 0;
+  width: 2.55rem;
+  height: 2.55rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: rgba(140, 34, 8, 0.35);
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cr-impact__card:hover .cr-impact__card-arrow {
+  background: var(--cr-impact-brand);
+  transform: translateX(2px);
+}
+
+.cr-impact__empty {
+  margin: 2rem auto 0;
+  max-width: 36rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.metrics-page .cr-impact {
+  padding-bottom: 1.75rem;
+}
+
+.metrics-page .cr-impact__band {
+  border-radius: 0;
+}
+
+.metrics-page .cr-impact__cards-wrap {
+  margin-top: -2rem;
+}

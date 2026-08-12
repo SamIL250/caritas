@@ -1,4 +1,5 @@
-import React from "react";
+import type { ReactNode } from "react";
+import PageHeroSection from "@/components/website/sections/PageHeroSection";
 
 export type NewsLandingHeroProps = {
   eyebrow: string;
@@ -6,46 +7,40 @@ export type NewsLandingHeroProps = {
   headlineAccent: string;
   intro: string;
   heroImageUrl?: string | null;
+  breadcrumbLabel?: string;
+  children?: ReactNode;
 };
 
+const DEFAULT_HERO_IMAGE = "/img/slide4.webp";
+
+/** News / Stories landing hero — same inset PageHero as the public `/news` page. */
 export default function NewsLandingHero({
   eyebrow,
   headlinePrefix,
   headlineAccent,
   intro,
   heroImageUrl,
+  breadcrumbLabel = "Stories and Updates",
   children,
-}: NewsLandingHeroProps & { children?: React.ReactNode }) {
-  const heroBg =
-    heroImageUrl && heroImageUrl.trim()
-      ? `url("${heroImageUrl.replace(/"/g, "")}")`
-      : undefined;
+}: NewsLandingHeroProps) {
+  const imageUrl =
+    typeof heroImageUrl === "string" && heroImageUrl.trim()
+      ? heroImageUrl.trim()
+      : DEFAULT_HERO_IMAGE;
+
+  const accent = (headlineAccent || "Updates").trim();
+  const prefix = (headlinePrefix || "Stories and").trim();
 
   return (
-    <section
-      className="news-hero"
-      style={
-        heroBg
-          ? ({ ["--news-hero-image" as string]: heroBg } as React.CSSProperties)
-          : undefined
-      }
+    <PageHeroSection
+      imageUrl={imageUrl}
+      eyebrow={eyebrow || "Latest from Caritas Rwanda"}
+      heading={`${prefix} ${accent}`}
+      headingAccent={accent}
+      subheading={intro}
+      breadcrumbLabel={breadcrumbLabel}
     >
-      <div className="news-hero-container">
-      <div className="news-hero-inner">
-        <div className="hero-eyebrow">
-          <i className="fa-solid fa-newspaper" aria-hidden />
-          {eyebrow}
-        </div>
-        <h1>
-          {(headlinePrefix || "News &").trim()}{" "}
-          {(headlineAccent || "").trim() ? (
-            <span>{(headlineAccent || "").trim()}</span>
-          ) : null}
-        </h1>
-        <p className="news-hero-intro">{intro}</p>
-        {children}
-      </div>
-      </div>
-    </section>
+      {children}
+    </PageHeroSection>
   );
 }

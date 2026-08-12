@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import ExpandableText from "@/components/website/ExpandableText";
 
 type QuickNavItem = {
   label: string;
@@ -112,7 +113,11 @@ export default function PageHeroSection({
                 </h1>
 
                 {subheading ? (
-                  <p className="hero-slider-frame__subtitle">{subheading}</p>
+                  <ExpandableText
+                    text={subheading}
+                    lines={2}
+                    className="hero-slider-frame__subtitle"
+                  />
                 ) : null}
 
                 <nav className="hero-breadcrumb" aria-label="Breadcrumb">

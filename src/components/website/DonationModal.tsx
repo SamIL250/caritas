@@ -38,7 +38,7 @@ import {
 } from "@/lib/donation-payment-methods";
 import { mapCommunityCampaignToModalRow } from "@/lib/community-campaign-donation-map";
 
-type FlowStep = "pick" | "detail" | "pay";
+type FlowStep = "pick" | "detail" | "gift" | "details" | "pay";
 type DonorType = "individual" | "organization";
 
 const PAY_METHOD_ORDER: DonationPaymentMethod[] = [
@@ -115,7 +115,7 @@ const GENERAL_CAUSE = {
   fundraising_end_at: null as string | null,
   frequency_one_time: true,
   frequency_weekly: false,
-  frequency_monthly: false,
+  frequency_monthly: true,
   frequency_every_n_months: null as number | null,
   frequency_every_n_years: null as number | null,
   recurring_commitment_months: null as number | null,
@@ -144,6 +144,8 @@ export default function DonationModal({
   const [donorMessage, setDonorMessage] = useState("");
   const [frequencyId, setFrequencyId] = useState<string>("one_time");
   const [paymentMethod, setPaymentMethod] = useState<DonationPaymentMethod>("stripe");
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -157,6 +159,10 @@ export default function DonationModal({
     setIsScrolledToBottom(scrollHeight - scrollTop <= clientHeight + 10);
   }
 
+  function scrollFormTop() {
+    formAreaRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function handleCloseClick() {
     if (amount || donorName || donorEmail || organizationName || phone || address || donorMessage) {
       setShowCloseConfirm(true);
@@ -167,7 +173,9 @@ export default function DonationModal({
 
   const flowSteps = useMemo((): FlowStep[] => {
     const showDetail = Boolean(selectedCampaign && selectedCampaign.id);
-    return showDetail ? ["pick", "detail", "pay"] : ["pick", "pay"];
+    return showDetail
+      ? ["pick", "detail", "gift", "details", "pay"]
+      : ["pick", "gift", "details", "pay"];
   }, [selectedCampaign]);
 
   const stepDisplayIndex = useMemo(() => {
@@ -269,6 +277,8 @@ export default function DonationModal({
         setDonorMessage("");
         setFrequencyId("one_time");
         setPaymentMethod("stripe");
+        setAcceptedPrivacy(false);
+        setAcceptedTerms(false);
         setGalleryIndex(0);
         setError(null);
         setSelectedCampaign(null);
@@ -289,6 +299,8 @@ export default function DonationModal({
     setDonorMessage("");
     setFrequencyId("one_time");
     setPaymentMethod("stripe");
+    setAcceptedPrivacy(false);
+    setAcceptedTerms(false);
     setGalleryIndex(0);
 
     void (async () => {
@@ -340,8 +352,9 @@ export default function DonationModal({
       setPhase("detail");
     } else {
       setFrequencyId(frequencyChoicesForCampaign(null)[0]?.id ?? "one_time");
-      setPhase("pay");
+      setPhase("gift");
     }
+    scrollFormTop();
   }
 
   function goNextFromDetail() {
@@ -351,18 +364,75 @@ export default function DonationModal({
       return;
     }
     setFrequencyId(frequencyChoicesForCampaign(selectedCampaign as never)[0]?.id ?? "one_time");
+    setPhase("gift");
+    scrollFormTop();
+  }
+
+  function goNextFromGift() {
+    setError(null);
+    if (!amount || Number.isNaN(parseInt(amount, 10)) || parseInt(amount, 10) < 1000) {
+      setError("Minimum donation is 1,000 RWF.");
+      return;
+    }
+    setPhase("details");
+    scrollFormTop();
+  }
+
+  function goNextFromDetails() {
+    setError(null);
+    if (donorType === "organization") {
+      if (!organizationName.trim()) {
+        setError("Please enter your organization name.");
+        return;
+      }
+      if (!contactPerson.trim()) {
+        setError("Please enter a contact person.");
+        return;
+      }
+    } else if (!donorName.trim()) {
+      setError("Please enter your full name.");
+      return;
+    }
+    if (!donorEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(donorEmail.trim())) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (!acceptedPrivacy) {
+      setError("Please confirm you have read and agreed to the Privacy Policy.");
+      return;
+    }
+    if (!acceptedTerms) {
+      setError("Please confirm you have read and agreed to the Terms & Conditions.");
+      return;
+    }
+    if (recurringRequiresStripe(selectedFrequency)) {
+      setPaymentMethod("stripe");
+    }
     setPhase("pay");
+    scrollFormTop();
   }
 
   function goBack() {
     setError(null);
     if (phase === "pay") {
+      setPhase("details");
+      scrollFormTop();
+      return;
+    }
+    if (phase === "details") {
+      setPhase("gift");
+      scrollFormTop();
+      return;
+    }
+    if (phase === "gift") {
       if (selectedCampaign?.id) setPhase("detail");
       else setPhase("pick");
+      scrollFormTop();
       return;
     }
     if (phase === "detail") {
       setPhase("pick");
+      scrollFormTop();
     }
   }
 
@@ -370,10 +440,17 @@ export default function DonationModal({
     setError(null);
     if (flowSteps.indexOf(target) < flowSteps.indexOf(phase)) {
       setPhase(target);
+      scrollFormTop();
     }
   }
 
   async function handlePayment() {
+    if (!acceptedPrivacy || !acceptedTerms) {
+      setError("Please accept the Privacy Policy and Terms & Conditions before continuing.");
+      setPhase("details");
+      scrollFormTop();
+      return;
+    }
     if (donorType === "organization") {
       if (!organizationName.trim()) {
         setError("Please enter your organization name.");
@@ -588,6 +665,15 @@ export default function DonationModal({
                 className="donation-modal-form-area relative" 
                 ref={formAreaRef} 
                 onScroll={handleScroll}
+                data-lenis-prevent
+                data-lenis-prevent-wheel
+                onWheel={(e) => {
+                  // Keep touchpad/mouse wheel scrolling inside the form pane
+                  const el = formAreaRef.current;
+                  if (!el) return;
+                  if (el.scrollHeight <= el.clientHeight + 1) return;
+                  e.stopPropagation();
+                }}
                 style={{ padding: 0 }}
               >
                 {/* Sticky Header with Logo and Close */}
@@ -852,18 +938,138 @@ export default function DonationModal({
                   </motion.div>
                 )}
 
-                {phase === "pay" && (
+                {phase === "gift" && (
                   <motion.div
                     className="form-step"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    key="pay"
+                    key="gift"
                   >
                     <h2 className="step-title">
                       Your <span>Gift</span>
                     </h2>
                     <p className="step-description">
                       Supporting: <strong>{String(selectedCampaign?.name || "General Donation")}</strong>
+                    </p>
+
+                    {(freqChoices.some((c) => c.id === "one_time") ||
+                      freqChoices.some((c) => c.id === "month")) && (
+                      <div className="donation-freq-toggle" role="tablist" aria-label="Donation frequency">
+                        {freqChoices
+                          .filter((c) => c.id === "one_time" || c.id === "month")
+                          .map((c) => (
+                            <button
+                              key={c.id}
+                              type="button"
+                              role="tab"
+                              aria-selected={frequencyId === c.id}
+                              className={`donation-freq-toggle__btn ${frequencyId === c.id ? "is-active" : ""}`}
+                              onClick={() => {
+                                setFrequencyId(c.id);
+                                setError(null);
+                              }}
+                            >
+                              {c.label}
+                            </button>
+                          ))}
+                      </div>
+                    )}
+
+                    {freqChoices.filter((c) => c.id !== "one_time" && c.id !== "month").length > 0 ? (
+                      <div className="donation-frequency-block">
+                        <span className="donation-frequency-heading">Other frequencies</span>
+                        <div className="donation-frequency-chips">
+                          {freqChoices
+                            .filter((c) => c.id !== "one_time" && c.id !== "month")
+                            .map((c) => (
+                              <button
+                                key={c.id}
+                                type="button"
+                                className={`donation-frequency-chip ${frequencyId === c.id ? "is-active" : ""}`}
+                                onClick={() => {
+                                  setFrequencyId(c.id);
+                                  setError(null);
+                                }}
+                              >
+                                {c.label}
+                              </button>
+                            ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {selectedFrequency.kind !== "one_time" ? (
+                      <p className="secure-note" style={{ marginTop: 0, marginBottom: "1rem" }}>
+                        Monthly and other recurring gifts are charged securely by card (Stripe). You can pause or
+                        cancel later — our team manages this in the dashboard.
+                      </p>
+                    ) : null}
+
+                    <div className="amount-selection">
+                      <div className="presets-grid">
+                        {(Array.isArray(selectedCampaign?.preset_amounts)
+                          ? (selectedCampaign.preset_amounts as number[])
+                          : [5000, 10000, 25000, 50000]
+                        ).map((p: number) => (
+                          <button
+                            key={p}
+                            type="button"
+                            className={`preset-btn ${amount === p.toString() ? "selected" : ""}`}
+                            onClick={() => {
+                              setAmount(p.toString());
+                              setError(null);
+                            }}
+                          >
+                            {p.toLocaleString()} <span className="currency">RWF</span>
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="custom-amount-input">
+                        <span className="input-prefix">RWF</span>
+                        <input
+                          type="number"
+                          placeholder="Other amount"
+                          value={amount}
+                          onChange={(e) => {
+                            setAmount(e.target.value);
+                            setError(null);
+                          }}
+                          min={1000}
+                          disabled={submitting}
+                        />
+                      </div>
+                    </div>
+
+                    {error ? <div className="donation-error-msg">{error}</div> : null}
+
+                    <div className="step-actions">
+                      <button
+                        type="button"
+                        className="btn-donation-next"
+                        onClick={goNextFromGift}
+                        disabled={!amount || ended}
+                      >
+                        Next <ChevronRight size={18} className="ml-2" />
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {phase === "details" && (
+                  <motion.div
+                    className="form-step"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    key="details"
+                  >
+                    <h2 className="step-title">
+                      Your <span>Details</span>
+                    </h2>
+                    <p className="step-description">
+                      {parseInt(amount || "0", 10).toLocaleString()} RWF ·{" "}
+                      {freqChoices.find((c) => c.id === frequencyId)?.label || "One-time"} ·{" "}
+                      {String(selectedCampaign?.name || "General Donation")}
                     </p>
 
                     <div className="donor-type-tabs" role="tablist" aria-label="Donor type">
@@ -981,100 +1187,150 @@ export default function DonationModal({
                       </label>
                     </div>
 
-                    {freqChoices.length > 1 ? (
-                      <div className="donation-frequency-block">
-                        <span className="donation-frequency-heading">Frequency</span>
-                        <div className="donation-frequency-chips">
-                          {freqChoices.map((c) => (
-                            <button
-                              key={c.id}
-                              type="button"
-                              className={`donation-frequency-chip ${frequencyId === c.id ? "is-active" : ""}`}
-                              onClick={() => setFrequencyId(c.id)}
-                            >
-                              {c.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-
-                    <div className="amount-selection">
-                      <div className="presets-grid">
-                        {(Array.isArray(selectedCampaign?.preset_amounts)
-                          ? (selectedCampaign.preset_amounts as number[])
-                          : [5000, 10000, 25000, 50000]
-                        ).map((p: number) => (
-                          <button
-                            key={p}
-                            type="button"
-                            className={`preset-btn ${amount === p.toString() ? "selected" : ""}`}
-                            onClick={() => {
-                              setAmount(p.toString());
-                              setError(null);
-                            }}
-                          >
-                            {p.toLocaleString()} <span className="currency">RWF</span>
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="custom-amount-input">
-                        <span className="input-prefix">RWF</span>
+                    <div className="donation-policy-block">
+                      <label className="donation-policy-item">
                         <input
-                          type="number"
-                          placeholder="Other amount"
-                          value={amount}
+                          type="checkbox"
+                          checked={acceptedPrivacy}
                           onChange={(e) => {
-                            setAmount(e.target.value);
+                            setAcceptedPrivacy(e.target.checked);
                             setError(null);
                           }}
-                          min={1000}
-                          disabled={submitting}
                         />
-                      </div>
+                        <span className="donation-policy-item__copy">
+                          <strong>Privacy Policy *</strong>
+                          I have read and agreed to the{" "}
+                          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+                            Privacy Policy
+                          </a>
+                          .
+                        </span>
+                      </label>
+                      <label className="donation-policy-item">
+                        <input
+                          type="checkbox"
+                          checked={acceptedTerms}
+                          onChange={(e) => {
+                            setAcceptedTerms(e.target.checked);
+                            setError(null);
+                          }}
+                        />
+                        <span className="donation-policy-item__copy">
+                          <strong>Terms and Conditions *</strong>
+                          I have read and agreed to the{" "}
+                          <a href="/terms" target="_blank" rel="noopener noreferrer">
+                            Terms &amp; Conditions
+                          </a>
+                          .
+                        </span>
+                      </label>
                     </div>
+
+                    {error ? <div className="donation-error-msg">{error}</div> : null}
+
+                    <div className="step-actions">
+                      <button
+                        type="button"
+                        className="btn-donation-next"
+                        onClick={goNextFromDetails}
+                      >
+                        Next <ChevronRight size={18} className="ml-2" />
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {phase === "pay" && (
+                  <motion.div
+                    className="form-step"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    key="pay"
+                  >
+                    <h2 className="step-title">
+                      Payment <span>Method</span>
+                    </h2>
+                    <p className="step-description">
+                      {parseInt(amount || "0", 10).toLocaleString()} RWF ·{" "}
+                      {freqChoices.find((c) => c.id === frequencyId)?.label || "One-time"}
+                    </p>
 
                     <div className="donation-payment-method-block">
                       <div className="donation-payment-method-block__header">
                         <span className="donation-frequency-heading donation-payment-method-block__title">
-                          Payment method
+                          Choose how to give
                         </span>
                         {!allowOfflinePayment ? (
                           <p className="donation-recurring-stripe-note">
-                            Recurring gifts are processed securely with a card (Stripe).
+                            Recurring gifts use card (Stripe) today. Other methods are listed below and coming soon for
+                            monthly giving.
                           </p>
-                        ) : null}
+                        ) : (
+                          <p className="donation-recurring-stripe-note">
+                            Card checkout is available now. Bank transfer and mobile money can be used for one-time
+                            pledges.
+                          </p>
+                        )}
                       </div>
-                      <div
-                        className={`donation-pay-methods${!allowOfflinePayment ? " donation-pay-methods--stripe-only" : ""}`}
-                      >
-                        {(allowOfflinePayment ? PAY_METHOD_ORDER : (["stripe"] as const)).map((id) => {
+                      <div className="donation-pay-methods">
+                        {PAY_METHOD_ORDER.map((id) => {
                           const Icon = PAY_METHOD_ICONS[id];
-                          const active = isPaymentTileActive(id);
+                          const offlineLocked = !allowOfflinePayment && id !== "stripe";
+                          const active = !offlineLocked && isPaymentTileActive(id);
                           const methodClass = `donation-pay-method-tile--${id.replace(/_/g, "-")}`;
                           return (
                             <button
                               key={id}
                               type="button"
-                              className={`donation-pay-method-tile ${methodClass} ${active ? "is-active" : ""}`}
+                              className={`donation-pay-method-tile ${methodClass} ${active ? "is-active" : ""}${
+                                offlineLocked ? " is-coming-soon" : ""
+                              }${id === "stripe" ? " is-available-now" : ""}`}
                               onClick={() => {
-                                if (recurringRequiresStripe(selectedFrequency)) return;
+                                if (offlineLocked || submitting) return;
                                 setPaymentMethod(id);
                                 setError(null);
                               }}
-                              disabled={submitting}
+                              disabled={submitting || offlineLocked}
                               aria-pressed={active}
+                              aria-disabled={offlineLocked}
+                              title={
+                                offlineLocked
+                                  ? "Coming soon for recurring donations"
+                                  : undefined
+                              }
                             >
                               <span className="donation-pay-method-tile__check" aria-hidden>
                                 {active ? <Check strokeWidth={3} size={11} /> : null}
                               </span>
-                              <span className={`donation-pay-method-tile__icon-ring donation-pay-method-tile__icon-ring--${id.replace(/_/g, "-")}`}>
-                                <Icon className="donation-pay-method-tile__icon" size={22} strokeWidth={2} aria-hidden />
+                              <span
+                                className={`donation-pay-method-tile__icon-ring donation-pay-method-tile__icon-ring--${id.replace(/_/g, "-")}`}
+                              >
+                                <Icon
+                                  className="donation-pay-method-tile__icon"
+                                  size={22}
+                                  strokeWidth={2}
+                                  aria-hidden
+                                />
                               </span>
                               <span className="donation-pay-method-tile__text">
-                                <span className="donation-pay-method-tile__label">{PAYMENT_METHOD_LABELS[id]}</span>
-                                <span className="donation-pay-method-tile__hint">{PAYMENT_METHOD_HINTS[id]}</span>
+                                <span className="donation-pay-method-tile__label">
+                                  {PAYMENT_METHOD_LABELS[id]}
+                                  {id === "stripe" ? (
+                                    <span className="donation-pay-method-tile__badge donation-pay-method-tile__badge--live">
+                                      Available now
+                                    </span>
+                                  ) : null}
+                                  {offlineLocked ? (
+                                    <span className="donation-pay-method-tile__badge donation-pay-method-tile__badge--soon">
+                                      Coming soon
+                                    </span>
+                                  ) : null}
+                                </span>
+                                <span className="donation-pay-method-tile__hint">
+                                  {offlineLocked
+                                    ? "Will be available for monthly gifts soon"
+                                    : PAYMENT_METHOD_HINTS[id]}
+                                </span>
                               </span>
                             </button>
                           );
@@ -1190,48 +1446,67 @@ export default function DonationModal({
           {/* Confirmation Modal */}
           <AnimatePresence>
             {showCloseConfirm && (
-              <motion.div 
-                className="absolute inset-0 z-[99999] flex flex-col items-center justify-center bg-black/60 p-4 md:p-6 backdrop-blur-sm"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              <motion.div
+                className="donation-cancel-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                onClick={() => setShowCloseConfirm(false)}
+                role="presentation"
               >
-                <div 
-                  className="w-full max-w-md rounded-3xl bg-white shadow-2xl flex flex-col overflow-hidden text-left"
+                <motion.div
+                  className="donation-cancel-dialog"
+                  role="alertdialog"
+                  aria-modal="true"
+                  aria-labelledby="donation-cancel-title"
+                  aria-describedby="donation-cancel-desc"
+                  initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-center justify-between border-b border-stone-100 px-8 py-6 bg-stone-50/50">
-                    <h2 className="text-xl font-bold text-stone-900">Cancel donation?</h2>
-                    <button 
-                      onClick={() => setShowCloseConfirm(false)} 
-                      className="rounded-full p-2 hover:bg-stone-200 text-stone-500 transition-colors"
+                  <button
+                    type="button"
+                    className="donation-cancel-close"
+                    onClick={() => setShowCloseConfirm(false)}
+                    aria-label="Dismiss"
+                  >
+                    <X size={18} strokeWidth={2.25} aria-hidden />
+                  </button>
+
+                  <div className="donation-cancel-icon" aria-hidden>
+                    <Heart size={22} strokeWidth={2} />
+                  </div>
+
+                  <h2 id="donation-cancel-title" className="donation-cancel-title">
+                    Cancel donation?
+                  </h2>
+                  <p id="donation-cancel-desc" className="donation-cancel-copy">
+                    You have entered some information. Leaving now will discard your gift details.
+                  </p>
+
+                  <div className="donation-cancel-actions">
+                    <button
+                      type="button"
+                      className="donation-cancel-btn donation-cancel-btn--keep"
+                      onClick={() => setShowCloseConfirm(false)}
                     >
-                      <X size={20} />
+                      Continue giving
+                    </button>
+                    <button
+                      type="button"
+                      className="donation-cancel-btn donation-cancel-btn--leave"
+                      onClick={() => {
+                        setShowCloseConfirm(false);
+                        onClose();
+                      }}
+                    >
+                      Yes, cancel
                     </button>
                   </div>
-                  <div className="px-8 py-8 flex flex-col space-y-6">
-                    <p className="text-base text-stone-600 leading-relaxed">
-                      You have entered some information. Are you sure you want to leave? Your progress will be lost.
-                    </p>
-                    <div className="flex w-full gap-3 pt-2">
-                      <button
-                        type="button"
-                        className="flex-1 inline-flex h-12 items-center justify-center rounded-xl border border-stone-200 bg-white px-5 text-sm font-bold text-stone-700 transition-colors hover:bg-stone-50"
-                        onClick={() => setShowCloseConfirm(false)}
-                      >
-                        Continue giving
-                      </button>
-                      <button
-                        type="button"
-                        className="flex-1 inline-flex h-12 items-center justify-center rounded-xl bg-red-600 px-5 text-sm font-bold text-white transition-colors hover:bg-red-700 shadow-sm"
-                        onClick={() => {
-                          setShowCloseConfirm(false);
-                          onClose();
-                        }}
-                      >
-                        Yes, cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>

@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDonation } from "@/context/DonationContext";
 import { useMotionSafe } from '@/components/website/motion/useMotionSafe';
+import ExpandableText from '@/components/website/ExpandableText';
 
 /** Shortest wrap-aware direction for carousel slides (+1 = incoming from right). */
 function navigateDirection(from: number, to: number, len: number): 1 | -1 {
@@ -264,12 +265,12 @@ export default function HeroSection({
                   {slide.heading}
                 </h1>
 
-                <p
+                <ExpandableText
+                  text={slide.subheading}
+                  lines={2}
                   className="hero-slider-frame__subtitle"
                   style={{ color: displayTextColor }}
-                >
-                  {slide.subheading}
-                </p>
+                />
 
                 <div className="hero-slider-frame__actions">
                   {slide.cta_url && slide.cta_text && renderCta(slide.cta_url, slide.cta_text, true)}
