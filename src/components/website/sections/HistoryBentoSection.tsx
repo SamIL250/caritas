@@ -145,26 +145,25 @@ function mapSpan(span: number | undefined, index: number, total: number): 1 | 2 
 }
 
 function mapCmsItems(items: HistoryBentoItemInput[]): HistoryCard[] {
-  return items
-    .map((item, index) => {
-      const year = String(item.year || "").trim();
-      const title = String(item.title || "").trim();
-      if (!year && !title) return null;
-      const bodyRaw = String(item.body || "").trim();
-      return {
-        year: year || "—",
-        eraPill: String(item.badge || "").trim() || "Milestone",
-        eraPillIcon: normalizeIcon(item.icon),
-        title: title || year,
-        body: bodyRaw ? markdownLiteToHtml(bodyRaw) : "",
-        imageUrl:
-          String(item.image_url || "").trim() ||
-          FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
-        variant: mapTone(item.tone, index),
-        span: mapSpan(typeof item.span === "number" ? item.span : undefined, index, items.length),
-      } satisfies HistoryCard;
-    })
-    .filter((c): c is HistoryCard => Boolean(c));
+  return items.flatMap((item, index) => {
+    const year = String(item.year || "").trim();
+    const title = String(item.title || "").trim();
+    if (!year && !title) return [];
+    const bodyRaw = String(item.body || "").trim();
+    const card: HistoryCard = {
+      year: year || "—",
+      eraPill: String(item.badge || "").trim() || "Milestone",
+      eraPillIcon: normalizeIcon(item.icon),
+      title: title || year,
+      body: bodyRaw ? markdownLiteToHtml(bodyRaw) : "",
+      imageUrl:
+        String(item.image_url || "").trim() ||
+        FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
+      variant: mapTone(item.tone, index),
+      span: mapSpan(typeof item.span === "number" ? item.span : undefined, index, items.length),
+    };
+    return [card];
+  });
 }
 
 export default function HistoryBentoSection(props: HistoryBentoSectionProps = {}) {
