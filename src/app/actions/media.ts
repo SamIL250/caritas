@@ -44,13 +44,28 @@ export async function listMediaFolders(): Promise<MediaFolderRow[]> {
   return (data ?? []) as MediaFolderRow[];
 }
 
-export async function getMedia(options?: {
+export type GetMediaOptions = {
   folderId?: string | null;
   trash?: boolean;
-}): Promise<MediaRow[]> {
-  const supabase = await createClient();
-  let q = supabase.from("media").select("*").order("created_at", { ascending: false });
+  /** Case-insensitive filename search */
+  search?: string;
+  /** Page size (omit to return all matching rows — used by full library UI) */
+  limit?: number;
+  /** 0-based offset when `limit` is set */
+  offset?: number;
+};
 
+export type GetMediaPageResult = {
+  items: MediaRow[];
+  total: number;
+  hasMore: boolean;
+};
+
+function applyMediaFilters(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  q: any,
+  options?: GetMediaOptions,
+) {
   if (options?.trash) {
     q = q.not("deleted_at", "is", null);
   } else {
@@ -62,6 +77,49 @@ export async function getMedia(options?: {
         q = q.eq("folder_id", options.folderId);
       }
     }
+  }
+  const search = options?.search?.trim();
+  if (search) {
+    q = q.ilike("filename", `%${search}%`);
+  }
+  return q;
+}
+
+/** Paginated media list for pickers (fast first paint). */
+export async function getMediaPage(options?: GetMediaOptions): Promise<GetMediaPageResult> {
+  const supabase = await createClient();
+  const limit = Math.min(Math.max(options?.limit ?? 15, 1), 100);
+  const offset = Math.max(options?.offset ?? 0, 0);
+
+  let q = supabase
+    .from("media")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false });
+
+  q = applyMediaFilters(q, options);
+  q = q.range(offset, offset + limit - 1);
+
+  const { data, error, count } = await q;
+  if (error) throw new Error(error.message);
+
+  const items = (data ?? []) as MediaRow[];
+  const total = typeof count === "number" ? count : items.length;
+  return {
+    items,
+    total,
+    hasMore: offset + items.length < total,
+  };
+}
+
+export async function getMedia(options?: GetMediaOptions): Promise<MediaRow[]> {
+  const supabase = await createClient();
+  let q = supabase.from("media").select("*").order("created_at", { ascending: false });
+  q = applyMediaFilters(q, options);
+
+  if (typeof options?.limit === "number") {
+    const limit = Math.min(Math.max(options.limit, 1), 500);
+    const offset = Math.max(options.offset ?? 0, 0);
+    q = q.range(offset, offset + limit - 1);
   }
 
   const { data, error } = await q;

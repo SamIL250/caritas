@@ -9,18 +9,19 @@ import {
   useRef,
   useState,
 } from "react";
-import { MessageSquare, Send, Sparkles, X } from "lucide-react";
+import { MessageSquare, MessageSquarePlus, Send, Sparkles, X } from "lucide-react";
 
 import { sendChatMessage } from "@/app/actions/chat";
+import ChatMessageBody from "@/components/website/ChatMessageBody";
 import "./chatbot-fab.css";
 
 type ChatLang = "en" | "fr" | "es" | "rw";
 
-const LANG_OPTIONS: { id: ChatLang; label: string; native: string }[] = [
-  { id: "en", label: "English", native: "English" },
-  { id: "fr", label: "French", native: "Français" },
-  { id: "es", label: "Spanish", native: "Español" },
-  { id: "rw", label: "Kinyarwanda", native: "Ikinyarwanda" },
+const LANG_OPTIONS: { id: ChatLang; label: string; native: string; short: string }[] = [
+  { id: "en", label: "English", native: "English", short: "EN" },
+  { id: "fr", label: "French", native: "Français", short: "FR" },
+  { id: "es", label: "Spanish", native: "Español", short: "ES" },
+  { id: "rw", label: "Kinyarwanda", native: "Ikinyarwanda", short: "RW" },
 ];
 
 const COPY: Record<
@@ -78,7 +79,7 @@ const COPY: Record<
     suggestionsLabel: "Try asking",
     suggestion1: "What does Caritas Rwanda do?",
     suggestion2: "How can I volunteer?",
-    suggestion3: "Who built this website?",
+    suggestion3: "How can I donate or support a campaign?",
   },
   fr: {
     fab: "Demander à Caritas",
@@ -106,7 +107,7 @@ const COPY: Record<
     suggestionsLabel: "Essayez de demander",
     suggestion1: "Que fait Caritas Rwanda ?",
     suggestion2: "Comment puis-je me porter volontaire ?",
-    suggestion3: "Qui a créé ce site web ?",
+    suggestion3: "Comment puis-je faire un don ?",
   },
   es: {
     fab: "Preguntar a Caritas",
@@ -134,7 +135,7 @@ const COPY: Record<
     suggestionsLabel: "Prueba preguntar",
     suggestion1: "¿Qué hace Caritas Rwanda?",
     suggestion2: "¿Cómo puedo ser voluntario?",
-    suggestion3: "¿Quién creó este sitio web?",
+    suggestion3: "¿Cómo puedo donar o apoyar una campaña?",
   },
   rw: {
     fab: "Baza Caritas",
@@ -162,7 +163,7 @@ const COPY: Record<
     suggestionsLabel: "Gerageza kubaza",
     suggestion1: "Caritas Rwanda ikora iki?",
     suggestion2: "Nashobora gute kuba umukorerabushake?",
-    suggestion3: "Ni nde wakoze uru rubuga?",
+    suggestion3: "Nashobora gute gutanga inkunga?",
   },
 };
 
@@ -443,7 +444,7 @@ export default function ChatbotFab() {
             </span>
             <div className="cb-header__text">
               <div className="cb-header__name">
-                {chat.title}
+                <span className="cb-header__name-text">{chat.title}</span>
                 <span className="cb-header__badge">{chat.badge}</span>
               </div>
               <p className="cb-header__sub">{chat.subtitle}</p>
@@ -459,8 +460,8 @@ export default function ChatbotFab() {
                   onChange={(e) => chooseLanguage(e.target.value as ChatLang)}
                 >
                   {LANG_OPTIONS.map((o) => (
-                    <option key={o.id} value={o.id}>
-                      {o.native}
+                    <option key={o.id} value={o.id} title={o.native}>
+                      {o.short}
                     </option>
                   ))}
                 </select>
@@ -469,11 +470,12 @@ export default function ChatbotFab() {
             {conversationStarted ? (
               <button
                 type="button"
-                className="cb-btn-ghost"
+                className="cb-icon-btn"
                 onClick={clearConversation}
                 title={chat.clear}
+                aria-label={chat.newChat}
               >
-                {chat.newChat}
+                <MessageSquarePlus size={18} strokeWidth={2} />
               </button>
             ) : null}
             <button
@@ -552,6 +554,8 @@ export default function ChatbotFab() {
                         <span />
                         <span />
                       </span>
+                    ) : m.role === "assistant" ? (
+                      <ChatMessageBody text={m.content} />
                     ) : (
                       m.content
                     )}

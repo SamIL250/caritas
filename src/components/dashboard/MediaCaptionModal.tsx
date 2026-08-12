@@ -69,12 +69,19 @@ export function MediaCaptionModal({
   if (!open || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60 p-4">
+    <div className="fixed inset-0 z-[999999] flex min-h-dvh w-full items-center justify-center overscroll-none">
+      <button
+        type="button"
+        aria-label="Close caption dialog"
+        className="absolute inset-0 h-full w-full cursor-default border-0 bg-black/60"
+        onClick={onCancel}
+      />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="media-caption-modal-title"
-        className="flex max-h-[min(90vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="relative z-10 mx-4 flex max-h-[min(90vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="border-b border-stone-100 p-6">
           <h2 id="media-caption-modal-title" className="text-lg font-bold text-stone-900">
