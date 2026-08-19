@@ -16,12 +16,12 @@ type LabelPlacement = 'above' | 'below' | 'left' | 'right';
 
 const DIAGRAM = {
   center: { x: 480, y: 350 },
-  mainRadius: 124,
-  satelliteRadius: 30,
-  orbitRadius: 196,
-  innerOrbitRadius: 54,
+  mainRadius: 150,
+  satelliteRadius: 42,
+  orbitRadius: 240,
+  innerOrbitRadius: 65,
   /** Focus pill diameter in SVG user units — keep CSS pills in sync via % */
-  innerCircleSize: 80,
+  innerCircleSize: 100,
 } as const;
 
 type DiagramViewport = {
@@ -45,7 +45,7 @@ function getLabelPosition(
     case 'above':
       return {
         x: satellite.x,
-        y: satellite.y - satelliteRadius - gap - blockHeight / 2 + 6,
+        y: satellite.y - satelliteRadius - gap - blockHeight / 2 - 6,
         anchor: 'middle' as const,
       };
     case 'below':
@@ -252,9 +252,9 @@ function polarPoint(cx: number, cy: number, radius: number, angleDeg: number) {
 
 function valueFontSize(value: string, mobile = false) {
   const bump = mobile ? 5 : 0;
-  if (value.length > 5) return 13 + bump;
-  if (value.length > 3) return 16 + bump;
-  return 21 + bump;
+  if (value.length > 5) return 16 + bump;
+  if (value.length > 3) return 20 + bump;
+  return 26 + bump;
 }
 
 function splitLabel(label: string): string[] {
@@ -266,9 +266,9 @@ function splitLabel(label: string): string[] {
 
 function labelFontSize(label: string, mobile = false) {
   const bump = mobile ? 3 : 0;
-  if (label.length > 32) return 10 + bump;
-  if (label.length > 22) return 11 + bump;
-  return 12 + bump;
+  if (label.length > 32) return 12 + bump;
+  if (label.length > 22) return 14 + bump;
+  return 16 + bump;
 }
 
 function AboutDiagram({

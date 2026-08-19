@@ -52,7 +52,7 @@ section.cr-home-about {
 
 .cr-about-body {
   display: grid;
-  grid-template-columns: minmax(0, 1.34fr) minmax(0, 0.66fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
   gap: clamp(2rem, 3vw, 2.75rem);
   align-items: start;
   min-width: 0;
@@ -89,7 +89,7 @@ section.cr-home-about {
   position: relative;
   /* Full column width, but shrink if the natural height would exceed the cap
      so the whole network stays visible (no bottom clipping). */
-  --cr-about-max-h: 26rem;
+  --cr-about-max-h: 32rem;
   width: min(100%, calc(var(--cr-about-max-h) * var(--cr-about-ar-w, 1) / var(--cr-about-ar-h, 1)));
   max-width: 100%;
   aspect-ratio: var(--cr-about-ar-w, 1) / var(--cr-about-ar-h, 1);
@@ -98,7 +98,7 @@ section.cr-home-about {
   min-height: 0;
   overflow: hidden;
   border-radius: 0.85rem;
-  background: #fafafa;
+  background: #ffffff;
   padding: 0;
   box-sizing: border-box;
   margin-inline: auto;
@@ -112,7 +112,7 @@ section.cr-home-about {
   }
 
   .cr-about-diagram {
-    --cr-about-max-h: 28rem;
+    --cr-about-max-h: 38rem;
   }
 }
 
@@ -150,7 +150,7 @@ section.cr-home-about {
 .cr-about-diagram__satellite-label {
   fill: #1f2937;
   font-family: var(--font-outfit, 'Outfit', sans-serif);
-  font-size: 12.5px;
+  font-size: 14.5px;
   font-weight: 600;
   letter-spacing: 0.01em;
 }
@@ -162,10 +162,10 @@ section.cr-home-about {
   width: var(--cr-about-focus-size, 14%);
   height: auto;
   aspect-ratio: 1;
-  max-width: 4.75rem;
-  max-height: 4.75rem;
-  min-width: 2.85rem;
-  min-height: 2.85rem;
+  max-width: 6.5rem;
+  max-height: 6.5rem;
+  min-width: 4rem;
+  min-height: 4rem;
   margin: 0;
   padding: 0.12rem;
   transform: translate(-50%, -50%);
@@ -192,7 +192,7 @@ section.cr-home-about {
 }
 
 .cr-about-focus__eyebrow {
-  font-size: clamp(0.48rem, 1.4cqi, 0.62rem);
+  font-size: clamp(0.55rem, 1.8cqi, 0.75rem);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -200,7 +200,7 @@ section.cr-home-about {
 }
 
 .cr-about-focus__label {
-  font-size: clamp(0.58rem, 1.7cqi, 0.74rem);
+  font-size: clamp(0.65rem, 2.2cqi, 0.9rem);
   font-weight: 800;
   letter-spacing: 0.06em;
   line-height: 1.05;
@@ -441,7 +441,7 @@ section.cr-home-about {
 
   .cr-about-diagram,
   .cr-about-diagram--mobile {
-    --cr-about-max-h: min(92vw, 26rem);
+    --cr-about-max-h: min(110vw, 32rem);
     width: min(100%, calc(var(--cr-about-max-h) * var(--cr-about-ar-w, 1) / var(--cr-about-ar-h, 1)));
     border-radius: 0.65rem;
     padding: 0;
@@ -469,18 +469,18 @@ section.cr-home-about {
 
   .cr-about-focus {
     /* Stay proportional; only nudge min size for tap targets */
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    max-width: 4.5rem;
-    max-height: 4.5rem;
+    min-width: 3.5rem;
+    min-height: 3.5rem;
+    max-width: 5.5rem;
+    max-height: 5.5rem;
   }
 
   .cr-about-focus__eyebrow {
-    font-size: clamp(0.45rem, 1.6vw, 0.55rem);
+    font-size: clamp(0.5rem, 2vw, 0.65rem);
   }
 
   .cr-about-focus__label {
-    font-size: clamp(0.52rem, 2vw, 0.68rem);
+    font-size: clamp(0.6rem, 2.5vw, 0.8rem);
   }
 
   .cr-about-tabs {
@@ -520,7 +520,7 @@ section.cr-home-about {
   }
 
   .cr-about-diagram__satellite-label {
-    font-size: 11px;
+    font-size: 13px;
   }
 }
 
