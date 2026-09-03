@@ -208,7 +208,7 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                     }
                   }}
                 >
-                  Programs <ChevronDown size={14} className="nav-inline-caret inline-block ml-1 opacity-60" />
+                  What We Do <ChevronDown size={14} className="nav-inline-caret inline-block ml-1 opacity-60" />
                 </Link>
                 <button
                   type="button"
