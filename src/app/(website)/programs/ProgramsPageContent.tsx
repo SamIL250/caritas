@@ -51,11 +51,14 @@ export default function ProgramsPageContent({
   return (
     <div className="prog-page-root">
       <ProgramsLandingHero
-        eyebrow={chrome.eyebrow}
         headlinePrefix={chrome.headlinePrefix}
         headlineAccent={chrome.headlineAccent}
         intro={chrome.intro}
         heroImageUrl={chrome.heroImageUrl}
+        pillars={categories.map((category) => ({
+          slug: category.slug,
+          label: category.label,
+        }))}
       />
 
       {!librarySection || librarySection.visible ? (

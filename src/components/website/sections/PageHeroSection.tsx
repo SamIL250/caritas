@@ -15,6 +15,7 @@ type PageHeroSectionProps = {
   subheading: string;
   imageUrl?: string;
   breadcrumbLabel?: string;
+  showBreadcrumb?: boolean;
   quickNavHint?: string;
   quickNav?: QuickNavItem[];
   quickNavMode?: "anchor" | "select";
@@ -62,6 +63,7 @@ export default function PageHeroSection({
   subheading,
   imageUrl = "/img/slide1.webp",
   breadcrumbLabel = "About Us",
+  showBreadcrumb = true,
   quickNav = [],
   quickNavHint,
   quickNavMode = "anchor",
@@ -120,11 +122,13 @@ export default function PageHeroSection({
                   />
                 ) : null}
 
-                <nav className="hero-breadcrumb" aria-label="Breadcrumb">
-                  <Link href="/">Home</Link>
-                  <span aria-hidden>›</span>
-                  <span>{breadcrumbLabel}</span>
-                </nav>
+                {showBreadcrumb ? (
+                  <nav className="hero-breadcrumb" aria-label="Breadcrumb">
+                    <Link href="/">Home</Link>
+                    <span aria-hidden>›</span>
+                    <span>{breadcrumbLabel}</span>
+                  </nav>
+                ) : null}
 
                 {hasQuickNav ? (
                   <div className="hero-quick-nav-row">

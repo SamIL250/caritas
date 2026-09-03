@@ -1,32 +1,74 @@
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
+import { CANONICAL_PROGRAMS } from "@/lib/program-cards-defaults";
+import { PROGRAM_BUILTIN_SLUGS } from "@/lib/programs";
+
+export type ProgramsHeroPillar = {
+  slug: string;
+  label: string;
+};
 
 export type ProgramsLandingHeroProps = {
-  eyebrow: string;
   headlinePrefix: string;
   headlineAccent: string;
   intro: string;
   heroImageUrl?: string | null;
+  pillars?: ProgramsHeroPillar[];
+  /** @deprecated Badge is no longer shown on the programs hero. */
+  eyebrow?: string;
 };
 
+const FALLBACK_PILLARS: ProgramsHeroPillar[] = CANONICAL_PROGRAMS.map((program, index) => ({
+  slug: PROGRAM_BUILTIN_SLUGS[index] ?? `pillar-${index + 1}`,
+  label: program.title,
+}));
+
+function resolveHeroPillars(pillars?: ProgramsHeroPillar[]): ProgramsHeroPillar[] {
+  if (!pillars?.length) return FALLBACK_PILLARS;
+
+  const builtins = PROGRAM_BUILTIN_SLUGS
+    .map((slug) => pillars.find((pillar) => pillar.slug === slug))
+    .filter((pillar): pillar is ProgramsHeroPillar => Boolean(pillar));
+
+  if (builtins.length >= 4) return builtins.slice(0, 4);
+  return pillars.slice(0, 4);
+}
+
 export default function ProgramsLandingHero({
-  eyebrow,
   headlinePrefix,
   headlineAccent,
-  intro,
   heroImageUrl,
+  pillars,
 }: ProgramsLandingHeroProps) {
   const imageUrl =
     typeof heroImageUrl === "string" && heroImageUrl.trim()
       ? heroImageUrl.trim()
       : "/img/slide3.webp";
+  const items = resolveHeroPillars(pillars);
+
   return (
     <PageHeroSection
       imageUrl={imageUrl}
-      eyebrow={eyebrow || "What We Do"}
+      eyebrow=""
       heading={`${(headlinePrefix || "Programs that").trim()} ${(headlineAccent || "Transform Lives").trim()}`}
       headingAccent={(headlineAccent || "Transform Lives").trim()}
-      subheading={intro}
-      breadcrumbLabel="Programs"
-    />
+      subheading=""
+      showBreadcrumb={false}
+    >
+      <div className="prog-hero-pillars">
+        <ol className="prog-hero-pillars__grid">
+          {items.map((pillar, index) => (
+            <li key={pillar.slug} className="prog-hero-pillars__cell">
+              <a href={`#${pillar.slug}`} className="prog-hero-pillars__item">
+                <span className="prog-hero-pillars__num" aria-hidden>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="prog-hero-pillars__label">{pillar.label}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p className="prog-hero-pillars__title">Departments</p>
+      </div>
+    </PageHeroSection>
   );
 }
