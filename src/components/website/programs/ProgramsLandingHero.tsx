@@ -1,6 +1,4 @@
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
-import { CANONICAL_PROGRAMS } from "@/lib/program-cards-defaults";
-import { PROGRAM_BUILTIN_SLUGS } from "@/lib/programs";
 
 export type ProgramsHeroPillar = {
   slug: string;
@@ -17,19 +15,40 @@ export type ProgramsLandingHeroProps = {
   eyebrow?: string;
 };
 
-const FALLBACK_PILLARS: ProgramsHeroPillar[] = CANONICAL_PROGRAMS.map((program, index) => ({
-  slug: PROGRAM_BUILTIN_SLUGS[index] ?? `pillar-${index + 1}`,
-  label: program.title,
+const HERO_PILLAR_ORDER = [
+  "finance-administration",
+  "social-welfare",
+  "health",
+  "development",
+] as const;
+
+const HERO_PILLAR_LABELS: Record<(typeof HERO_PILLAR_ORDER)[number], string> = {
+  "finance-administration": "Administration and Finance",
+  "social-welfare": "Social Welfare",
+  health: "Health",
+  development: "Development",
+};
+
+const FALLBACK_PILLARS: ProgramsHeroPillar[] = HERO_PILLAR_ORDER.map((slug) => ({
+  slug,
+  label: HERO_PILLAR_LABELS[slug],
 }));
 
 function resolveHeroPillars(pillars?: ProgramsHeroPillar[]): ProgramsHeroPillar[] {
   if (!pillars?.length) return FALLBACK_PILLARS;
 
-  const builtins = PROGRAM_BUILTIN_SLUGS
-    .map((slug) => pillars.find((pillar) => pillar.slug === slug))
+  const ordered = HERO_PILLAR_ORDER
+    .map((slug) => {
+      const match = pillars.find((pillar) => pillar.slug === slug);
+      if (!match) return null;
+      return {
+        slug: match.slug,
+        label: HERO_PILLAR_LABELS[slug] ?? match.label,
+      };
+    })
     .filter((pillar): pillar is ProgramsHeroPillar => Boolean(pillar));
 
-  if (builtins.length >= 4) return builtins.slice(0, 4);
+  if (ordered.length >= 4) return ordered.slice(0, 4);
   return pillars.slice(0, 4);
 }
 
