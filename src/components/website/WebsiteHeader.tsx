@@ -8,10 +8,18 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { useDonation } from '@/context/DonationContext';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { ABOUT_SECTION_NAV, aboutSectionPath, hrefToAboutAnchor } from '@/lib/about-section-nav';
+import { replaceProgramsHash } from '@/lib/programs-hash';
 import NavMegaMenu from '@/components/website/NavMegaMenu';
 import type { NavMegaMenuData } from '@/lib/nav-mega-menu-data';
 
 type SubKey = 'about' | 'programs' | 'news' | 'publications';
+
+const PROGRAMS_NAV_ITEMS = [
+  { slug: "social-welfare", label: "Social Welfare", icon: "fa-people-roof" },
+  { slug: "health", label: "Health", icon: "fa-heart-pulse" },
+  { slug: "development", label: "Development", icon: "fa-seedling" },
+  { slug: "finance-administration", label: "Finance & Administration", icon: "fa-building-columns" },
+] as const;
 
 type Props = {
   navMegaMenu: NavMegaMenuData;
@@ -92,6 +100,13 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
     if (pathname === '/about') {
       window.location.hash = anchor;
       return;
+    }
+  };
+
+  const goToProgramsSection = (slug: string) => {
+    closeNav();
+    if (pathname === '/programs') {
+      replaceProgramsHash(slug);
     }
   };
 
@@ -226,30 +241,26 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
               </div>
               <div className="nav-dropdown">
                 <div className="nav-dropdown-inner nav-sub-menu">
-                  <Link href="/programs#social-welfare" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-people-roof" />
-                    </span>
-                    <span className="nav-mega-category-label">Social Welfare</span>
-                  </Link>
-                  <Link href="/programs#health" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-heart-pulse" />
-                    </span>
-                    <span className="nav-mega-category-label">Health</span>
-                  </Link>
-                  <Link href="/programs#development" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-seedling" />
-                    </span>
-                    <span className="nav-mega-category-label">Development</span>
-                  </Link>
-                  <Link href="/programs#finance-administration" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-building-columns" />
-                    </span>
-                    <span className="nav-mega-category-label">Finance &amp; Administration</span>
-                  </Link>
+                  {PROGRAMS_NAV_ITEMS.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={`/programs#${item.slug}`}
+                      className="nav-mega-category"
+                      onClick={(e) => {
+                        if (pathname === "/programs") {
+                          e.preventDefault();
+                          goToProgramsSection(item.slug);
+                          return;
+                        }
+                        closeNav();
+                      }}
+                    >
+                      <span className="nav-mega-category-icon" aria-hidden>
+                        <i className={`fa-solid ${item.icon}`} />
+                      </span>
+                      <span className="nav-mega-category-label">{item.label}</span>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </li>

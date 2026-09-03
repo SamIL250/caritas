@@ -21,6 +21,7 @@ import RwandaMapBackground from "./RwandaMapBackground";
 import { ProgramBubbleCircle } from "./ProgramBubbleCircle";
 import type { ProgramsLibrarySectionContent } from "@/lib/programs-library-section";
 import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section";
+import { parseProgramsHashSlug, replaceProgramsHash } from "@/lib/programs-hash";
 
 const PROGRAM_GRID_COLUMNS = 4;
 const SUCCESS_STORY_ROWS = 1;
@@ -76,8 +77,13 @@ export default function ProgramsLibrary({
   useEffect(() => {
     const syncFromHash = () => {
       const raw = window.location.hash.replace(/^#/, "").trim();
-      if (raw && sortedCategories.some((c) => c.slug === raw)) {
-        setActiveTab(raw);
+      const slug = parseProgramsHashSlug(window.location.hash);
+      if (raw.includes("#") && slug) {
+        const url = new URL(window.location.href);
+        window.history.replaceState(null, "", `${url.pathname}${url.search}#${slug}`);
+      }
+      if (slug && sortedCategories.some((c) => c.slug === slug)) {
+        setActiveTab(slug);
         requestAnimationFrame(() => {
           requestAnimationFrame(scrollToDepartmentSection);
         });
@@ -111,15 +117,10 @@ export default function ProgramsLibrary({
         ? event.target.closest("a.prog-hero-pillars__item")
         : null;
       if (!(link instanceof HTMLAnchorElement)) return;
-      const slug = link.hash.replace(/^#/, "").trim();
+      const slug = parseProgramsHashSlug(link.hash);
       if (!slug || !sortedCategories.some((c) => c.slug === slug)) return;
-      if (window.location.hash.replace(/^#/, "") === slug) {
-        event.preventDefault();
-        setActiveTab(slug);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(scrollToDepartmentSection);
-        });
-      }
+      event.preventDefault();
+      replaceProgramsHash(slug);
     }
 
     document.addEventListener("click", onHeroDepartmentClick);
@@ -153,7 +154,7 @@ export default function ProgramsLibrary({
   // Switch tab & update hash
   function switchTab(slug: string) {
     setActiveTab(slug);
-    window.history.replaceState(null, "", `#${slug}`);
+    replaceProgramsHash(slug);
   }
 
   function categoryNewsHref(slug: string) {
