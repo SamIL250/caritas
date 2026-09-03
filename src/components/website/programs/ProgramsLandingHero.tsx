@@ -55,18 +55,15 @@ export default function ProgramsLandingHero({
       showBreadcrumb={false}
     >
       <div className="prog-hero-pillars">
-        <ol className="prog-hero-pillars__grid">
-          {items.map((pillar, index) => (
+        <ul className="prog-hero-pillars__grid">
+          {items.map((pillar) => (
             <li key={pillar.slug} className="prog-hero-pillars__cell">
               <a href={`#${pillar.slug}`} className="prog-hero-pillars__item">
-                <span className="prog-hero-pillars__num" aria-hidden>
-                  {String(index + 1).padStart(2, "0")}
-                </span>
                 <span className="prog-hero-pillars__label">{pillar.label}</span>
               </a>
             </li>
           ))}
-        </ol>
+        </ul>
         <p className="prog-hero-pillars__title">Departments</p>
       </div>
     </PageHeroSection>

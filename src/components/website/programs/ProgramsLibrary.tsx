@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useLenis } from "lenis/react";
 import {
   encodeProgramAssetUrl,
   formatProgramDate,
@@ -53,13 +54,33 @@ export default function ProgramsLibrary({
 
   const [activeTab, setActiveTab] = useState<string>(sortedCategories[0]?.slug || "");
   const [activeProgram, setActiveProgram] = useState<(ProgramRow & any) | null>(null);
+  const lenis = useLenis();
+
+  const scrollToDepartmentSection = useCallback(() => {
+    const target = document.querySelector(".prog-dept-tabs");
+    if (!(target instanceof HTMLElement)) return;
+
+    const offset = window.matchMedia("(max-width: 768px)").matches ? -64 : -80;
+    lenis?.resize();
+
+    if (lenis) {
+      lenis.scrollTo(target, { offset, lock: false });
+      return;
+    }
+
+    const top = target.getBoundingClientRect().top + window.scrollY + offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }, [lenis]);
 
   // Sync tab from URL hash
   useEffect(() => {
     const syncFromHash = () => {
       const raw = window.location.hash.replace(/^#/, "").trim();
       if (raw && sortedCategories.some((c) => c.slug === raw)) {
-        setTimeout(() => setActiveTab(raw), 0);
+        setActiveTab(raw);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(scrollToDepartmentSection);
+        });
       }
     };
 
@@ -85,13 +106,32 @@ export default function ProgramsLibrary({
       setTimeout(() => window.dispatchEvent(new HashChangeEvent("hashchange")), 0);
     }) as typeof history.replaceState;
 
+    function onHeroDepartmentClick(event: MouseEvent) {
+      const link = event.target instanceof Element
+        ? event.target.closest("a.prog-hero-pillars__item")
+        : null;
+      if (!(link instanceof HTMLAnchorElement)) return;
+      const slug = link.hash.replace(/^#/, "").trim();
+      if (!slug || !sortedCategories.some((c) => c.slug === slug)) return;
+      if (window.location.hash.replace(/^#/, "") === slug) {
+        event.preventDefault();
+        setActiveTab(slug);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(scrollToDepartmentSection);
+        });
+      }
+    }
+
+    document.addEventListener("click", onHeroDepartmentClick);
+
     return () => {
       window.removeEventListener("hashchange", syncFromHash);
       window.removeEventListener("popstate", syncFromHash);
+      document.removeEventListener("click", onHeroDepartmentClick);
       history.pushState = origPush;
       history.replaceState = origReplace;
     };
-  }, [sortedCategories]);
+  }, [sortedCategories, scrollToDepartmentSection]);
 
   // Close drawers on Escape
   useEffect(() => {

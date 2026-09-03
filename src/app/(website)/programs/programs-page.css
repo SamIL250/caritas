@@ -43,41 +43,36 @@
 
 .prog-hero-pillars__cell:nth-child(-n + 2) {
   padding-right: 1.55rem;
+  text-align: right;
 }
 
 .prog-hero-pillars__cell:nth-child(n + 3) {
   padding-left: 1.55rem;
   border-left: 1px solid rgba(255, 255, 255, 0.48);
+  text-align: left;
 }
 
 .prog-hero-pillars__item {
   display: flex;
   align-items: baseline;
-  gap: 0.7rem;
   padding-block: 0.42rem;
   color: #ffffff;
   text-decoration: none;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
-  transition: color 0.18s ease, transform 0.18s ease;
+  transition: color 0.18s ease;
   white-space: nowrap;
+}
+
+.prog-hero-pillars__cell:nth-child(-n + 2) .prog-hero-pillars__item {
+  justify-content: flex-end;
+}
+
+.prog-hero-pillars__cell:nth-child(n + 3) .prog-hero-pillars__item {
+  justify-content: flex-start;
 }
 
 .prog-hero-pillars__item:hover {
   color: #f3d2c4;
-}
-
-.prog-hero-pillars__item:hover .prog-hero-pillars__num {
-  color: #e07050;
-}
-
-.prog-hero-pillars__num {
-  flex-shrink: 0;
-  min-width: 1.6rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, 0.62);
 }
 
 .prog-hero-pillars__label {
