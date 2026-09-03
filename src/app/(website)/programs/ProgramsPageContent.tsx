@@ -55,10 +55,8 @@ export default function ProgramsPageContent({
         headlineAccent={chrome.headlineAccent}
         intro={chrome.intro}
         heroImageUrl={chrome.heroImageUrl}
-        pillars={categories.map((category) => ({
-          slug: category.slug,
-          label: category.label,
-        }))}
+        pillars={chrome.pillars}
+        caption={chrome.departmentsCaption}
       />
 
       {!librarySection || librarySection.visible ? (

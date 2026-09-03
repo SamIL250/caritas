@@ -7,6 +7,10 @@ import type {
 } from "@/lib/programs";
 import type { PublicationRow } from "@/lib/publications";
 import type { NewsArticleRow } from "@/lib/news";
+import {
+  parseProgramsHeroDepartmentsFromOptions,
+  type ProgramsHeroDepartment,
+} from "@/lib/programs-hero-departments";
 
 export type ProgramsPageChrome = {
   eyebrow: string;
@@ -14,6 +18,8 @@ export type ProgramsPageChrome = {
   headlineAccent: string;
   intro: string;
   heroImageUrl: string | null;
+  pillars: ProgramsHeroDepartment[];
+  departmentsCaption: string;
 };
 
 export type ProgramsCmsSection = {
@@ -55,6 +61,7 @@ function parseHeroToChrome(hero: Record<string, unknown> | null): ProgramsPageCh
   const rawUrl = hero?.image_url;
   const heroImageUrl =
     typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim() : null;
+  const { departments, caption } = parseProgramsHeroDepartmentsFromOptions(options);
 
   return {
     eyebrow: badge,
@@ -62,6 +69,8 @@ function parseHeroToChrome(hero: Record<string, unknown> | null): ProgramsPageCh
     headlineAccent,
     intro,
     heroImageUrl,
+    pillars: departments,
+    departmentsCaption: caption,
   };
 }
 

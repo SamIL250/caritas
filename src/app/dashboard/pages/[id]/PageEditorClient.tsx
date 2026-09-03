@@ -118,6 +118,8 @@ import ProgramsLibrarySectionPreview from '@/components/dashboard/pages/Programs
 import ProgramsPartnerSection from '@/components/website/programs/ProgramsPartnerSection';
 import ProgramsLibrarySectionEditor from '@/components/dashboard/pages/ProgramsLibrarySectionEditor';
 import ProgramsPartnerSectionEditor from '@/components/dashboard/pages/ProgramsPartnerSectionEditor';
+import ProgramsHeroDepartmentsEditor from '@/components/dashboard/pages/ProgramsHeroDepartmentsEditor';
+import { parseProgramsHeroDepartmentsFromOptions } from '@/lib/programs-hero-departments';
 import FeaturedCampaignSectionPreview from '@/components/dashboard/pages/FeaturedCampaignSectionPreview';
 import type { PublishedNewsArticle } from '@/app/(website)/news/get-news-data';
 import type { PublicationCategoryRow, PublicationRow } from '@/lib/publications';
@@ -790,6 +792,7 @@ export default function PageEditorClient({
           typeof o.heading_accent === 'string' && o.heading_accent.trim()
             ? String(o.heading_accent)
             : 'Of Interventions';
+        const heroDepartments = parseProgramsHeroDepartmentsFromOptions(o);
         return (
           <div className="w-full shrink-0">
             <ProgramsLandingHero
@@ -800,6 +803,8 @@ export default function PageEditorClient({
               headlineAccent={accent}
               intro={typeof localState.subheading === 'string' ? localState.subheading : ''}
               heroImageUrl={typeof localState.image_url === 'string' ? localState.image_url : null}
+              pillars={heroDepartments.departments}
+              caption={heroDepartments.caption}
             />
           </div>
         );
@@ -2014,7 +2019,7 @@ function SectionForm({
     case 'hero':
       return (
         <div className="space-y-6">
-          {renderOptionField('Top Badge Text', 'badge_text', 'text')}
+          {pageSlug !== 'programs' ? renderOptionField('Top Badge Text', 'badge_text', 'text') : null}
           {renderField('Heading', 'heading', 'text')}
           {pageSlug && pageSlug !== 'home' ? (
             <>
@@ -2032,7 +2037,20 @@ function SectionForm({
               </p>
             </>
           ) : null}
-          {renderField('Subheading', 'subheading', 'textarea')}
+          {pageSlug === 'programs' ? (() => {
+            const heroDepartments = parseProgramsHeroDepartmentsFromOptions(state.options);
+            return (
+              <ProgramsHeroDepartmentsEditor
+                items={heroDepartments.departments}
+                caption={heroDepartments.caption}
+                categories={programsPreview?.categories ?? []}
+                onChange={(items) => onOptionsChange('hero_departments', items)}
+                onCaptionChange={(value) => onOptionsChange('departments_caption', value)}
+              />
+            );
+          })() : (
+            renderField('Subheading', 'subheading', 'textarea')
+          )}
           {renderField('Background Image', 'image_url', 'image')}
           {pageSlug === 'home' ? (
             <>

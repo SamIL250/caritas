@@ -1,9 +1,11 @@
 import PageHeroSection from "@/components/website/sections/PageHeroSection";
+import {
+  DEFAULT_PROGRAMS_HERO_CAPTION,
+  DEFAULT_PROGRAMS_HERO_DEPARTMENTS,
+  type ProgramsHeroDepartment,
+} from "@/lib/programs-hero-departments";
 
-export type ProgramsHeroPillar = {
-  slug: string;
-  label: string;
-};
+export type ProgramsHeroPillar = ProgramsHeroDepartment;
 
 export type ProgramsLandingHeroProps = {
   headlinePrefix: string;
@@ -11,45 +13,22 @@ export type ProgramsLandingHeroProps = {
   intro: string;
   heroImageUrl?: string | null;
   pillars?: ProgramsHeroPillar[];
+  caption?: string;
   /** @deprecated Badge is no longer shown on the programs hero. */
   eyebrow?: string;
 };
 
-const HERO_PILLAR_ORDER = [
-  "finance-administration",
-  "social-welfare",
-  "health",
-  "development",
-] as const;
-
-const HERO_PILLAR_LABELS: Record<(typeof HERO_PILLAR_ORDER)[number], string> = {
-  "finance-administration": "Administration and Finance",
-  "social-welfare": "Social Welfare",
-  health: "Health",
-  development: "Development",
-};
-
-const FALLBACK_PILLARS: ProgramsHeroPillar[] = HERO_PILLAR_ORDER.map((slug) => ({
-  slug,
-  label: HERO_PILLAR_LABELS[slug],
-}));
-
 function resolveHeroPillars(pillars?: ProgramsHeroPillar[]): ProgramsHeroPillar[] {
-  if (!pillars?.length) return FALLBACK_PILLARS;
-
-  const ordered = HERO_PILLAR_ORDER
-    .map((slug) => {
-      const match = pillars.find((pillar) => pillar.slug === slug);
-      if (!match) return null;
-      return {
-        slug: match.slug,
-        label: HERO_PILLAR_LABELS[slug] ?? match.label,
-      };
-    })
-    .filter((pillar): pillar is ProgramsHeroPillar => Boolean(pillar));
-
-  if (ordered.length >= 4) return ordered.slice(0, 4);
-  return pillars.slice(0, 4);
+  if (!pillars?.length) {
+    return DEFAULT_PROGRAMS_HERO_DEPARTMENTS.map((item) => ({ ...item }));
+  }
+  return pillars
+    .filter((pillar) => pillar.label.trim())
+    .slice(0, 4)
+    .map((pillar) => ({
+      slug: pillar.slug.trim(),
+      label: pillar.label.trim(),
+    }));
 }
 
 export default function ProgramsLandingHero({
@@ -57,12 +36,14 @@ export default function ProgramsLandingHero({
   headlineAccent,
   heroImageUrl,
   pillars,
+  caption,
 }: ProgramsLandingHeroProps) {
   const imageUrl =
     typeof heroImageUrl === "string" && heroImageUrl.trim()
       ? heroImageUrl.trim()
       : "/img/slide3.webp";
   const items = resolveHeroPillars(pillars);
+  const captionText = caption?.trim() || DEFAULT_PROGRAMS_HERO_CAPTION;
 
   return (
     <PageHeroSection
@@ -76,14 +57,14 @@ export default function ProgramsLandingHero({
       <div className="prog-hero-pillars">
         <ul className="prog-hero-pillars__grid">
           {items.map((pillar) => (
-            <li key={pillar.slug} className="prog-hero-pillars__cell">
+            <li key={`${pillar.slug}-${pillar.label}`} className="prog-hero-pillars__cell">
               <a href={`#${pillar.slug}`} className="prog-hero-pillars__item">
                 <span className="prog-hero-pillars__label">{pillar.label}</span>
               </a>
             </li>
           ))}
         </ul>
-        <p className="prog-hero-pillars__title">Departments</p>
+        <p className="prog-hero-pillars__title">{captionText}</p>
       </div>
     </PageHeroSection>
   );
