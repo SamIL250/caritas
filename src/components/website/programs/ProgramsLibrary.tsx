@@ -207,22 +207,6 @@ export default function ProgramsLibrary({
         const showNews = libraryConfig.show_news && categoryNews.length > 0;
         const hasPrograms = items.length > 0;
 
-        if (!hasPrograms && !showStories && !showNews) {
-          return (
-            <div
-              key={cat.id}
-              className="prog-panel active"
-              role="tabpanel"
-              aria-labelledby={`tab-${cat.slug}`}
-              style={{ "--dept-color": cat.accent || "#1a1a1a" } as React.CSSProperties}
-            >
-              <div className="prog-empty">
-                Programs are coming soon for this pillar.
-              </div>
-            </div>
-          );
-        }
-
         return (
           <div
             key={cat.id}
@@ -256,11 +240,7 @@ export default function ProgramsLibrary({
                   />
                 </div>
               </div>
-            ) : (
-              <div className="prog-empty prog-empty--compact">
-                Programs are coming soon for this pillar.
-              </div>
-            )}
+            ) : null}
 
             {showStories ? (
               <SuccessStoriesSection stories={categoryStories} category={cat} />
