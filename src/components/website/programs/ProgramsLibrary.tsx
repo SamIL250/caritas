@@ -22,7 +22,6 @@ import {
 import type { PublishedNewsArticle } from "@/app/(website)/news/get-news-data";
 import NewsArticlesFeed from "@/components/website/news/NewsArticlesFeed";
 import RwandaMapBackground from "./RwandaMapBackground";
-import { ProgramBubbleCircle } from "./ProgramBubbleCircle";
 import type { ProgramsLibrarySectionContent } from "@/lib/programs-library-section";
 import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section";
 import { parseProgramsHashSlug, replaceProgramsHash } from "@/lib/programs-hash";
@@ -251,7 +250,10 @@ export default function ProgramsLibrary({
               <div className="prog-ref-section">
                 <RwandaMapBackground />
                 <div className="prog-ref-inner">
-                  <ProgramBubbleGallery
+                  <header className="prog-ref-heading">
+                    <h3 className="prog-ref-title">Current projects in {cat.label}</h3>
+                  </header>
+                  <ProgramCardGallery
                     items={items}
                     initialCount={libraryConfig.bubble_initial_count}
                     viewAllLabel={libraryConfig.view_all_label}
@@ -284,9 +286,9 @@ export default function ProgramsLibrary({
 }
 
 /* ------------------------------------------------------------------ */
-/* Bubble Circle Gallery                                                */
+/* Project card gallery                                                 */
 /* ------------------------------------------------------------------ */
-function ProgramBubbleGallery({
+function ProgramCardGallery({
   items,
   initialCount,
   viewAllLabel,
@@ -302,26 +304,15 @@ function ProgramBubbleGallery({
   const [showAll, setShowAll] = useState(false);
   const visibleCount = Math.max(1, Math.min(initialCount, items.length));
   const displayItems = showAll ? items : items.slice(0, visibleCount);
-  const BUBBLE_COLORS = ["bubble-blue", "bubble-tan", "bubble-green"];
 
   return (
-    <div className={`bubble-slider-container ${showAll ? "show-all" : ""}`}>
-      <div className="bubble-slider">
-        <div className="bs-track-wrap">
-          <div
-            className="bs-track"
-            style={{ flexWrap: showAll ? "wrap" : "nowrap", gap: "2rem", justifyContent: "center" }}
-          >
-            {displayItems.map((p, idx) => (
-              <ProgramBubbleCircle
-                key={p.id}
-                program={p}
-                colorClass={BUBBLE_COLORS[idx % BUBBLE_COLORS.length]}
-                onClick={onClick}
-              />
-            ))}
-          </div>
-        </div>
+    <div className="prog-project-gallery">
+      <div
+        className={`prog-project-columns prog-project-columns--${Math.min(3, displayItems.length)}`}
+      >
+        {displayItems.map((program) => (
+          <ProgramProjectCard key={program.id} program={program} onClick={onClick} />
+        ))}
       </div>
       {items.length > visibleCount && (
         <div className="bubble-viewall-wrap">
@@ -336,6 +327,83 @@ function ProgramBubbleGallery({
         </div>
       )}
     </div>
+  );
+}
+
+function ProgramProjectCard({
+  program,
+  onClick,
+}: {
+  program: ProgramRow;
+  onClick: (program: ProgramRow) => void;
+}) {
+  const imageUrl = program.cover_image_url?.trim()
+    ? encodeProgramAssetUrl(program.cover_image_url)
+    : null;
+  const subtitle = program.subtitle?.trim() ?? "";
+  const excerpt = program.excerpt?.trim() ?? "";
+  const location = program.location?.trim() ?? "";
+  const phone = program.contact_phone?.trim() ?? "";
+  const phoneHref = phone ? `tel:${phone.replace(/\s/g, "")}` : "";
+  const showFooter = Boolean(location || phone);
+
+  return (
+    <article
+      className="prog-project-card"
+      onClick={() => onClick(program)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick(program);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`${program.title}. Open program details.`}
+    >
+      <div className="prog-project-card__body">
+        <div className="prog-project-card__top">
+          {imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={imageUrl}
+              alt={program.cover_image_alt || program.title}
+              className="prog-project-card__media"
+            />
+          ) : (
+            <div className="prog-project-card__media prog-project-card__media--empty" aria-hidden />
+          )}
+          <div className="prog-project-card__heading">
+            <h4 className="prog-project-card__title">{program.title}</h4>
+            {subtitle ? (
+              <p className="prog-project-card__tagline">&ldquo;{subtitle}&rdquo;</p>
+            ) : null}
+          </div>
+        </div>
+
+        {excerpt ? <p className="prog-project-card__excerpt">{excerpt}</p> : null}
+
+        {showFooter ? (
+          <div className="prog-project-card__meta">
+            {location ? (
+              <span className="prog-project-card__location">
+                <i className="fa-solid fa-location-dot" aria-hidden />
+                {location}
+              </span>
+            ) : null}
+            {phone ? (
+              <a
+                href={phoneHref}
+                className="prog-project-card__phone"
+                onClick={(event) => event.stopPropagation()}
+              >
+                {phone}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    </article>
   );
 }
 
