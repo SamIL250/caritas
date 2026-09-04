@@ -12,7 +12,7 @@ import { replaceProgramsHash } from '@/lib/programs-hash';
 import NavMegaMenu from '@/components/website/NavMegaMenu';
 import type { NavMegaMenuData } from '@/lib/nav-mega-menu-data';
 
-type SubKey = 'about' | 'programs' | 'news' | 'publications';
+type SubKey = 'about' | 'programs' | 'publications';
 
 const PROGRAMS_NAV_ITEMS = [
   { slug: "social-welfare", label: "Social Welfare", icon: "fa-people-roof" },
@@ -261,66 +261,6 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                       <span className="nav-mega-category-label">{item.label}</span>
                     </Link>
                   ))}
-                </div>
-              </div>
-            </li>
-
-            <li className={['has-dropdown', openSub === 'news' ? 'is-expanded' : ''].filter(Boolean).join(' ')}>
-              <div className="nav-item-row">
-                <Link
-                  href="/news"
-                  className={isActive('/news') || Boolean(pathname?.startsWith('/news/')) ? 'current' : ''}
-                  onClick={(e) => {
-                    if (window.innerWidth < 1024) {
-                      e.preventDefault();
-                      toggleSub('news');
-                    } else {
-                      closeNav();
-                    }
-                  }}
-                >
-                  Stories and Updates <ChevronDown size={14} className="nav-inline-caret inline-block ml-1 opacity-60" />
-                </Link>
-                <button
-                  type="button"
-                  className="nav-submenu-toggle"
-                  aria-expanded={openSub === 'news'}
-                  aria-label="Toggle Stories and Updates submenu"
-                  onClick={() => toggleSub('news')}
-                >
-                  <ChevronDown
-                    size={18}
-                    aria-hidden
-                    className={openSub === 'news' ? 'rotate-180 transition-transform' : 'transition-transform'}
-                  />
-                </button>
-              </div>
-              <div className="nav-dropdown">
-                <div className="nav-dropdown-inner nav-sub-menu">
-                  <Link href="/news?topic=social-welfare" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-people-roof" />
-                    </span>
-                    <span className="nav-mega-category-label">Social Welfare</span>
-                  </Link>
-                  <Link href="/news?topic=health" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-heart-pulse" />
-                    </span>
-                    <span className="nav-mega-category-label">Health</span>
-                  </Link>
-                  <Link href="/news?topic=development" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-seedling" />
-                    </span>
-                    <span className="nav-mega-category-label">Development</span>
-                  </Link>
-                  <Link href="/news?topic=finance-administration" className="nav-mega-category" onClick={closeNav}>
-                    <span className="nav-mega-category-icon" aria-hidden>
-                      <i className="fa-solid fa-building-columns" />
-                    </span>
-                    <span className="nav-mega-category-label">Finance &amp; Administration</span>
-                  </Link>
                 </div>
               </div>
             </li>
