@@ -48,6 +48,43 @@
   pointer-events: none;
 }
 
+/* Embedded on /programs Latest News — same feed, light search, no page chrome */
+.news-page-root--embed {
+  background: transparent;
+}
+
+.news-page-root--embed .news-hero-search {
+  margin: 0;
+}
+
+.news-page-root--embed .news-hero-search input {
+  border: 1px solid rgba(13, 27, 42, 0.14);
+  background: #fff;
+  color: var(--news-ink);
+}
+
+.news-page-root--embed .news-hero-search input::placeholder {
+  color: var(--news-muted);
+}
+
+.news-page-root--embed .news-hero-search input:focus {
+  border-color: rgba(165, 40, 13, 0.45);
+  background: #fff;
+}
+
+.news-page-root--embed .news-hero-search .search-icon {
+  color: var(--news-muted);
+}
+
+.news-page-root--embed .news-wrap {
+  max-width: none;
+  padding: 0;
+}
+
+.news-page-root--embed .news-year-filter {
+  top: calc(var(--prog-news-sticky-top, 140px) + 4rem);
+}
+
 /* Sticky filter tabs — underline bar (shared with programs page) */
 .news-page-root .news-filter-bar {
   position: sticky;
@@ -176,6 +213,12 @@
   font-size: 0.76rem;
   color: var(--news-muted);
   margin-bottom: 0.85rem;
+}
+
+.news-page-root .news-feat-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .news-page-root .news-feat-cat {
@@ -335,7 +378,7 @@
   letter-spacing: 0.06em;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.45rem;
 }
 
 .news-page-root .news-card-body h3 {

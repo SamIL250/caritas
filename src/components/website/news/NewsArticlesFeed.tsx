@@ -188,8 +188,8 @@ export default function NewsArticlesFeed({
               <div className="news-feat-content">
                 <div className="news-feat-meta">
                   <span className="news-feat-cat">{tagLabel(heroArticle)}</span>
-                  <span>
-                    <i className="fa-regular fa-calendar mr-1" aria-hidden />
+                  <span className="news-feat-date">
+                    <i className="fa-regular fa-calendar" aria-hidden />
                     {formatPublishedDate(heroArticle.published_at)}
                   </span>
                 </div>

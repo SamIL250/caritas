@@ -15,18 +15,44 @@ import {
   publicationDetailHref,
   type PublicationRow,
 } from "@/lib/publications";
-import { formatPublishedDate, type NewsArticleRow } from "@/lib/news";
-import { sortByPublishedNewest } from "@/lib/content-sort";
+import {
+  inferredDepartmentSlugFromLegacyNewsCategory,
+  type NewsArticleRow,
+} from "@/lib/news";
+import type { PublishedNewsArticle } from "@/app/(website)/news/get-news-data";
+import NewsArticlesFeed from "@/components/website/news/NewsArticlesFeed";
 import RwandaMapBackground from "./RwandaMapBackground";
 import { ProgramBubbleCircle } from "./ProgramBubbleCircle";
 import type { ProgramsLibrarySectionContent } from "@/lib/programs-library-section";
 import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section";
 import { parseProgramsHashSlug, replaceProgramsHash } from "@/lib/programs-hash";
-import { cloudinaryUrl } from "@/lib/cloudinary-url";
+import "@/app/(website)/news/news-page.css";
 
 const SUCCESS_STORY_ROWS = 1;
 const SUCCESS_STORIES_PER_ROW = 2;
-const NEWS_VISIBLE = 2;
+
+function toPublishedNewsArticle(
+  article: NewsArticleRow,
+  categories: ProgramCategoryRow[],
+): PublishedNewsArticle {
+  const department = article.department_id
+    ? categories.find((category) => category.id === article.department_id)
+    : undefined;
+
+  return {
+    ...article,
+    department: department
+      ? { slug: department.slug, label: department.label }
+      : null,
+  };
+}
+
+function articleMatchesDepartment(article: PublishedNewsArticle, slug: string): boolean {
+  const departmentSlug =
+    article.department?.slug?.trim() ||
+    inferredDepartmentSlugFromLegacyNewsCategory(article.category);
+  return departmentSlug === slug;
+}
 
 type Props = {
   programs: ProgramRow[];
@@ -53,6 +79,10 @@ export default function ProgramsLibrary({
 
   const [activeTab, setActiveTab] = useState<string>(sortedCategories[0]?.slug || "");
   const [activeProgram, setActiveProgram] = useState<(ProgramRow & any) | null>(null);
+  const publishedNews = useMemo(
+    () => news.map((article) => toPublishedNewsArticle(article, categories)),
+    [news, categories],
+  );
   const lenis = useLenis();
 
   const scrollToDepartmentSection = useCallback(() => {
@@ -155,18 +185,8 @@ export default function ProgramsLibrary({
     replaceProgramsHash(slug);
   }
 
-  function categoryNewsHref(slug: string) {
-    return `/news?topic=${encodeURIComponent(slug)}`;
-  }
-
   function storiesForCategory(categoryId: string) {
     return successStories.filter((s) => s.department_id === categoryId);
-  }
-
-  function newsForCategory(categoryId: string) {
-    return sortByPublishedNewest(
-      news.filter((a) => a.department_id === categoryId),
-    );
   }
 
   return (
@@ -200,10 +220,11 @@ export default function ProgramsLibrary({
 
         const items = programs.filter((p) => p.category === cat.slug);
         const categoryStories = storiesForCategory(cat.id);
-        const categoryNews = newsForCategory(cat.id);
         const showStories =
           libraryConfig.show_success_stories && categoryStories.length > 0;
-        const showNews = libraryConfig.show_news && categoryNews.length > 0;
+        const showNews =
+          libraryConfig.show_news &&
+          publishedNews.some((article) => articleMatchesDepartment(article, cat.slug));
         const hasPrograms = items.length > 0;
 
         return (
@@ -246,36 +267,7 @@ export default function ProgramsLibrary({
             ) : null}
 
             {showNews ? (
-              <section className="prog-editorial prog-editorial--news" aria-labelledby={`prog-news-title-${cat.slug}`}>
-                <div className="prog-editorial__inner">
-                  <header className="prog-editorial__header">
-                    <p className="prog-editorial__eyebrow">{cat.label}</p>
-                    <h3 id={`prog-news-title-${cat.slug}`} className="prog-editorial__title">
-                      Latest News
-                    </h3>
-                    <p className="prog-editorial__lead">
-                      Updates and stories from the {cat.label.toLowerCase()} department.
-                    </p>
-                  </header>
-
-                  <div className="prog-editorial__shell">
-                    <div className="prog-editorial__frame">
-                      <div className="prog-news-list">
-                        {categoryNews.slice(0, NEWS_VISIBLE).map((article) => (
-                          <NewsCard key={article.id} article={article} />
-                        ))}
-                      </div>
-
-                      <div className="prog-editorial__footer">
-                        <Link href={categoryNewsHref(cat.slug)} className="prog-editorial__cta">
-                          View more stories
-                          <i className="fa-solid fa-arrow-right" aria-hidden />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
+              <LatestNewsSection articles={publishedNews} category={cat} />
             ) : null}
           </div>
         );
@@ -560,51 +552,60 @@ function ProgramDrawer({
 }
 
 /* ------------------------------------------------------------------ */
-/* News Card                                                            */
+/* Latest News — same feed as /news (search → featured → more stories) */
 /* ------------------------------------------------------------------ */
-function NewsCard({
-  article,
+function LatestNewsSection({
+  articles,
+  category,
 }: {
-  article: NewsArticleRow;
+  articles: PublishedNewsArticle[];
+  category: ProgramCategoryRow;
 }) {
-  const imageUrl = article.image_url?.trim()
-    ? cloudinaryUrl(article.image_url.trim(), {
-        width: 900,
-        quality: "auto",
-        format: "auto",
-      })
-    : null;
+  const [query, setQuery] = useState("");
 
   return (
-    <Link
-      href={`/news/${article.slug}`}
-      className="prog-news-card"
-      aria-label={`Read article: ${article.title}`}
+    <section
+      className="prog-editorial prog-editorial--news"
+      aria-labelledby={`prog-news-title-${category.slug}`}
     >
-      {imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imageUrl}
-          alt={article.image_alt || article.title}
-          className="prog-news-card__thumb"
-        />
-      ) : (
-        <div className="prog-news-card__thumb prog-news-card__thumb--empty" aria-hidden />
-      )}
+      <div className="prog-editorial__inner prog-news-layout news-page-root news-page-root--embed">
+        <header className="prog-editorial__header">
+          <p className="prog-editorial__eyebrow">{category.label}</p>
+          <h3 id={`prog-news-title-${category.slug}`} className="prog-editorial__title">
+            Latest News
+          </h3>
+          <p className="prog-editorial__lead">
+            Updates and stories from the {category.label.toLowerCase()} department.
+          </p>
+        </header>
 
-      <div className="prog-news-card__body">
-        {article.published_at ? (
-          <span className="prog-news-card__date">{formatPublishedDate(article.published_at)}</span>
-        ) : null}
-        <h4 className="prog-news-card__title">{article.title}</h4>
-        {article.excerpt ? (
-          <p className="prog-news-card__excerpt">{article.excerpt}</p>
-        ) : null}
-        <span className="prog-news-card__link">
-          Read article
-          <i className="fa-solid fa-arrow-right" aria-hidden />
-        </span>
+        <div className="prog-news-search-slot">
+          <div className="news-hero-search">
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search articles…"
+              aria-label={`Search ${category.label} stories and updates`}
+              autoComplete="off"
+            />
+            <span className="search-icon">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden />
+            </span>
+          </div>
+        </div>
+
+        <NewsArticlesFeed
+          featuredArticle={null}
+          gridArticles={articles}
+          departmentPillars={[]}
+          topicFilter="all"
+          onTopicFilterChange={() => {}}
+          departmentFilter={category.slug}
+          onDepartmentFilterChange={() => {}}
+          query={query}
+        />
       </div>
-    </Link>
+    </section>
   );
 }

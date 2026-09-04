@@ -58,7 +58,7 @@ const COPY: Record<
     open: "Open Caritas assistant",
     close: "Close assistant",
     title: "Caritas Assistant",
-    subtitle: "Faith-driven answers, on demand",
+    subtitle: "Prompt answers on demand",
     badge: "AI",
     welcome:
       "Hello — I can help you learn about our programs, history, and how to get involved. What would you like to know?",
@@ -75,7 +75,7 @@ const COPY: Record<
     errorGeneric: "Something went wrong. Please try again.",
     errorEmpty: "Please type a message first.",
     disclaimer:
-      "Responses are AI-generated and may be inaccurate. For verified information, see our pages or use the contact form.",
+      "AI assistant will provide you with general information. For specific enquiries, don't hesitate to get in touch with us.",
     suggestionsLabel: "Try asking",
     suggestion1: "What does Caritas Rwanda do?",
     suggestion2: "How can I volunteer?",
