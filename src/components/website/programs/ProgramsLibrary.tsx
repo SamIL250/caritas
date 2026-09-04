@@ -172,11 +172,23 @@ export default function ProgramsLibrary({
     return () => window.removeEventListener("keydown", onKey);
   }, [activeProgram]);
 
-  // Lock body scroll when any drawer is open
+  // Lock page scroll when the drawer is open (Lenis ignores overflow: hidden)
   useEffect(() => {
-    document.body.style.overflow = activeProgram ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [activeProgram]);
+    if (activeProgram) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      lenis?.stop();
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      lenis?.start();
+    }
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      lenis?.start();
+    };
+  }, [activeProgram, lenis]);
 
   // Switch tab & update hash
   function switchTab(slug: string) {
@@ -526,6 +538,8 @@ function ProgramDrawer({
       />
       <aside
         className={`drawer-panel${isOpen ? " open" : ""}`}
+        data-lenis-prevent
+        data-lenis-prevent-wheel
         role="dialog"
         aria-modal="true"
         aria-label={program?.title || "Program details"}

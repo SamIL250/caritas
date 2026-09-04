@@ -65,7 +65,7 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
         prevent: (node: HTMLElement | null) => {
           if (!node) return false;
           if (node.closest?.("[data-lenis-prevent]")) return true;
-          if (node.closest?.(".cb-panel, .cb-body, .donation-modal-form-area, .donation-modal-overlay")) {
+          if (node.closest?.(".cb-panel, .cb-body, .donation-modal-form-area, .donation-modal-overlay, .drawer-panel")) {
             return true;
           }
           return false;
