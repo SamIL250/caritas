@@ -335,8 +335,9 @@
 
 .rwanda-map-bg #Rwanda path {
   fill: #e6e8eb;
-  stroke: currentColor;
-  stroke-width: 0.7;
+  stroke: color-mix(in srgb, var(--dept-color, #8c2208) 28%, #c5c8cc);
+  stroke-width: 0.4;
+  stroke-opacity: 0.45;
 }
 
 .prog-ref-inner {
