@@ -48,6 +48,16 @@
   display: block;
 }
 
+.news-detail-cover--full img,
+.news-detail-cover--full .news-detail-cover-figure img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  background: #f3f0ec;
+}
+
 .news-detail-cover-figure .media-figure-caption {
   padding: 0.65rem 0.85rem 0.85rem;
   text-align: left;

@@ -160,6 +160,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
           currentId={publication.id}
           detailHref={(slug) => publicationDetailHref({ slug })}
           externalUrl={publication.external_url}
+          coverUncropped
         />
         <ViewTracker pageType="publication" pageId={publication.id} />
       </>,

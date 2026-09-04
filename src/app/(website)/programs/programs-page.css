@@ -716,8 +716,8 @@
 
 .prog-stories-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
 }
 
 .prog-story-card {
@@ -738,7 +738,7 @@
 
 .prog-story-card__media {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #e5e7eb;
   flex-shrink: 0;
@@ -760,8 +760,8 @@
 .prog-story-card__body {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 1rem 1rem 1.1rem;
+  gap: 0.55rem;
+  padding: 1.2rem 1.25rem 1.35rem;
   flex: 1;
 }
 
@@ -779,13 +779,14 @@
 
 .prog-story-card__title {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: #111827;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -798,12 +799,12 @@
 
 .prog-story-card__excerpt {
   margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.6;
+  font-size: 0.9rem;
+  line-height: 1.55;
   color: #4b5563;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -833,8 +834,8 @@
 
 .prog-news-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
 }
 
 .prog-news-card {
@@ -842,12 +843,12 @@
   flex-direction: row;
   align-items: stretch;
   border: 1.5px solid #e8e2d9;
-  border-radius: 0.85rem;
+  border-radius: 1rem;
   overflow: hidden;
   background: #ffffff;
   text-decoration: none;
   color: inherit;
-  min-height: 0;
+  min-height: 17.5rem;
   transition: border-color 0.18s ease;
 }
 
@@ -856,9 +857,11 @@
 }
 
 .prog-news-card__thumb {
-  width: 7.25rem;
+  width: 42%;
+  max-width: 26rem;
   flex-shrink: 0;
   object-fit: cover;
+  object-position: center;
   display: block;
   background: #e5e7eb;
 }
@@ -870,14 +873,14 @@
 .prog-news-card__body {
   flex: 1;
   min-width: 0;
-  padding: 0.85rem 0.95rem;
+  padding: 1.6rem 1.75rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.65rem;
 }
 
 .prog-news-card__date {
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -886,9 +889,10 @@
 
 .prog-news-card__title {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
   color: #111827;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -899,12 +903,12 @@
 
 .prog-news-card__excerpt {
   margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.55;
+  font-size: 1.02rem;
+  line-height: 1.6;
   color: #4b5563;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex: 1;
@@ -913,9 +917,9 @@
 .prog-news-card__link {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   margin-top: auto;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -923,18 +927,27 @@
 }
 
 .prog-news-card__link i {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
 }
 
 @media (max-width: 1100px) {
   .prog-stories-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
   }
 }
 
 @media (max-width: 720px) {
-  .prog-news-list {
-    grid-template-columns: 1fr;
+  .prog-news-card {
+    min-height: 13.5rem;
+  }
+
+  .prog-news-card__thumb {
+    width: 38%;
+    max-width: 14rem;
+  }
+
+  .prog-news-card__body {
+    padding: 1.15rem 1.2rem 1.1rem;
   }
 }
 
@@ -943,12 +956,18 @@
     padding-inline: 1rem;
   }
 
-  .prog-stories-grid {
+  .prog-stories-grid,
+  .prog-news-list {
     grid-template-columns: 1fr;
   }
 
+  .prog-news-card {
+    min-height: 11.5rem;
+  }
+
   .prog-news-card__thumb {
-    width: 6.25rem;
+    width: 36%;
+    max-width: 11rem;
   }
 }
 

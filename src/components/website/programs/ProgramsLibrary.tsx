@@ -22,13 +22,11 @@ import { ProgramBubbleCircle } from "./ProgramBubbleCircle";
 import type { ProgramsLibrarySectionContent } from "@/lib/programs-library-section";
 import { DEFAULT_PROGRAMS_LIBRARY_SECTION } from "@/lib/programs-library-section";
 import { parseProgramsHashSlug, replaceProgramsHash } from "@/lib/programs-hash";
+import { cloudinaryUrl } from "@/lib/cloudinary-url";
 
-const PROGRAM_GRID_COLUMNS = 4;
 const SUCCESS_STORY_ROWS = 1;
-const NEWS_ROWS = 1;
-
-const SUCCESS_STORIES_PER_ROW = PROGRAM_GRID_COLUMNS;
-const NEWS_VISIBLE = PROGRAM_GRID_COLUMNS * NEWS_ROWS;
+const SUCCESS_STORIES_PER_ROW = 2;
+const NEWS_VISIBLE = 2;
 
 type Props = {
   programs: ProgramRow[];
@@ -418,8 +416,6 @@ function SuccessStoryCard({ story }: { story: PublicationRow }) {
   const imageUrl = story.cover_image_url?.trim()
     ? encodePublicationAssetUrl(story.cover_image_url)
     : null;
-
-  const customFields = story.custom_fields as Record<string, any> || {};
   const href = publicationDetailHref(story);
 
   return (
@@ -437,15 +433,9 @@ function SuccessStoryCard({ story }: { story: PublicationRow }) {
           <span className="prog-story-card__tag">{story.tag_label}</span>
         ) : null}
         <h4 className="prog-story-card__title">{story.title}</h4>
+        {story.excerpt ? <p className="prog-story-card__excerpt">{story.excerpt}</p> : null}
         {story.period_label ? (
           <span className="prog-story-card__period">{story.period_label}</span>
-        ) : null}
-        {story.excerpt ? <p className="prog-story-card__excerpt">{story.excerpt}</p> : null}
-        {customFields.outcome ? (
-          <p className="prog-story-card__outcome">
-            <i className="fa-solid fa-arrow-trend-up" aria-hidden />
-            {String(customFields.outcome)}
-          </p>
         ) : null}
       </div>
     </Link>
@@ -577,16 +567,24 @@ function NewsCard({
 }: {
   article: NewsArticleRow;
 }) {
+  const imageUrl = article.image_url?.trim()
+    ? cloudinaryUrl(article.image_url.trim(), {
+        width: 900,
+        quality: "auto",
+        format: "auto",
+      })
+    : null;
+
   return (
     <Link
       href={`/news/${article.slug}`}
       className="prog-news-card"
       aria-label={`Read article: ${article.title}`}
     >
-      {article.image_url?.trim() ? (
+      {imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={article.image_url}
+          src={imageUrl}
           alt={article.image_alt || article.title}
           className="prog-news-card__thumb"
         />

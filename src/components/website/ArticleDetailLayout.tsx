@@ -32,6 +32,8 @@ type Props = {
   currentId: string;
   detailHref: (slug: string) => string;
   externalUrl?: string | null;
+  /** Show the full cover photo instead of cropping it to a fixed banner height. */
+  coverUncropped?: boolean;
 };
 
 export function ArticleDetailLayout({
@@ -50,6 +52,7 @@ export function ArticleDetailLayout({
   currentId,
   detailHref,
   externalUrl,
+  coverUncropped = false,
 }: Props) {
   const ordered = sortByPublishedNewest(peers);
   const currentIndex = ordered.findIndex((item) => item.id === currentId);
@@ -75,7 +78,7 @@ export function ArticleDetailLayout({
         </nav>
 
         {cover ? (
-          <div className="news-detail-cover">
+          <div className={`news-detail-cover${coverUncropped ? " news-detail-cover--full" : ""}`}>
             <MediaFigure
               src={cover}
               alt={coverAlt || title}
