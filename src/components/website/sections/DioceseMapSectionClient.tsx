@@ -388,9 +388,10 @@ export default function DioceseMapSectionClient(raw: Props) {
               radius: style.radius,
               fillColor: style.fillColor,
               color: "#ffffff",
-              weight: 2,
+              weight: style.weight,
               opacity: 1,
               fillOpacity: 0.92,
+              ...(style.dashArray ? { dashArray: style.dashArray } : {}),
             });
 
             marker.on("click", (e: any) => {
@@ -727,6 +728,16 @@ export default function DioceseMapSectionClient(raw: Props) {
                       <i className="fa-solid fa-building" aria-hidden /> {selectedHealth.responsible}
                     </div>
                   ) : null}
+                  {selectedHealth.exactCoords ? (
+                    <div className="lp-meta">
+                      <i className="fa-solid fa-crosshairs" aria-hidden />{" "}
+                      {selectedHealth.lat.toFixed(5)}, {selectedHealth.lng.toFixed(5)}
+                    </div>
+                  ) : (
+                    <div className="lp-meta diocese-health-approx-note">
+                      Approximate map location — set latitude/longitude in the dashboard for an exact pin.
+                    </div>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -799,6 +810,9 @@ export default function DioceseMapSectionClient(raw: Props) {
                     {selectedHealth.facility_type ? `${selectedHealth.facility_type} · ` : ""}
                     {selectedHealth.district}, {selectedHealth.sector} · {selectedHealth.diocese}
                     {selectedHealth.responsible ? ` · ${selectedHealth.responsible}` : ""}
+                    {selectedHealth.exactCoords
+                      ? ` · ${selectedHealth.lat.toFixed(5)}, ${selectedHealth.lng.toFixed(5)}`
+                      : " · Approximate location"}
                   </p>
                 </div>
               </>
@@ -815,6 +829,9 @@ export default function DioceseMapSectionClient(raw: Props) {
               </span>
               <span>
                 <i style={{ background: "#911313" }} aria-hidden /> Other
+              </span>
+              <span className="diocese-health-legend__note">
+                Solid ring = exact coords · dashed ring = approximate
               </span>
             </div>
           ) : null}

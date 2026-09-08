@@ -6,6 +6,8 @@ import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import {
   HEALTH_FACILITY_COLUMNS,
+  HEALTH_FACILITY_COORD_FIELDS,
+  hasExactHealthFacilityCoords,
   type DioceseHealthFacility,
 } from "@/lib/diocese-health-facilities";
 
@@ -33,6 +35,8 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
           f.name,
           f.facility_type,
           f.responsible,
+          f.lat,
+          f.lng,
         ]
           .join(" ")
           .toLowerCase();
@@ -40,6 +44,11 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
       })
       .map(({ i }) => i);
   }, [facilities, search]);
+
+  const exactCoordCount = useMemo(
+    () => facilities.filter((f) => hasExactHealthFacilityCoords(f)).length,
+    [facilities],
+  );
 
   const totalPages = Math.max(1, Math.ceil(filteredIndices.length / EDITOR_PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -51,6 +60,23 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
   const patchFacility = (index: number, field: keyof DioceseHealthFacility, value: string) => {
     const list = [...facilities];
     list[index] = { ...list[index], [field]: value };
+    onChange(list);
+  };
+
+  const patchFacilityCoord = (index: number, field: "lat" | "lng", raw: string) => {
+    const list = [...facilities];
+    const trimmed = raw.trim();
+    const next = { ...list[index] };
+
+    if (!trimmed) {
+      delete next[field];
+    } else {
+      const value = Number(trimmed);
+      if (!Number.isFinite(value)) return;
+      next[field] = value;
+    }
+
+    list[index] = next;
     onChange(list);
   };
 
@@ -75,6 +101,11 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
 
   return (
     <div className="space-y-3">
+      <p className="text-[10px] text-stone-500 leading-relaxed">
+        Set latitude and longitude for exact map placement. Facilities without coordinates use an
+        approximate position near their diocese.
+      </p>
+
       <div className="flex flex-wrap items-center gap-2">
         <input
           type="search"
@@ -87,13 +118,14 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
           }}
         />
         <span className="text-[10px] text-stone-500 whitespace-nowrap">
-          {facilities.length} total
+          {facilities.length} total · {exactCoordCount} with exact coords
         </span>
       </div>
 
       <ul className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
         {pageIndices.map((idx) => {
           const f = facilities[idx];
+          const hasExactCoords = hasExactHealthFacilityCoords(f);
           return (
             <li
               key={f.id || idx}
@@ -107,6 +139,17 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
               >
                 <X size={14} aria-hidden />
               </button>
+              <div className="mb-2 pr-8">
+                <span
+                  className={`inline-flex rounded px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
+                    hasExactCoords
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-amber-50 text-amber-700"
+                  }`}
+                >
+                  {hasExactCoords ? "Exact map location" : "Approximate map location"}
+                </span>
+              </div>
               <div className="grid gap-2 pr-8 sm:grid-cols-2">
                 {HEALTH_FACILITY_COLUMNS.map((col) => (
                   <div key={col.key} className="space-y-0.5">
@@ -117,6 +160,23 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
                       className="w-full rounded border border-stone-200 p-2 text-xs"
                       value={f[col.key] ?? ""}
                       onChange={(e) => patchFacility(idx, col.key, e.target.value)}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 grid gap-2 pr-8 sm:grid-cols-2">
+                {HEALTH_FACILITY_COORD_FIELDS.map((field) => (
+                  <div key={field.key} className="space-y-0.5">
+                    <label className="text-[9px] font-bold uppercase text-stone-400">
+                      {field.label}
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      className="w-full rounded border border-stone-200 p-2 text-xs font-mono"
+                      value={f[field.key] ?? ""}
+                      placeholder={field.placeholder}
+                      onChange={(e) => patchFacilityCoord(idx, field.key, e.target.value)}
                     />
                   </div>
                 ))}

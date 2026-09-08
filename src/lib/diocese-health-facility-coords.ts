@@ -1,5 +1,8 @@
 import type { DioceseMapMarker } from "@/lib/diocese-map-defaults";
-import type { DioceseHealthFacility } from "@/lib/diocese-health-facilities";
+import {
+  hasExactHealthFacilityCoords,
+  type DioceseHealthFacility,
+} from "@/lib/diocese-health-facilities";
 
 /** Excel / CMS diocese labels → diocese marker id */
 const DIOCESE_ALIASES: Record<string, string> = {
@@ -43,6 +46,7 @@ function resolveDioceseId(label: string): string | null {
 export type HealthFacilityMapPoint = DioceseHealthFacility & {
   lat: number;
   lng: number;
+  exactCoords: boolean;
 };
 
 export function resolveHealthFacilityCoordinates(
@@ -87,7 +91,12 @@ export function buildHealthFacilityMapPoints(
     const coords = resolveHealthFacilityCoordinates(facility, dioceses, indexInSector);
     if (!coords) continue;
 
-    points.push({ ...facility, lat: coords.lat, lng: coords.lng });
+    points.push({
+      ...facility,
+      lat: coords.lat,
+      lng: coords.lng,
+      exactCoords: hasExactHealthFacilityCoords(facility),
+    });
   }
 
   return points;
@@ -96,16 +105,25 @@ export function buildHealthFacilityMapPoints(
 export function healthFacilityMarkerStyle(facility: DioceseHealthFacility): {
   fillColor: string;
   radius: number;
+  weight: number;
+  dashArray: string | null;
 } {
   const type = facility.facility_type.toLowerCase();
   const radius = type.includes("hospital") || type.includes("district") ? 9 : 7;
   const responsible = facility.responsible.toLowerCase();
+  const exactCoords = hasExactHealthFacilityCoords(facility);
 
+  let fillColor = "#911313";
   if (responsible.includes("catholic")) {
-    return { fillColor: "#1d6f42", radius };
+    fillColor = "#1d6f42";
+  } else if (responsible.includes("public")) {
+    fillColor = "#2563eb";
   }
-  if (responsible.includes("public")) {
-    return { fillColor: "#2563eb", radius };
-  }
-  return { fillColor: "#911313", radius };
+
+  return {
+    fillColor,
+    radius,
+    weight: exactCoords ? 2.5 : 1.5,
+    dashArray: exactCoords ? null : "4 3",
+  };
 }

@@ -19,6 +19,17 @@ export const HEALTH_FACILITY_COLUMNS = [
   { key: "responsible", label: "Responsible institution" },
 ] as const;
 
+export const HEALTH_FACILITY_COORD_FIELDS = [
+  { key: "lat", label: "Latitude", placeholder: "e.g. -1.9441" },
+  { key: "lng", label: "Longitude", placeholder: "e.g. 30.0619" },
+] as const;
+
+function parseCoord(value: unknown): number | undefined {
+  if (value === "" || value === null || value === undefined) return undefined;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : undefined;
+}
+
 function normalizeResponsible(value: string): string {
   const trimmed = value.trim();
   if (trimmed.toLowerCase() === "catolic") return "Catholic";
@@ -43,8 +54,8 @@ export function normalizeHealthFacilities(raw: unknown): DioceseHealthFacility[]
       const responsible = normalizeResponsible(
         typeof r.responsible === "string" ? r.responsible : "",
       );
-      const lat = Number.isFinite(Number(r.lat)) ? Number(r.lat) : undefined;
-      const lng = Number.isFinite(Number(r.lng)) ? Number(r.lng) : undefined;
+      const lat = parseCoord(r.lat);
+      const lng = parseCoord(r.lng);
       const id =
         typeof r.id === "string" && r.id.trim()
           ? r.id.trim()
@@ -58,10 +69,15 @@ export function normalizeHealthFacilities(raw: unknown): DioceseHealthFacility[]
         name,
         facility_type: facilityType,
         responsible,
-        ...(lat !== undefined && lng !== undefined ? { lat, lng } : {}),
+        ...(lat !== undefined ? { lat } : {}),
+        ...(lng !== undefined ? { lng } : {}),
       };
     })
     .filter((row): row is DioceseHealthFacility => row !== null);
+}
+
+export function hasExactHealthFacilityCoords(facility: DioceseHealthFacility): boolean {
+  return Number.isFinite(facility.lat) && Number.isFinite(facility.lng);
 }
 
 export function uniqueSorted(values: string[]): string[] {

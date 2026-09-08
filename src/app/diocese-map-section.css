@@ -246,6 +246,18 @@
     margin-bottom: 8px;
 }
 
+.diocese-health-legend__note {
+    flex-basis: 100%;
+    font-size: 0.68rem;
+    color: #9ca3af;
+}
+
+.diocese-health-approx-note {
+    color: #9ca3af;
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+
 .diocese-list {
     list-style: none;
     display: flex;
