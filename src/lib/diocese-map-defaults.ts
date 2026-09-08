@@ -1,5 +1,12 @@
 /** CMS + defaults for `diocese_map_section` (reference: `index.html` Leaflet block). */
 
+import {
+  normalizeHealthFacilities,
+  type DioceseHealthFacility,
+} from "@/lib/diocese-health-facilities";
+
+export type { DioceseHealthFacility };
+
 export type DioceseMapMarker = {
   /** Stable key for selection + markers */
   id: string;
@@ -28,6 +35,12 @@ export type DioceseMapSectionContent = {
   map_zoom: number;
   empty_hint: string;
   select_label: string;
+  map_tab_label: string;
+  health_tab_label: string;
+  health_description: string;
+  health_select_label: string;
+  health_empty_hint: string;
+  health_facilities: DioceseHealthFacility[];
   dioceses: DioceseMapMarker[];
 };
 
@@ -44,6 +57,13 @@ export const DEFAULT_DIOCESE_MAP_SECTION_CONTENT: DioceseMapSectionContent = {
   map_zoom: 8,
   empty_hint: "Click a marker on the map or select a diocese from the list",
   select_label: "Select a Caritas",
+  map_tab_label: "Diocesan Caritas",
+  health_tab_label: "Health Facilities",
+  health_description:
+    "Catholic-based health facilities across Rwanda’s dioceses — hospitals and health centres serving communities nationwide.",
+  health_select_label: "Select a health facility",
+  health_empty_hint: "Click a marker on the map or select a facility from the list",
+  health_facilities: [],
   dioceses: [
     {
       id: "kigali",
@@ -211,6 +231,21 @@ export function normalizeDioceseMapContent(
     map_zoom: Number.isFinite(Number(raw.map_zoom)) ? Number(raw.map_zoom) : base.map_zoom,
     empty_hint: typeof raw.empty_hint === "string" ? raw.empty_hint : base.empty_hint,
     select_label: typeof raw.select_label === "string" ? raw.select_label : base.select_label,
+    map_tab_label:
+      typeof raw.map_tab_label === "string" ? raw.map_tab_label : base.map_tab_label,
+    health_tab_label:
+      typeof raw.health_tab_label === "string" ? raw.health_tab_label : base.health_tab_label,
+    health_description:
+      typeof raw.health_description === "string"
+        ? raw.health_description
+        : base.health_description,
+    health_select_label:
+      typeof raw.health_select_label === "string"
+        ? raw.health_select_label
+        : base.health_select_label,
+    health_empty_hint:
+      typeof raw.health_empty_hint === "string" ? raw.health_empty_hint : base.health_empty_hint,
+    health_facilities: normalizeHealthFacilities(raw.health_facilities),
     dioceses,
   };
 }

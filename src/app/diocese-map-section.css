@@ -8,13 +8,13 @@
 
 
 .diocese-map-header {
-    text-align: center;
-    max-width: 800px;
+    text-align: left;
+    max-width: 1400px;
     margin: 0 auto 3rem;
 }
 
 .diocese-map-inner {
-    max-width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
     position: relative;
     z-index: 2;
@@ -63,7 +63,7 @@
 .diocese-map-eyebrow {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
     font-size: 0.68rem;
     font-weight: 700;
@@ -94,6 +94,156 @@
     color: #6b7280;
     line-height: 1.75;
     margin-top: 0.8rem;
+}
+
+.diocese-network-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    padding: 0.35rem;
+    background: #f3f4f6;
+    border-radius: 12px;
+    border: 1px solid #e8e4df;
+}
+
+.diocese-network-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.1rem;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #6b7280;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.diocese-network-tab i {
+    color: #9ca3af;
+    font-size: 0.78rem;
+}
+
+.diocese-network-tab:hover {
+    color: #374151;
+}
+
+.diocese-network-tab.is-active {
+    background: #ffffff;
+    color: #911313;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.diocese-network-tab.is-active i {
+    color: #911313;
+}
+
+.diocese-map-inner--health {
+    width: 100%;
+}
+
+.diocese-health-sidebar-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.diocese-health-sidebar-filters__input,
+.diocese-health-sidebar-filters__select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #e8e4df;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: #374151;
+    background: #ffffff;
+}
+
+.diocese-health-sidebar-count {
+    font-size: 0.72rem;
+    color: #9ca3af;
+    margin: 0.25rem 0 0;
+}
+
+.diocese-list--health {
+    max-height: 420px;
+}
+
+.diocese-health-type-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.diocese-health-list-type {
+    display: block;
+    font-size: 0.62rem !important;
+    color: #6b7280 !important;
+    margin-top: 2px;
+}
+
+.diocese-health-sidebar-empty {
+    list-style: none;
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: #9ca3af;
+}
+
+.diocese-health-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.65rem;
+    font-size: 0.72rem;
+    color: #6b7280;
+}
+
+.diocese-health-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.diocese-health-legend i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.diocese-health-info-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.map-center-card--health {
+    width: 300px;
+}
+
+.lp-body--health {
+    padding-top: 18px;
+}
+
+.lp-health-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #911313;
+    background: #fde8e8;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-bottom: 8px;
 }
 
 .diocese-list {

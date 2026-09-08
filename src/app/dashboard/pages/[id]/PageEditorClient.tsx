@@ -29,6 +29,8 @@ import { Badge } from '@/components/ui/Badge';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Modal } from '@/components/ui/Modal';
 import { MediaPicker } from '@/components/dashboard/MediaPicker';
+import { DioceseHealthFacilitiesEditor } from '@/components/dashboard/DioceseHealthFacilitiesEditor';
+import { normalizeHealthFacilities } from '@/lib/diocese-health-facilities';
 import { createClient } from '@/lib/supabase/client';
 import { SECTION_ICONS, SECTION_LABELS, DEFAULT_SECTION_CONTENT } from '@/lib/constants';
 import { PROGRAM_SLOT_TITLES, ensureProgramCardSlots, hydrateProgramCardsContent, type ProgramCardItem } from '@/lib/program-cards-defaults';
@@ -5813,6 +5815,21 @@ function SectionForm({
           {renderField('Anchor id', 'anchor_id', 'text')}
           {renderField('Empty selection hint', 'empty_hint', 'text')}
           {renderField('Sidebar select label', 'select_label', 'text')}
+          <p className="text-[10px] font-bold uppercase text-stone-400 pt-2 border-t border-stone-100">
+            Health facilities tab
+          </p>
+          {renderField('Map tab label', 'map_tab_label', 'text')}
+          {renderField('Health tab label', 'health_tab_label', 'text')}
+          {renderField('Health tab description', 'health_description', 'textarea', { rows: 3 })}
+          {renderField('Health sidebar label', 'health_select_label', 'text')}
+          {renderField('Health empty selection hint', 'health_empty_hint', 'text')}
+          <DioceseHealthFacilitiesEditor
+            facilities={normalizeHealthFacilities(state.health_facilities)}
+            onChange={(list) => onChange('health_facilities', list)}
+          />
+          <p className="text-[10px] font-bold uppercase text-stone-400 pt-2 border-t border-stone-100">
+            Map settings
+          </p>
           <div className="grid grid-cols-3 gap-2">
             <div className="space-y-1">
               <label className="text-[10px] font-bold uppercase text-stone-400">Map center lat</label>

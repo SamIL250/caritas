@@ -633,7 +633,7 @@ export const SECTION_LABELS: Record<string, string> = {
   pillar_cards: "Vision & mission",
   values_grid: "Core values",
   network_section: "Network & dioceses",
-  diocese_map_section: "Diocese network map",
+  diocese_map_section: "Diocese network map & health facilities",
   leadership_grid: "Leadership chronicle (timeline)",
   news_article_feed: "Article listing",
   publications_library: "Publications library",
