@@ -100,55 +100,72 @@
     color: #911313;
 }
 .diocese-map-desc {
-    font-size: 0.86rem;
-    color: #6b7280;
-    line-height: 1.75;
-    margin-top: 0.8rem;
+    max-width: 820px;
+    font-size: clamp(1rem, 1.2vw, 1.08rem);
+    color: #596273;
+    line-height: 1.7;
+    margin-top: 1rem;
 }
 
 .diocese-network-tabs {
     display: inline-flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1.75rem;
-    padding: 0.35rem;
-    background: #f3f4f6;
-    border-radius: 12px;
-    border: 1px solid #e8e4df;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    padding: 0.45rem;
+    background: #f1f2f4;
+    border-radius: 14px;
+    border: 1px solid #dfe2e6;
+    box-shadow: 0 4px 14px rgba(31, 41, 55, 0.06);
 }
 
 .diocese-network-tab {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 1.1rem;
-    border: none;
-    border-radius: 9px;
+    gap: 0.65rem;
+    padding: 0.82rem 1.35rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
     background: transparent;
     color: #6b7280;
-    font-size: 0.82rem;
-    font-weight: 700;
+    font-size: clamp(0.95rem, 1vw, 1.05rem);
+    font-weight: 800;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .diocese-network-tab i {
     color: #9ca3af;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
 }
 
 .diocese-network-tab:hover {
-    color: #374151;
+    color: #911313;
+    background: rgba(255, 255, 255, 0.65);
 }
 
 .diocese-network-tab.is-active {
     background: #ffffff;
     color: #911313;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-color: rgba(145, 19, 19, 0.18);
+    box-shadow: 0 3px 10px rgba(31, 41, 55, 0.09);
 }
 
 .diocese-network-tab.is-active i {
     color: #911313;
+}
+
+@media (max-width: 560px) {
+    .diocese-network-tabs {
+        display: flex;
+        width: 100%;
+    }
+
+    .diocese-network-tab {
+        flex: 1;
+        justify-content: center;
+        padding-inline: 0.75rem;
+    }
 }
 
 .diocese-map-inner--health {
