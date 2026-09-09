@@ -8,6 +8,10 @@ import AboutSectionNav from "@/components/website/about/AboutSectionNav";
 import { useLenisResize } from "@/components/website/motion/useLenisResize";
 import { ABOUT_SECTION_NAV, hrefToAboutAnchor } from "@/lib/about-section-nav";
 
+// Keep the in-page explorer available for a future re-enable without deleting it.
+// About sections are currently opened from the site header's About Us dropdown.
+const SHOW_IN_PAGE_ABOUT_NAV = false;
+
 type QuickNavItem = {
   label: string;
   href: string;
@@ -54,8 +58,11 @@ export default function AboutPageSwitcher({
       ),
     [panels],
   );
+  const defaultAnchor = validAnchors.includes("history")
+    ? "history"
+    : validAnchors[0] ?? null;
 
-  const [activeAnchor, setActiveAnchor] = useState<string | null>(null);
+  const [activeAnchor, setActiveAnchor] = useState<string | null>(defaultAnchor);
 
   useLenisResize([activeAnchor]);
 
@@ -83,15 +90,18 @@ export default function AboutPageSwitcher({
       return;
     }
     if (!hashAnchor) {
-      setActiveAnchor(null);
+      setActiveAnchor(defaultAnchor);
     }
-  }, [validAnchors, scrollToPanel]);
+  }, [defaultAnchor, validAnchors, scrollToPanel]);
 
   useEffect(() => {
     if (pathname !== "/about") return;
-    syncFromHash();
+    const frameId = requestAnimationFrame(syncFromHash);
     window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener("hashchange", syncFromHash);
+    };
   }, [pathname, syncFromHash]);
 
   const handleSelect = useCallback(
@@ -111,7 +121,7 @@ export default function AboutPageSwitcher({
     const url = new URL(window.location.href);
     url.hash = "";
     window.history.replaceState(null, "", url.toString());
-    setActiveAnchor(null);
+    setActiveAnchor(defaultAnchor);
 
     if (lenis) {
       lenis.scrollTo(0, { lock: false });
@@ -119,7 +129,7 @@ export default function AboutPageSwitcher({
     }
 
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [lenis]);
+  }, [defaultAnchor, lenis]);
 
   useEffect(() => {
     if (activeAnchor) {
@@ -136,11 +146,13 @@ export default function AboutPageSwitcher({
     <div className="about-page-content">
       <PageHeroSection {...hero} breadcrumbLabel={hero.breadcrumbLabel ?? "About Us"} />
 
-      <AboutSectionNav
-        items={quickNav}
-        activeHref={activeHref}
-        onSelect={handleSelect}
-      />
+      {SHOW_IN_PAGE_ABOUT_NAV ? (
+        <AboutSectionNav
+          items={quickNav}
+          activeHref={activeHref}
+          onSelect={handleSelect}
+        />
+      ) : null}
 
       {activeAnchor && panels[activeAnchor] ? (
         <div className="about-page-section-panel" key={activeAnchor}>

@@ -12,6 +12,10 @@ import {
 } from "@/lib/mission-vision-values";
 import { ABOUT_SECTION_NAV, hrefToAboutAnchor } from "@/lib/about-section-nav";
 
+// Temporarily keep the About-page MVV implementation dormant.
+// Vision, mission, and values now live in the homepage About section.
+const SHOW_ABOUT_MVV_PANELS = false;
+
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
   const { data: page } = await supabase
@@ -161,22 +165,26 @@ export default async function AboutPage() {
         );
         break;
       case "pillar_cards":
-        panels[anchor] = (
-          <MissionVisionValuesSection
-            key={section.id}
-            showValues={false}
-            {...parseMissionVisionContent(section.content)}
-          />
-        );
+        if (SHOW_ABOUT_MVV_PANELS) {
+          panels[anchor] = (
+            <MissionVisionValuesSection
+              key={section.id}
+              showValues={false}
+              {...parseMissionVisionContent(section.content)}
+            />
+          );
+        }
         break;
       case "values_grid":
-        panels[anchor] = (
-          <MissionVisionValuesSection
-            key={section.id}
-            showMissionVision={false}
-            {...parseValuesGridContent(section.content)}
-          />
-        );
+        if (SHOW_ABOUT_MVV_PANELS) {
+          panels[anchor] = (
+            <MissionVisionValuesSection
+              key={section.id}
+              showMissionVision={false}
+              {...parseValuesGridContent(section.content)}
+            />
+          );
+        }
         break;
       case "network_section":
       case "diocese_map_section":
@@ -188,13 +196,13 @@ export default async function AboutPage() {
     }
   }
 
-  if (!panels.mission) {
+  if (SHOW_ABOUT_MVV_PANELS && !panels.mission) {
     panels.mission = (
       <MissionVisionValuesSection key="mission-fallback" showValues={false} />
     );
   }
 
-  if (!panels.values) {
+  if (SHOW_ABOUT_MVV_PANELS && !panels.values) {
     panels.values = (
       <MissionVisionValuesSection key="values-fallback" showMissionVision={false} />
     );

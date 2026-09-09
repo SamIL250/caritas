@@ -41,7 +41,8 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
   }, []);
 
   useEffect(() => {
-    closeNav();
+    const frameId = requestAnimationFrame(closeNav);
+    return () => cancelAnimationFrame(frameId);
   }, [pathname, closeNav]);
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
         tickingRef.current = false;
       });
     };
-    setScrolled(window.scrollY > 20);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -98,7 +99,10 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
     closeNav();
     const anchor = hrefToAboutAnchor(href);
     if (pathname === '/about') {
-      window.location.hash = anchor;
+      const url = new URL(window.location.href);
+      url.hash = anchor;
+      window.history.replaceState(null, '', url);
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
       return;
     }
   };
@@ -187,7 +191,7 @@ export default function WebsiteHeader({ navMegaMenu }: Props) {
                       href={aboutSectionPath(item.href)}
                       className="nav-mega-category"
                       onClick={(e) => {
-                        if (pathname === '/about') {
+                        if (pathname === '/about' && item.href.startsWith('#')) {
                           e.preventDefault();
                           goToAboutSection(item.href);
                         } else {

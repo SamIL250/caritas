@@ -8941,7 +8941,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-hist-card--crimson::before {
-    background: linear-gradient(145deg, rgba(130, 18, 8, 0.72) 0%, rgba(60, 8, 4, 0.52) 100%);
+    background: linear-gradient(145deg, rgba(130, 18, 8, 0.48) 0%, rgba(60, 8, 4, 0.28) 100%);
 }
 
 .about-hist-card--crimson:hover {
@@ -8949,7 +8949,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-hist-card--navy::before {
-    background: linear-gradient(145deg, rgba(5, 18, 48, 0.72) 0%, rgba(8, 28, 68, 0.52) 100%);
+    background: linear-gradient(145deg, rgba(5, 18, 48, 0.48) 0%, rgba(8, 28, 68, 0.28) 100%);
 }
 
 .about-hist-card--navy:hover {
@@ -8957,7 +8957,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-hist-card--light::before {
-    background: linear-gradient(145deg, rgba(20, 8, 8, 0.55) 0%, rgba(0, 0, 0, 0.35) 100%);
+    background: linear-gradient(145deg, rgba(20, 8, 8, 0.38) 0%, rgba(0, 0, 0, 0.18) 100%);
 }
 
 .about-hist-card--light:hover {
@@ -8965,7 +8965,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-hist-card--gold::before {
-    background: linear-gradient(145deg, rgba(80, 44, 0, 0.72) 0%, rgba(50, 28, 0, 0.52) 100%);
+    background: linear-gradient(145deg, rgba(80, 44, 0, 0.48) 0%, rgba(50, 28, 0, 0.28) 100%);
 }
 
 .about-hist-card--gold:hover {
@@ -8978,9 +8978,9 @@ a.diocese-card.diocese-card--special {
     inset: 0;
     z-index: 2;
     background: linear-gradient(to top,
-            rgba(0, 0, 0, 0.88) 0%,
-            rgba(0, 0, 0, 0.45) 45%,
-            rgba(0, 0, 0, 0.05) 100%);
+            rgba(0, 0, 0, 0.68) 0%,
+            rgba(0, 0, 0, 0.26) 45%,
+            rgba(0, 0, 0, 0.02) 100%);
 }
 
 .about-hist-span2 {

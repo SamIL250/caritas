@@ -233,9 +233,9 @@ const FOCUS_ITEMS: Array<{
   title: string;
   Icon: ComponentType<{ size?: number; strokeWidth?: number; 'aria-hidden'?: boolean }>;
 }> = [
+  { key: 'vision', title: 'Our Vision', Icon: Eye },
   { key: 'mission', title: 'Our Mission', Icon: Target },
   { key: 'values', title: 'Our Values', Icon: Heart },
-  { key: 'vision', title: 'Our Vision', Icon: Eye },
 ];
 
 function stripHtml(text: string) {
@@ -470,10 +470,10 @@ export default function AboutSection(props: Record<string, unknown> = {}) {
       : DEFAULT_CONTENT.networkNodes,
   };
 
-  const [activeFocus, setActiveFocus] = useState<FocusKey>('mission');
+  const [activeFocus, setActiveFocus] = useState<FocusKey>('vision');
 
   return (
-    <section className="cr-home-about">
+    <section className="cr-home-about" id="about-us">
       <div className="cr-about-inner">
         <header className="cr-about-header">
           <ScrollReveal delay={0}>

@@ -6,14 +6,9 @@ export const ABOUT_SECTION_NAV = [
     icon: "fa-clock-rotate-left",
   },
   {
-    label: "Vision & Mission",
-    href: "#mission",
+    label: "VISION, MISSION & VALUES",
+    href: "/#about-us",
     icon: "fa-bullseye",
-  },
-  {
-    label: "Our Values",
-    href: "#values",
-    icon: "fa-star",
   },
   {
     label: "Our Network",
@@ -28,6 +23,7 @@ export const ABOUT_SECTION_NAV = [
 ] as const;
 
 export function aboutSectionPath(href: string): string {
+  if (href.startsWith("/")) return href;
   return href.startsWith("#") ? `/about${href}` : `/about#${href}`;
 }
 

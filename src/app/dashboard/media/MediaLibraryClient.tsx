@@ -19,6 +19,7 @@ import {
   FileText,
   FolderPlus,
   Folder as FolderIcon,
+  Eye,
   ImageIcon,
   Loader2,
   MoreHorizontal,
@@ -28,6 +29,7 @@ import {
   Eraser,
   Pencil,
   ChevronLeft,
+  X,
 } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
 import { Button } from "@/components/ui/Button";
@@ -311,6 +313,7 @@ function DraggableFileCard({
   onOpenMenu,
   copiedId,
   onCopy,
+  onPreview,
 }: {
   item: MediaRow;
   trashMode: boolean;
@@ -319,6 +322,7 @@ function DraggableFileCard({
   onOpenMenu: (e: React.MouseEvent<HTMLElement>, item: MediaRow) => void;
   copiedId: string | null;
   onCopy: () => void;
+  onPreview: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: dragFileId(item.id),
@@ -354,6 +358,22 @@ function DraggableFileCard({
 
         <div className="pointer-events-none absolute inset-0 bg-black/55 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
           <div className="flex h-full items-center justify-center gap-2">
+            {item.mime_type?.startsWith("image/") ? (
+              <button
+                type="button"
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onPreview();
+                }}
+                className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-700 hover:text-[var(--color-primary)]"
+                title="Preview image"
+                aria-label={`Preview ${item.filename}`}
+              >
+                <Eye size={18} aria-hidden />
+              </button>
+            ) : null}
             <button
               type="button"
               onPointerDown={(e) => e.stopPropagation()}
@@ -399,6 +419,69 @@ function DraggableFileCard({
       </div>
       </div>
     </div>
+  );
+}
+
+function MediaImagePreview({
+  item,
+  onClose,
+}: {
+  item: MediaRow | null;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    if (!item) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [item, onClose]);
+
+  if (!item || typeof document === "undefined") return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[999999] flex items-center justify-center bg-stone-950/90 p-4 sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Preview ${item.filename}`}
+    >
+      <button
+        type="button"
+        className="absolute inset-0 cursor-zoom-out"
+        onClick={onClose}
+        aria-label="Close image preview"
+      />
+      <div className="relative z-10 flex max-h-full max-w-full flex-col items-center">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-2 top-2 z-20 flex size-10 items-center justify-center rounded-full bg-black/65 text-white transition-colors hover:bg-black"
+          aria-label="Close image preview"
+        >
+          <X size={20} aria-hidden />
+        </button>
+        {/* eslint-disable-next-line @next/next/no-img-element -- full-resolution CMS preview */}
+        <img
+          src={item.url}
+          alt={item.caption?.trim() || item.filename}
+          className="max-h-[82vh] max-w-[92vw] rounded-xl object-contain shadow-2xl"
+        />
+        <div className="mt-3 max-w-[92vw] rounded-lg bg-black/60 px-4 py-2 text-center text-white">
+          <p className="text-sm font-semibold">{item.filename}</p>
+          {item.caption?.trim() ? (
+            <p className="mt-1 text-xs text-white/75">{item.caption}</p>
+          ) : null}
+        </div>
+      </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -486,11 +569,13 @@ export default function MediaLibraryClient({
   const [pendingImageUploads, setPendingImageUploads] = useState<File[]>([]);
   const [pendingOtherUploads, setPendingOtherUploads] = useState<File[]>([]);
   const [captionEditItem, setCaptionEditItem] = useState<MediaRow | null>(null);
+  const [previewItem, setPreviewItem] = useState<MediaRow | null>(null);
   const [page, setPage] = useState(1);
   const [sortField, setSortField] = useState<MediaSortField>("updated_at");
   const [sortDirection, setSortDirection] = useState<MediaSortDirection>("desc");
 
   const ctxMenuRef = useRef<HTMLDivElement | null>(null);
+  const closePreview = useCallback(() => setPreviewItem(null), []);
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -575,19 +660,17 @@ export default function MediaLibraryClient({
   );
 
   const totalPages = Math.max(1, Math.ceil(sortedItems.length / MEDIA_PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
 
   const paginatedItems = useMemo(() => {
-    const start = (page - 1) * MEDIA_PAGE_SIZE;
+    const start = (currentPage - 1) * MEDIA_PAGE_SIZE;
     return sortedItems.slice(start, start + MEDIA_PAGE_SIZE);
-  }, [sortedItems, page]);
+  }, [sortedItems, currentPage]);
 
   useEffect(() => {
-    setPage(1);
+    const frameId = requestAnimationFrame(() => setPage(1));
+    return () => cancelAnimationFrame(frameId);
   }, [currentFolderId, trashMode, sortField, sortDirection]);
-
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || []);
@@ -869,7 +952,7 @@ export default function MediaLibraryClient({
                   ))}
                 </div>
                 <MediaPaginationBar
-                  page={page}
+                  page={currentPage}
                   totalPages={totalPages}
                   totalItems={sortedItems.length}
                   pageSize={MEDIA_PAGE_SIZE}
@@ -929,11 +1012,12 @@ export default function MediaLibraryClient({
                       }}
                       onCtx={openCtxFile}
                       onOpenMenu={openCtxFileMenu}
+                      onPreview={() => setPreviewItem(item)}
                     />
                     ))}
                   </div>
                   <MediaPaginationBar
-                    page={page}
+                    page={currentPage}
                     totalPages={totalPages}
                     totalItems={sortedItems.length}
                     pageSize={MEDIA_PAGE_SIZE}
@@ -952,6 +1036,8 @@ export default function MediaLibraryClient({
           {formatBytes(usage.usedBytes)} / {formatBytes(usage.maxBytes)} used
         </span>
       </div>
+
+      <MediaImagePreview item={previewItem} onClose={closePreview} />
 
       {ctxMenu && typeof document !== "undefined"
         ? createPortal(
@@ -1001,6 +1087,18 @@ export default function MediaLibraryClient({
                 </>
               ) : (
                 <>
+                  {(ctxMenu.target as MediaRow).mime_type?.startsWith("image/") ? (
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
+                      onClick={() => {
+                        setPreviewItem(ctxMenu.target as MediaRow);
+                        setCtxMenu(null);
+                      }}
+                    >
+                      <Eye size={16} aria-hidden /> Preview
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-stone-50"
