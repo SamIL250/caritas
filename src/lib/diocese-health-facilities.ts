@@ -1,5 +1,27 @@
+export const HEALTH_FACILITY_CATEGORIES = [
+  {
+    value: "specialized_hospital",
+    label: "Specialized Hospitals",
+    singularLabel: "Specialized Hospital",
+  },
+  {
+    value: "district_hospital",
+    label: "District Hospitals",
+    singularLabel: "District Hospital",
+  },
+  {
+    value: "health_center",
+    label: "Health Centers",
+    singularLabel: "Health Center",
+  },
+] as const;
+
+export type HealthFacilityCategory =
+  (typeof HEALTH_FACILITY_CATEGORIES)[number]["value"];
+
 export type DioceseHealthFacility = {
   id: string;
+  category: HealthFacilityCategory;
   diocese: string;
   district: string;
   sector: string;
@@ -36,6 +58,42 @@ function normalizeResponsible(value: string): string {
   return trimmed;
 }
 
+export function inferHealthFacilityCategory(
+  facilityType: string,
+): HealthFacilityCategory {
+  const normalized = facilityType.trim().toLowerCase();
+  if (
+    normalized.includes("specialized") ||
+    normalized.includes("teaching") ||
+    normalized.includes("eye unit")
+  ) {
+    return "specialized_hospital";
+  }
+  if (
+    normalized.includes("district hospital") ||
+    normalized === "hospital" ||
+    normalized.includes("orthopedic centre")
+  ) {
+    return "district_hospital";
+  }
+  return "health_center";
+}
+
+export function isHealthFacilityCategory(
+  value: unknown,
+): value is HealthFacilityCategory {
+  return HEALTH_FACILITY_CATEGORIES.some((category) => category.value === value);
+}
+
+export function healthFacilityCategoryLabel(
+  category: HealthFacilityCategory,
+  singular = false,
+): string {
+  const match = HEALTH_FACILITY_CATEGORIES.find((item) => item.value === category);
+  if (!match) return "Health Center";
+  return singular ? match.singularLabel : match.label;
+}
+
 export function normalizeHealthFacilities(raw: unknown): DioceseHealthFacility[] {
   if (!Array.isArray(raw)) return [];
 
@@ -51,6 +109,9 @@ export function normalizeHealthFacilities(raw: unknown): DioceseHealthFacility[]
       const sector = typeof r.sector === "string" ? r.sector.trim() : "";
       const facilityType =
         typeof r.facility_type === "string" ? r.facility_type.trim() : "";
+      const category = isHealthFacilityCategory(r.category)
+        ? r.category
+        : inferHealthFacilityCategory(facilityType);
       const responsible = normalizeResponsible(
         typeof r.responsible === "string" ? r.responsible : "",
       );
@@ -63,6 +124,7 @@ export function normalizeHealthFacilities(raw: unknown): DioceseHealthFacility[]
 
       return {
         id,
+        category,
         diocese,
         district,
         sector,

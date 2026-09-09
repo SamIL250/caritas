@@ -40,7 +40,24 @@ function hashString(value: string): number {
 function resolveDioceseId(label: string): string | null {
   const key = label.trim().toLowerCase();
   if (!key) return null;
-  return DIOCESE_ALIASES[key] ?? null;
+  const exact = DIOCESE_ALIASES[key];
+  if (exact) return exact;
+
+  for (const id of [
+    "kigali",
+    "kabgayi",
+    "butare",
+    "byumba",
+    "cyangugu",
+    "gikongoro",
+    "kibungo",
+    "nyundo",
+    "ruhengeri",
+  ]) {
+    if (key.includes(id)) return id;
+  }
+  if (key.includes("cyangungu")) return "cyangugu";
+  return null;
 }
 
 export type HealthFacilityMapPoint = DioceseHealthFacility & {
@@ -110,14 +127,23 @@ export function healthFacilityMarkerStyle(facility: DioceseHealthFacility): {
 } {
   const type = facility.facility_type.toLowerCase();
   const radius = type.includes("hospital") || type.includes("district") ? 9 : 7;
-  const responsible = facility.responsible.toLowerCase();
   const exactCoords = hasExactHealthFacilityCoords(facility);
 
-  let fillColor = "#911313";
-  if (responsible.includes("catholic")) {
-    fillColor = "#1d6f42";
-  } else if (responsible.includes("public")) {
-    fillColor = "#2563eb";
+  let fillColor: string;
+  switch (facility.category) {
+    case "specialized_hospital":
+      fillColor = "#6d28d9";
+      break;
+    case "district_hospital":
+      fillColor = "#a31616";
+      break;
+    case "health_center":
+      fillColor = "#1d6f42";
+      break;
+    default: {
+      const exhaustiveCategory: never = facility.category;
+      return exhaustiveCategory;
+    }
   }
 
   return {

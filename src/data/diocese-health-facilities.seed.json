@@ -1,4880 +1,1212 @@
 [
   {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Nyamata",
-    "name": "Nyamata",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-nyamata-nyamata-1a21ca"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Gashora",
-    "name": "Gashora",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-gashora-gashora-e37936"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Juru",
-    "name": "Juru",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-juru-juru-e44a29"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Kamabuye",
-    "name": "Kamabuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-kamabuye-kamabuye-56b424"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Mareba",
-    "name": "Mareba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-mareba-mareba-19baf1"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Mayange",
-    "name": "Mayange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-mayange-mayange-bd65e4"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Musenyi",
-    "name": "Gakurazo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-musenyi-gakurazo-75236f"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Mwogo",
-    "name": "Mwogo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-mwogo-mwogo-7af1f6"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Ngeruka",
-    "name": "Ngeruka",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-ngeruka-ngeruka-025cdb"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Ntarama",
-    "name": "Ntarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-ntarama-ntarama-0afa4d"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Nyamata",
-    "name": "Nyamata",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-nyamata-nyamata-8b386f"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Nyarugenge",
-    "name": "Nyarugenge",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-nyarugenge-nyarugenge-72f654"
-  },
-  {
-    "diocese": "Bugesera",
-    "district": "Bugesera",
-    "sector": "Rilima",
-    "name": "Prison Rilima",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "bugesera-bugesera-rilima-prison-rilima-0d63c2"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
+    "id": "rilima-35fee58c",
+    "category": "specialized_hospital",
+    "diocese": "Kigali",
     "district": "Bugesera",
     "sector": "Rilima",
     "name": "Rilima",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-bugesera-rilima-rilima-838e48"
+    "facility_type": "Pediatric Orthopedic specialized Hospital",
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Bugesera",
-    "sector": "Ruhuha",
-    "name": "Ruhuha",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-bugesera-ruhuha-ruhuha-35e018"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Bugesera",
-    "sector": "Rweru",
-    "name": "Nzangwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-bugesera-rweru-nzangwa-e6458c"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Bugesera",
-    "sector": "Shyara",
-    "name": "Gihinga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-bugesera-shyara-gihinga-0ccbf0"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Bugesera",
-    "sector": "Rilima",
-    "name": "Rilima",
-    "facility_type": "Centre Orthopedic de Rilima",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-bugesera-rilima-rilima-f84e83"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Gikondo",
-    "name": "Gikondo",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-kicukiro-gikondo-gikondo-de2b6d"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Kanombe",
-    "name": "Busanza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kicukiro-kanombe-busanza-b3d798"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Kanombe",
-    "name": "Kairos",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kicukiro-kanombe-kairos-2f729c"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Kicukiro",
-    "name": "Bethsaida",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kicukiro-kicukiro-bethsaida-998c30"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Masaka",
-    "name": "Kabuga",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-kicukiro-masaka-kabuga-58d3d2"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Masaka",
-    "name": "Masaka",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-kicukiro-masaka-masaka-7acbb9"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kicukiro",
-    "sector": "Niboye",
-    "name": "Kicukiro",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-kicukiro-niboye-kicukiro-965968"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Kimisagara",
-    "name": "Cor-unum",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-nyarugenge-kimisagara-cor-unum-4d36c0"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Mageragere",
-    "name": "Butamwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-nyarugenge-mageragere-butamwa-db8ac5"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Mageragere",
-    "name": "Nyarurenzi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-nyarugenge-mageragere-nyarurenzi-392ec9"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Muhima",
-    "name": "Muhima",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-nyarugenge-muhima-muhima-49c76e"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Nyakabanda",
-    "name": "Kabusunzu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-nyarugenge-nyakabanda-kabusunzu-381abe"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Nyamirambo",
-    "name": "Rugarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-nyarugenge-nyamirambo-rugarama-457e4b"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Nyarugenge",
-    "sector": "Nyarugenge",
-    "name": "Biryogo",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-nyarugenge-nyarugenge-biryogo-40e577"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
+    "id": "caraes-ndera-218f019f",
+    "category": "specialized_hospital",
+    "diocese": "Kigali",
     "district": "Gasabo",
     "sector": "Ndera",
     "name": "Caraes Ndera",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-gasabo-ndera-caraes-ndera-9187e1"
+    "facility_type": "Neuropsychiatric Teaching Hospital",
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Gasabo",
-    "sector": "Ndera",
-    "name": "Rubungo",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-gasabo-ndera-rubungo-e2f392"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
+    "id": "ruli-a7f98f2e",
+    "category": "district_hospital",
+    "diocese": "Kigali",
     "district": "Gakenke",
     "sector": "Ruli",
     "name": "Ruli",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-gakenke-ruli-ruli-b75696"
+    "facility_type": "District Hospital",
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Gakenke",
-    "sector": "Nyange",
-    "name": "Nyange-Munanira",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-gakenke-nyange-nyange-munanira-461a65"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Gakenke",
-    "sector": "Ruli",
-    "name": "Ruli",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-gakenke-ruli-ruli-f9db72"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Gakenke",
-    "sector": "Rushashi",
-    "name": "Rwankuba",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-gakenke-rushashi-rwankuba-b51483"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Rulindo",
-    "sector": "Rusiga",
-    "name": "Kinini",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-rulindo-rusiga-kinini-bada4d"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Rulindo",
-    "sector": "Shyorongi",
-    "name": "Rutonde",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-rulindo-shyorongi-rutonde-f80ac4"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Rulindo",
-    "sector": "Shyorongi",
-    "name": "Shyorongi",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "archidiocese-de-kigali-rulindo-shyorongi-shyorongi-8347a7"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Gatsibo",
-    "sector": "Ngarama",
-    "name": "Ngarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-gatsibo-ngarama-ngarama-f79dc8"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Gatsibo",
-    "sector": "Nyagihanga",
-    "name": "Nyagihanga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-gatsibo-nyagihanga-nyagihanga-7d1814"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Gahini",
-    "name": "Gahini",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-gahini-gahini-d16924"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Gahini",
-    "name": "Gahini",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-gahini-gahini-f2d642"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Mukarange",
-    "name": "Mukarange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-mukarange-mukarange-eb9603"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Mukarange",
-    "name": "Rutare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-mukarange-rutare-62fd5c"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Murundi",
-    "name": "Buhabwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-murundi-buhabwa-f868d5"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Murundi",
-    "name": "Ryamanyoni",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-murundi-ryamanyoni-b4c2df"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Mwiri",
-    "name": "Kageyo I",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-mwiri-kageyo-i-ca0a06"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "Kayonza",
-    "sector": "Mwiri",
-    "name": "Nyakabungo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "archidiocese-de-kigali-kayonza-mwiri-nyakabungo-2e8bf1"
-  },
-  {
-    "diocese": "Archidiocese de Kigali",
-    "district": "",
-    "sector": "",
-    "name": "18",
-    "facility_type": "",
-    "responsible": "",
-    "id": "archidiocese-de-kigali-18-2138ca"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Rukara",
-    "name": "Rukara",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-kibungo-kayonza-rukara-rukara-771c96"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Rukara",
-    "name": "Rwinkwavu",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-rukara-rwinkwavu-9a1e6f"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Kabare",
-    "name": "Cyarubare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-kabare-cyarubare-65ecb2"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Kabarondo",
-    "name": "Kabarondo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-kabarondo-kabarondo-fe94c4"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Murama",
-    "name": "Karama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-murama-karama-e3ac73"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Ndego",
-    "name": "Ndego",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-ndego-ndego-ebb0cb"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Nyamirama",
-    "name": "Nyamirama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-nyamirama-nyamirama-a02127"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Ruramira",
-    "name": "Ruramira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-ruramira-ruramira-684f59"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kayonza",
-    "sector": "Rwinkwavu",
-    "name": "Rwinkwavu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kayonza-rwinkwavu-rwinkwavu-9d6c01"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Kirehe",
-    "name": "Kirehe",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-kirehe-kirehe-0e62cf"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Gahara",
-    "name": "Gahara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-gahara-gahara-813307"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Gahara",
-    "name": "Gashongora",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-gahara-gashongora-be9d20"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Gatore",
-    "name": "Rwantonde",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-gatore-rwantonde-3d1af7"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Kigarama",
-    "name": "Kigarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-kigarama-kigarama-c2d248"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Kirehe",
-    "name": "Kirehe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-kirehe-kirehe-dd880a"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Mahama",
-    "name": "Mahama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-mahama-mahama-9f7b6d"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Mahama",
-    "name": "Mahama Refugee Camp",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-mahama-mahama-refugee-camp-347670"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Mpanga",
-    "name": "Kabuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-mpanga-kabuye-338d80"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Mpanga",
-    "name": "Nasho",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-mpanga-nasho-e5ca90"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Musaza",
-    "name": "Musaza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-musaza-musaza-63d949"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Mushikiri",
-    "name": "Mushikiri",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-mushikiri-mushikiri-1a00b1"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Nasho",
-    "name": "Mulindi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-nasho-mulindi-8971e7"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Nasho",
-    "name": "Ntaruka",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-nasho-ntaruka-467ea3"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Nyamugari",
-    "name": "Bukora",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-nyamugari-bukora-a6520b"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Nyamugari",
-    "name": "Rusumo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-nyamugari-rusumo-9c14f6"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Nyarubuye",
-    "name": "Nyabitare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-nyarubuye-nyabitare-a882d0"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Kirehe",
-    "sector": "Nyarubuye",
-    "name": "Nyarubuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-kirehe-nyarubuye-nyarubuye-f5d41e"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Kibungo",
-    "name": "Kibungo",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-kibungo-kibungo-0e8bfe"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Jarama",
-    "name": "Jarama",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-kibungo-ngoma-jarama-jarama-366a21"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Kibungo",
-    "name": "Kibungo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-kibungo-kibungo-444652"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Kibungo",
-    "name": "Kibungo Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-kibungo-kibungo-prison-3ff9e0"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Mugesera",
-    "name": "Nyange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-mugesera-nyange-b8f878"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Murama",
-    "name": "Rukira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-murama-rukira-b6100b"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Mutenderi",
-    "name": "Mutenderi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-mutenderi-mutenderi-80affc"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Remera",
-    "name": "Remera",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-remera-remera-b779f9"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Rukira",
-    "name": "Gituku",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-kibungo-ngoma-rukira-gituku-c5fb28"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Rukumberi",
-    "name": "Rukumberi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-rukumberi-rukumberi-d9e356"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Rurenge",
-    "name": "Kirwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-rurenge-kirwa-b77c20"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Sake",
-    "name": "Rukoma Sake",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-kibungo-ngoma-sake-rukoma-sake-faddfd"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Zaza",
-    "name": "Sangaza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-ngoma-zaza-sangaza-5b152e"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Ngoma",
-    "sector": "Zaza",
-    "name": "Zaza",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-kibungo-ngoma-zaza-zaza-1f19ba"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Nyagatare",
-    "sector": "Nyagatare",
-    "name": "Nyagatare",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-nyagatare-nyagatare-nyagatare-c18e6b"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Rwamagana",
-    "sector": "Munyaga",
-    "name": "Munyaga",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-kibungo-rwamagana-munyaga-munyaga-fb653a"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Nyagatare",
-    "sector": "Kiyombe",
-    "name": "Cyondo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-nyagatare-kiyombe-cyondo-0075e3"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "Nyagatare",
-    "sector": "Matimba",
-    "name": "Kagitumba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-de-kibungo-nyagatare-matimba-kagitumba-61686a"
-  },
-  {
-    "diocese": "Diocese de Kibungo",
-    "district": "",
-    "sector": "",
-    "name": "6",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-de-kibungo-6-5c68eb"
-  },
-  {
-    "diocese": "Diocese de Byumba",
-    "district": "Rulindo",
-    "sector": "Rukozo",
-    "name": "Rukozo",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-rulindo-rukozo-rukozo-3f90d6"
-  },
-  {
-    "diocese": "Diocese de Byumba",
-    "district": "Rulindo",
-    "sector": "Buyoga",
-    "name": "Muyanza",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-rulindo-buyoga-muyanza-b531f0"
-  },
-  {
-    "diocese": "Diocese de Byumba",
-    "district": "Burera",
-    "sector": "Bungwe",
-    "name": "Bungwe",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-burera-bungwe-bungwe-21d3b9"
-  },
-  {
-    "diocese": "Diocese de Byumba",
-    "district": "Gicumbi",
-    "sector": "Rushaki",
-    "name": "Rushaki",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-gicumbi-rushaki-rushaki-15ba7e"
-  },
-  {
-    "diocese": "Diocese de Byumba",
-    "district": "Gicumbi",
-    "sector": "Rwamiko",
-    "name": "Rwesero",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-gicumbi-rwamiko-rwesero-f14493"
-  },
-  {
-    "diocese": "Diocese de Byumba",
-    "district": "Gatsibo",
-    "sector": "Kiziguro",
-    "name": "Kiziguro",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-gatsibo-kiziguro-kiziguro-38afd2"
-  },
-  {
-    "diocese": "Diocese de Byumba",
+    "id": "kiziguro-47209b12",
+    "category": "district_hospital",
+    "diocese": "Byumba",
     "district": "Gatsibo",
     "sector": "Kiziguro",
     "name": "Kiziguro",
     "facility_type": "District Hospital",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-gatsibo-kiziguro-kiziguro-66cb25"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Byumba",
-    "district": "Gatsibo",
-    "sector": "Muhura",
-    "name": "Muhura",
+    "id": "nemba-74bb6f6a",
+    "category": "district_hospital",
+    "diocese": "Ruhengeri",
+    "district": "Gakenke",
+    "sector": "Nemba",
+    "name": "Nemba",
+    "facility_type": "District Hospital",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "gakoma-e3a29b65",
+    "category": "district_hospital",
+    "diocese": "Butare",
+    "district": "Gisagara",
+    "sector": "Mamba",
+    "name": "Gakoma",
+    "facility_type": "District Hospital",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "kabgayi-e1301706",
+    "category": "specialized_hospital",
+    "diocese": "Kabgayi",
+    "district": "Muhanga",
+    "sector": "Nyamabuye",
+    "name": "Kabgayi",
+    "facility_type": "Kabgayi Level II Teaching Hospital",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "kabgayi-708c294d",
+    "category": "specialized_hospital",
+    "diocese": "Kabgayi",
+    "district": "Muhanga",
+    "sector": "Nyamabuye",
+    "name": "Kabgayi",
+    "facility_type": "Kabgayi Eye Unit (Hospital)",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "gatagara-6fc0ade5",
+    "category": "district_hospital",
+    "diocese": "Kabgayi",
+    "district": "Nyanza",
+    "sector": "Nyanza",
+    "name": "Gatagara",
+    "facility_type": "Orthopedic Centre",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "murunda-3ce297d1",
+    "category": "district_hospital",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
+    "district": "Rutsiro",
+    "sector": "Murunda",
+    "name": "Murunda",
+    "facility_type": "District Hospital",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "mibilizi-6a6cab5c",
+    "category": "district_hospital",
+    "diocese": "Cyangugu",
+    "district": "Rusizi",
+    "sector": "Gashonga",
+    "name": "Mibilizi",
+    "facility_type": "District Hospital",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rilima-0bfac2fb",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Bugesera",
+    "sector": "Rilima",
+    "name": "Rilima",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-gatsibo-muhura-muhura-6bf43e"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Byumba",
-    "district": "Nyagatare",
-    "sector": "Gatunda",
-    "name": "Nyarurema",
+    "id": "ruhuha-e6a25624",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Bugesera",
+    "sector": "Ruhuha",
+    "name": "Ruhuha",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-nyagatare-gatunda-nyarurema-3101e6"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Byumba",
-    "district": "Nyagatare",
-    "sector": "Matimba",
-    "name": "Matimba",
+    "id": "gikondo-47fedae8",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Kicukiro",
+    "sector": "Gikondo",
+    "name": "Gikondo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-byumba-nyagatare-matimba-matimba-37eaf0"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Byumba",
-    "district": "",
-    "sector": "",
-    "name": "10",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-de-byumba-10-60fa26"
-  },
-  {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Burera",
-    "sector": "Butaro",
-    "name": "Butaro",
-    "facility_type": "Butaro HC",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-burera-butaro-butaro-37d394"
-  },
-  {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Burera",
-    "sector": "Cyeru",
-    "name": "Ndongozi",
+    "id": "kabuga-53c82447",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Kicukiro",
+    "sector": "Masaka",
+    "name": "Kabuga",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-burera-cyeru-ndongozi-0769ec"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Burera",
-    "sector": "Kinoni",
-    "name": "Kinoni",
+    "id": "masaka-b098231f",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Kicukiro",
+    "sector": "Masaka",
+    "name": "Masaka",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-burera-kinoni-kinoni-c6ff20"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Burera",
-    "sector": "Kivuye",
-    "name": "Rusasa",
+    "id": "kicukiro-133dbc1c",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Kicukiro",
+    "sector": "Niboye",
+    "name": "Kicukiro",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-burera-kivuye-rusasa-a36ab2"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Musanze",
-    "sector": "Busogo",
-    "name": "Busogo",
+    "id": "cor-unum-a6ca4524",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Nyarugenge",
+    "sector": "Kimisagara",
+    "name": "Cor-unum",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-musanze-busogo-busogo-2d2e82"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Musanze",
-    "sector": "Rwaza",
-    "name": "Rwaza",
+    "id": "biryogo-26f1848f",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Nyarugenge",
+    "sector": "Nyarugenge",
+    "name": "Biryogo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-musanze-rwaza-rwaza-580aec"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "Musanze",
-    "sector": "Nkotsi",
-    "name": "Nyakinama",
+    "id": "rubungo-88f0c7ed",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Gasabo",
+    "sector": "Ndera",
+    "name": "Rubungo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-musanze-nkotsi-nyakinama-d1cf11"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
+    "id": "ruli-f956ea85",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
     "district": "Gakenke",
     "sector": "Ruli",
     "name": "Ruli",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-gakenke-ruli-ruli-0b1031"
+    "facility_type": "District Hospital",
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
+    "id": "nyange-munanira-151c5736",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Gakenke",
+    "sector": "Nyange",
+    "name": "Nyange-Munanira",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "ruli-49b7d727",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
     "district": "Gakenke",
     "sector": "Ruli",
     "name": "Ruli",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-gakenke-ruli-ruli-fce6c9"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
+    "id": "rwankuba-0ecfca00",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
     "district": "Gakenke",
     "sector": "Rushashi",
     "name": "Rwankuba",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-ruhengeri-gakenke-rushashi-rwankuba-9f5d27"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Ruhengeri",
-    "district": "",
-    "sector": "",
-    "name": "10",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-de-ruhengeri-10-da011c"
+    "id": "kinini-8808a436",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Rulindo",
+    "sector": "Rusiga",
+    "name": "Kinini",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Gisagara",
-    "sector": "Mamba",
-    "name": "Gakoma",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-mamba-gakoma-b37dc3"
+    "id": "rutonde-8a171bba",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Rulindo",
+    "sector": "Shyorongi",
+    "name": "Rutonde",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "shyorongi-163cbe80",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Rulindo",
+    "sector": "Shyorongi",
+    "name": "Shyorongi",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "cyinzuzi-125d9421",
+    "category": "health_center",
+    "diocese": "Kigali Archdiocese",
+    "district": "Rulindo",
+    "sector": "Cyinzuzi",
+    "name": "Cyinzuzi",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rukara-ab1a1877",
+    "category": "health_center",
+    "diocese": "Kibungo Diocese",
+    "district": "Kayonza",
+    "sector": "Rukara",
+    "name": "Rukara",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "jarama-66873d17",
+    "category": "health_center",
+    "diocese": "Kibungo Diocese",
+    "district": "Ngoma",
+    "sector": "Jarama",
+    "name": "Jarama",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "gituku-0cde8cb8",
+    "category": "health_center",
+    "diocese": "Kibungo Diocese",
+    "district": "Ngoma",
+    "sector": "Rukira",
+    "name": "Gituku",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rukoma-sake-fd0c7fc4",
+    "category": "health_center",
+    "diocese": "Kibungo Diocese",
+    "district": "Ngoma",
+    "sector": "Sake",
+    "name": "Rukoma Sake",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "zaza-4f88ee3b",
+    "category": "health_center",
+    "diocese": "Kibungo Diocese",
+    "district": "Ngoma",
+    "sector": "Zaza",
+    "name": "Zaza",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "munyaga-382d936b",
+    "category": "health_center",
+    "diocese": "Kibungo Diocese",
+    "district": "Rwamagana",
+    "sector": "Munyaga",
+    "name": "Munyaga",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rukozo-93b60afd",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Rulindo",
+    "sector": "Rukozo",
+    "name": "Rukozo",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "muyanza-34c5831a",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Rulindo",
+    "sector": "Buyoga",
+    "name": "Muyanza",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "bungwe-4d9ae142",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Burera",
+    "sector": "Bungwe",
+    "name": "Bungwe",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rushaki-5861765f",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Gicumbi",
+    "sector": "Rushaki",
+    "name": "Rushaki",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rwesero-5c0a0616",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Gicumbi",
+    "sector": "Rwamiko",
+    "name": "Rwesero",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "kiziguro-c44a52f2",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Gatsibo",
+    "sector": "Kiziguro",
+    "name": "Kiziguro",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "muhura-c439f614",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Gatsibo",
+    "sector": "Muhura",
+    "name": "Muhura",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "nyarurema-b1c25a03",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Nyagatare",
+    "sector": "Gatunda",
+    "name": "Nyarurema",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "matimba-f2c61ecd",
+    "category": "health_center",
+    "diocese": "Byumba Diocese",
+    "district": "Nyagatare",
+    "sector": "Matimba",
+    "name": "Matimba",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "butaro-d118516c",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Burera",
+    "sector": "Butaro",
+    "name": "Butaro",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "ndongozi-3a6de743",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Burera",
+    "sector": "Cyeru",
+    "name": "Ndongozi",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "kinoni-f7ec1b3a",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Burera",
+    "sector": "Kinoni",
+    "name": "Kinoni",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "janja-4649c3c1",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Gakenke",
+    "sector": "Janja",
+    "name": "Janja",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rusasa-4b6481b1",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Burera",
+    "sector": "Kivuye",
+    "name": "Rusasa",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "busogo-a11b97b7",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Musanze",
+    "sector": "Busogo",
+    "name": "Busogo",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rwaza-9ac69b57",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Musanze",
+    "sector": "Rwaza",
+    "name": "Rwaza",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "nyakinama-06383794",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Musanze",
+    "sector": "Nkotsi",
+    "name": "Nyakinama",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "nemba-d548b45f",
+    "category": "health_center",
+    "diocese": "Ruhengeri Diocese",
+    "district": "Gakenke",
+    "sector": "Nemba",
+    "name": "Nemba",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "gikonko-98972363",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Gikonko",
     "name": "Gikonko",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-gikonko-gikonko-1744db"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Nyagatare",
-    "sector": "Rukomo",
-    "name": "Rukomo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyagatare-rukomo-rukomo-88e126"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyagatare",
-    "sector": "Rukomo",
-    "name": "Rurenge",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyagatare-rukomo-rurenge-9e2a90"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyagatare",
-    "sector": "Rwempasha",
-    "name": "Rwempasha",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyagatare-rwempasha-rwempasha-06bd67"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyagatare",
-    "sector": "Rwimiyaga",
-    "name": "Bugaragara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyagatare-rwimiyaga-bugaragara-cd6c31"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyagatare",
-    "sector": "Tabagwe",
-    "name": "Tabagwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyagatare-tabagwe-tabagwe-a3e45a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Kigabiro",
-    "name": "Rwamagana",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-kigabiro-rwamagana-f7da05"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Fumbwe",
-    "name": "Nyagasambu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-fumbwe-nyagasambu-14290f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Gahengeri",
-    "name": "Gahengeri",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-gahengeri-gahengeri-e9d2f1"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Gishali",
-    "name": "Gishari PoLice",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-gishali-gishari-police-3d879f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Gishali",
-    "name": "Ruhunda",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-gishali-ruhunda-448aba"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Karenge",
-    "name": "Karenge",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-karenge-karenge-cac37c"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Kigabiro",
-    "name": "Rwamagana",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-kigabiro-rwamagana-c4f1e5"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Kigabiro",
-    "name": "Avega Rwamagana",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-kigabiro-avega-rwamagana-bd24a3"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Muhazi",
-    "name": "Murambi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-muhazi-murambi-ba1f1e"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Muhazi",
-    "name": "Nsinda Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-muhazi-nsinda-prison-9c101d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Musha",
-    "name": "Musha",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-musha-musha-f181e9"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Muyumbu",
-    "name": "Muyumbu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-muyumbu-muyumbu-93bafa"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Nyakaliro",
-    "name": "Nyakaliro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-nyakaliro-nyakaliro-e24bd1"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Nzige",
-    "name": "Nzige",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-nzige-nzige-a4ebe6"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rwamagana",
-    "sector": "Rubona",
-    "name": "Rubona",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rwamagana-rubona-rubona-b10274"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kimironko",
-    "name": "Kibagabaga",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kimironko-kibagabaga-1fac57"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Gikomero",
-    "name": "Bumbogo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-gikomero-bumbogo-8a531e"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Gikomero",
-    "name": "Gikomero II",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-gikomero-gikomero-ii-e34a7a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Jabana",
-    "name": "Kabuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-jabana-kabuye-6083b3"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Jabana",
-    "name": "Nyacyonga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-jabana-nyacyonga-603d14"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Jali",
-    "name": "Gihogwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-jali-gihogwe-c85801"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Jali",
-    "name": "Jali",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-jali-jali-7d8da7"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kacyiru",
-    "name": "Kacyiru",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kacyiru-kacyiru-f5a930"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kacyiru",
-    "name": "Kacyiru Police Hospital",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kacyiru-kacyiru-police-hospital-89f252"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kacyiru",
-    "name": "King Faisal Hospital",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kacyiru-king-faisal-hospital-8188fb"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kimironko",
-    "name": "Kimironko Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kimironko-kimironko-prison-8457de"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kinyinya",
-    "name": "Kagugu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kinyinya-kagugu-f577b0"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kinyinya",
-    "name": "Kinyinya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kinyinya-kinyinya-b75f09"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Kinyinya",
-    "name": "Rwanda Women's Network",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-kinyinya-rwanda-womens-network-5002f2"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Nduba",
-    "name": "Nduba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-nduba-nduba-3e0387"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Remera",
-    "name": "Avega Kigali",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-remera-avega-kigali-e9fd25"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Remera",
-    "name": "Remera",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-remera-remera-18a68d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Rusororo",
-    "name": "SOLACE MINISTRIES MINISTRIES",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-rusororo-solace-ministries-ministries-fcd586"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gasabo",
-    "sector": "Rutunga",
-    "name": "Kayanga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gasabo-rutunga-kayanga-ec34ec"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kicukiro",
-    "sector": "Masaka",
-    "name": "Masaka",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-kicukiro-masaka-masaka-5f96eb"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kicukiro",
-    "sector": "Gahanga",
-    "name": "Gahanga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kicukiro-gahanga-gahanga-e91368"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kicukiro",
-    "sector": "Gatenga",
-    "name": "Gatenga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kicukiro-gatenga-gatenga-3b7682"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kicukiro",
-    "sector": "Nyarugunga",
-    "name": "Kanombe Military Hospital",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-kicukiro-nyarugunga-kanombe-military-hospital-b9f8b7"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kicukiro",
-    "sector": "Nyarugunga",
-    "name": "Nyarugunga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kicukiro-nyarugunga-nyarugunga-20007d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyarugenge",
-    "sector": "Muhima",
-    "name": "Muhima",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-nyarugenge-muhima-muhima-740366"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyarugenge",
-    "sector": "Kanyinya",
-    "name": "Kanyinya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyarugenge-kanyinya-kanyinya-e4ddb9"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyarugenge",
-    "sector": "Kigali",
-    "name": "Mwendo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyarugenge-kigali-mwendo-f9c80c"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyarugenge",
-    "sector": "Nyarugenge",
-    "name": "Kigali University Hospital",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-nyarugenge-nyarugenge-kigali-university-hospital-0b2942"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyarugenge",
-    "sector": "Nyarugenge",
-    "name": "Gitega",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyarugenge-nyarugenge-gitega-165ab1"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Nyarugenge",
-    "sector": "Nyarugenge",
-    "name": "Kigali Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-nyarugenge-nyarugenge-kigali-prison-d5d8ad"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Butaro",
-    "name": "Butaro",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-butaro-butaro-4ced6e"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Cyanika",
-    "name": "Cyanika",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-cyanika-cyanika-ff7745"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Gahunga",
-    "name": "Gahunga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-gahunga-gahunga-22ad5a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Gatebe",
-    "name": "Gatebe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-gatebe-gatebe-e20d36"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Gitovu",
-    "name": "Ruhombo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-gitovu-ruhombo-7bd6bb"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Kagogo",
-    "name": "Gitare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-kagogo-gitare-20f68f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Kinoni",
-    "name": "Ntaruka",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-kinoni-ntaruka-68085b"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Kinyababa",
-    "name": "Kinyababa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-kinyababa-kinyababa-e92f8b"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Kivuye",
-    "name": "Kivuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-kivuye-kivuye-8148e2"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Nemba",
-    "name": "Nyamugali",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-nemba-nyamugali-d9abf0"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Rugarama",
-    "name": "Rugarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-rugarama-rugarama-0fb63d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Rugengabari",
-    "name": "Mucaca",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-rugengabari-mucaca-99fe06"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Ruhunde",
-    "name": "Ruhunde",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-ruhunde-ruhunde-b1ce08"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Rusarabuye",
-    "name": "Kirambo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-rusarabuye-kirambo-547edd"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Burera",
-    "sector": "Rwerere",
-    "name": "Rwerere",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-burera-rwerere-rwerere-a745e7"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Busengo",
-    "name": "Busengo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-busengo-busengo-6dc1d3"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Cyabingo",
-    "name": "Cyabingo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-cyabingo-cyabingo-da24ba"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Gakenke",
-    "name": "Nganzo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-gakenke-nganzo-7f49ca"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Gashenyi",
-    "name": "Rukura",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-gashenyi-rukura-2f0c97"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Gashenyi",
-    "name": "Rutenderi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-gashenyi-rutenderi-9d7b88"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Janja",
-    "name": "Rutake",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-janja-rutake-2905f4"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Kamubuga",
-    "name": "Kamubuga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-kamubuga-kamubuga-af79a7"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Karambo",
-    "name": "Karambo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-karambo-karambo-bd5149"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Kivuruga",
-    "name": "Bushoka",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-kivuruga-bushoka-958310"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Mataba",
-    "name": "Mataba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-mataba-mataba-b239fc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Mugunga",
-    "name": "Gatonde",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-mugunga-gatonde-83256b"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Muzo",
-    "name": "Rusoro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-muzo-rusoro-f70734"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Rusasa",
-    "name": "Nyundo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-rusasa-nyundo-48087d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Coko",
-    "name": "Coko",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-coko-coko-e140e4"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Coko",
-    "name": "Nyange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-coko-nyange-676982"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Minazi",
-    "name": "Minazi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-minazi-minazi-5b9e67"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Muhondo",
-    "name": "Muhondo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-muhondo-muhondo-b2b4dc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Muyongwe",
-    "name": "Muyongwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-muyongwe-muyongwe-0ac493"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gakenke",
-    "sector": "Rushashi",
-    "name": "Rushashi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gakenke-rushashi-rushashi-c35be6"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Byumba",
-    "name": "Byumba",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-byumba-byumba-849ad9"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Bukure",
-    "name": "Giti",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-bukure-giti-f12e27"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Bwisige",
-    "name": "Bwisige",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-bwisige-bwisige-8dd7d7"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Bwisige",
-    "name": "Mukono",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-bwisige-mukono-7da140"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Byumba",
-    "name": "Byumba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-byumba-byumba-1a56cd"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Byumba",
-    "name": "Ruhenda",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-byumba-ruhenda-063a49"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Cyumba",
-    "name": "Cyumba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-cyumba-cyumba-11a352"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Giti",
-    "name": "Tanda",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-giti-tanda-0e1b9d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Kageyo",
-    "name": "Camp Gihembe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-kageyo-camp-gihembe-ad33fa"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Kageyo",
-    "name": "Muhondo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-kageyo-muhondo-5b2f08"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Kaniga",
-    "name": "Mulindi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-kaniga-mulindi-6e03e2"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Manyagiro",
-    "name": "Manyagiro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-manyagiro-manyagiro-c2b4fd"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Miyove",
-    "name": "Miyove",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-miyove-miyove-5cc112"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Miyove",
-    "name": "Miyove B Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-miyove-miyove-b-prison-18411b"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Mukarange",
-    "name": "Mukarange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-mukarange-mukarange-041841"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Muko",
-    "name": "Muko",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-muko-muko-a3561c"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Mutete",
-    "name": "Musenyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-mutete-musenyi-d5cbcb"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Nyankenke",
-    "name": "Kigogo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-nyankenke-kigogo-7b5c3a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Rubaya",
-    "name": "Rubaya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-rubaya-rubaya-63e8e0"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Rukomo",
-    "name": "Gisiza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-rukomo-gisiza-c733ac"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Rukomo",
-    "name": "Munyinya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-rukomo-munyinya-47867b"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Rutare",
-    "name": "Rutare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-rutare-rutare-3ebfac"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Ruvune",
-    "name": "Ruvune",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-ruvune-ruvune-de3115"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gicumbi",
-    "sector": "Shangasha",
-    "name": "Bushara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gicumbi-shangasha-bushara-dc6676"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Muhoza",
-    "name": "Ruhengeri",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-muhoza-ruhengeri-3cfdfc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Cyuve",
-    "name": "Gasiza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-cyuve-gasiza-f870fc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Cyuve",
-    "name": "Karwasa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-cyuve-karwasa-1d4e97"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Gashaki",
-    "name": "Gashaki",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-gashaki-gashaki-4596a1"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Gataraga",
-    "name": "Gataraga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-gataraga-gataraga-9e3a0f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Kimonyi",
-    "name": "Kimonyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-kimonyi-kimonyi-6efc09"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Kinigi",
-    "name": "Bisate",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-kinigi-bisate-77975f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Kinigi",
-    "name": "Kinigi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-kinigi-kinigi-361140"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Muhoza",
-    "name": "Muhoza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-muhoza-muhoza-fe0f71"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Muhoza",
-    "name": "Ruhengeri Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-muhoza-ruhengeri-prison-013da4"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Muko",
-    "name": "Kabere",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-muko-kabere-31e450"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Musanze",
-    "name": "Musanze",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-musanze-musanze-49f119"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Remera",
-    "name": "Murandi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-remera-murandi-1aac18"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Musanze",
-    "sector": "Shingiro",
-    "name": "Shingiro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-musanze-shingiro-shingiro-2237dc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Kinihira",
-    "name": "Kinihira",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-kinihira-kinihira-c7f441"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Base",
-    "name": "Mushongi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-base-mushongi-fc7d2c"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Bushoki",
-    "name": "Tare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-bushoki-tare-dced8a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Buyoga",
-    "name": "Buyoga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-buyoga-buyoga-3b5d2d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Cyungo",
-    "name": "Marembo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-cyungo-marembo-4fb50f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Kinihira",
-    "name": "Kinihira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-kinihira-kinihira-22c738"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Kisaro",
-    "name": "Kisaro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-kisaro-kisaro-6a3a29"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Tumba",
-    "name": "Tumba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-tumba-tumba-d9bc80"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Ngoma",
-    "name": "Rutongo",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-ngoma-rutongo-c83e4e"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Burega",
-    "name": "Burega",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-burega-burega-a4b01a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Masoro",
-    "name": "Masoro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-masoro-masoro-a8cfcc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Mbogo",
-    "name": "Rulindo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-mbogo-rulindo-526ecf"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Murambi",
-    "name": "Bubangu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-murambi-bubangu-1ff829"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Murambi",
-    "name": "Murambi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-murambi-murambi-43849a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Ngoma",
-    "name": "Remera-Mbogo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-ngoma-remera-mbogo-b87bb5"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Ntarabana",
-    "name": "Kajevuba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-ntarabana-kajevuba-80dc49"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Ntarabana",
-    "name": "Kiyanza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-ntarabana-kiyanza-4c4375"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Rulindo",
-    "sector": "Shyorongi",
-    "name": "Rwahi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-rulindo-shyorongi-rwahi-cc079b"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "gakoma-2e0a8e40",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Mamba",
     "name": "Gakoma",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-mamba-gakoma-b1e409"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "save-c6fb30e5",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Save",
     "name": "Save",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-save-save-9d0fb9"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Gisagara",
-    "sector": "Kibilizi",
-    "name": "Kibilizi",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-gisagara-kibilizi-kibilizi-de955d"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "gikore-a9b2c415",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Kansi",
     "name": "Gikore",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-kansi-gikore-02f554"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "kansi-80fe7818",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Kansi",
     "name": "Kansi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-kansi-kansi-236ca9"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Gisagara",
-    "sector": "Kibirizi",
-    "name": "Kibilizi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gisagara-kibirizi-kibilizi-05c20c"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Gisagara",
-    "sector": "Kigembe",
-    "name": "Agahabwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gisagara-kigembe-agahabwa-635437"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "kirarambogo-5c3c109c",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Muganza",
     "name": "Kirarambogo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-muganza-kirarambogo-d087a5"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "mugombwa-ab3f373f",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Mugombwa",
     "name": "Mugombwa",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-mugombwa-mugombwa-63ea71"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Gisagara",
-    "sector": "Mukindo",
-    "name": "Kibayi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gisagara-mukindo-kibayi-4138d6"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "gisagara-97b58456",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Gisagara",
     "sector": "Ndora",
     "name": "Gisagara",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-gisagara-ndora-gisagara-8b2811"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Gisagara",
-    "sector": "Nyanza",
-    "name": "Kigembe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-gisagara-nyanza-kigembe-f11d7e"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Ngoma",
-    "name": "Kabutare",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-ngoma-kabutare-4b6eb1"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Gishamvu",
-    "name": "Busoro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-gishamvu-busoro-e928c9"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "sovu-3756e3d7",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Huye",
     "sector": "Huye",
     "name": "Sovu",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-huye-huye-sovu-b9f0a2"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Karama",
-    "name": "Karama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-karama-karama-2bba57"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Kigoma",
-    "name": "Kinyamakara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-kigoma-kinyamakara-51076f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Maraba",
-    "name": "Maraba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-maraba-maraba-45b25a"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Mbazi",
-    "name": "Mbazi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-mbazi-mbazi-2bcbcc"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Mukura",
-    "name": "Mukura",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-mukura-mukura-31d33f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Ngoma",
-    "name": "Butare",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-ngoma-butare-6518d1"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Ngoma",
-    "name": "CUSP Butare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-ngoma-cusp-butare-3e47c6"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Ngoma",
-    "name": "Huye Police",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-ngoma-huye-police-36b3a0"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "matyazo-f0822790",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Huye",
     "sector": "Ngoma",
     "name": "Matyazo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-huye-ngoma-matyazo-a09d20"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Ngoma",
-    "name": "Karubanda Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-ngoma-karubanda-prison-b24e84"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Ruhashya",
-    "name": "Ruhashya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-ruhashya-ruhashya-d0bbf6"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Rusatira",
-    "name": "Rubona",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-rusatira-rubona-bde9de"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Rusatira",
-    "name": "Rusatira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-rusatira-rusatira-17d6fb"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Rwaniro",
-    "name": "Rwaniro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-rwaniro-rwaniro-422b23"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "simbi-1b9e113b",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Huye",
     "sector": "Simbi",
     "name": "Simbi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-huye-simbi-simbi-0eb4a3"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "Huye",
-    "sector": "Tumba",
-    "name": "Rango",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-huye-tumba-rango-4ed17d"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kamonyi",
-    "sector": "Rukoma",
-    "name": "Remera Rukoma",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-butare-kamonyi-rukoma-remera-rukoma-327b74"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kamonyi",
-    "sector": "Gacurabwenge",
-    "name": "Kamonyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kamonyi-gacurabwenge-kamonyi-b333e4"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kamonyi",
-    "sector": "Kayenzi",
-    "name": "Kayenzi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kamonyi-kayenzi-kayenzi-fad91f"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kamonyi",
-    "sector": "Mugina",
-    "name": "Cyeru",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kamonyi-mugina-cyeru-47d589"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kamonyi",
-    "sector": "Mugina",
-    "name": "Mugina",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kamonyi-mugina-mugina-840d14"
-  },
-  {
-    "diocese": "Diocese Butare",
-    "district": "Kamonyi",
-    "sector": "Musambira",
-    "name": "Musambira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-butare-kamonyi-musambira-musambira-e302d9"
-  },
-  {
-    "diocese": "Diocese Butare",
+    "id": "karama-b90b8496",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Huye",
     "sector": "Karama",
     "name": "Karama",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-huye-karama-karama-289fdf"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "busoro-9a617305",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Nyanza",
     "sector": "Busoro",
     "name": "Busoro",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-nyanza-busoro-busoro-275daf"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "ruyenzi-984cdd81",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Nyanza",
     "sector": "Ntyazo",
     "name": "Ruyenzi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-nyanza-ntyazo-ruyenzi-090daa"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
+    "id": "cyahinda-d8ae400b",
+    "category": "health_center",
+    "diocese": "Butare",
     "district": "Nyaruguru",
     "sector": "Cyahinda",
     "name": "Cyahinda",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-butare-nyaruguru-cyahinda-cyahinda-ea95a0"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Butare",
-    "district": "",
-    "sector": "",
-    "name": "16",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-butare-16-20ef54"
-  },
-  {
-    "diocese": "Diocese de Gikongoro",
+    "id": "kirambi-3fb6bf32",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyanza",
     "sector": "Nyagisozi",
     "name": "Kirambi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyanza-nyagisozi-kirambi-c4a1ed"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "mweya-7b805e38",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyanza",
     "sector": "Nyagisozi",
     "name": "Mweya",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyanza-nyagisozi-mweya-d90ff3"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "rugege-34d6766e",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyamagabe",
     "sector": "Gatare",
     "name": "Rugege",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyamagabe-gatare-rugege-ab7bce"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "kaduha-def3a9e9",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyamagabe",
     "sector": "Kaduha",
     "name": "Kaduha",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyamagabe-kaduha-kaduha-0c2686"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "shaba-b5e62432",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyamagabe",
     "sector": "Kitabi",
     "name": "Shaba",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyamagabe-kitabi-shaba-32ddef"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "cyanika-6463062d",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyamagabe",
     "sector": "Cyanika",
     "name": "Cyanika",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyamagabe-cyanika-cyanika-a9e1db"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "mbuga-73fd5032",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyamagabe",
     "sector": "Tare",
     "name": "Mbuga",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyamagabe-tare-mbuga-4894a0"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "kibeho-dd61c44f",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyaruguru",
     "sector": "Kibeho",
     "name": "Kibeho",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyaruguru-kibeho-kibeho-7268dc"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "muganza-5758dbd6",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyaruguru",
     "sector": "Muganza",
     "name": "Muganza",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyaruguru-muganza-muganza-6549af"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "ruheru-87da3ce2",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyaruguru",
     "sector": "Ruheru",
     "name": "Ruheru",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyaruguru-ruheru-ruheru-6f261f"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
+    "id": "ruramba-4595a19d",
+    "category": "health_center",
+    "diocese": "Gikongoro Diocese",
     "district": "Nyaruguru",
     "sector": "Ruramba",
     "name": "Ruramba",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-de-gikongoro-nyaruguru-ruramba-ruramba-b97bae"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese de Gikongoro",
-    "district": "",
-    "sector": "",
-    "name": "11",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-de-gikongoro-11-805185"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "kabuga-a0c17f72",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Kamonyi",
     "sector": "Ngamba",
     "name": "Kabuga",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-kamonyi-ngamba-kabuga-47bb78"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Kamonyi",
-    "sector": "Ngamba",
-    "name": "Karangara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-kamonyi-ngamba-karangara-104aa6"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Kamonyi",
-    "sector": "Nyamiyaga",
-    "name": "Nyamiyaga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-kamonyi-nyamiyaga-nyamiyaga-05345e"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "nyagihamba-a3adce00",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Kamonyi",
     "sector": "Nyarubaka",
     "name": "Nyagihamba",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-kamonyi-nyarubaka-nyagihamba-fe3028"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Kamonyi",
-    "sector": "Rugarika",
-    "name": "Kigese",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-kamonyi-rugarika-kigese-b556e7"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Kamonyi",
-    "sector": "Rukoma",
-    "name": "Remera Rukoma",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-kamonyi-rukoma-remera-rukoma-fa9855"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "gihara-9b7960dc",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Kamonyi",
     "sector": "Runda",
     "name": "Gihara",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-kamonyi-runda-gihara-3e11ed"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Nyamabuye",
-    "name": "Kabgayi",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-muhanga-nyamabuye-kabgayi-13e3b9"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "kivumu-ec80ec57",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Muhanga",
     "sector": "Cyeza",
     "name": "Kivumu",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-muhanga-cyeza-kivumu-0105e2"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Cyeza",
-    "name": "Rutobwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-cyeza-rutobwe-7e2e2a"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Kabacuzi",
-    "name": "Buramba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-kabacuzi-buramba-4db2b5"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Kibangu",
-    "name": "Gitega",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-kibangu-gitega-36e4a7"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Kiyumba",
-    "name": "Nyabikenke",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-kiyumba-nyabikenke-5da032"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Muhanga",
-    "name": "Mata",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-muhanga-mata-4bf417"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "mushishiro-b552c33d",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Muhanga",
     "sector": "Mushishiro",
     "name": "Mushishiro",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-muhanga-mushishiro-mushishiro-f7e5b7"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Nyabinoni",
-    "name": "Nyabinoni",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-nyabinoni-nyabinoni-2585e4"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "kabgayi-b60d6b1c",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Muhanga",
     "sector": "Nyamabuye",
     "name": "Kabgayi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-muhanga-nyamabuye-kabgayi-ae368e"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Nyarusange",
-    "name": "Gikomero",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-nyarusange-gikomero-6fb288"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "nyarusange-4f5775a4",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Muhanga",
     "sector": "Nyarusange",
     "name": "Nyarusange",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-muhanga-nyarusange-nyarusange-4ff98a"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Rongi",
-    "name": "Gasagara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-rongi-gasagara-bfb65c"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Rugendabari",
-    "name": "Gasovu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-rugendabari-gasovu-4b0ade"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Rugendabari",
-    "name": "Rugendabari",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-rugendabari-rugendabari-adfacd"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Shyogwe",
-    "name": "Gitarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-shyogwe-gitarama-ff89ed"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Shyogwe",
-    "name": "Gitarama Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-shyogwe-gitarama-prison-471569"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Muhanga",
-    "sector": "Shyogwe",
-    "name": "Shyogwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-muhanga-shyogwe-shyogwe-658b2d"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Kaduha",
-    "name": "Kaduha",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-kaduha-kaduha-4f40eb"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Buruhukiro",
-    "name": "Buruhukiro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-buruhukiro-buruhukiro-1673f0"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Kibumbwe",
-    "name": "Kibumbwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-kibumbwe-kibumbwe-b640be"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Mugano",
-    "name": "Mugano",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-mugano-mugano-b3db11"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Musange",
-    "name": "Jenda",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-musange-jenda-e5a337"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Musebeya",
-    "name": "Musebeya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-musebeya-musebeya-ba8a59"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Mushubi",
-    "name": "Mushubi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-mushubi-mushubi-03f2a2"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Nkomane",
-    "name": "Nyarwungo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-nkomane-nyarwungo-780286"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Gasaka",
-    "name": "Kigeme",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-gasaka-kigeme-0b4062"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Gasaka",
-    "name": "Kigeme",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-gasaka-kigeme-8b3436"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Gasaka",
-    "name": "Nyamagabe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-gasaka-nyamagabe-e48302"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Gasaka",
-    "name": "Gikongoro Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-gasaka-gikongoro-prison-1c35d3"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Kamegeri",
-    "name": "Nyarusiza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-kamegeri-nyarusiza-983f22"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Kibirizi",
-    "name": "Kibirizi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-kibirizi-kibirizi-448434"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Kitabi",
-    "name": "Kitabi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-kitabi-kitabi-0f6574"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Kitabi",
-    "name": "Shaba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-kitabi-shaba-aa5508"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Mbazi",
-    "name": "Ngara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-mbazi-ngara-97f964"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyamagabe",
-    "sector": "Uwinkingi",
-    "name": "Uwinkingi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyamagabe-uwinkingi-uwinkingi-34d1c7"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Busasamana",
-    "name": "Nyanza",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-busasamana-nyanza-6acc85"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Busasamana",
-    "name": "Hanika I",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-busasamana-hanika-i-d99513"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Busasamana",
-    "name": "Nyanza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-busasamana-nyanza-246cb0"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Cyabakamyi",
-    "name": "Mucubira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-cyabakamyi-mucubira-e8e13f"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Kibilizi",
-    "name": "Kibilizi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-kibilizi-kibilizi-eb7e65"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Kibilizi",
-    "name": "Mututu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-kibilizi-mututu-f23f28"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Kigoma",
-    "name": "Gahombo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-kigoma-gahombo-848c36"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Mukingo",
-    "name": "Gatagara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-mukingo-gatagara-81d566"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Mukingo",
-    "name": "Mpanga Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-mukingo-mpanga-prison-8d8ad5"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Mukingo",
-    "name": "Nyanza Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-mukingo-nyanza-prison-677bd8"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Muyira",
-    "name": "Nyamiyaga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-muyira-nyamiyaga-c2253f"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Muyira",
-    "name": "Nyamure",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-muyira-nyamure-5d2cd8"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Ntyazo",
-    "name": "Ntyazo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-ntyazo-ntyazo-892c56"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Rwabicuma",
-    "name": "Cyaratsi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-rwabicuma-cyaratsi-a5d22d"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyanza",
-    "sector": "Rwabicuma",
-    "name": "Nyarusange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyanza-rwabicuma-nyarusange-a80034"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Munini",
-    "name": "Munini",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-munini-munini-bdee91"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Busanze",
-    "name": "Runyombyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-busanze-runyombyi-b6c34d"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Cyahinda",
-    "name": "Coko",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-cyahinda-coko-664ff1"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Kivu",
-    "name": "Kivu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-kivu-kivu-e7dcb8"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Mata",
-    "name": "Nyamyumba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-mata-nyamyumba-75ae60"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Munini",
-    "name": "Munini",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-munini-munini-878cef"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Ngera",
-    "name": "Ngera",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-ngera-ngera-2e0393"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Ngoma",
-    "name": "Ngoma",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-ngoma-ngoma-9d6884"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Nyabimata",
-    "name": "Nyabimata",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-nyabimata-nyabimata-044276"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Nyagisozi",
-    "name": "Maraba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-nyagisozi-maraba-a69c3f"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Nyagisozi",
-    "name": "Nyantanga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-nyagisozi-nyantanga-0d6e52"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Nyaruguru",
-    "sector": "Rusenge",
-    "name": "Kabilizi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-nyaruguru-rusenge-kabilizi-6c07e5"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Bweramana",
-    "name": "Gitwe",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-bweramana-gitwe-bfe400"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Bweramana",
-    "name": "Gitwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-bweramana-gitwe-725b75"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Byimana",
-    "name": "Byimana",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-byimana-byimana-06fadf"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Kabagali",
-    "name": "Karambi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-kabagali-karambi-3c6862"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Kabagali",
-    "name": "Munanira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-kabagali-munanira-d2a1ac"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Kinihira",
-    "name": "Muremure",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-kinihira-muremure-6f63d5"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "muyunzwe-f114d22d",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Ruhango",
     "sector": "Kinihira",
     "name": "Muyunzwe",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-ruhango-kinihira-muyunzwe-509f99"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Mwendo",
-    "name": "Gishweru",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-mwendo-gishweru-bbac82"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Mwendo",
-    "name": "Mwendo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-mwendo-mwendo-b42a7e"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Kinazi",
-    "name": "Ruhango",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-kinazi-ruhango-74e69a"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Kinazi",
-    "name": "Kinazi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-kinazi-kinazi-aba472"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Kinazi",
-    "name": "Mukoma",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-kinazi-mukoma-998f02"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "kizibere-4b8da1cb",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Ruhango",
     "sector": "Mbuye",
     "name": "Kizibere",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-ruhango-mbuye-kizibere-c46359"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Mbuye",
-    "name": "Mbuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-mbuye-mbuye-cab64e"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Ntongwe",
-    "name": "Nyarurama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-ntongwe-nyarurama-babfcd"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Ruhango",
-    "sector": "Ruhango",
-    "name": "Kigoma",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-ruhango-ruhango-kigoma-17c111"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
+    "id": "ruhango-64173e64",
+    "category": "health_center",
+    "diocese": "Kabgayi Diocese",
     "district": "Ruhango",
     "sector": "Ruhango",
     "name": "Ruhango",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-kabgayi-ruhango-ruhango-ruhango-3faa00"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Kabgayi",
-    "district": "Karongi",
-    "sector": "Bwishyura",
-    "name": "Kibuye",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-karongi-bwishyura-kibuye-e19c06"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Karongi",
-    "sector": "Bwishyura",
-    "name": "Kibuye",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-karongi-bwishyura-kibuye-e21d92"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "Karongi",
-    "sector": "Gitesi",
-    "name": "Kirambo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-kabgayi-karongi-gitesi-kirambo-4932ec"
-  },
-  {
-    "diocese": "Diocese Kabgayi",
-    "district": "",
-    "sector": "",
-    "name": "11",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-kabgayi-11-f792d4"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "mukungu-df37384c",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Karongi",
     "sector": "Mutuntu",
     "name": "Mukungu",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-karongi-mutuntu-mukungu-dff1a3"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Rubengera",
-    "name": "Bubazi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-rubengera-bubazi-214971"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Rubengera",
-    "name": "Rubengera",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-rubengera-rubengera-16f3bd"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Rugabano",
-    "name": "Karongi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-rugabano-karongi-426cfc"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Rugabano",
-    "name": "Rufungo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-rugabano-rufungo-c1931a"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "rugabano-35afa32a",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Karongi",
     "sector": "Rugabano",
     "name": "Rugabano",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-karongi-rugabano-rugabano-53322d"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Rwankuba",
-    "name": "Bisesero",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-rwankuba-bisesero-c9b4c9"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Rwankuba",
-    "name": "Kiziba Camp",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-rwankuba-kiziba-camp-a46f61"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "musango-90c6f971",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Karongi",
     "sector": "Rwankuba",
     "name": "Musango",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-karongi-rwankuba-musango-1669b9"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Murambi",
-    "name": "Kirinda",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-murambi-kirinda-f97e1f"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "birambo-d705bea9",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Karongi",
     "sector": "Gashari",
     "name": "Birambo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-karongi-gashari-birambo-5d0806"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Gashari",
-    "name": "Mwendo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-gashari-mwendo-5848fa"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Murambi",
-    "name": "Kirinda",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-murambi-kirinda-70d9e6"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Murundi",
-    "name": "Munzanga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-murundi-munzanga-801109"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Ruganda",
-    "name": "Biguhu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-ruganda-biguhu-f01e45"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Gishyita",
-    "name": "Mugonero",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-gishyita-mugonero-69bd2f"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "mpembe-4cdf5cf3",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Karongi",
     "sector": "Gishyita",
     "name": "Mpembe",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-karongi-gishyita-mpembe-52d2c2"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Gishyita",
-    "name": "Mugonero",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-gishyita-mugonero-8699bd"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Mubuga",
-    "name": "Karora",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-mubuga-karora-249bf5"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "mubuga-b125bca7",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Karongi",
     "sector": "Mubuga",
     "name": "Mubuga",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-karongi-mubuga-mubuga-b6697d"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Twumba",
-    "name": "Gatare",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-twumba-gatare-bc913c"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Karongi",
-    "sector": "Twumba",
-    "name": "Gisovu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-karongi-twumba-gisovu-ab9519"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Kabaya",
-    "name": "Kabaya",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-kabaya-kabaya-4c6a42"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Hindiro",
-    "name": "Hindiro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-hindiro-hindiro-42f6db"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Hindiro",
-    "name": "Muramba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-hindiro-muramba-6bfa86"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Kabaya",
-    "name": "Kabaya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-kabaya-kabaya-662eba"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Kavumu",
-    "name": "Ramba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-kavumu-ramba-a0f317"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Matyazo",
-    "name": "Gashonyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-matyazo-gashonyi-78e24f"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Muhanda",
-    "name": "Rubaya",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-muhanda-rubaya-8693c6"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Muhororo",
-    "name": "Muhororo",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-muhororo-muhororo-7bd5c1"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Bwira",
-    "name": "Gashubi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-bwira-gashubi-01a247"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Gatumba",
-    "name": "Muhororo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-gatumba-muhororo-b107d1"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Gatumba",
-    "name": "Rubona",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-gatumba-rubona-95f295"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Kageyo",
-    "name": "Kageyo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-kageyo-kageyo-784251"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Muhororo",
-    "name": "Ntaganzwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-muhororo-ntaganzwa-1ecc02"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Ndaro",
-    "name": "Ntobwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-ndaro-ntobwe-10296e"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Ngororero",
-    "name": "Nyange A",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-ngororero-nyange-a-63b36a"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Ngororero",
-    "name": "Rususa",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-ngororero-ngororero-rususa-f23c70"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Ngororero",
-    "sector": "Nyange",
-    "name": "Nyange B",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-ngororero-nyange-nyange-b-6a90bf"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Shyira",
-    "name": "Shyira",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-shyira-shyira-95cd7c"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Bigogwe",
-    "name": "Arusha",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-bigogwe-arusha-a9a47c"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Bigogwe",
-    "name": "Bigogwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-bigogwe-bigogwe-2ae7bf"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Bigogwe",
-    "name": "Kora",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-bigogwe-kora-26fce2"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Jenda",
-    "name": "Kareba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-jenda-kareba-eac7a8"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Jomba",
-    "name": "Jomba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-jomba-jomba-ee51c2"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Kabatwa",
-    "name": "Kabatwa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-kabatwa-kabatwa-7505d4"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Karago",
-    "name": "Mwiyanike",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-karago-mwiyanike-2ce261"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Mukamira",
-    "name": "Rwankeri",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-mukamira-rwankeri-19345a"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Muringa",
-    "name": "Gakamba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-muringa-gakamba-53e407"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Rambura",
-    "name": "Birembo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-rambura-birembo-fb3361"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Rambura",
-    "name": "Rambura",
-    "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-nyabihu-rambura-rambura-9e7748"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Rugera",
-    "name": "Nyakigezi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-rugera-nyakigezi-d8e5cd"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Rugera",
-    "name": "NyakiLiba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-rugera-nyakiliba-063a48"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Rurembo",
-    "name": "Rurembo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-rurembo-rurembo-7e815b"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyabihu",
-    "sector": "Shyira",
-    "name": "Shyira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyabihu-shyira-shyira-2cdbde"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyamasheke",
-    "sector": "Bushenge",
-    "name": "Bushenge",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyamasheke-bushenge-bushenge-0f23a2"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyamasheke",
-    "sector": "Bushekeri",
-    "name": "Gisakura",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyamasheke-bushekeri-gisakura-4ccad4"
-  },
-  {
-    "diocese": "Diocese Nyundo",
-    "district": "Nyamasheke",
-    "sector": "Bushenge",
-    "name": "Bushenge",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-nyundo-nyamasheke-bushenge-bushenge-f78ee7"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "kibingo-f0598897",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Nyamasheke",
     "sector": "Gihombo",
     "name": "Kibingo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-nyamasheke-gihombo-kibingo-5ceaa5"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "Rutsiro",
-    "sector": "Murunda",
-    "name": "Murunda",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-murunda-murunda-28eb00"
-  },
-  {
-    "diocese": "Diocese Nyundo",
+    "id": "crete-congo-nil-1710a5fb",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Rutsiro",
     "sector": "Gihango",
     "name": "Crete Congo NIL",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-gihango-crete-congo-nil-293592"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
+    "id": "murunda-29a329a6",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Rutsiro",
     "sector": "Murunda",
     "name": "Murunda",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-murunda-murunda-1094ce"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
+    "id": "mushubati-c11f4873",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Rutsiro",
     "sector": "Mushubati",
     "name": "Mushubati",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-mushubati-mushubati-22f06c"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
+    "id": "kabona-c80de584",
+    "category": "health_center",
+    "diocese": "Nyundo Diocese/Kibuye Zone",
     "district": "Rutsiro",
     "sector": "Rusebeya",
     "name": "Kabona",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-rusebeya-kabona-cb5745"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
+    "id": "rambura-05c42dd1",
+    "category": "health_center",
+    "diocese": "Nyundo Gisenyi,  Gisenyi Zone",
+    "district": "Nyabihu",
+    "sector": "Rambura",
+    "name": "Rambura",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "rususa-583ef6a0",
+    "category": "health_center",
+    "diocese": "Nyundo Gisenyi,  Gisenyi Zone",
+    "district": "Ngororero",
+    "sector": "Ngororero",
+    "name": "Rususa",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "biruyi-308a65d9",
+    "category": "health_center",
+    "diocese": "Nyundo Gisenyi,  Gisenyi Zone",
     "district": "Rutsiro",
     "sector": "Mushonyi",
     "name": "Biruyi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-mushonyi-biruyi-46be2f"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
+    "id": "kivumu-82958faa",
+    "category": "health_center",
+    "diocese": "Nyundo Gisenyi,  Gisenyi Zone",
     "district": "Rutsiro",
     "sector": "Kivumu",
     "name": "Kivumu",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rutsiro-kivumu-kivumu-257aab"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
+    "id": "nyundo-89d567fc",
+    "category": "health_center",
+    "diocese": "Nyundo Gisenyi,  Gisenyi Zone",
     "district": "Rubavu",
     "sector": "Nyundo",
     "name": "Nyundo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-nyundo-rubavu-nyundo-nyundo-6555b7"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Nyundo",
-    "district": "",
-    "sector": "",
-    "name": "17",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-nyundo-17-ceafe5"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "mwezi-b44d8d4a",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Nyamasheke",
     "sector": "Karengera",
     "name": "Mwezi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-nyamasheke-karengera-mwezi-fc12aa"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Nyabitekeri",
-    "name": "Mukoma",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-nyabitekeri-mukoma-64f15a"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "muyange-d99a3a8d",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Nyamasheke",
     "sector": "Nyabitekeri",
     "name": "Muyange",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-nyamasheke-nyabitekeri-muyange-b5743c"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Ruharambuga",
-    "name": "Kamonyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-ruharambuga-kamonyi-99f3ae"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Shangi",
-    "name": "Mugera",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-shangi-mugera-962846"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Kanjongo",
-    "name": "Kibogora",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-kanjongo-kibogora-06b56a"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Cyato",
-    "name": "Yove",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-cyato-yove-e9c20c"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Kagano",
-    "name": "Nyamasheke",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-kagano-nyamasheke-61fb4d"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Kanjongo",
-    "name": "Kibogora",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-kanjongo-kibogora-0bb424"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Kanjongo",
-    "name": "Ruheru",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-kanjongo-ruheru-3eb093"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Karambi",
-    "name": "Cyivugiza",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-karambi-cyivugiza-ae77a5"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "karambi-88153be6",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Nyamasheke",
     "sector": "Karambi",
     "name": "Karambi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-nyamasheke-karambi-karambi-3f6cb0"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Karambi",
-    "name": "Ngange",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-karambi-ngange-7e9c77"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Kirimbi",
-    "name": "Karengera",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-kirimbi-karengera-75f3e8"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "gatare-c9962ad1",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Nyamasheke",
     "sector": "Macuba",
     "name": "Gatare",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-nyamasheke-macuba-gatare-ae9bab"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "hanika-b9a9d16a",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Nyamasheke",
     "sector": "Macuba",
     "name": "Hanika",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-nyamasheke-macuba-hanika-ff7b63"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "gisakura-9e572bf9",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Nyamasheke",
-    "sector": "Mahembe",
-    "name": "Mahembe",
+    "sector": "Bushekeri",
+    "name": "Gisakura",
     "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-mahembe-mahembe-56e79e"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Nyamasheke",
-    "sector": "Rangiro",
-    "name": "Rangiro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-nyamasheke-rangiro-rangiro-8ca312"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Gisenyi",
-    "name": "Gisenyi",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-gisenyi-gisenyi-f24228"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Bugeshi",
-    "name": "Bugeshi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-bugeshi-bugeshi-d60463"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Busasamana",
-    "name": "Busasamana",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-busasamana-busasamana-c2cdfc"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Cyanzarwe",
-    "name": "Busigari",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-cyanzarwe-busigari-b0a4ea"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Gisenyi",
-    "name": "Gacuba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-gisenyi-gacuba-90ea48"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Gisenyi",
-    "name": "Gisenyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-gisenyi-gisenyi-db6741"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Gisenyi",
-    "name": "Gisenyi Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-gisenyi-gisenyi-prison-65dc2d"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Kanama",
-    "name": "Karambo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-kanama-karambo-fa8c4a"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Kanzenze",
-    "name": "Kabari",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-kanzenze-kabari-a61433"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Mudende",
-    "name": "Mudende",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-mudende-mudende-f7d82a"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Nyakiriba",
-    "name": "Nyakiriba",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-nyakiriba-nyakiriba-d033c7"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Nyamyumba",
-    "name": "Kigufi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-nyamyumba-kigufi-d47ac6"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Rubavu",
-    "name": "Byahi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-rubavu-byahi-6a0708"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rubavu",
-    "sector": "Rubavu",
-    "name": "Murara",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rubavu-rubavu-murara-ea35a8"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Kamembe",
-    "name": "Gihundwe",
-    "facility_type": "Hospital",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-kamembe-gihundwe-7aa189"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "bweyeye-6fb249db",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Bweyeye",
     "name": "Bweyeye",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-bweyeye-bweyeye-c318c4"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Giheke",
-    "name": "Giheke",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-giheke-giheke-9b510d"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Kamembe",
-    "name": "Gihundwe",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-kamembe-gihundwe-21ad3f"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Kamembe",
-    "name": "Mont Cyangugu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-kamembe-mont-cyangugu-1dad8d"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Kamembe",
-    "name": "Rusizi Prison",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-kamembe-rusizi-prison-127e95"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "rusizi-19ae68d5",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Mururu",
     "name": "Rusizi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-mururu-rusizi-9963a2"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "nkanka-dfddb601",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Nkanka",
     "name": "Nkanka",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-nkanka-nkanka-e495c7"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "nkombo-447410fd",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Nkombo",
     "name": "Nkombo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-nkombo-nkombo-3f1475"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Gashonga",
-    "name": "Mibilizi",
-    "facility_type": "Hospital",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-gashonga-mibilizi-e050e9"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Bugarama",
-    "name": "Bugarama",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-bugarama-bugarama-d9b362"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "nyabitimbo-8f20a586",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Butare",
     "name": "Nyabitimbo",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-butare-nyabitimbo-d727ee"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "mibilizi-78e35869",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Gashonga",
     "name": "Mibilizi",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-gashonga-mibilizi-ae311f"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Gikundamvura",
-    "name": "Gikundamvura",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-gikundamvura-gikundamvura-6e23df"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Gitambi",
-    "name": "Mashesha",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-gitambi-mashesha-48bbd9"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "bugarama-eb1948e7",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Muganza",
     "name": "Bugarama",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-muganza-bugarama-c8b6a0"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "nkungu-178a2a66",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Nkungu",
     "name": "Nkungu",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-nkungu-nkungu-cd3f57"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rusizi",
-    "sector": "Nyakarenzo",
-    "name": "Nyakarenzo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rusizi-nyakarenzo-nyakarenzo-0421b8"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
+    "id": "rwinzuki-fb7728b7",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Nzahaha",
     "name": "Rwinzuki",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-nzahaha-rwinzuki-9a5760"
+    "responsible": "Catholic"
   },
   {
-    "diocese": "Diocese Cyangungu",
+    "id": "nyakabuye-ed1a9839",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
+    "district": "Rusizi",
+    "sector": "Nyakabuye",
+    "name": "Nyakabuye",
+    "facility_type": "Health Center",
+    "responsible": "Catholic"
+  },
+  {
+    "id": "mushaka-4b9c623c",
+    "category": "health_center",
+    "diocese": "Cyangungu Diocese",
     "district": "Rusizi",
     "sector": "Rwimbogo",
     "name": "Mushaka",
     "facility_type": "Health Center",
-    "responsible": "Catholic",
-    "id": "diocese-cyangungu-rusizi-rwimbogo-mushaka-b209a6"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Boneza",
-    "name": "Iwawa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-boneza-iwawa-abe7ee"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Boneza",
-    "name": "Kinunu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-boneza-kinunu-ffd0c1"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Gihango",
-    "name": "Kibingo",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-gihango-kibingo-2301e6"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Kigeyo",
-    "name": "Cyimbili",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-kigeyo-cyimbili-0fd07c"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Kigeyo",
-    "name": "Kinihira",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-kigeyo-kinihira-11f7df"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Kivumu",
-    "name": "Kivumu",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-kivumu-kivumu-c781b0"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Manihira",
-    "name": "Rutsiro",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-manihira-rutsiro-1695dd"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Mukura",
-    "name": "Mukura",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-mukura-mukura-70dc09"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Murunda",
-    "name": "Karumbi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-murunda-karumbi-a81286"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Musasa",
-    "name": "Musasa",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-musasa-musasa-fd2167"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Mushonyi",
-    "name": "Biruyi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-mushonyi-biruyi-a979b0"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Nyabirasi",
-    "name": "Nyabirasi",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-nyabirasi-nyabirasi-96f8a1"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Ruhango",
-    "name": "Bitenga",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-ruhango-bitenga-7c1ffe"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "Rutsiro",
-    "sector": "Ruhango",
-    "name": "Kayove",
-    "facility_type": "Health Center",
-    "responsible": "Public",
-    "id": "diocese-cyangungu-rutsiro-ruhango-kayove-068e2e"
-  },
-  {
-    "diocese": "Diocese Cyangungu",
-    "district": "",
-    "sector": "",
-    "name": "16",
-    "facility_type": "",
-    "responsible": "",
-    "id": "diocese-cyangungu-16-1d428f"
+    "responsible": "Catholic"
   }
 ]

@@ -5,13 +5,16 @@ import { Plus, X } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import {
+  HEALTH_FACILITY_CATEGORIES,
   HEALTH_FACILITY_COLUMNS,
   HEALTH_FACILITY_COORD_FIELDS,
   hasExactHealthFacilityCoords,
+  type HealthFacilityCategory,
   type DioceseHealthFacility,
 } from "@/lib/diocese-health-facilities";
 
 const EDITOR_PAGE_SIZE = 20;
+type HealthFacilityTextField = (typeof HEALTH_FACILITY_COLUMNS)[number]["key"];
 
 type Props = {
   facilities: DioceseHealthFacility[];
@@ -34,6 +37,7 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
           f.sector,
           f.name,
           f.facility_type,
+          f.category,
           f.responsible,
           f.lat,
           f.lng,
@@ -57,9 +61,15 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
     safePage * EDITOR_PAGE_SIZE,
   );
 
-  const patchFacility = (index: number, field: keyof DioceseHealthFacility, value: string) => {
+  const patchFacility = (index: number, field: HealthFacilityTextField, value: string) => {
     const list = [...facilities];
     list[index] = { ...list[index], [field]: value };
+    onChange(list);
+  };
+
+  const patchFacilityCategory = (index: number, category: HealthFacilityCategory) => {
+    const list = [...facilities];
+    list[index] = { ...list[index], category };
     onChange(list);
   };
 
@@ -89,6 +99,7 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
       ...facilities,
       {
         id: `facility-${Date.now()}`,
+        category: "health_center",
         diocese: "",
         district: "",
         sector: "",
@@ -149,6 +160,27 @@ export function DioceseHealthFacilitiesEditor({ facilities, onChange }: Props) {
                 >
                   {hasExactCoords ? "Exact map location" : "Approximate map location"}
                 </span>
+              </div>
+              <div className="mb-3 pr-8">
+                <label className="text-[9px] font-bold uppercase text-stone-400">
+                  Facility category
+                </label>
+                <select
+                  className="mt-0.5 w-full rounded border border-stone-200 bg-white p-2 text-xs"
+                  value={f.category}
+                  onChange={(event) =>
+                    patchFacilityCategory(
+                      idx,
+                      event.target.value as HealthFacilityCategory,
+                    )
+                  }
+                >
+                  {HEALTH_FACILITY_CATEGORIES.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="grid gap-2 pr-8 sm:grid-cols-2">
                 {HEALTH_FACILITY_COLUMNS.map((col) => (

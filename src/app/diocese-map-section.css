@@ -43,6 +43,16 @@
         margin-bottom: 2rem;
         box-shadow: none;
     }
+
+    .diocese-map-sidebar--health {
+        height: auto;
+        max-height: none;
+    }
+
+    .diocese-list--health {
+        max-height: 420px;
+        flex: none;
+    }
 }
 
 .diocese-sidebar-title {
@@ -145,6 +155,128 @@
     width: 100%;
 }
 
+.diocese-map-sidebar--health {
+    height: 560px;
+    max-height: 560px;
+    gap: 0.75rem;
+    padding: 1.25rem;
+}
+
+.diocese-health-category-dropdown {
+    position: relative;
+    z-index: 20;
+}
+
+.diocese-health-category-dropdown__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #e8e4df;
+    border-radius: 10px;
+    background: #fff;
+    color: #1f2937;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.diocese-health-category-dropdown__trigger:hover,
+.diocese-health-category-dropdown__trigger[aria-expanded="true"] {
+    border-color: rgba(145, 19, 19, 0.35);
+    box-shadow: 0 0 0 3px rgba(145, 19, 19, 0.06);
+}
+
+.diocese-health-category-dropdown__trigger small {
+    display: block;
+    margin-bottom: 2px;
+    color: #9ca3af;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.diocese-health-category-dropdown__trigger strong {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.diocese-health-category-dropdown__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.diocese-health-category-dropdown__meta b,
+.diocese-health-category-dropdown__menu strong {
+    min-width: 2rem;
+    padding: 0.18rem 0.45rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #6b7280;
+    font-size: 0.65rem;
+    text-align: center;
+}
+
+.diocese-health-category-dropdown__meta i {
+    color: #9ca3af;
+    font-size: 0.65rem;
+    transition: transform 0.18s ease;
+}
+
+.diocese-health-category-dropdown__meta i.is-open {
+    transform: rotate(180deg);
+}
+
+.diocese-health-category-dropdown__menu {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.4rem;
+    border: 1px solid #e8e4df;
+    border-radius: 11px;
+    background: #fff;
+    box-shadow: 0 16px 35px rgba(31, 41, 55, 0.14);
+}
+
+.diocese-health-category-dropdown__menu button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #6b7280;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+}
+
+.diocese-health-category-dropdown__menu button:hover,
+.diocese-health-category-dropdown__menu button.is-active {
+    background: #fdf4f4;
+    color: #911313;
+}
+
+.diocese-health-category-dropdown__menu button.is-active strong {
+    background: #911313;
+    color: #fff;
+}
+
 .diocese-health-sidebar-filters {
     display: flex;
     flex-direction: column;
@@ -169,7 +301,18 @@
 }
 
 .diocese-list--health {
-    max-height: 420px;
+    min-height: 0;
+    max-height: none;
+    flex: 1;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    outline: none;
+}
+
+.diocese-list--health:focus-visible {
+    border-radius: 8px;
+    box-shadow: 0 0 0 2px rgba(145, 19, 19, 0.18);
 }
 
 .diocese-health-type-dot {

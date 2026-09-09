@@ -12,9 +12,15 @@ import {
   healthFacilityMarkerStyle,
   type HealthFacilityMapPoint,
 } from "@/lib/diocese-health-facility-coords";
-import { uniqueSorted } from "@/lib/diocese-health-facilities";
+import {
+  HEALTH_FACILITY_CATEGORIES,
+  healthFacilityCategoryLabel,
+  uniqueSorted,
+  type HealthFacilityCategory,
+} from "@/lib/diocese-health-facilities";
 
 type NetworkTab = "map" | "health";
+type HealthCategoryFilter = "all" | HealthFacilityCategory;
 
 function imgSrc(src?: string): string {
   if (!src) return "";
@@ -125,14 +131,14 @@ function loadMarkerClusterFromCdn(L: any): Promise<any> {
 type Props = Partial<DioceseMapSectionContent> & Record<string, unknown>;
 
 export default function DioceseMapSectionClient(raw: Props) {
-  const stableKey = JSON.stringify(raw);
-  const c = useMemo(() => normalizeDioceseMapContent(raw), [stableKey]);
+  const c = useMemo(() => normalizeDioceseMapContent(raw), [raw]);
 
   const shellRef = useRef<HTMLDivElement>(null);
   const mapDivRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<Record<string, any>>({});
   const clusterRef = useRef<any>(null);
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const selectedIdRef = useRef<string | null>(null);
   const hideCardRef = useRef<() => void>(() => {});
 
@@ -140,7 +146,9 @@ export default function DioceseMapSectionClient(raw: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [healthSearch, setHealthSearch] = useState("");
   const [healthDioceseFilter, setHealthDioceseFilter] = useState("");
-  selectedIdRef.current = selectedId;
+  const [healthCategoryFilter, setHealthCategoryFilter] =
+    useState<HealthCategoryFilter>("all");
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
   const [cardStyle, setCardStyle] = useState<{
     left: number;
@@ -169,6 +177,7 @@ export default function DioceseMapSectionClient(raw: Props) {
   const filteredHealthPoints = useMemo(() => {
     const q = healthSearch.trim().toLowerCase();
     return healthPoints.filter((f) => {
+      if (healthCategoryFilter !== "all" && f.category !== healthCategoryFilter) return false;
       if (healthDioceseFilter && f.diocese !== healthDioceseFilter) return false;
       if (!q) return true;
       const haystack = [
@@ -177,13 +186,34 @@ export default function DioceseMapSectionClient(raw: Props) {
         f.sector,
         f.name,
         f.facility_type,
+        healthFacilityCategoryLabel(f.category),
         f.responsible,
       ]
         .join(" ")
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [healthPoints, healthSearch, healthDioceseFilter]);
+  }, [healthPoints, healthSearch, healthDioceseFilter, healthCategoryFilter]);
+
+  const healthCategoryCounts = useMemo(() => {
+    const counts: Record<HealthFacilityCategory, number> = {
+      specialized_hospital: 0,
+      district_hospital: 0,
+      health_center: 0,
+    };
+    for (const facility of healthPoints) counts[facility.category] += 1;
+    return counts;
+  }, [healthPoints]);
+
+  const selectedHealthCategory = useMemo(() => {
+    if (healthCategoryFilter === "all") {
+      return { label: "All facilities", count: healthPoints.length };
+    }
+    return {
+      label: healthFacilityCategoryLabel(healthCategoryFilter),
+      count: healthCategoryCounts[healthCategoryFilter],
+    };
+  }, [healthCategoryCounts, healthCategoryFilter, healthPoints.length]);
 
   const healthById = useMemo(() => {
     const m = new Map<string, HealthFacilityMapPoint>();
@@ -199,7 +229,42 @@ export default function DioceseMapSectionClient(raw: Props) {
     setSelectedId(null);
     setCardStyle(null);
   }, []);
-  hideCardRef.current = hideCard;
+
+  const switchTab = useCallback(
+    (tab: NetworkTab) => {
+      hideCard();
+      setActiveTab(tab);
+    },
+    [hideCard],
+  );
+
+  useEffect(() => {
+    selectedIdRef.current = selectedId;
+  }, [selectedId]);
+
+  useEffect(() => {
+    hideCardRef.current = hideCard;
+  }, [hideCard]);
+
+  useEffect(() => {
+    if (!categoryDropdownOpen) return;
+
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!categoryDropdownRef.current?.contains(event.target as Node)) {
+        setCategoryDropdownOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setCategoryDropdownOpen(false);
+    };
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [categoryDropdownOpen]);
 
   const positionCard = useCallback(() => {
     const map = mapRef.current;
@@ -272,9 +337,15 @@ export default function DioceseMapSectionClient(raw: Props) {
   );
 
   const selectDioceseRef = useRef(selectDiocese);
-  selectDioceseRef.current = selectDiocese;
   const selectHealthRef = useRef(selectHealthFacility);
-  selectHealthRef.current = selectHealthFacility;
+
+  useEffect(() => {
+    selectDioceseRef.current = selectDiocese;
+  }, [selectDiocese]);
+
+  useEffect(() => {
+    selectHealthRef.current = selectHealthFacility;
+  }, [selectHealthFacility]);
 
   const mapConfigKey = useMemo(
     () =>
@@ -432,11 +503,6 @@ export default function DioceseMapSectionClient(raw: Props) {
   }, []);
 
   useEffect(() => {
-    setSelectedId(null);
-    setCardStyle(null);
-  }, [activeTab]);
-
-  useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
     requestAnimationFrame(() => {
@@ -479,7 +545,7 @@ export default function DioceseMapSectionClient(raw: Props) {
             aria-selected={activeTab === "map"}
             aria-controls="diocese-network-panel"
             className={`diocese-network-tab${activeTab === "map" ? " is-active" : ""}`}
-            onClick={() => setActiveTab("map")}
+            onClick={() => switchTab("map")}
           >
             <i className="fa-solid fa-map-location-dot" aria-hidden />
             {mapTabLabel}
@@ -491,7 +557,7 @@ export default function DioceseMapSectionClient(raw: Props) {
             aria-selected={activeTab === "health"}
             aria-controls="diocese-network-panel"
             className={`diocese-network-tab${activeTab === "health" ? " is-active" : ""}`}
-            onClick={() => setActiveTab("health")}
+            onClick={() => switchTab("health")}
           >
             <i className="fa-solid fa-hospital" aria-hidden />
             {healthTabLabel}
@@ -505,7 +571,11 @@ export default function DioceseMapSectionClient(raw: Props) {
         role="tabpanel"
         aria-labelledby={activeTab === "health" ? "diocese-network-tab-health" : "diocese-network-tab-map"}
       >
-        <div className="diocese-map-sidebar">
+        <div
+          className={`diocese-map-sidebar${
+            activeTab === "health" ? " diocese-map-sidebar--health" : ""
+          }`}
+        >
           {activeTab === "map" ? (
             <>
               <div className="diocese-sidebar-title">
@@ -551,6 +621,73 @@ export default function DioceseMapSectionClient(raw: Props) {
               <div className="diocese-sidebar-title">
                 <i className="fa-solid fa-hospital" aria-hidden /> {c.health_select_label}
               </div>
+              <div
+                ref={categoryDropdownRef}
+                className="diocese-health-category-dropdown"
+              >
+                <button
+                  type="button"
+                  className="diocese-health-category-dropdown__trigger"
+                  aria-haspopup="listbox"
+                  aria-expanded={categoryDropdownOpen}
+                  onClick={() => setCategoryDropdownOpen((open) => !open)}
+                >
+                  <span>
+                    <small>Facility category</small>
+                    <strong>{selectedHealthCategory.label}</strong>
+                  </span>
+                  <span className="diocese-health-category-dropdown__meta">
+                    <b>{selectedHealthCategory.count}</b>
+                    <i
+                      className={`fa-solid fa-chevron-down${
+                        categoryDropdownOpen ? " is-open" : ""
+                      }`}
+                      aria-hidden
+                    />
+                  </span>
+                </button>
+                {categoryDropdownOpen ? (
+                  <div
+                    className="diocese-health-category-dropdown__menu"
+                    role="listbox"
+                    aria-label="Facility category"
+                  >
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={healthCategoryFilter === "all"}
+                      className={healthCategoryFilter === "all" ? "is-active" : ""}
+                      onClick={() => {
+                        setHealthCategoryFilter("all");
+                        setCategoryDropdownOpen(false);
+                        hideCard();
+                      }}
+                    >
+                      <span>All facilities</span>
+                      <strong>{healthPoints.length}</strong>
+                    </button>
+                    {HEALTH_FACILITY_CATEGORIES.map((category) => (
+                      <button
+                        key={category.value}
+                        type="button"
+                        role="option"
+                        aria-selected={healthCategoryFilter === category.value}
+                        className={
+                          healthCategoryFilter === category.value ? "is-active" : ""
+                        }
+                        onClick={() => {
+                          setHealthCategoryFilter(category.value);
+                          setCategoryDropdownOpen(false);
+                          hideCard();
+                        }}
+                      >
+                        <span>{category.label}</span>
+                        <strong>{healthCategoryCounts[category.value]}</strong>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
               <div className="diocese-health-sidebar-filters">
                 <input
                   type="search"
@@ -577,7 +714,12 @@ export default function DioceseMapSectionClient(raw: Props) {
               <p className="diocese-health-sidebar-count" aria-live="polite">
                 {filteredHealthPoints.length} facilities
               </p>
-              <ul className="diocese-list diocese-list--health">
+              <ul
+                className="diocese-list diocese-list--health"
+                data-lenis-prevent
+                tabIndex={0}
+                aria-label="Health facilities"
+              >
                 {filteredHealthPoints.map((f, idx) => (
                   <li
                     key={f.id}
@@ -600,9 +742,9 @@ export default function DioceseMapSectionClient(raw: Props) {
                           <i className="fa-solid fa-location-dot" aria-hidden />
                           {f.district}, {f.sector}
                         </span>
-                        {f.facility_type ? (
-                          <span className="diocese-health-list-type">{f.facility_type}</span>
-                        ) : null}
+                        <span className="diocese-health-list-type">
+                          {healthFacilityCategoryLabel(f.category, true)}
+                        </span>
                       </div>
                       <i className="fa-solid fa-chevron-right diocese-list-arrow" aria-hidden />
                     </button>
@@ -713,8 +855,14 @@ export default function DioceseMapSectionClient(raw: Props) {
                 </button>
                 <div className="lp-body lp-body--health">
                   <div className="lp-title">{selectedHealth.name}</div>
+                  <div className="lp-health-badge">
+                    {healthFacilityCategoryLabel(selectedHealth.category, true)}
+                  </div>
                   {selectedHealth.facility_type ? (
-                    <div className="lp-health-badge">{selectedHealth.facility_type}</div>
+                    <div className="lp-meta">
+                      <i className="fa-solid fa-stethoscope" aria-hidden />{" "}
+                      {selectedHealth.facility_type}
+                    </div>
                   ) : null}
                   <div className="lp-meta">
                     <i className="fa-solid fa-church" aria-hidden /> {selectedHealth.diocese}
@@ -822,13 +970,13 @@ export default function DioceseMapSectionClient(raw: Props) {
           {activeTab === "health" ? (
             <div className="diocese-health-legend" aria-label="Facility legend">
               <span>
-                <i style={{ background: "#1d6f42" }} aria-hidden /> Catholic
+                <i style={{ background: "#6d28d9" }} aria-hidden /> Specialized Hospitals
               </span>
               <span>
-                <i style={{ background: "#2563eb" }} aria-hidden /> Public
+                <i style={{ background: "#a31616" }} aria-hidden /> District Hospitals
               </span>
               <span>
-                <i style={{ background: "#911313" }} aria-hidden /> Other
+                <i style={{ background: "#1d6f42" }} aria-hidden /> Health Centers
               </span>
               <span className="diocese-health-legend__note">
                 Solid ring = exact coords · dashed ring = approximate
