@@ -2108,6 +2108,13 @@ nav>ul>li {
             rgba(0, 0, 0, 0.66) 100%);
 }
 
+.about-page-content .hero-section-page .hero-slider-frame__overlay {
+    background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.24) 0%,
+            rgba(0, 0, 0, 0.36) 48%,
+            rgba(0, 0, 0, 0.5) 100%);
+}
+
 .hero-section-page .hero-breadcrumb {
     margin-top: 0.65rem;
     margin-bottom: 0;
