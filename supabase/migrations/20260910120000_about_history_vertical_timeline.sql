@@ -13,6 +13,7 @@ set
     "subtitle": "From a small charity established by Catholic Bishops to a nationwide humanitarian network — our journey spans over 66 years of unwavering service to the most vulnerable Rwandans.",
     "anchor_id": "history",
     "background_image": "",
+    "year_order": "past_to_present",
     "items": [
       {
         "year": "1959",
@@ -68,6 +69,7 @@ select
     "subtitle": "From a small charity established by Catholic Bishops to a nationwide humanitarian network — our journey spans over 66 years of unwavering service to the most vulnerable Rwandans.",
     "anchor_id": "history",
     "background_image": "",
+    "year_order": "past_to_present",
     "items": [
       {
         "year": "1959",

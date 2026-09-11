@@ -11,6 +11,8 @@ export type HistoryBentoItemInput = {
   span?: number;
 };
 
+export type HistoryYearOrder = "past_to_present" | "present_to_past";
+
 export type HistoryBentoSectionProps = {
   eyebrow?: string;
   eyebrow_icon?: string;
@@ -18,6 +20,8 @@ export type HistoryBentoSectionProps = {
   subtitle?: string;
   anchor_id?: string;
   background_image?: string;
+  /** Display order of milestones by year. */
+  year_order?: HistoryYearOrder | string;
   items?: HistoryBentoItemInput[];
 };
 
@@ -84,6 +88,42 @@ function markdownLiteToHtml(raw: string): string {
   return s;
 }
 
+function parseYearSortValue(year: string): number {
+  const match = year.match(/-?\d+/);
+  if (!match) return Number.POSITIVE_INFINITY;
+  const n = Number.parseInt(match[0], 10);
+  return Number.isFinite(n) ? n : Number.POSITIVE_INFINITY;
+}
+
+function normalizeYearOrder(raw: unknown): HistoryYearOrder {
+  const v = String(raw || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[-\s]+/g, "_");
+  if (
+    v === "present_to_past" ||
+    v === "desc" ||
+    v === "newest_first" ||
+    v === "reverse"
+  ) {
+    return "present_to_past";
+  }
+  return "past_to_present";
+}
+
+function sortTimelineCards(
+  cards: TimelineCard[],
+  order: HistoryYearOrder,
+): TimelineCard[] {
+  const sorted = [...cards].sort((a, b) => {
+    const ya = parseYearSortValue(a.year);
+    const yb = parseYearSortValue(b.year);
+    if (ya !== yb) return ya - yb;
+    return a.year.localeCompare(b.year);
+  });
+  return order === "present_to_past" ? sorted.reverse() : sorted;
+}
+
 function normalizeIcon(raw?: string): string | undefined {
   const t = (raw || "").trim();
   if (!t) return undefined;
@@ -118,11 +158,14 @@ export default function HistoryBentoSection(props: HistoryBentoSectionProps = {}
     "From a small charity established by Catholic Bishops to a nationwide humanitarian network — our journey spans over 66 years of unwavering service to the most vulnerable Rwandans.";
   const anchor = (props.anchor_id || "history").trim() || "history";
   const backgroundImage = String(props.background_image || "").trim();
+  const yearOrder = normalizeYearOrder(props.year_order);
 
-  const cards =
+  const cards = sortTimelineCards(
     Array.isArray(props.items) && props.items.length > 0
       ? mapCmsItems(props.items)
-      : DEFAULT_ITEMS;
+      : DEFAULT_ITEMS,
+    yearOrder,
+  );
 
   if (!cards.length) return null;
 

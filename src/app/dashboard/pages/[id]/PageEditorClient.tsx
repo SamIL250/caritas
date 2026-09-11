@@ -4351,6 +4351,25 @@ function SectionForm({
           {pageSlug === 'about' ? (
             <>
               {renderField('Background image', 'background_image', 'image')}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+                  Year order
+                </label>
+                <select
+                  className="w-full rounded-lg border border-stone-200 p-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515]"
+                  value={
+                    state.year_order === 'present_to_past' ||
+                    state.year_order === 'desc' ||
+                    state.year_order === 'newest_first'
+                      ? 'present_to_past'
+                      : 'past_to_present'
+                  }
+                  onChange={(e) => onChange('year_order', e.target.value)}
+                >
+                  <option value="past_to_present">Past → Present (oldest first)</option>
+                  <option value="present_to_past">Present → Past (newest first)</option>
+                </select>
+              </div>
               <p className="text-[10px] leading-relaxed text-stone-500">
                 Each milestone needs a <strong>year</strong> (shown in the center circle) and a description. Optional title appears above the body. Use the <strong>B</strong> / <em>I</em> buttons on each description, or type{" "}
                 <strong>**bold**</strong> and <strong>*italic*</strong>.
