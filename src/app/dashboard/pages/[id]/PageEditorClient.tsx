@@ -21,6 +21,8 @@ import {
   Layers,
   LayoutGrid,
   Newspaper,
+  Bold,
+  Italic,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -4330,7 +4332,7 @@ function SectionForm({
         <div className="space-y-4">
           {pageSlug === 'about' ? (
             <p className="rounded-lg border border-emerald-100 bg-emerald-50 p-3 text-[10px] leading-relaxed text-emerald-900">
-              About history uses the mosaic layout on the live site. Edits below update that mosaic preview and the public About page.
+              About history uses a vertical timeline (year circles on a center line, content alternating left/right). Add milestones below — the public section scrolls when there are many entries. Set a section background image if desired.
             </p>
           ) : null}
           {renderField('Eyebrow', 'eyebrow', 'text')}
@@ -4346,10 +4348,20 @@ function SectionForm({
           {renderField('Title', 'title', 'text')}
           {renderField('Subtitle', 'subtitle', 'textarea', { rows: 3 })}
           {renderField('Section ID (anchors)', 'anchor_id', 'text')}
-          <p className="text-[10px] leading-relaxed text-stone-500">
-            Mosaic cards: optional <strong>badge</strong>, <strong>card tone</strong>, <strong>icon</strong>, and{" "}
-            <strong>background image</strong>. Use **double asterisks** for bold in the body.
-          </p>
+          {pageSlug === 'about' ? (
+            <>
+              {renderField('Background image', 'background_image', 'image')}
+              <p className="text-[10px] leading-relaxed text-stone-500">
+                Each milestone needs a <strong>year</strong> (shown in the center circle) and a description. Optional title appears above the body. Use the <strong>B</strong> / <em>I</em> buttons on each description, or type{" "}
+                <strong>**bold**</strong> and <strong>*italic*</strong>.
+              </p>
+            </>
+          ) : (
+            <p className="text-[10px] leading-relaxed text-stone-500">
+              Mosaic cards: optional <strong>badge</strong>, <strong>card tone</strong>, <strong>icon</strong>, and{" "}
+              <strong>background image</strong>. Use **double asterisks** for bold in the body.
+            </p>
+          )}
           <p className="text-[10px] font-bold uppercase text-stone-400">Timeline items</p>
           <ul className="space-y-3">
             {(state.items || []).map((row: any, idx: number) => (
@@ -4376,55 +4388,59 @@ function SectionForm({
                       list[idx] = { ...list[idx], year: e.target.value };
                       onChange('items', list);
                     }}
-                    placeholder="Year"
+                    placeholder="Year (e.g. 1959 or 1994+)"
                   />
-                  <input
-                    className="w-full rounded border border-stone-200 p-2 text-xs"
-                    value={row.badge ?? ''}
-                    onChange={(e) => {
-                      const list = [...(state.items || [])];
-                      list[idx] = { ...list[idx], badge: e.target.value };
-                      onChange('items', list);
-                    }}
-                    placeholder="Badge (optional), e.g. Founding"
-                  />
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="space-y-1">
-                      <label className="text-[9px] font-bold uppercase text-stone-400">Card tone</label>
-                      <select
-                        className="w-full rounded border border-stone-200 p-2 text-xs"
-                        value={(row.tone as string) || ''}
-                        onChange={(e) => {
-                          const list = [...(state.items || [])];
-                          const v = e.target.value;
-                          list[idx] = {
-                            ...list[idx],
-                            tone: v === '' ? undefined : v,
-                          };
-                          onChange('items', list);
-                        }}
-                      >
-                        <option value="">Auto</option>
-                        <option value="crimson">Crimson</option>
-                        <option value="navy">Navy</option>
-                        <option value="light">Light</option>
-                        <option value="gold">Gold</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[9px] font-bold uppercase text-stone-400">Icon</label>
+                  {pageSlug !== 'about' ? (
+                    <>
                       <input
                         className="w-full rounded border border-stone-200 p-2 text-xs"
-                        value={row.icon ?? ''}
+                        value={row.badge ?? ''}
                         onChange={(e) => {
                           const list = [...(state.items || [])];
-                          list[idx] = { ...list[idx], icon: e.target.value };
+                          list[idx] = { ...list[idx], badge: e.target.value };
                           onChange('items', list);
                         }}
-                        placeholder="fa-seedling"
+                        placeholder="Badge (optional), e.g. Founding"
                       />
-                    </div>
-                  </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="text-[9px] font-bold uppercase text-stone-400">Card tone</label>
+                          <select
+                            className="w-full rounded border border-stone-200 p-2 text-xs"
+                            value={(row.tone as string) || ''}
+                            onChange={(e) => {
+                              const list = [...(state.items || [])];
+                              const v = e.target.value;
+                              list[idx] = {
+                                ...list[idx],
+                                tone: v === '' ? undefined : v,
+                              };
+                              onChange('items', list);
+                            }}
+                          >
+                            <option value="">Auto</option>
+                            <option value="crimson">Crimson</option>
+                            <option value="navy">Navy</option>
+                            <option value="light">Light</option>
+                            <option value="gold">Gold</option>
+                          </select>
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[9px] font-bold uppercase text-stone-400">Icon</label>
+                          <input
+                            className="w-full rounded border border-stone-200 p-2 text-xs"
+                            value={row.icon ?? ''}
+                            onChange={(e) => {
+                              const list = [...(state.items || [])];
+                              list[idx] = { ...list[idx], icon: e.target.value };
+                              onChange('items', list);
+                            }}
+                            placeholder="fa-seedling"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
                   <input
                     className="w-full rounded border border-stone-200 p-2 text-xs font-semibold"
                     value={row.title ?? ''}
@@ -4433,9 +4449,63 @@ function SectionForm({
                       list[idx] = { ...list[idx], title: e.target.value };
                       onChange('items', list);
                     }}
-                    placeholder="Title"
+                    placeholder={pageSlug === 'about' ? 'Title (optional)' : 'Title'}
                   />
+                  {pageSlug === 'about' ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[9px] font-bold uppercase text-stone-400 mr-1">Style</span>
+                      <button
+                        type="button"
+                        className="inline-flex h-7 items-center gap-1 rounded border border-stone-200 bg-white px-2 text-[11px] font-bold text-stone-700 hover:border-[#8c2208]/40 hover:text-[#8c2208]"
+                        title="Wrap selection with **bold**"
+                        onClick={() => {
+                          const el = document.getElementById(`about-timeline-body-${idx}`) as HTMLTextAreaElement | null;
+                          if (!el) return;
+                          const start = el.selectionStart ?? 0;
+                          const end = el.selectionEnd ?? 0;
+                          const value = row.body ?? '';
+                          const selected = value.slice(start, end) || 'text';
+                          const next = `${value.slice(0, start)}**${selected}**${value.slice(end)}`;
+                          const list = [...(state.items || [])];
+                          list[idx] = { ...list[idx], body: next };
+                          onChange('items', list);
+                          requestAnimationFrame(() => {
+                            el.focus();
+                            const caret = start + 2 + selected.length;
+                            el.setSelectionRange(start + 2, caret);
+                          });
+                        }}
+                      >
+                        <Bold size={12} aria-hidden /> Bold
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex h-7 items-center gap-1 rounded border border-stone-200 bg-white px-2 text-[11px] italic text-stone-700 hover:border-[#8c2208]/40 hover:text-[#8c2208]"
+                        title="Wrap selection with *italic*"
+                        onClick={() => {
+                          const el = document.getElementById(`about-timeline-body-${idx}`) as HTMLTextAreaElement | null;
+                          if (!el) return;
+                          const start = el.selectionStart ?? 0;
+                          const end = el.selectionEnd ?? 0;
+                          const value = row.body ?? '';
+                          const selected = value.slice(start, end) || 'text';
+                          const next = `${value.slice(0, start)}*${selected}*${value.slice(end)}`;
+                          const list = [...(state.items || [])];
+                          list[idx] = { ...list[idx], body: next };
+                          onChange('items', list);
+                          requestAnimationFrame(() => {
+                            el.focus();
+                            const caret = start + 1 + selected.length;
+                            el.setSelectionRange(start + 1, caret);
+                          });
+                        }}
+                      >
+                        <Italic size={12} aria-hidden /> Italic
+                      </button>
+                    </div>
+                  ) : null}
                   <textarea
+                    id={pageSlug === 'about' ? `about-timeline-body-${idx}` : undefined}
                     className="w-full rounded border border-stone-200 p-2 text-xs"
                     rows={3}
                     value={row.body ?? ''}
@@ -4444,21 +4514,23 @@ function SectionForm({
                       list[idx] = { ...list[idx], body: e.target.value };
                       onChange('items', list);
                     }}
-                    placeholder="Description (**bold** ok)"
+                    placeholder="Description (**bold** and *italic* ok)"
                   />
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold uppercase text-stone-400">Background image URL</label>
-                    <input
-                      className="w-full rounded border border-stone-200 p-2 text-xs"
-                      value={row.image_url ?? ''}
-                      onChange={(e) => {
-                        const list = [...(state.items || [])];
-                        list[idx] = { ...list[idx], image_url: e.target.value };
-                        onChange('items', list);
-                      }}
-                      placeholder="/img/… or https://…"
-                    />
-                  </div>
+                  {pageSlug !== 'about' ? (
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-bold uppercase text-stone-400">Background image URL</label>
+                      <input
+                        className="w-full rounded border border-stone-200 p-2 text-xs"
+                        value={row.image_url ?? ''}
+                        onChange={(e) => {
+                          const list = [...(state.items || [])];
+                          list[idx] = { ...list[idx], image_url: e.target.value };
+                          onChange('items', list);
+                        }}
+                        placeholder="/img/… or https://…"
+                      />
+                    </div>
+                  ) : null}
                 </div>
               </li>
             ))}
@@ -4470,7 +4542,9 @@ function SectionForm({
             onClick={() =>
               onChange('items', [
                 ...(state.items || []),
-                { year: '', badge: '', title: '', body: '', tone: '', icon: '', image_url: '' },
+                pageSlug === 'about'
+                  ? { year: '', title: '', body: '' }
+                  : { year: '', badge: '', title: '', body: '', tone: '', icon: '', image_url: '' },
               ])
             }
           >
