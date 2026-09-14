@@ -400,7 +400,7 @@ export default function NewsCards({
                               aria-hidden={idx !== activeSlide}
                             >
                               <div
-                                className="cr-stories__slide-media"
+                                className={`cr-stories__slide-media${img ? "" : " cr-stories__slide-media--fallback"}`}
                                 style={
                                   img
                                     ? {
@@ -409,6 +409,7 @@ export default function NewsCards({
                                     : undefined
                                 }
                               />
+                              <div className="cr-stories__slide-shade" aria-hidden />
                               <div className="cr-stories__slide-panel">
                                 <div className="cr-stories__slide-meta">
                                   {article.tag ? (

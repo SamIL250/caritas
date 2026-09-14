@@ -244,38 +244,46 @@ export default function BePartOfChangeSection({
             <div className="cr-bpc-change__frame">
               <div className="cr-bpc-change__grid">
                 <ScrollReveal delay={0.14} className="cr-bpc-change__feat-wrap">
-                <article className="cr-bpc-change__feat">
+                <article
+                  className={`cr-bpc-change__feat${campaign ? "" : " cr-bpc-change__feat--empty"}`}
+                >
                   <ParallaxLayer speed={0.12} className="cr-bpc-change__feat-media-wrap">
-                  <div className="cr-bpc-change__feat-media">
-                    {campaign?.featured_image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- CMS / external URLs
-                      <img
-                        src={campaign.featured_image_url}
-                        alt={campaign.image_alt || ""}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="cr-bpc-change__feat-placeholder" aria-hidden>
-                        <i className="fa-solid fa-image" />
-                        <span className="cr-bpc-change__feat-placeholder-label">
-                          Campaign image
-                        </span>
-                      </div>
-                    )}
-                    {campaign && (campaign.category_label || "").trim() ? (
-                      <span className="cr-bpc-change__feat-tag">
-                        {campaign.category_icon ? (
-                          <i className={iconClass(campaign.category_icon)} aria-hidden />
-                        ) : null}
-                        {campaign.category_label}
-                      </span>
-                    ) : null}
-                  </div>
+                    <div
+                      className={`cr-bpc-change__feat-media${campaign?.featured_image_url ? "" : " cr-bpc-change__feat-media--fallback"}`}
+                    >
+                      {campaign?.featured_image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- CMS / external URLs
+                        <img
+                          src={campaign.featured_image_url}
+                          alt={campaign.image_alt || ""}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="cr-bpc-change__feat-placeholder" aria-hidden>
+                          <i className="fa-solid fa-image" />
+                          <span className="cr-bpc-change__feat-placeholder-label">
+                            Campaign image
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </ParallaxLayer>
+
+                  {campaign ? (
+                    <div className="cr-bpc-change__feat-shade" aria-hidden />
+                  ) : null}
 
                   <div className="cr-bpc-change__feat-body">
                     {campaign ? (
                       <>
+                        {(campaign.category_label || "").trim() ? (
+                          <span className="cr-bpc-change__feat-tag">
+                            {campaign.category_icon ? (
+                              <i className={iconClass(campaign.category_icon)} aria-hidden />
+                            ) : null}
+                            {campaign.category_label}
+                          </span>
+                        ) : null}
                         {(campaign.title || "").trim() ? (
                           <h3 className="cr-bpc-change__feat-name">{campaign.title}</h3>
                         ) : null}

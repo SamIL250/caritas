@@ -160,7 +160,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.85rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (min-width: 960px) {
@@ -170,18 +170,59 @@
   }
 }
 
-/* ── Featured campaign card ── */
+/* ── Featured campaign card (full-bleed image + overlay, like Impact at a Glance) ── */
+.cr-bpc-change__feat-wrap {
+  height: 100%;
+}
+
 .cr-bpc-change__feat {
-  background: #ffffff;
-  border: 1px solid #e8e2d9;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: clamp(22rem, 42vw, 28rem);
+  height: 100%;
   border-radius: 1rem;
   overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 16px 40px rgba(60, 20, 10, 0.18);
+}
+
+@media (min-width: 960px) {
+  .cr-bpc-change__feat {
+    min-height: 100%;
+  }
+}
+
+.cr-bpc-change__feat--empty {
+  display: block;
+  min-height: auto;
+  height: auto;
+  background: #ffffff;
+  border: 1px solid #e8e2d9;
+  box-shadow: none;
+}
+
+.cr-bpc-change__feat--empty .cr-bpc-change__feat-media-wrap {
+  position: relative;
+  height: clamp(12rem, 28vw, 15rem);
+}
+
+.cr-bpc-change__feat--empty .cr-bpc-change__feat-body {
+  position: relative;
+  color: inherit;
+}
+
+.cr-bpc-change__feat-media-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .cr-bpc-change__feat-media {
   position: relative;
   width: 100%;
-  height: clamp(15rem, 32vw, 18.5rem);
+  height: 100%;
   background: #e5e7eb;
   overflow: hidden;
 }
@@ -191,6 +232,35 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1.02);
+  transition: transform 0.45s ease;
+}
+
+.cr-bpc-change__feat:hover .cr-bpc-change__feat-media img {
+  transform: scale(1.06);
+}
+
+.cr-bpc-change__feat-media--fallback {
+  background: linear-gradient(
+    155deg,
+    #8c2208 0%,
+    #6e1a06 55%,
+    #3f1006 100%
+  );
+}
+
+.cr-bpc-change__feat-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 8, 4, 0.12) 0%,
+    rgba(20, 8, 4, 0.22) 38%,
+    rgba(80, 20, 8, 0.74) 72%,
+    rgba(60, 14, 5, 0.94) 100%
+  );
+  pointer-events: none;
 }
 
 .cr-bpc-change__feat-placeholder {
@@ -213,16 +283,28 @@
   color: #9ca3af;
 }
 
+.cr-bpc-change__feat-body {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.15rem, 2vw, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cr-bpc-change__feat:not(.cr-bpc-change__feat--empty) .cr-bpc-change__feat-body {
+  color: #ffffff;
+}
+
 .cr-bpc-change__feat-tag {
-  position: absolute;
-  top: 0.85rem;
-  left: 0.85rem;
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   gap: 0.35rem;
   padding: 0.28rem 0.72rem;
   border-radius: 999px;
-  background: #8c2208;
+  background: rgba(140, 34, 8, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 700;
@@ -230,44 +312,44 @@
   text-transform: uppercase;
 }
 
-.cr-bpc-change__feat-body {
-  padding: clamp(1.15rem, 2vw, 1.5rem);
-}
-
 .cr-bpc-change__feat-name {
-  margin: 0 0 0.35rem;
+  margin: 0;
   font-size: clamp(1.2rem, 2vw, 1.45rem);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.cr-bpc-change__feat--empty .cr-bpc-change__feat-name {
   color: #111827;
 }
 
 .cr-bpc-change__feat-location {
-  margin: 0 0 0.85rem;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.35rem;
   font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   font-weight: 500;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .cr-bpc-change__feat-story {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.35rem;
   padding-left: 0.85rem;
-  border-left: 3px solid #8c2208;
+  border-left: 3px solid rgba(255, 255, 255, 0.45);
 }
 
 .cr-bpc-change__feat-story,
 .cr-bpc-change__feat-story .cr-expandable__text {
   font-size: 1.02rem;
   line-height: 1.6;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .cr-bpc-change__feat-story .cr-expandable__toggle {
-  color: #8c2208;
+  color: #f5d4a8;
   font-size: inherit;
   font-weight: 700;
 }
@@ -301,16 +383,16 @@
   justify-content: center;
   gap: 0.35rem;
   width: 100%;
-  margin-top: 0.75rem;
+  margin-top: 0.35rem;
   font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   font-weight: 600;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .cr-bpc-change__feat-link:hover {
-  color: #8c2208;
+  color: #ffffff;
 }
 
 .cr-bpc-change__empty {
