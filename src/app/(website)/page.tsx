@@ -67,13 +67,14 @@ export default async function LandingPage() {
     .eq('visible', true)
     .order('order', { ascending: true });
 
-  // 4. Fetch Sections
-  const { data: sections } = await supabase
+  // 4. Fetch Sections (all rows for fallback checks; only visible ones render)
+  const { data: allSections } = await supabase
     .from('sections')
     .select('*')
     .eq('page_id', pageId)
-    .eq('visible', true)
     .order('order', { ascending: true });
+
+  const sections = (allSections ?? []).filter((s) => s.visible !== false);
 
   // 5. Fetch published news articles for the news_cards section
   const { data: newsArticles } = await supabase
@@ -88,8 +89,9 @@ export default async function LandingPage() {
     (sections ?? []) as PublicSectionRow[],
   );
 
-  const hasProgramSection = enrichedSections?.some((s: any) => s.type === "program_cards");
-  const hasHomeAboutSection = enrichedSections?.some((s: any) => s.type === "home_about");
+  // Fallback blocks only when no CMS row exists — a hidden row must not re-trigger them.
+  const hasProgramSectionRow = (allSections ?? []).some((s) => s.type === "program_cards");
+  const hasHomeAboutSectionRow = (allSections ?? []).some((s) => s.type === "home_about");
 
   const heroRow = hero as Record<string, unknown> | null;
   const heroProps =
@@ -128,10 +130,10 @@ export default async function LandingPage() {
       />
 
       {/* Rooted in Faith, Built for People — CMS-driven or fallback defaults */}
-      {!hasHomeAboutSection ? <AboutSection /> : null}
+      {!hasHomeAboutSectionRow ? <AboutSection /> : null}
 
       {/* Default programs block only when no program_cards row exists in CMS */}
-      {!hasProgramSection ? <ProgramCards key="fallback-program-cards" /> : null}
+      {!hasProgramSectionRow ? <ProgramCards key="fallback-program-cards" /> : null}
 
       {/* All other CMS sections + Find Us block */}
       {(() => {
