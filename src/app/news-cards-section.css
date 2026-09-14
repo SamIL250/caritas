@@ -237,8 +237,8 @@
   min-height: 22rem;
   border-radius: 1rem;
   overflow: hidden;
-  background: #111827;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: #ffffff;
+  border: 1px solid #e8e2d9;
 }
 
 @media (min-width: 960px) {
@@ -273,7 +273,8 @@
   position: relative;
   z-index: 2;
   margin-top: auto;
-  background: #111827;
+  background: #ffffff;
+  border-top: 1px solid #e8e2d9;
   padding: clamp(1.35rem, 2.5vw, 1.85rem) clamp(1.25rem, 2.5vw, 2rem);
   display: flex;
   flex-direction: column;
@@ -307,7 +308,7 @@
   gap: 0.35rem;
   font-size: 0.75rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.62);
+  color: #9ca3af;
 }
 
 .cr-stories__slide-title {
@@ -316,7 +317,7 @@
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  color: #111827;
 }
 
 .cr-stories__slide-excerpt {
@@ -327,11 +328,11 @@
 .cr-stories__slide-excerpt .cr-expandable__text {
   font-size: 1.02rem;
   line-height: 1.55;
-  color: rgba(255, 255, 255, 0.88);
+  color: #4b5563;
 }
 
 .cr-stories__slide-excerpt .cr-expandable__toggle {
-  color: #ffffff;
+  color: #8c2208;
   border: none;
   background: transparent;
   font-size: inherit;
@@ -342,7 +343,7 @@
 .cr-stories__slide-excerpt .cr-expandable__toggle:hover {
   background: transparent;
   border-color: transparent;
-  color: #ffffff;
+  color: #a1280a;
 }
 
 .cr-stories__slide-link {
@@ -353,13 +354,13 @@
   margin-top: 0.15rem;
   padding: 0.58rem 1.15rem;
   border-radius: 999px;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  background: transparent;
-  color: #ffffff;
+  border: 1.5px solid rgba(140, 34, 8, 0.35);
+  background: #ffffff;
+  color: #8c2208;
   font-size: 0.82rem;
   font-weight: 700;
   text-decoration: none;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .cr-stories__slide-link:hover {
