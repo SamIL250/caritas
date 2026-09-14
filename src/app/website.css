@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme inline {
-    --font-outfit: 'Outfit', sans-serif;
-    --font-poppins: var(--font-outfit);
-    --font-inter: var(--font-outfit);
+    --font-sans: var(--font-outfit), "Outfit", ui-sans-serif, system-ui, sans-serif;
+    --font-poppins: var(--font-outfit), "Outfit", sans-serif;
+    --font-inter: var(--font-outfit), "Outfit", sans-serif;
     --color-primary-orange: #8c2208;
     --color-primary-orange-hover: #a1280a;
 }
@@ -22,6 +22,7 @@
     --text-dark: #333333;
     --text-light: #666666;
     --border-light: #e0e0e0;
+    --font-outfit: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 html {

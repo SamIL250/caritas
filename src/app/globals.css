@@ -27,8 +27,9 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
 
   /* Fonts */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-poppins: 'Poppins', sans-serif;
+  --font-outfit: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-outfit);
+  --font-poppins: var(--font-outfit);
 }
 
 @theme inline {

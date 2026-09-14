@@ -1,6 +1,7 @@
 import { GoogleTranslateBootstrap } from "@/components/i18n/GoogleTranslateBootstrap";
 import "@/components/i18n/google-translate.css";
 import NextTopLoader from 'nextjs-toploader';
+import { OUTFIT_GOOGLE_FONTS_HREF } from "@/lib/fonts";
 
 export const metadata = {
   title: "Caritas Rwanda CMS",
@@ -15,6 +16,11 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href={OUTFIT_GOOGLE_FONTS_HREF} rel="stylesheet" />
+      </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <NextTopLoader color="#a5280d" height={4} showSpinner={false} zIndex={99999} />
         <GoogleTranslateBootstrap />

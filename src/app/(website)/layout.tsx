@@ -129,15 +129,6 @@ import { getMergedFooterSettings, getCookieConsentSettings } from "@/lib/site-se
 import { buildMediaCaptionRecord } from "@/lib/media-captions";
 import { loadAllMediaCaptions } from "@/lib/media-captions-server";
 
-import { Outfit } from "next/font/google";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-outfit",
-  display: "swap",
-});
-
 export default async function WebsiteLayout({
   children,
 }: {
@@ -153,7 +144,7 @@ export default async function WebsiteLayout({
     <VolunteerProvider>
       <DonationProvider>
         <MediaCaptionProvider captions={buildMediaCaptionRecord(captionMap)}>
-        <div className={`website-root ${outfit.variable}`}>
+        <div className="website-root">
           <WebsiteJsonLd />
           <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
           {/* FontAwesome */}
