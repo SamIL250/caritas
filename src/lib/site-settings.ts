@@ -5,6 +5,11 @@ import {
   type FooterSettings,
 } from "@/lib/footer-settings";
 import { parseCookieSettings, type CookieConsentSettings } from "@/lib/cookie-consent";
+import {
+  parseTypographyFromOptions,
+  TYPOGRAPHY_DEFAULTS,
+  type TypographySettings,
+} from "@/lib/typography-settings";
 
 /** Footer merged with defaults, for the public site layout. */
 export async function getMergedFooterSettings(): Promise<FooterSettings> {
@@ -12,6 +17,14 @@ export async function getMergedFooterSettings(): Promise<FooterSettings> {
   const { data } = await supabase.from("site_settings").select("options").eq("id", 1).maybeSingle();
   if (!data?.options) return mergeFooterSettings(undefined);
   return parseFooterFromOptions(data.options);
+}
+
+/** Font size controls merged with defaults, for the public site layout. */
+export async function getMergedTypographySettings(): Promise<TypographySettings> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("site_settings").select("options").eq("id", 1).maybeSingle();
+  if (!data?.options) return { ...TYPOGRAPHY_DEFAULTS };
+  return parseTypographyFromOptions(data.options);
 }
 
 /** Cookie consent settings for the public site banner. */

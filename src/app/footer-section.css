@@ -112,7 +112,7 @@
   padding: 0 0 0.55rem;
   border-bottom: 2px solid rgba(255, 255, 255, 0.22);
   width: fit-content;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -138,7 +138,7 @@
 }
 
 .cr-footer .ft-chip-label {
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -189,7 +189,7 @@
 .cr-footer .ft-sys-desc {
   display: block;
   margin-top: 0.12rem;
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   line-height: 1.45;
   color: rgba(255, 255, 255, 0.58);
 }
@@ -263,7 +263,7 @@
 
 .cr-footer .ft-newsletter-feedback {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   line-height: 1.45;
 }
 
@@ -294,7 +294,7 @@
 }
 
 .cr-footer .ft-bottom-left {
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.58);
 }
@@ -324,7 +324,7 @@
 }
 
 .cr-footer .ft-bottom-links a {
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.58);
   text-decoration: none;

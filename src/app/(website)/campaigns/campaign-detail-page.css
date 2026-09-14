@@ -59,7 +59,7 @@
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.26);
   color: rgba(255, 255, 255, 0.92);
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -161,7 +161,7 @@
 }
 
 .campaign-detail-root .campaign-hero-stat-label {
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -232,7 +232,7 @@
 
 .campaign-detail-root .campaign-hero-breadcrumb {
   margin-top: 1.75rem;
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.55);
   display: flex;
@@ -340,12 +340,12 @@
 
 .campaign-detail-root .campaign-story-btn-more .fa-chevron-down,
 .campaign-detail-root .campaign-story-link-less .fa-chevron-up {
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
 }
 
 .campaign-detail-root .campaign-comments-identity-toggle .fa-chevron-down,
 .campaign-detail-root .campaign-comments-identity-toggle .fa-chevron-up {
-  font-size: 0.625rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.625rem);
 }
 
 .campaign-detail-root .campaign-full-story-html.donation-campaign-prose > p:first-of-type::first-letter {
@@ -599,14 +599,14 @@
 
 .campaign-detail-root .campaign-comments-msg-author {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   font-weight: 700;
   color: var(--campaign-body-ink);
   font-family: var(--font-campaign-prose);
 }
 
 .campaign-detail-root .campaign-comments-msg-time {
-  font-size: 0.6875rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6875rem);
   color: #78716c;
   font-family: var(--font-campaign-prose);
 }
@@ -614,7 +614,7 @@
 .campaign-detail-root .campaign-comments-msg-body {
   margin: 0.45rem 0 0;
   white-space: pre-wrap;
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   line-height: 1.55;
   color: var(--campaign-muted-body);
   font-family: var(--font-campaign-prose);
@@ -625,7 +625,7 @@
   padding: 0;
   border: none;
   background: none;
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   font-weight: 600;
   color: var(--campaign-red);
   cursor: pointer;
@@ -714,7 +714,7 @@
   gap: 0.35rem;
   align-items: center;
   margin-bottom: 0.65rem;
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   color: var(--campaign-muted-body);
   font-family: var(--font-campaign-prose);
 }
@@ -733,7 +733,7 @@
 
 .campaign-detail-root .campaign-comments-status {
   margin-bottom: 0.65rem;
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   line-height: 1.45;
   font-family: var(--font-campaign-prose);
 }
@@ -755,7 +755,7 @@
   padding: 0.55rem 0;
   margin-bottom: 0.35rem;
   font-family: var(--font-campaign-prose);
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   font-weight: 600;
   color: var(--campaign-red);
   background: none;
@@ -797,7 +797,7 @@
 
 .campaign-detail-root .campaign-comments-field-label span {
   display: block;
-  font-size: 0.6875rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6875rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;

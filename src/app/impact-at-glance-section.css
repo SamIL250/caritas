@@ -51,7 +51,7 @@
 
 .cr-impact__eyebrow {
   margin: 0 0 0.55rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;

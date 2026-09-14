@@ -66,7 +66,7 @@
   gap: 0.45rem;
   padding: 0.5rem 1.1rem;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-decoration: none;
@@ -102,7 +102,7 @@
   gap: 0.45rem;
   padding: 0.45rem 1rem 0.45rem 0.85rem;
   border-radius: 999px;
-  font-size: 0.77rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.77rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-decoration: none;
@@ -127,7 +127,7 @@
   gap: 0.45rem;
   background: rgba(122, 21, 21, 0.08);
   color: #7a1515;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -135,7 +135,7 @@
   border-radius: 100px;
   margin-bottom: 1rem;
 }
-.vg-eyebrow i { font-size: 0.7rem; }
+.vg-eyebrow i { font-size: max(var(--cr-text-min, 0rem), 0.7rem); }
 .vg-title {
   font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   font-weight: 800;
@@ -161,7 +161,7 @@
 .vg-cat-chip {
   display: inline-flex;
   align-items: center;
-  font-size: 0.7rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.7rem);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -249,7 +249,7 @@
   position: absolute;
   right: 10px;
   bottom: 10px;
-  font-size: 0.7rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.7rem);
   font-weight: 600;
   color: #ffffff;
   background: rgba(13, 27, 42, 0.7);
@@ -269,7 +269,7 @@
 .vg-pill {
   display: inline-flex;
   align-items: center;
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -340,7 +340,7 @@
   min-height: 0;
 }
 .vg-queue-head {
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -419,7 +419,7 @@
   position: absolute;
   right: 5px;
   bottom: 5px;
-  font-size: 0.6rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6rem);
   font-weight: 600;
   color: #ffffff;
   background: rgba(13, 27, 42, 0.75);
@@ -434,7 +434,7 @@
   min-width: 0;
 }
 .vg-queue-cat {
-  font-size: 0.6rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -598,8 +598,8 @@
   .vg-queue { padding: 1rem; }
   .vg-queue-item { grid-template-columns: 88px 1fr; }
   .vg-queue-thumb { width: 88px; }
-  .vg-media-tab { font-size: 0.72rem; padding: 0.42rem 0.85rem; }
-  .vg-view-more-yt { font-size: 0.72rem; }
+  .vg-media-tab { font-size: max(var(--cr-text-min, 0rem), 0.72rem); padding: 0.42rem 0.85rem; }
+  .vg-view-more-yt { font-size: max(var(--cr-text-min, 0rem), 0.72rem); }
   .vg-header-actions { flex-direction: column; align-items: flex-start; }
   
   /* Hide top View More and show bottom one full width */

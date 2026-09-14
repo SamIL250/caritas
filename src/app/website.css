@@ -346,7 +346,7 @@ nav>ul>li {
     width: 18px;
     text-align: center;
     color: #8c2208;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     flex-shrink: 0;
 }
 
@@ -378,7 +378,7 @@ nav>ul>li {
     gap: 0.4rem;
     padding: 0.75rem 0.9rem;
     border-radius: 10px;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     min-width: 78px;
     text-align: center;
 }
@@ -587,7 +587,7 @@ nav>ul>li {
     margin-top: 0.65rem;
     padding: 0.65rem 0.85rem;
     border-radius: 10px;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 800;
     color: #8c2208 !important;
     text-decoration: none;
@@ -653,7 +653,7 @@ nav>ul>li {
 
 .nav-mega-year-filter-label {
     margin: 0 0 0.4rem;
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -664,7 +664,7 @@ nav>ul>li {
     background: none;
     border: none;
     padding: 0.2rem 0;
-    font-size: 0.84rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.84rem);
     font-weight: 600;
     color: #94a3b8;
     cursor: pointer;
@@ -723,7 +723,7 @@ nav>ul>li {
 
 .nav-mega-preview-eyebrow {
     margin: 0 0 0.35rem;
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -771,7 +771,7 @@ nav>ul>li {
 
 .nav-mega-preview-year-label {
     margin: 0 0 0.4rem;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -833,7 +833,7 @@ nav>ul>li {
     border-radius: 999px;
     background: rgba(145, 19, 19, 0.92);
     color: #fff;
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     line-height: 1;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
 }
@@ -850,7 +850,7 @@ nav>ul>li {
     border-radius: 999px;
     background: rgba(145, 19, 19, 0.08);
     color: #911313;
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -883,7 +883,7 @@ nav>ul>li {
 }
 
 .nav-mega-preview-item-title {
-    font-size: 0.84rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.84rem);
     font-weight: 700;
     line-height: 1.35;
     color: #111827;
@@ -895,7 +895,7 @@ nav>ul>li {
 }
 
 .nav-mega-preview-item-date {
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 600;
     color: #64748b;
 }
@@ -912,7 +912,7 @@ nav>ul>li {
     align-items: center;
     gap: 0.45rem;
     margin-top: 0.75rem;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 700;
     color: #8c2208 !important;
     text-decoration: none;
@@ -947,7 +947,7 @@ nav>ul>li {
 
 /* Caret on dropdown parents */
 .has-dropdown .nav-item-row .caret {
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     margin-left: 0.25rem;
     transition: transform 0.2s ease;
     display: inline-block;
@@ -977,7 +977,7 @@ nav>ul>li {
     align-items: center;
     justify-content: center;
     padding: 0.55rem 1.5rem;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     border-radius: 50px;
     font-weight: 600;
     border: none;
@@ -1304,7 +1304,7 @@ nav>ul>li {
         margin-top: 0.25rem;
         padding: 0.7rem 0.75rem 0.55rem;
         border-top: 1px solid #efeae3;
-        font-size: 0.8rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.8rem);
         font-weight: 700;
         color: #8c2208 !important;
         background: transparent;
@@ -1348,7 +1348,7 @@ nav>ul>li {
         border: none;
         border-radius: 7px;
         background: rgba(140, 34, 8, 0.08);
-        font-size: 0.78rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     }
 
     .nav-sub-menu .nav-mega-category:hover .nav-mega-category-icon,
@@ -1410,7 +1410,7 @@ nav>ul>li {
         border: none;
         border-radius: 7px;
         background: rgba(140, 34, 8, 0.08);
-        font-size: 0.78rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     }
 
     .nav-mega-category.is-active .nav-mega-category-icon,
@@ -1429,7 +1429,7 @@ nav>ul>li {
         padding: 0.7rem 0.75rem 0.55rem;
         border-top: 1px solid #efeae3;
         border-radius: 0;
-        font-size: 0.8rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.8rem);
         font-weight: 700;
         color: #8c2208 !important;
         background: transparent;
@@ -1576,7 +1576,7 @@ nav>ul>li {
 }
 
 .hero-years-word {
-    font-size: 0.5rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.5rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -1603,7 +1603,7 @@ nav>ul>li {
     }
 
     .hero-years-word {
-        font-size: 0.42rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.42rem);
         max-width: 60px;
     }
 }
@@ -1624,7 +1624,7 @@ nav>ul>li {
     }
 
     .hero-years-word {
-        font-size: 0.38rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.38rem);
         max-width: 50px;
     }
 }
@@ -1822,7 +1822,7 @@ nav>ul>li {
 
 .hero-slider-frame__badge {
     margin: 0 0 1rem;
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -1985,7 +1985,7 @@ nav>ul>li {
     }
 
     .hero-years-watermark__label {
-        font-size: 0.46rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.46rem);
         letter-spacing: 0.16em;
     }
 
@@ -2163,7 +2163,7 @@ nav>ul>li {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50px;
     padding: 0.4rem 1.2rem;
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 500;
     color: var(--white);
     text-transform: uppercase;
@@ -2479,7 +2479,7 @@ section {
     gap: 0.5rem;
     background: rgba(165, 40, 13, 0.08);
     color: #a5280d;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -2587,7 +2587,7 @@ section {
 }
 
 .mvv-card-label {
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -2664,7 +2664,7 @@ section {
 }
 
 .value-pill-name {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 700;
     color: #0d1b2a;
     line-height: 1.3;
@@ -2698,7 +2698,7 @@ section {
 }
 
 .net-stat-label {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #5a6a7a;
     font-weight: 600;
     line-height: 1.3;
@@ -2765,7 +2765,7 @@ section {
     color: #fff;
     padding: 0.4rem 1rem;
     border-radius: 100px;
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 800;
     text-transform: uppercase;
 }
@@ -2826,14 +2826,14 @@ section {
 }
 
 .side-tag {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 800;
     color: var(--primary-orange);
     text-transform: uppercase;
 }
 
 .side-date {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: var(--text-light);
 }
 
@@ -3125,7 +3125,7 @@ section {
 }
 
 .bento-stat-label {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 600;
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
@@ -3295,7 +3295,7 @@ section {
     color: var(--white);
     padding: 0.4rem 1rem;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -3379,7 +3379,7 @@ section {
     background: rgba(165, 40, 13, 0.08);
     border: 1px solid rgba(165, 40, 13, 0.2);
     color: #a5280d;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -3439,7 +3439,7 @@ section {
     gap: 0.5rem;
     padding: 0.6rem 1.35rem;
     border-radius: 999px;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 700;
     letter-spacing: 0.02em;
     cursor: pointer;
@@ -3481,7 +3481,7 @@ section {
     }
 
     .mh-tab {
-        font-size: 0.74rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.74rem);
         padding: 0.5rem 1rem;
     }
 }
@@ -3643,7 +3643,7 @@ section {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: #fff;
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.2px;
@@ -3653,7 +3653,7 @@ section {
 }
 
 .story-feat-date {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: rgba(255, 255, 255, 0.5);
     margin-bottom: 0.5rem;
     display: flex;
@@ -3682,7 +3682,7 @@ section {
     align-items: center;
     gap: 0.5rem;
     color: #fff;
-    font-size: 0.83rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.83rem);
     font-weight: 700;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.22);
@@ -3751,7 +3751,7 @@ section {
 }
 
 .story-small-tag {
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.2px;
@@ -3759,7 +3759,7 @@ section {
 }
 
 .story-small-date {
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     color: #8a9aaa;
 }
 
@@ -3772,7 +3772,7 @@ section {
 }
 
 .story-small p {
-    font-size: 0.79rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.79rem);
     color: #5a6a7a;
     line-height: 1.55;
     display: -webkit-box;
@@ -3783,7 +3783,7 @@ section {
 }
 
 .story-small a.story-read {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 700;
     color: #a5280d;
     display: inline-flex;
@@ -3827,11 +3827,11 @@ section {
 
     .stories-magazine--three-sides .story-small-tag,
     .stories-magazine--three-sides .story-small-date {
-        font-size: 0.58rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.58rem);
     }
 
     .stories-magazine--three-sides .story-small h3 {
-        font-size: 0.8rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.8rem);
         line-height: 1.25;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -3845,7 +3845,7 @@ section {
     }
 
     .stories-magazine--three-sides .story-small a.story-read {
-        font-size: 0.68rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.68rem);
         margin-top: 0;
     }
 }
@@ -3986,7 +3986,7 @@ section {
 
 .story-date {
     color: var(--primary-orange);
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 800;
     margin-bottom: 1rem;
     text-transform: uppercase;
@@ -4135,7 +4135,7 @@ section {
     border: 1px solid rgba(140, 34, 8, 0.4);
     border-radius: 100px;
     padding: 0.4rem 1rem;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     color: #ff8c5a;
     text-transform: uppercase;
@@ -4268,7 +4268,7 @@ section {
 }
 
 .cta-card-label {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
@@ -4321,7 +4321,7 @@ section {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -4330,7 +4330,7 @@ section {
 }
 
 .cta-engage__eyebrow i {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     opacity: 0.9;
 }
 
@@ -4441,7 +4441,7 @@ section {
 }
 
 .cta-engage__stat-label {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -4530,7 +4530,7 @@ section {
     background: rgba(165, 40, 13, 0.08);
     border: 1px solid rgba(165, 40, 13, 0.2);
     color: #a5280d;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -4628,7 +4628,7 @@ section {
 }
 
 .map-card-label p {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: #8a9aaa;
 }
 
@@ -4740,7 +4740,7 @@ footer {
     justify-content: center;
     color: rgba(255, 255, 255, 0.4);
     text-decoration: none;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     transition: border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -4772,7 +4772,7 @@ footer {
 
 /* Column headings */
 .ft-col-heading {
-    font-size: 0.65rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.65rem);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1.2px;
@@ -4791,7 +4791,7 @@ footer {
 .ft-links li a {
     color: rgba(255, 255, 255, 0.4);
     text-decoration: none;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 400;
     transition: color 0.2s ease;
 }
@@ -4804,7 +4804,7 @@ footer {
     background: none;
     border: none;
     color: rgba(255, 255, 255, 0.4);
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 400;
     font-family: var(--font-outfit), "Outfit", sans-serif;
     cursor: pointer;
@@ -4818,7 +4818,7 @@ footer {
 
 /* Newsletter */
 .ft-newsletter-text {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     color: rgba(255, 255, 255, 0.35);
     line-height: 1.6;
     margin-bottom: 1rem;
@@ -4835,7 +4835,7 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     padding: 0.6rem 0.85rem;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     color: #ffffff;
     font-family: var(--font-outfit), "Outfit", sans-serif;
     outline: none;
@@ -4858,7 +4858,7 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     padding: 0.65rem;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 400;
     font-family: var(--font-outfit), "Outfit", sans-serif;
     cursor: pointer;
@@ -4880,7 +4880,7 @@ footer {
 }
 
 .ft-newsletter-feedback {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     line-height: 1.45;
     margin: 0;
     padding: 0.5rem 0.65rem;
@@ -4954,7 +4954,7 @@ footer {
     justify-content: center;
     padding: 0.55rem 1.2rem;
     border-radius: 6px;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 400;
     font-family: var(--font-outfit), "Outfit", sans-serif;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -5013,11 +5013,11 @@ footer {
 
 .ft-chip-icon i {
     color: #f97316;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
 }
 
 .ft-chip-label {
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     font-weight: 500;
     color: rgba(255, 255, 255, 0.3);
     text-transform: uppercase;
@@ -5025,7 +5025,7 @@ footer {
 }
 
 .ft-chip-value {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 400;
     color: rgba(255, 255, 255, 0.8);
     margin-top: 0.05rem;
@@ -5065,7 +5065,7 @@ footer {
 }
 
 .ft-bottom-left {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     color: rgba(255, 255, 255, 0.3);
     line-height: 1.6;
 }
@@ -5082,7 +5082,7 @@ footer {
 }
 
 .ft-bottom-links a {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: rgba(255, 255, 255, 0.25);
     text-decoration: none;
     transition: color 0.2s ease;
@@ -5099,7 +5099,7 @@ footer {
 .ft-developer a {
     color: rgba(255, 255, 255, 0.35);
     text-decoration: none;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     transition: color 0.2s ease;
 }
 
@@ -5208,7 +5208,7 @@ footer {
 
 .footer-credit {
     color: rgba(255, 255, 255, 0.4);
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-style: italic;
 }
 
@@ -5458,7 +5458,7 @@ footer {
 }
 
 .dial-caret {
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     color: #8a9aaa;
     margin-left: 0.1rem;
     transition: transform 0.2s;
@@ -5499,7 +5499,7 @@ footer {
     top: 50%;
     transform: translateY(-50%);
     color: #aaa;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
 }
 
 .dial-search {
@@ -5564,7 +5564,7 @@ footer {
 
 .dial-option-code {
     color: #8a9aaa;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     flex-shrink: 0;
 }
 
@@ -5709,7 +5709,7 @@ footer {
     border: 1px solid rgba(140, 34, 8, 0.18);
     border-radius: 100px;
     padding: 0.4rem 1.1rem;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     color: var(--primary-orange);
     text-transform: uppercase;
@@ -5872,7 +5872,7 @@ footer {
 }
 
 .partner-name {
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 700;
     color: var(--text-light);
     text-align: center;
@@ -5977,7 +5977,7 @@ footer {
     border: 1px solid rgba(140, 34, 8, 0.2);
     border-radius: 100px;
     padding: 0.4rem 1.1rem;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     color: var(--primary-orange);
     text-transform: uppercase;
@@ -6053,7 +6053,7 @@ footer {
 
 .contact-info-card-text strong {
     display: block;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 700;
     color: var(--text-light);
     text-transform: uppercase;
@@ -6142,7 +6142,7 @@ footer {
 }
 
 .cf-field label {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 700;
     color: var(--text-light);
     text-transform: uppercase;
@@ -6213,7 +6213,7 @@ footer {
     border: 1px solid #e2e5ea;
     background: #f8f9fb;
     color: var(--text-light);
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -6234,7 +6234,7 @@ footer {
 }
 
 .cf-pill-label {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 700;
     color: var(--text-light);
     text-transform: uppercase;
@@ -6281,7 +6281,7 @@ footer {
 }
 
 .cf-feedback {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     line-height: 1.55;
     padding: 0.75rem 0.95rem;
     border-radius: 10px;
@@ -6363,7 +6363,7 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 800;
     color: #911313;
     text-transform: uppercase;
@@ -6425,12 +6425,12 @@ footer {
     justify-content: center;
     flex-shrink: 0;
     color: #911313;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
 }
 
 .cm-info-text strong {
     display: block;
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     font-weight: 700;
     color: #888;
     text-transform: uppercase;
@@ -6439,7 +6439,7 @@ footer {
 }
 
 .cm-info-text span {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     color: #333;
     font-weight: 600;
 }
@@ -6469,7 +6469,7 @@ footer {
 }
 
 .cm-form-subtitle {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     color: #888;
     margin-bottom: 1.5rem;
 }
@@ -6494,7 +6494,7 @@ footer {
 }
 
 .cm-field label {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 700;
     color: #888;
     text-transform: uppercase;
@@ -6548,7 +6548,7 @@ footer {
     border: 1px solid #e2e5ea;
     background: #f8f9fb;
     color: #666;
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -6568,7 +6568,7 @@ footer {
 }
 
 .cm-pill-label {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 700;
     color: #888;
     text-transform: uppercase;
@@ -6605,7 +6605,7 @@ footer {
 }
 
 .cm-feedback {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     line-height: 1.5;
     padding: 0.65rem 0.9rem;
     border-radius: 8px;
@@ -6686,7 +6686,7 @@ footer {
     border: 1.5px solid #e2e5ea;
     background: #fff;
     color: #777;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 700;
     font-family: inherit;
     cursor: pointer;
@@ -6861,7 +6861,7 @@ footer {
 
 .contact-map-card-label p {
     margin: 0.1rem 0 0;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #777;
     line-height: 1.35;
 }
@@ -6979,7 +6979,7 @@ button:focus {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.26);
     color: rgba(255, 255, 255, 0.92);
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -7055,7 +7055,7 @@ button:focus {
     padding: 0 0.15rem 0 0;
     line-height: 1.25;
     color: rgba(255, 255, 255, 0.88);
-    font-size: 0.76rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.76rem);
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -7127,7 +7127,7 @@ button:focus {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.22);
     color: rgba(255, 255, 255, 0.88);
-    font-size: 0.76rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.76rem);
     font-weight: 600;
     line-height: 1.25;
     padding: 0.48rem 0.9rem;
@@ -7223,7 +7223,7 @@ button.qnav-pill {
     .qnav-pill {
         width: 100%;
         justify-content: center;
-        font-size: 0.82rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.82rem);
         padding: 0.5rem 1rem;
         white-space: normal;
     }
@@ -7382,7 +7382,7 @@ section.stats-banner {
 }
 
 .stats-banner-label {
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -7423,7 +7423,7 @@ section {
     gap: 0.5rem;
     background: rgba(165, 40, 13, 0.08);
     color: #a5280d;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -7577,7 +7577,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .chairperson-title {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     text-align: center;
     line-height: 1.5;
 }
@@ -7729,7 +7729,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .hm-badge {
-    font-size: 0.625rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.625rem);
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -7970,7 +7970,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .mvv-card-label {
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -8046,7 +8046,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .value-pill-name {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 700;
     color: #0d1b2a;
     line-height: 1.3;
@@ -8080,7 +8080,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .net-stat-label {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #5a6a7a;
     font-weight: 600;
     line-height: 1.35;
@@ -8154,7 +8154,7 @@ section#values .head-center .sub-section-subtitle {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 800;
     color: #fff;
     background: #911313;
@@ -8175,7 +8175,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .dc-card-city {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: #911313;
     font-weight: 700;
     text-transform: uppercase;
@@ -8187,7 +8187,7 @@ section#values .head-center .sub-section-subtitle {
 }
 
 .dc-card-desc {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     color: #5a6a7a;
     line-height: 1.65;
     margin-bottom: 1rem;
@@ -8205,13 +8205,13 @@ section#values .head-center .sub-section-subtitle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #6b7280;
 }
 
 .dc-card-meta-row i {
     color: #911313;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     width: 14px;
     text-align: center;
     flex-shrink: 0;
@@ -8231,7 +8231,7 @@ section#values .head-center .sub-section-subtitle {
     gap: 0.4rem;
     padding: 0.55rem 0.8rem;
     border-radius: 10px;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 700;
     text-decoration: none;
     border: 1.5px solid #e5e7eb;
@@ -8329,7 +8329,7 @@ a.diocese-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.66rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.66rem);
     font-weight: 800;
     color: #fff;
     letter-spacing: 0.03em;
@@ -8354,7 +8354,7 @@ a.diocese-card {
 }
 
 .dioc-est {
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     font-weight: 600;
     color: rgba(255, 220, 200, 0.88);
     display: flex;
@@ -8364,7 +8364,7 @@ a.diocese-card {
 }
 
 .dioc-est i {
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
 }
 
 .dioc-readmore {
@@ -8375,7 +8375,7 @@ a.diocese-card {
     background: rgba(255, 255, 255, 0.14);
     border: 1px solid rgba(255, 255, 255, 0.28);
     color: #fff;
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 700;
     letter-spacing: 0.07em;
     text-transform: uppercase;
@@ -8393,7 +8393,7 @@ a.diocese-card {
 }
 
 .dioc-readmore i {
-    font-size: 0.55rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.55rem);
 }
 
 .dioc-readmore--static {
@@ -8472,7 +8472,7 @@ button.dioc-readmore {
     display: inline-block;
     background: rgba(165, 40, 13, 0.88);
     color: #fff;
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     font-weight: 800;
     padding: 0.14rem 0.5rem;
     border-radius: 6px;
@@ -8497,7 +8497,7 @@ button.dioc-readmore {
     border: none;
     border-radius: 50%;
     color: #fff;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8537,12 +8537,12 @@ button.dioc-readmore {
     align-items: center;
     justify-content: center;
     color: #a5280d;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     margin-top: 0.08rem;
 }
 
 .dioc-row-label {
-    font-size: 0.64rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.64rem);
     font-weight: 700;
     color: #9ca3af;
     text-transform: uppercase;
@@ -8583,7 +8583,7 @@ button.dioc-readmore {
     gap: 0.4rem;
     background: #a5280d;
     color: #fff;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 700;
     padding: 0.65rem 1.1rem;
     border-radius: 11px;
@@ -8601,7 +8601,7 @@ button.dioc-readmore {
     background: rgba(0, 0, 0, 0.055);
     border: none;
     color: #6b7280;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 600;
     padding: 0.65rem 1.1rem;
     border-radius: 11px;
@@ -8667,7 +8667,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .diocese-card--special .dioc-icon-center span {
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -8804,7 +8804,7 @@ a.diocese-card.diocese-card--special {
     border: 1px solid rgba(145, 19, 19, 0.2);
     border-radius: 100px;
     padding: 0.3rem 0.9rem;
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 700;
     color: #911313;
     text-transform: uppercase;
@@ -8820,7 +8820,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-chairperson-title {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     color: #6b7280;
     text-align: center;
     line-height: 1.6;
@@ -8847,7 +8847,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-chair-eyebrow {
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     font-weight: 800;
     color: #911313;
     text-transform: uppercase;
@@ -8898,7 +8898,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-chairperson-meta {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #9ca3af;
     font-style: normal;
     letter-spacing: 0.3px;
@@ -9094,7 +9094,7 @@ a.diocese-card.diocese-card--special {
     background: #ffffff;
     color: #8c2208;
     border: 2.5px solid #8c2208;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 800;
     letter-spacing: 0.02em;
     line-height: 1;
@@ -9215,7 +9215,7 @@ a.diocese-card.diocese-card--special {
     .about-hist-year-node {
         min-width: 3.15rem;
         height: 3.15rem;
-        font-size: 0.7rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     }
 
     .about-hist-copy {
@@ -9229,7 +9229,7 @@ a.diocese-card.diocese-card--special {
     }
 
     .about-hist-body {
-        font-size: 0.84rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.84rem);
     }
 }
 
@@ -9313,7 +9313,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-mvv-stmt-label {
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 800;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -9444,7 +9444,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-mvv-vals-eyebrow {
-    font-size: 0.62rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.62rem);
     font-weight: 800;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -9535,7 +9535,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .about-mvv-value-pill-desc {
-    font-size: 0.71rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.71rem);
     color: rgba(255, 255, 255, 0.85);
     line-height: 1.55;
     margin: 0;
@@ -9613,7 +9613,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ldr-era-title {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 800;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -9629,7 +9629,7 @@ a.diocese-card.diocese-card--special {
 
 .ldr-era-span {
     margin-left: auto;
-    font-size: 0.68rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem);
     font-weight: 600;
     color: #6b7280;
     background: rgba(165, 40, 13, 0.07);
@@ -9815,7 +9815,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ldr-name {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 700;
     color: #0d1b2a;
     line-height: 1.36;
@@ -9823,13 +9823,13 @@ a.diocese-card.diocese-card--special {
 }
 
 .ldr-role {
-    font-size: 0.63rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.63rem);
     color: #6b7280;
     margin-bottom: 0.2rem;
 }
 
 .ldr-period {
-    font-size: 0.61rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.61rem);
     font-weight: 700;
     color: rgba(165, 40, 13, 0.65);
 }
@@ -9838,7 +9838,7 @@ a.diocese-card.diocese-card--special {
     display: inline-block;
     background: #a5280d;
     color: #fff;
-    font-size: 0.56rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.56rem);
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -9884,7 +9884,7 @@ a.diocese-card.diocese-card--special {
     position: absolute;
     left: 0;
     transform: translateX(-50%);
-    font-size: 0.64rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.64rem);
     font-weight: 800;
     color: #a5280d;
     letter-spacing: 0.04em;
@@ -10065,7 +10065,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ldr-popup-name {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 800;
     color: #0d1b2a;
     line-height: 1.35;
@@ -10073,7 +10073,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ldr-popup-role {
-    font-size: 0.65rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.65rem);
     font-weight: 500;
     color: #a5280d;
 }
@@ -10282,7 +10282,7 @@ a.diocese-card.diocese-card--special {
     border: 1px solid rgba(140, 34, 8, 0.18);
     border-radius: 100px;
     padding: 0.4rem 1.1rem;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     color: var(--primary-orange);
     text-transform: uppercase;
@@ -10599,7 +10599,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .impact-stat .stat-label {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -10648,7 +10648,7 @@ a.diocese-card.diocese-card--special {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     font-weight: 800;
     color: #adb5bd;
     transition: all 0.3s ease;
@@ -10679,7 +10679,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .step-description {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     color: #888;
     margin-bottom: 1rem;
     line-height: 1.4;
@@ -10744,7 +10744,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .campaign-card .card-text p {
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: #888;
     line-height: 1.35;
 }
@@ -10800,7 +10800,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .preset-btn .currency {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     opacity: 0.7;
     margin-left: 0.25rem;
     font-weight: 600;
@@ -11079,14 +11079,14 @@ a.diocese-card.diocese-card--special {
 .pub-card-figure .media-figure-caption,
 .news-card-figure .media-figure-caption {
     text-align: left;
-    font-size: 0.8125rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
     padding: 0 0.15rem;
 }
 
 .testimony-card-figure .media-figure-caption {
     padding: 0.5rem 0.75rem 0;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
 }
 
 .donation-campaign-meta {
@@ -11112,7 +11112,7 @@ a.diocese-card.diocese-card--special {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -11148,7 +11148,7 @@ a.diocese-card.diocese-card--special {
 
 .donation-frequency-heading {
     display: block;
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -11167,7 +11167,7 @@ a.diocese-card.diocese-card--special {
     background: #fff;
     border-radius: 999px;
     padding: 0.45rem 0.9rem;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 800;
     color: #475569;
     cursor: pointer;
@@ -11222,7 +11222,7 @@ a.diocese-card.diocese-card--special {
     background: #ffffff;
     cursor: pointer;
     text-align: left;
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 700;
     color: #1a1a1a;
     transition: all 0.2s ease;
@@ -11274,7 +11274,7 @@ a.diocese-card.diocese-card--special {
     align-items: center;
     border-radius: 999px;
     padding: 0.12rem 0.45rem;
-    font-size: 0.58rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.58rem);
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -11315,7 +11315,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .donation-offline-refhint {
-    font-size: 0.8rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     font-weight: 600;
     color: #334155;
 }
@@ -11338,7 +11338,7 @@ a.diocese-card.diocese-card--special {
 
 .secure-note {
     text-align: center;
-    font-size: 0.75rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.75rem);
     color: #94a3b8;
     margin-top: 1.5rem;
     display: flex;
@@ -11626,14 +11626,14 @@ a.diocese-card.diocese-card--special {
 }
 
 .donation-policy-item__copy {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     line-height: 1.45;
     color: #334155;
 }
 
 .donation-policy-item__copy strong {
     display: block;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: #0f172a;
@@ -11971,14 +11971,14 @@ a.diocese-card.diocese-card--special {
 }
 
 .donation-policy-item__copy {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     line-height: 1.45;
     color: #334155;
 }
 
 .donation-policy-item__copy strong {
     display: block;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: #0f172a;
@@ -12298,7 +12298,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ft-col-heading {
-    font-size: 0.72rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.72rem);
     font-weight: 800;
     letter-spacing: 0.13em;
     text-transform: uppercase;
@@ -12311,7 +12311,7 @@ a.diocese-card.diocese-card--special {
 
 .ft-sys-name {
     display: block;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
     transition: color 0.2s ease;
@@ -12319,7 +12319,7 @@ a.diocese-card.diocese-card--special {
 
 .ft-sys-desc {
     display: block;
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     color: rgba(255, 255, 255, 0.3);
     margin-top: 0.1rem;
     transition: color 0.2s ease;
@@ -12360,7 +12360,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ft-chip-label {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     font-weight: 700;
     color: #64748b;
     text-transform: uppercase;
@@ -12469,7 +12469,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ft-bottom-left {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #475569;
     line-height: 1.5;
 }
@@ -12485,7 +12485,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .ft-bottom-links a {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #475569;
     text-decoration: none;
     transition: color 0.2s;
@@ -12562,7 +12562,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .metrics-kpi-label {
-    font-size: 0.6rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.6rem);
     font-weight: 600;
     color: #6b7280;
     text-transform: uppercase;
@@ -12701,13 +12701,13 @@ a.diocese-card.diocese-card--special {
 }
 
 .metrics-stat-card-label {
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 600;
     color: #6b7280;
 }
 
 .metrics-stat-card-sub {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     color: #9ca3af;
     margin-top: 0.2rem;
 }
@@ -12744,7 +12744,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .metrics-program-desc {
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     color: #6b7280;
     margin-top: 0.1rem;
 }
@@ -12772,7 +12772,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .metrics-program-stat-lbl {
-    font-size: 0.7rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     color: #6b7280;
     font-weight: 600;
     text-transform: uppercase;
@@ -12794,7 +12794,7 @@ a.diocese-card.diocese-card--special {
 .metrics-prog-bar-label {
     display: flex;
     justify-content: space-between;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     font-weight: 600;
     color: #374151;
     margin-bottom: 0.35rem;
@@ -12907,7 +12907,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .metrics-reach-card-stat .lbl {
-    font-size: 0.65rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.65rem);
     color: #6b7280;
     font-weight: 600;
     text-transform: uppercase;
@@ -12920,7 +12920,7 @@ a.diocese-card.diocese-card--special {
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.78rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.78rem);
     color: #6b7280;
 }
 
@@ -12939,7 +12939,7 @@ a.diocese-card.diocese-card--special {
 }
 
 .metrics-stat-card-sub {
-    font-size: 0.65rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.65rem);
     color: #9ca3af;
     margin-top: 0.15rem;
 }
@@ -13023,7 +13023,7 @@ a.diocese-card.diocese-card--special {
         padding-right: 1.25rem !important;
         padding-top: 0.65rem !important;
         padding-bottom: 0.65rem !important;
-        font-size: 0.7rem !important;
+        font-size: max(var(--cr-text-min, 0rem), 0.7rem) !important;
     }
 
     .hero-section-height .hero-years-badge {
@@ -13115,7 +13115,7 @@ a.diocese-card.diocese-card--special {
     }
 
     .story-feat-tag {
-        font-size: 0.58rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.58rem);
         padding: 0.2rem 0.6rem;
         margin-bottom: 0.5rem;
     }
@@ -13134,7 +13134,7 @@ a.diocese-card.diocese-card--special {
     }
 
     .story-small h3 {
-        font-size: 0.8rem;
+        font-size: max(var(--cr-text-min, 0rem), 0.8rem);
     }
 
     .story-small p {

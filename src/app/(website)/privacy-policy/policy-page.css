@@ -27,7 +27,7 @@
 }
 
 .policy-page-date {
-  font-size: 0.82rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   color: rgba(255,255,255,0.6);
   font-weight: 500;
   margin: 0;

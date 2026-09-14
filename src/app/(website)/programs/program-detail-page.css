@@ -146,14 +146,14 @@
 }
 
 .program-pillar-link-chevron {
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   color: var(--campaign-red, #a5280d);
   flex-shrink: 0;
 }
 
 .program-pillar-note {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   line-height: 1.55;
   color: var(--campaign-muted-body, #57534e);
 }
@@ -312,7 +312,7 @@
 }
 
 .program-related-card-eyebrow {
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -332,7 +332,7 @@
 }
 
 .program-related-card-excerpt {
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   line-height: 1.45;
   color: var(--campaign-muted-body, #57534e);
   display: -webkit-box;
@@ -347,7 +347,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   color: #78716c;
 }
 
@@ -360,7 +360,7 @@
 }
 
 .program-related-card-cta .fa-arrow-right {
-  font-size: 0.6rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6rem);
 }
 
 /* -------------------------------------------------------------
@@ -409,7 +409,7 @@
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 100px;
   padding: 0.35rem 1rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -439,7 +439,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  font-size: 0.82rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   color: rgba(255, 255, 255, 0.65);
 }
 

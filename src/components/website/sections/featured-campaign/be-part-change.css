@@ -70,7 +70,7 @@
 }
 
 .cr-bpc-change__toggle-arrow {
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -101,7 +101,7 @@
 
 .cr-bpc-change__eyebrow {
   margin: 0 0 0.75rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -206,7 +206,7 @@
 }
 
 .cr-bpc-change__feat-placeholder-label {
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -224,7 +224,7 @@
   border-radius: 999px;
   background: #8c2208;
   color: #ffffff;
-  font-size: 0.62rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -248,7 +248,7 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   font-weight: 500;
   color: #6b7280;
 }
@@ -302,7 +302,7 @@
   gap: 0.35rem;
   width: 100%;
   margin-top: 0.75rem;
-  font-size: 0.82rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   font-weight: 600;
   color: #6b7280;
   text-decoration: none;
@@ -407,7 +407,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.62rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -451,7 +451,7 @@
   background: #ffffff;
   color: #374151;
   font-family: inherit;
-  font-size: 0.74rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.74rem);
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -485,7 +485,7 @@
   padding: 0.72rem 1.1rem;
   border-radius: 999px;
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   font-weight: 700;
   text-decoration: none;
   text-align: center;
@@ -548,7 +548,7 @@
   .cr-bpc-change__toggle {
     width: 100%;
     justify-content: center;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   }
 
   .cr-bpc-change__bottom {

@@ -177,7 +177,7 @@
 }
 .cb-header__badge {
   flex-shrink: 0;
-  font-size: 0.62rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -188,7 +188,7 @@
   border-radius: 4px;
 }
 .cb-header__sub {
-  font-size: 0.74rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.74rem);
   color: #5a6a7a;
   margin: 0.1rem 0 0;
   line-height: 1.4;
@@ -212,7 +212,7 @@
   border: 1px solid rgba(13, 27, 42, 0.1);
   color: #1a2433;
   font-family: inherit;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.02em;
   padding: 0.4rem 0.65rem;
@@ -292,7 +292,7 @@ html.cb-chat-open body {
     no-repeat right 0.4rem center;
   color: #1a2433;
   font-family: inherit;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   border-radius: 8px;
@@ -352,7 +352,7 @@ html.cb-chat-open body {
 .cb-lang-picker__label {
   display: block;
   margin-top: 0.15rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   color: #5a6a7a;
 }
 
@@ -389,7 +389,7 @@ html.cb-chat-open body {
   gap: 0.55rem;
 }
 .cb-suggestions__label {
-  font-size: 0.66rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.66rem);
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -454,7 +454,7 @@ html.cb-chat-open body {
   align-items: flex-start;
 }
 .cb-msg__role {
-  font-size: 0.62rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -538,7 +538,7 @@ html.cb-chat-open body {
   border-bottom-right-radius: inherit;
 }
 .cb-error {
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   color: #b53b3b;
   background: #faecec;
   border: 1px solid rgba(181, 59, 59, 0.18);
@@ -618,7 +618,7 @@ html.cb-chat-open body {
   margin-top: 0.55rem;
 }
 .cb-disclaimer {
-  font-size: 0.7rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.7rem);
   font-style: italic;
   color: #8a96a3;
   margin: 0;
@@ -626,7 +626,7 @@ html.cb-chat-open body {
   flex: 1 1 auto;
 }
 .cb-counter {
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   color: #8a96a3;
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;

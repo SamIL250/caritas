@@ -14,7 +14,7 @@
 }
 
 .news-detail-breadcrumb {
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   color: #6b7280;
   margin-bottom: 1rem;
 }
@@ -71,7 +71,7 @@
 
 .news-detail-eyebrow {
   margin: 0 0 0.45rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -89,7 +89,7 @@
 
 .news-detail-date {
   margin: 0.75rem 0 0;
-  font-size: 0.82rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   color: #6b7280;
   display: inline-flex;
   align-items: center;
@@ -278,7 +278,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -322,7 +322,7 @@
 .news-sidebar-heading {
   margin: 0;
   padding: 1rem 1.1rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -357,7 +357,7 @@
 }
 
 .news-sidebar-link-title {
-  font-size: 0.84rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.84rem);
   font-weight: 600;
   line-height: 1.4;
   min-width: 0;
@@ -368,7 +368,7 @@
 }
 
 .news-sidebar-chevron {
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
   color: #9ca3af;
   flex-shrink: 0;
 }
@@ -391,11 +391,11 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
 }
 
 .news-sidebar-active-title {
-  font-size: 0.84rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.84rem);
   font-weight: 700;
   line-height: 1.45;
   min-width: 0;

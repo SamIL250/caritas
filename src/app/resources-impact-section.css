@@ -42,7 +42,7 @@ section.cr-resources-impact {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 100px;
-  font-size: 0.6875rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6875rem);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -63,7 +63,7 @@ section.cr-resources-impact {
 }
 
 .cr-resources-subtitle {
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   color: rgba(148, 163, 184, 0.95);
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -168,7 +168,7 @@ section.cr-resources-impact {
   margin-top: auto;
   padding-top: 0.35rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   font-weight: 500;
   color: rgba(203, 213, 225, 0.88);
   width: 100%;
@@ -238,7 +238,7 @@ a.cr-resources-cta:hover .cr-resources-cta-arrow {
 }
 
 .page-editor-section-preview .cr-resources-subtitle {
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
 }
 
 .page-editor-section-preview .cr-resources-grid {
@@ -266,11 +266,11 @@ a.cr-resources-cta:hover .cr-resources-cta-arrow {
 }
 
 .page-editor-section-preview .cr-resources-label {
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
 }
 
 .page-editor-section-preview .cr-resources-trend {
-  font-size: 0.58rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.58rem);
   padding-top: 0.28rem;
 }
 
@@ -281,6 +281,6 @@ a.cr-resources-cta:hover .cr-resources-cta-arrow {
 
 .page-editor-section-preview a.cr-resources-cta {
   padding: 0.45rem 0.85rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   border-radius: 6px;
 }

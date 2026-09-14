@@ -63,7 +63,7 @@
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 100px;
   padding: 0.3rem 1rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   color: rgba(255, 255, 255, 0.4);
 }
 
@@ -189,7 +189,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.83rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.83rem);
   font-weight: 600;
   color: #6b7280;
   border-bottom: 2.5px solid transparent;
@@ -198,7 +198,7 @@
 }
 
 .pub-filter-btn i {
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
 }
 
 .pub-filter-btn:hover {
@@ -272,7 +272,7 @@
 .pub-empty-state-text {
   margin: 0;
   max-width: 28rem;
-  font-size: 0.84rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.84rem);
   line-height: 1.6;
   color: #9ca3af;
 }
@@ -298,7 +298,7 @@
 
 .pub-facet-filter-label,
 .pub-year-filter-label {
-  font-size: 0.62rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -397,7 +397,7 @@
     padding: 0.38rem 0.85rem;
     border: 1px solid rgba(13, 27, 42, 0.1);
     border-radius: 100px;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
     color: #5a6a7a;
   }
 
@@ -438,7 +438,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -456,7 +456,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   font-weight: 700;
   color: #a5280d;
   padding: 0.45rem 1rem;
@@ -510,7 +510,7 @@
   transform: translateY(-50%);
   background: #a5280d;
   color: #fff;
-  font-size: 0.62rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.62rem);
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -537,7 +537,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.7rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.7rem);
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -567,14 +567,14 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   color: #6b7280;
   font-weight: 500;
 }
 
 .pub-feat-meta-item i {
   color: #a5280d;
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
 }
 
 .pub-feat-actions {
@@ -697,7 +697,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   z-index: 2;
 }
 
@@ -710,7 +710,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.94);
   color: #8c2208;
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -728,7 +728,7 @@
 
 /* Meta line (date / period / tag) */
 .pub-card-meta {
-  font-size: 0.7rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.7rem);
   font-weight: 600;
   color: #9ca3af;
   text-transform: uppercase;
@@ -746,7 +746,7 @@
 
 /* Description / excerpt */
 .pub-card-desc {
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   color: #4b5563;
   line-height: 1.55;
   margin: 0;
@@ -759,7 +759,7 @@
 
 /* Action link */
 .pub-card-action {
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   font-weight: 600;
   color: #a5280d;
   text-decoration: none;
@@ -888,7 +888,7 @@
 .pub-drawer-cat {
   background: rgba(165, 40, 13, 0.08);
   color: #a5280d;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -897,7 +897,7 @@
 }
 
 .pub-drawer-date {
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   color: #6b7280;
   display: flex;
   align-items: center;
@@ -1076,7 +1076,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
   font-weight: 600;
   color: #78716c;
   margin-bottom: 1rem;
@@ -1093,7 +1093,7 @@
 
 .pub-lock-page-eyebrow {
   display: inline-block;
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1126,7 +1126,7 @@
   border: 1px solid rgba(145, 19, 19, 0.18);
   background: rgba(255, 255, 255, 0.85);
   padding: 0.35rem 0.75rem;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1258,7 +1258,7 @@
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   color: #dc2626;
   background: #fef2f2;
   border-radius: 8px;
@@ -1316,7 +1316,7 @@
 }
 
 .pub-lock-hint {
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   color: #a8a29e;
   line-height: 1.625;
 }
@@ -1501,7 +1501,7 @@
 
 .pub-file-access-eyebrow {
   margin: 0 0 0.35rem;
-  font-size: 0.68rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.68rem);
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;

@@ -125,7 +125,12 @@ import CookieConsentBanner from "@/components/website/CookieConsentBanner";
 import { MediaCaptionProvider } from "@/components/website/MediaCaptionProvider";
 import { DonationProvider } from "@/context/DonationContext";
 import { VolunteerProvider } from "@/context/VolunteerContext";
-import { getMergedFooterSettings, getCookieConsentSettings } from "@/lib/site-settings";
+import {
+  getMergedFooterSettings,
+  getCookieConsentSettings,
+  getMergedTypographySettings,
+} from "@/lib/site-settings";
+import { buildTypographyCss } from "@/lib/typography-settings";
 import { buildMediaCaptionRecord } from "@/lib/media-captions";
 import { loadAllMediaCaptions } from "@/lib/media-captions-server";
 
@@ -134,16 +139,23 @@ export default async function WebsiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [footerSettings, cookieSettings, captionMap, navMegaMenu] = await Promise.all([
-    getMergedFooterSettings(),
-    getCookieConsentSettings(),
-    loadAllMediaCaptions(),
-    fetchNavMegaMenuData(),
-  ]);
+  const [footerSettings, cookieSettings, captionMap, navMegaMenu, typography] =
+    await Promise.all([
+      getMergedFooterSettings(),
+      getCookieConsentSettings(),
+      loadAllMediaCaptions(),
+      fetchNavMegaMenuData(),
+      getMergedTypographySettings(),
+    ]);
   return (
     <VolunteerProvider>
       <DonationProvider>
         <MediaCaptionProvider captions={buildMediaCaptionRecord(captionMap)}>
+        {/* Scoped to the public site: the dashboard layout never renders this. */}
+        <style
+          id="cr-typography"
+          dangerouslySetInnerHTML={{ __html: buildTypographyCss(typography) }}
+        />
         <div className="website-root">
           <WebsiteJsonLd />
           <link rel="preconnect" href="https://cdnjs.cloudflare.com" />

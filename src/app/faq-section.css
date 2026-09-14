@@ -20,7 +20,7 @@
   align-items: center;
   gap: 0.45rem;
   padding: 0.3rem 1rem;
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -31,7 +31,7 @@
 }
 
 .ct-faq-eyebrow i {
-  font-size: 0.7rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.7rem);
 }
 
 .ct-faq-title {
@@ -88,7 +88,7 @@
   height: 28px;
   border-radius: 50%;
   flex-shrink: 0;
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   color: #8c2208;
   background: rgba(140, 34, 8, 0.08);
   transition: background 0.3s ease, transform 0.3s ease;
@@ -145,18 +145,18 @@
 }
 
 .page-editor-section-preview .ct-faq-q-text {
-  font-size: 0.82rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.82rem);
 }
 
 .page-editor-section-preview .ct-faq-icon {
   width: 24px;
   height: 24px;
-  font-size: 0.65rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.65rem);
 }
 
 .page-editor-section-preview .ct-faq-a p {
   padding: 0 1rem 0.85rem;
-  font-size: 0.78rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.78rem);
 }
 
 @media (max-width: 640px) {
@@ -178,6 +178,6 @@
 
   .ct-faq-a p {
     padding: 0 1.1rem 1rem;
-    font-size: 0.82rem;
+    font-size: max(var(--cr-text-min, 0rem), 0.82rem);
   }
 }

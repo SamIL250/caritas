@@ -43,7 +43,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 100px;
-  font-size: 0.6875rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6875rem);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -51,7 +51,7 @@
 }
 
 .cr-bpc-badge i {
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   opacity: 0.85;
 }
 
@@ -155,7 +155,7 @@
   gap: 0.35rem;
   padding: 0.28rem 0.75rem;
   border-radius: 100px;
-  font-size: 0.625rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.625rem);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -181,7 +181,7 @@
 }
 
 .cr-bpc-feat-location {
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   color: rgba(148, 163, 184, 0.95);
   margin: 0 0 1rem;
   display: flex;
@@ -226,7 +226,7 @@
 }
 
 .cr-bpc-goal {
-  font-size: 0.75rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.75rem);
   color: rgba(148, 163, 184, 0.88);
   text-align: right;
 }
@@ -280,7 +280,7 @@
 }
 
 .cr-bpc-mini-stat-label {
-  font-size: 0.625rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.625rem);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -339,7 +339,7 @@
   align-items: center;
   gap: 0.35rem;
   margin-top: 0.85rem;
-  font-size: 0.8125rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8125rem);
   font-weight: 600;
   color: rgba(148, 163, 184, 0.95);
   text-decoration: none;
@@ -391,7 +391,7 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.625rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.625rem);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -431,7 +431,7 @@
 }
 
 .cr-bpc-small-desc {
-  font-size: 0.8rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.8rem);
   line-height: 1.55;
   color: rgba(148, 163, 184, 0.95);
   margin: 0 0 0.65rem;
@@ -446,7 +446,7 @@
 }
 
 .cr-bpc-small-meta {
-  font-size: 0.6875rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6875rem);
   color: rgba(148, 163, 184, 0.82);
   display: flex;
   justify-content: space-between;
@@ -471,7 +471,7 @@
   gap: 0.35rem;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.72rem);
   font-weight: 700;
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -523,7 +523,7 @@
 }
 
 .cr-bpc-impact-title {
-  font-size: 0.6875rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.6875rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -548,7 +548,7 @@
 }
 
 .cr-bpc-impact-label {
-  font-size: 0.625rem;
+  font-size: max(var(--cr-text-min, 0rem), 0.625rem);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;

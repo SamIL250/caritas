@@ -10,7 +10,7 @@
 .ct-faq-head { text-align: center; margin-bottom: 2.5rem; }
 .ct-faq-eyebrow {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em;
+    font-size: max(var(--cr-text-min, 0rem), 0.68rem); font-weight: 800; letter-spacing: 0.14em;
     text-transform: uppercase; color: #911313;
     background: rgba(165,40,13,0.07); border: 1px solid rgba(165,40,13,0.15);
     padding: 0.3rem 0.9rem; border-radius: 100px; margin-bottom: 0.85rem;
@@ -37,7 +37,7 @@
     width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
     background: rgba(165,40,13,0.08); border: 1px solid rgba(165,40,13,0.18);
     display: flex; align-items: center; justify-content: center;
-    color: #911313; font-size: 0.7rem;
+    color: #911313; font-size: max(var(--cr-text-min, 0rem), 0.7rem);
     transition: background 0.2s, transform 0.3s;
 }
 .ct-faq-item.open .ct-faq-icon { background: #911313; color: #fff; transform: rotate(45deg); }
