@@ -14,7 +14,7 @@ BEGIN
   FOR r IN
     SELECT s.id, s.content
     FROM sections s
-    WHERE s.section_type::text = 'partners'
+    WHERE s.type::text = 'partners'
   LOOP
     items := COALESCE(r.content->'items', '[]'::jsonb);
     IF jsonb_typeof(items) <> 'array' THEN

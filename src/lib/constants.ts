@@ -530,7 +530,6 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     title: "Caritas Rwanda by the",
     title_accent: "Numbers",
     body: "A transparent look at our reach across programmes — healthcare, social welfare, development, and administration across Rwanda.",
-    max_cards: 6,
     kpis: [
       { value: "500K+", label: "Beneficiaries Reached Annually", color: "#ff9a6c", size: "xl", image_url: "/img/slide1.webp" },
       { value: "9", label: "Diocesan Caritas Offices Nationwide", color: "#4ade80", size: "lg", image_url: "/img/slide2.webp" },

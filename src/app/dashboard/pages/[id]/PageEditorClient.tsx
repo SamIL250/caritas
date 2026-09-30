@@ -6460,7 +6460,7 @@ function SectionForm({
       return (
         <div className="space-y-6">
           <p className="text-[10px] text-stone-500 leading-relaxed">
-            Large photo cards in a left/right carousel. Edit titles, numbers, images; add or remove cards below. Only the first N cards are shown on the site (keeps the page light).
+            Large photo cards in a left/right carousel. Edit titles, numbers, images; add or remove cards below. Every card is shown on the site unless you set a limit below.
           </p>
           {renderField('Badge label', 'label', 'text')}
           {renderField('Title prefix', 'title', 'text')}
@@ -6468,21 +6468,22 @@ function SectionForm({
           {renderField('Intro text (header band)', 'body', 'textarea')}
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
-              Max cards on site (1–12)
+              Max cards on site (blank = show all)
             </label>
             <input
               type="number"
               min={1}
-              max={12}
-              value={state.max_cards ?? 6}
+              value={state.max_cards ?? ''}
+              placeholder="All"
               onChange={(e) => {
-                const n = parseInt(e.target.value, 10);
-                onChange('max_cards', Number.isFinite(n) ? Math.min(12, Math.max(1, n)) : 6);
+                const raw = e.target.value.trim();
+                const n = parseInt(raw, 10);
+                onChange('max_cards', raw === '' || !Number.isFinite(n) ? null : Math.max(1, n));
               }}
               className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515]"
             />
             <p className="text-[9px] text-stone-400">
-              Extra cards stay in CMS but are not rendered until you raise this limit.
+              Leave blank to show every card. A number only renders the first N (extra cards stay in CMS).
             </p>
           </div>
           <div className="space-y-1">

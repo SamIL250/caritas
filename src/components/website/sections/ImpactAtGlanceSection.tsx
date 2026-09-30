@@ -38,8 +38,11 @@ export type ImpactAtGlanceContent = {
   title?: string;
   title_accent?: string;
   body?: string;
-  /** Max cards rendered on the site (keeps page light). Default 6. */
-  max_cards?: number;
+  /**
+   * Max cards rendered on the site.
+   * `null` / omitted / invalid = no limit (every card renders).
+   */
+  max_cards?: number | null;
   kpis?: KpiItem[];
   programs?: ProgramLink[];
 };
@@ -60,8 +63,6 @@ const DEFAULT_CARD_IMAGES = [
   "/img/slide5.webp",
 ];
 
-const DEFAULT_MAX_CARDS = 6;
-
 type ImpactCard = {
   key: string;
   name: string;
@@ -72,17 +73,20 @@ type ImpactCard = {
   statLargeLabel: string;
 };
 
-function clampMaxCards(raw: unknown): number {
-  const n = typeof raw === "number" ? raw : parseInt(String(raw ?? ""), 10);
-  if (!Number.isFinite(n) || n < 1) return DEFAULT_MAX_CARDS;
-  return Math.min(12, Math.max(1, Math.floor(n)));
+/** Returns the card cap, or `null` when every card should render. */
+function resolveMaxCards(raw: unknown): number | null {
+  if (raw === null || raw === undefined || raw === "") return null;
+  const n = typeof raw === "number" ? raw : parseInt(String(raw), 10);
+  if (!Number.isFinite(n) || n < 1) return null;
+  return Math.floor(n);
 }
 
 function buildCards(
   programs: ProgramLink[],
   kpis: KpiItem[],
-  maxCards: number,
+  maxCards: number | null,
 ): ImpactCard[] {
+  const cap = maxCards === null ? Infinity : maxCards;
   const fromPrograms =
     programs.length > 0
       ? programs.map((p, i) => {
@@ -116,7 +120,7 @@ function buildCards(
           statLargeLabel: kpi.label || "",
         }));
 
-  return fromPrograms.slice(0, maxCards);
+  return fromPrograms.slice(0, cap);
 }
 
 export default function ImpactAtGlanceSection({
@@ -137,7 +141,7 @@ export default function ImpactAtGlanceSection({
   }[];
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const maxCards = clampMaxCards(max_cards);
+  const maxCards = resolveMaxCards(max_cards);
 
   const programLinks: ProgramLink[] =
     programs && programs.length > 0
