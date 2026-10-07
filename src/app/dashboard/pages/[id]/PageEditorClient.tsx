@@ -6460,7 +6460,7 @@ function SectionForm({
       return (
         <div className="space-y-6">
           <p className="text-[10px] text-stone-500 leading-relaxed">
-            Large photo cards in a left/right carousel. Edit titles, numbers, images; add or remove cards below. Every card is shown on the site unless you set a limit below.
+            Large photo cards — four per row on big screens. Clicking a card arrow reveals the metric cards of that category. Edit titles, numbers, images; add or remove cards below. Every card is shown on the site unless you set a limit below.
           </p>
           {renderField('Badge label', 'label', 'text')}
           {renderField('Title prefix', 'title', 'text')}
@@ -6468,7 +6468,7 @@ function SectionForm({
           {renderField('Intro text (header band)', 'body', 'textarea')}
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
-              Max cards on site (blank = show all)
+              Max category cards on site (blank = show all)
             </label>
             <input
               type="number"
@@ -6483,7 +6483,7 @@ function SectionForm({
               className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#7A1515]/20 focus:border-[#7A1515]"
             />
             <p className="text-[9px] text-stone-400">
-              Leave blank to show every card. A number only renders the first N (extra cards stay in CMS).
+              Leave blank to show every category card. A number only renders the first N categories, and caps the metrics each one reveals (extra cards stay in CMS).
             </p>
           </div>
           <div className="space-y-1">
