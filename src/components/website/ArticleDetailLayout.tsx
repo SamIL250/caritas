@@ -32,7 +32,7 @@ type Props = {
   currentId: string;
   detailHref: (slug: string) => string;
   externalUrl?: string | null;
-  /** Show the full cover photo instead of cropping it to a fixed banner height. */
+  /** Show the full cover photo at its natural size instead of the framed banner. */
   coverUncropped?: boolean;
 };
 
@@ -79,12 +79,28 @@ export function ArticleDetailLayout({
 
         {cover ? (
           <div className={`news-detail-cover${coverUncropped ? " news-detail-cover--full" : ""}`}>
-            <MediaFigure
-              src={cover}
-              alt={coverAlt || title}
-              figureClassName="news-detail-cover-figure"
-              imgClassName=""
-            />
+            {coverUncropped ? (
+              <MediaFigure
+                src={cover}
+                alt={coverAlt || title}
+                figureClassName="news-detail-cover-figure"
+                imgClassName=""
+              />
+            ) : (
+              // Blurred copy of the photo fills the banner around it, so the
+              // whole image stays visible without being cropped.
+              <div
+                className="news-detail-cover-frame"
+                style={{ backgroundImage: `url(${JSON.stringify(cover)})` }}
+              >
+                <MediaFigure
+                  src={cover}
+                  alt={coverAlt || title}
+                  figureClassName="news-detail-cover-figure"
+                  imgClassName=""
+                />
+              </div>
+            )}
           </div>
         ) : null}
 
