@@ -13146,6 +13146,82 @@ a.diocese-card.diocese-card--special {
     }
 }
 
+.donation-sheet-head {
+    border-bottom: 1px solid #efeae4;
+    padding: 1.85rem 2.4rem 1.55rem;
+}
+
+.donation-sheet-head__brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.donation-sheet-head__logo {
+    display: block;
+    height: 46px;
+    width: auto;
+}
+
+.donation-sheet-head__nav {
+    display: grid;
+    grid-template-columns: 5.75rem minmax(0, 1fr) 5.75rem;
+    align-items: center;
+    margin-top: 1.7rem;
+}
+
+.donation-sheet-body {
+    padding: 2rem 2.4rem 3rem;
+}
+
+@media (max-width: 720px) {
+    .donation-sheet-head {
+        padding: 1.35rem 1.35rem 1.2rem;
+    }
+
+    .donation-sheet-head__nav {
+        margin-top: 1.25rem;
+    }
+
+    .donation-sheet-body {
+        padding: 1.75rem 1.35rem 2.5rem;
+    }
+}
+
+.donation-modal-scope .donation-sheet-head .form-steps-indicator {
+    margin: 0;
+    gap: 0;
+    justify-content: center;
+}
+
+.donation-modal-scope .donation-sheet-head .donation-step-track {
+    gap: 0.75rem;
+}
+
+.donation-modal-scope .donation-sheet-head .step-line {
+    width: 2.75rem;
+    height: 1px;
+    background: #e4ddd6;
+}
+
+.donation-modal-scope .donation-sheet-head .step-dot {
+    width: 1.85rem;
+    height: 1.85rem;
+    background: transparent;
+    border: 1.5px solid #e4ddd6;
+    color: #a8a09a;
+    font-weight: 650;
+    box-shadow: none;
+}
+
+.donation-modal-scope .donation-sheet-head .step-dot.active {
+    background: #8c2208;
+    border-color: #8c2208;
+    color: #ffffff;
+    box-shadow: none;
+}
+
 /* ── 5. GENERAL: Reduce section padding on small screens ──── */
 @media (max-width: 480px) {
     section {

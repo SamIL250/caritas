@@ -704,68 +704,69 @@ export default function DonationModal({
                 }}
                 style={{ padding: 0 }}
               >
-                {/* Sticky Header with Logo and Close */}
-                <div className="sticky top-0 z-[60] flex w-full items-center justify-between border-b border-stone-100 bg-white/95 backdrop-blur-md px-8 py-5 md:px-10">
-                  <img src="/img/logo_bg.webp" alt="Caritas Rwanda Logo" className="h-[48px] object-contain" />
-                  <button type="button" className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-50 text-stone-600 transition-transform hover:scale-110 hover:bg-[#7A1515] hover:text-white" onClick={handleCloseClick} aria-label="Close modal">
-                    <X size={24} strokeWidth={2.5} />
-                  </button>
-                </div>
-
-
-
-                <div className="px-8 py-8 md:px-10 md:py-10">
-
-                <div className="flex items-center justify-between mb-8 pb-4 border-b border-stone-100">
-                  {/* Left: Back Button */}
-                  <div className="w-[80px]">
-                    {phase !== "pick" && (
-                      <button 
-                        type="button" 
-                        className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-stone-400 hover:text-stone-800 transition-colors" 
-                        onClick={goBack}
-                      >
-                        <ChevronLeft size={16} />
-                        Back
-                      </button>
-                    )}
+                <div className="donation-sheet-head sticky top-0 z-[60] bg-white">
+                  <div className="donation-sheet-head__brand">
+                    <img src="/img/logo_bg.webp" alt="Caritas Rwanda" className="donation-sheet-head__logo" />
+                    <button
+                      type="button"
+                      className="flex h-10 w-10 items-center justify-center rounded-full text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-800"
+                      onClick={handleCloseClick}
+                      aria-label="Close"
+                    >
+                      <X size={20} strokeWidth={2} />
+                    </button>
                   </div>
 
-                  {/* Center: Step Indicator */}
-                  <div className="form-steps-indicator donation-form-steps-wide" style={{ marginBottom: 0, marginTop: 0 }}>
-                    {Array.from({ length: stepDisplayTotal }, (_, i) => {
-                      const canClick = i < stepDisplayIndex - 1;
-                      return (
-                        <div
-                          key={i}
-                          className={`donation-step-track${canClick ? " is-clickable" : ""}`}
-                          onClick={canClick ? () => goToStep(flowSteps[i]) : undefined}
-                          role={canClick ? "button" : undefined}
-                          tabIndex={canClick ? 0 : undefined}
-                          onKeyDown={
-                            canClick
-                              ? (e) => {
-                                  if (e.key === "Enter" || e.key === " ") {
-                                    e.preventDefault();
-                                    goToStep(flowSteps[i]);
-                                  }
-                                }
-                              : undefined
-                          }
-                          aria-label={canClick ? `Go back to step ${i + 1}` : undefined}
+                  <div className="donation-sheet-head__nav">
+                    <div>
+                      {phase !== "pick" && (
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone-400 transition-colors hover:text-stone-800"
+                          onClick={goBack}
                         >
-                          <div className={`step-dot ${stepDisplayIndex >= i + 1 ? "active" : ""}`}>
-                            {i + 1}
-                          </div>
-                          {i < stepDisplayTotal - 1 ? <div className="step-line" /> : null}
-                        </div>
-                      );
-                    })}
-                  </div>
+                          <ChevronLeft size={15} strokeWidth={2} />
+                          Back
+                        </button>
+                      )}
+                    </div>
 
-                  {/* Right spacer for centering */}
-                  <div className="w-[80px]"></div>
+                    <div className="form-steps-indicator donation-form-steps-wide" style={{ marginBottom: 0, marginTop: 0 }}>
+                      {Array.from({ length: stepDisplayTotal }, (_, i) => {
+                        const canClick = i < stepDisplayIndex - 1;
+                        return (
+                          <div
+                            key={i}
+                            className={`donation-step-track${canClick ? " is-clickable" : ""}`}
+                            onClick={canClick ? () => goToStep(flowSteps[i]) : undefined}
+                            role={canClick ? "button" : undefined}
+                            tabIndex={canClick ? 0 : undefined}
+                            onKeyDown={
+                              canClick
+                                ? (e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                      e.preventDefault();
+                                      goToStep(flowSteps[i]);
+                                    }
+                                  }
+                                : undefined
+                            }
+                            aria-label={canClick ? `Go back to step ${i + 1}` : undefined}
+                          >
+                            <div className={`step-dot ${stepDisplayIndex >= i + 1 ? "active" : ""}`}>
+                              {i + 1}
+                            </div>
+                            {i < stepDisplayTotal - 1 ? <div className="step-line" /> : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div />
+                  </div>
                 </div>
+
+                <div className="donation-sheet-body">
 
                 {phase === "pick" && (
                   <motion.div
@@ -1457,7 +1458,6 @@ export default function DonationModal({
 
                 {phase === "reach" && !giving.online_payments_enabled && (
                   <motion.div
-                    className="form-step"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     key="reach"
