@@ -1,0 +1,132 @@
+.cr-give {
+  color: #1a1817;
+  font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+}
+
+.cr-give__cause {
+  margin: 0 0 0.65rem;
+  color: #8c2208;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cr-give__title {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(1.7rem, 3vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.cr-give__message {
+  margin: 0.85rem 0 0;
+  color: #5c5552;
+  font-size: 1rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.cr-give__list {
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid #e7e2dc;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cr-give__row {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.95rem 1rem;
+  border-top: 1px solid #e7e2dc;
+}
+
+.cr-give__row:first-child {
+  border-top: 0;
+}
+
+.cr-give__label {
+  margin: 0;
+  color: #948b87;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cr-give__value {
+  color: #1a1817;
+  font-size: 1.02rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a.cr-give__value:hover {
+  color: #8c2208;
+  text-decoration: underline;
+}
+
+.cr-give__dial {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.45rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #e7e2dc;
+  border-radius: 8px;
+  background: #faf8f6;
+}
+
+.cr-give__dial code {
+  color: #111827;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cr-give__copy {
+  flex-shrink: 0;
+  border: 1px solid #e7e2dc;
+  border-radius: 6px;
+  background: #fff;
+  color: #5c5552;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0.65rem;
+  cursor: pointer;
+}
+
+.cr-give__copy:hover {
+  border-color: #8c2208;
+  color: #8c2208;
+}
+
+.cr-give__done {
+  margin-top: 1.25rem;
+  border: 0;
+  border-radius: 8px;
+  background: #7a1515;
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+}
+
+.cr-give__done:hover {
+  background: #5e1010;
+}
+
+.cr-give--preview {
+  padding: 1.25rem;
+  border: 1px solid #e7e2dc;
+  border-radius: 12px;
+  background: #faf8f6;
+}

@@ -37,8 +37,14 @@ import {
   type DonationPaymentMethod,
 } from "@/lib/donation-payment-methods";
 import { mapCommunityCampaignToModalRow } from "@/lib/community-campaign-donation-map";
+import { DonationReachOut } from "@/components/website/DonationReachOut";
+import {
+  DONATION_GIVING_DEFAULTS,
+  parseDonationGivingSettings,
+  type DonationGivingSettings,
+} from "@/lib/donation-giving";
 
-type FlowStep = "pick" | "detail" | "gift" | "details" | "pay";
+type FlowStep = "pick" | "detail" | "gift" | "details" | "pay" | "reach";
 type DonorType = "individual" | "organization";
 
 const PAY_METHOD_ORDER: DonationPaymentMethod[] = [
@@ -128,6 +134,7 @@ export default function DonationModal({
   initialError,
 }: DonationModalProps) {
   const [phase, setPhase] = useState<FlowStep>("pick");
+  const [giving, setGiving] = useState<DonationGivingSettings>(DONATION_GIVING_DEFAULTS);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [campaigns, setCampaigns] = useState<Record<string, unknown>[]>([]);
@@ -172,11 +179,12 @@ export default function DonationModal({
   }
 
   const flowSteps = useMemo((): FlowStep[] => {
+    if (!giving.online_payments_enabled) return ["pick", "reach"];
     const showDetail = Boolean(selectedCampaign && selectedCampaign.id);
     return showDetail
       ? ["pick", "detail", "gift", "details", "pay"]
       : ["pick", "gift", "details", "pay"];
-  }, [selectedCampaign]);
+  }, [giving.online_payments_enabled, selectedCampaign]);
 
   const stepDisplayIndex = useMemo(() => {
     const idx = flowSteps.indexOf(phase);
@@ -307,23 +315,38 @@ export default function DonationModal({
       const supabase = createClient();
       setLoading(true);
       try {
-        const { data, error: qErr } = await supabase
-          .from("community_campaigns")
-          .select("*")
-          .eq("donations_enabled", true)
-          .eq("status", "published")
-          .order("published_at", { ascending: false });
+        const [campaignResult, givingResult] = await Promise.all([
+          supabase
+            .from("community_campaigns")
+            .select("*")
+            .eq("donations_enabled", true)
+            .eq("status", "published")
+            .order("published_at", { ascending: false }),
+          supabase
+            .from("donation_giving_settings")
+            .select("id, online_payments_enabled, title, message, contact_email, contact_phone, mtn_code")
+            .limit(1)
+            .maybeSingle(),
+        ]);
 
-        if (qErr) throw qErr;
+        if (campaignResult.error) throw campaignResult.error;
 
-        const list = ((data || []) as Record<string, unknown>[]).map(mapCommunityCampaignToModalRow);
+        const givingSettings = givingResult.error
+          ? { ...DONATION_GIVING_DEFAULTS }
+          : parseDonationGivingSettings(givingResult.data);
+        setGiving(givingSettings);
+        const paymentsOn = givingSettings.online_payments_enabled;
+
+        const list = ((campaignResult.data || []) as Record<string, unknown>[]).map(
+          mapCommunityCampaignToModalRow,
+        );
         setCampaigns(list);
 
         if (initialCampaignId) {
           const found = list.find((c) => String(c.id) === String(initialCampaignId));
           if (found) {
             setSelectedCampaign(found);
-            setPhase("detail");
+            setPhase(paymentsOn ? "detail" : "reach");
           } else {
             setSelectedCampaign({ ...GENERAL_CAUSE });
             setPhase("pick");
@@ -349,10 +372,10 @@ export default function DonationModal({
         return;
       }
       setGalleryIndex(0);
-      setPhase("detail");
+      setPhase(giving.online_payments_enabled ? "detail" : "reach");
     } else {
       setFrequencyId(frequencyChoicesForCampaign(null)[0]?.id ?? "one_time");
-      setPhase("gift");
+      setPhase(giving.online_payments_enabled ? "gift" : "reach");
     }
     scrollFormTop();
   }
@@ -414,6 +437,11 @@ export default function DonationModal({
 
   function goBack() {
     setError(null);
+    if (phase === "reach") {
+      setPhase("pick");
+      scrollFormTop();
+      return;
+    }
     if (phase === "pay") {
       setPhase("details");
       scrollFormTop();
@@ -763,6 +791,10 @@ export default function DonationModal({
                           onClick={() => {
                             setSelectedCampaign({ ...GENERAL_CAUSE });
                             setError(null);
+                            if (!giving.online_payments_enabled) {
+                              setPhase("reach");
+                              scrollFormTop();
+                            }
                           }}
                         >
                           <div className="card-check">
@@ -792,6 +824,10 @@ export default function DonationModal({
                                 if (cEnded) return;
                                 setSelectedCampaign(campaign);
                                 setError(null);
+                                if (!giving.online_payments_enabled) {
+                                  setPhase("reach");
+                                  scrollFormTop();
+                                }
                               }}
                             >
                               <div className="card-check">
@@ -816,8 +852,17 @@ export default function DonationModal({
                     )}
 
                     <div className="step-actions">
-                      <button type="button" className="btn-donation-next" onClick={goNextFromPick}>
-                        {selectedCampaign?.id ? "View campaign" : "Continue"}{" "}
+                      <button
+                        type="button"
+                        className="btn-donation-next"
+                        onClick={goNextFromPick}
+                        disabled={loading}
+                      >
+                        {selectedCampaign?.id
+                          ? giving.online_payments_enabled
+                            ? "View campaign"
+                            : "See how to give"
+                          : "Continue"}{" "}
                         <ChevronRight size={18} />
                       </button>
                     </div>
@@ -1407,6 +1452,21 @@ export default function DonationModal({
                         Your pledge is saved as pending until we confirm your transfer or mobile money payment.
                       </p>
                     )}
+                  </motion.div>
+                )}
+
+                {phase === "reach" && !giving.online_payments_enabled && (
+                  <motion.div
+                    className="form-step"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    key="reach"
+                  >
+                    <DonationReachOut
+                      settings={giving}
+                      causeName={String(selectedCampaign?.name || "General Donation")}
+                      onDone={onClose}
+                    />
                   </motion.div>
                 )}
                 </div>

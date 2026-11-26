@@ -29,6 +29,7 @@ import {
   RefreshCw,
   Type,
   Construction,
+  Smartphone,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
@@ -64,6 +65,7 @@ const navGroups: {
       { name: "Media", href: "/dashboard/media", icon: ImageIcon },
       { name: "Donations", href: "/dashboard/donations", icon: Heart, children: [
         { name: "Overview", href: "/dashboard/donations", icon: Heart },
+        { name: "How to give", href: "/dashboard/donations/giving", icon: Smartphone },
         { name: "Recurring", href: "/dashboard/donations/subscriptions", icon: RefreshCw },
         { name: "General", href: "/dashboard/donations/general", icon: Heart },
       ] },

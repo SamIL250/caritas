@@ -1689,6 +1689,42 @@ export interface Database {
         }
         Relationships: []
       }
+      donation_giving_settings: {
+        Row: {
+          id: string
+          online_payments_enabled: boolean
+          title: string
+          message: string
+          contact_email: string
+          contact_phone: string
+          mtn_code: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          online_payments_enabled?: boolean
+          title?: string
+          message?: string
+          contact_email?: string
+          contact_phone?: string
+          mtn_code?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          online_payments_enabled?: boolean
+          title?: string
+          message?: string
+          contact_email?: string
+          contact_phone?: string
+          mtn_code?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
