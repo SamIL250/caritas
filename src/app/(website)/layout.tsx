@@ -26,7 +26,7 @@ const OG_IMAGE = {
   type: "image/jpeg",
 } as const;
 
-export const metadata: Metadata = {
+const SITE_METADATA: Metadata = {
   metadataBase: new URL(SITE),
   title: {
     default: "Caritas Rwanda | Serving with Faith, Hope & Love",
@@ -112,6 +112,17 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  const maintenance = await getMaintenanceSettings();
+  if (!maintenance.enabled) return SITE_METADATA;
+  return {
+    ...SITE_METADATA,
+    title: maintenance.title,
+    description: maintenance.message.replace(/\s+/g, " ").trim(),
+    robots: { index: false, follow: false },
+  };
+}
+
 import WebsiteHeader from "@/components/website/WebsiteHeader";
 import WebsiteFooter from "@/components/website/WebsiteFooter";
 import WebsiteJsonLd from "@/components/website/WebsiteJsonLd";
@@ -130,6 +141,8 @@ import {
   getCookieConsentSettings,
   getMergedTypographySettings,
 } from "@/lib/site-settings";
+import { getMaintenanceSettings } from "@/lib/maintenance";
+import { MaintenanceScreen } from "@/components/website/MaintenanceScreen";
 import { buildTypographyCss } from "@/lib/typography-settings";
 import { buildMediaCaptionRecord } from "@/lib/media-captions";
 import { loadAllMediaCaptions } from "@/lib/media-captions-server";
@@ -139,6 +152,15 @@ export default async function WebsiteLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const maintenance = await getMaintenanceSettings();
+  if (maintenance.enabled) {
+    return (
+      <div className="website-root">
+        <MaintenanceScreen settings={maintenance} />
+      </div>
+    );
+  }
+
   const [footerSettings, cookieSettings, captionMap, navMegaMenu, typography] =
     await Promise.all([
       getMergedFooterSettings(),

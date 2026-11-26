@@ -28,6 +28,7 @@ import {
   BarChart3,
   RefreshCw,
   Type,
+  Construction,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
@@ -80,6 +81,7 @@ const navGroups: {
       { name: "Users", href: "/dashboard/users", icon: Users },
       { name: "Settings", href: "/dashboard/settings", icon: Settings },
       { name: "Typography", href: "/dashboard/typography", icon: Type },
+      { name: "Maintenance", href: "/dashboard/maintenance", icon: Construction },
       { name: "Cookies & Privacy", href: "/dashboard/cookies-privacy", icon: ShieldCheck },
     ],
   },

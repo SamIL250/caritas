@@ -1653,6 +1653,42 @@ export interface Database {
         }
         Relationships: []
       }
+      maintenance_settings: {
+        Row: {
+          id: string
+          enabled: boolean
+          eyebrow: string
+          title: string
+          message: string
+          contact_label: string
+          contact_email: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          enabled?: boolean
+          eyebrow?: string
+          title?: string
+          message?: string
+          contact_label?: string
+          contact_email?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          enabled?: boolean
+          eyebrow?: string
+          title?: string
+          message?: string
+          contact_label?: string
+          contact_email?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
