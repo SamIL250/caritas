@@ -91,7 +91,7 @@ export const DEFAULT_SECTION_CONTENT: Record<string, any> = {
     be_part_grid: true,
     featured_card: {
       image_url:
-        "https://caritasrwanda.org/wp-content/uploads/2026/02/162A7632-scaled.jpg",
+        "https://res.cloudinary.com/dddufhdak/image/upload/v1795702147/caritas_recovered/aHR0cHM6Ly9jYXJpdGFzcndhbmRhLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAyNi8wMi8xNjJBNzYz.jpg",
       image_alt:
         "Portrait representing an older Rwandan woman supported by Caritas programmes",
       category_label: "Medical Support",

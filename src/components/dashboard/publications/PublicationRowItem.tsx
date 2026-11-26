@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import {
   encodePublicationAssetUrl,
+  publicationFileHref,
   publicationHasPdf,
   type PublicationCategoryRow,
   type PublicationRow,
@@ -111,7 +112,7 @@ export function PublicationRowItem({ row, category, onDelete }: Props) {
       <div className="flex shrink-0 items-center justify-end gap-0.5 px-2 sm:w-auto sm:px-0">
         {row.file_url.trim() ? (
           <a
-            href={encodePublicationAssetUrl(row.file_url)}
+            href={publicationFileHref(row)}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg p-2.5 text-stone-400 transition-colors hover:bg-white/75 hover:text-stone-700"

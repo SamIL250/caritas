@@ -153,6 +153,14 @@ export function encodePublicationAssetUrl(url: string) {
   return encodeURI(path);
 }
 
+/**
+ * Same-origin download. Cloudinary stores the file; this route sends it to the browser
+ * because public PDF links on the free Cloudinary plan are blocked.
+ */
+export function publicationFileHref(row: Pick<PublicationRow, "slug" | "file_url">): string {
+  return `/publications/${encodeURIComponent(row.slug)}/file`;
+}
+
 /** Prefer PDF `file_url`, else external article link. */
 export function publicationPrimaryHref(row: Pick<PublicationRow, "file_url" | "external_url">): string {
   const f = row.file_url?.trim();

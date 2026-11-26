@@ -8,8 +8,8 @@ import type {
 } from "@/lib/publications";
 import {
   encodePublicationAssetUrl,
+  publicationFileHref,
   publicationHasPdf,
-  publicationPrimaryHref,
   readCategoryBehavior,
 } from "@/lib/publications";
 import { TESTIMONIES_SECTION_ANCHOR, type TestimonyRow } from "@/lib/testimonies";
@@ -351,7 +351,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
   function handleLockUnlock(pub: PublicationRow) {
     const hasPdf = publicationHasPdf(pub);
     if (hasPdf) {
-      window.open(publicationPrimaryHref(pub), '_blank', 'noopener');
+      window.open(publicationFileHref(pub), '_blank', 'noopener');
     } else {
       setActivePublication(pub);
     }
@@ -395,7 +395,7 @@ export default function PublicationsLibrary({ publications, categories, testimon
                   </div>
                 ) : publicationHasPdf(strategicFeatured) ? (
                   <a
-                    href={publicationPrimaryHref(strategicFeatured)}
+                    href={publicationFileHref(strategicFeatured)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="pub-featured"
@@ -863,7 +863,7 @@ function CategoryCard({ cat, row, onOpenDrawer, onLockedClick }: { cat: Publicat
   if (hasPdf) {
     return (
       <a
-        href={publicationPrimaryHref(row)}
+        href={publicationFileHref(row)}
         target="_blank"
         rel="noopener noreferrer"
         className="pub-card"

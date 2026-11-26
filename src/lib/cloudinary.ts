@@ -78,6 +78,51 @@ export async function uploadToCloudinary(
   });
 }
 
+const CLOUDINARY_ASSET_URL =
+  /^https:\/\/res\.cloudinary\.com\/[^/]+\/(image|raw|video)\/upload\/(.+)$/i;
+
+export type CloudinaryAssetRef = {
+  resourceType: "image" | "raw" | "video";
+  publicId: string;
+  format: string;
+};
+
+/** Read a Cloudinary delivery URL back into the asset the Admin API can download. */
+export function parseCloudinaryAssetUrl(url: string): CloudinaryAssetRef | null {
+  const match = url.trim().match(CLOUDINARY_ASSET_URL);
+  if (!match) return null;
+  const kind = match[1].toLowerCase();
+  const resourceType = kind === "raw" || kind === "video" ? kind : "image";
+  const pieces = match[2].split("/").filter((part) => {
+    if (/^v\d+$/.test(part)) return false;
+    if (part.startsWith("s--") || part.startsWith("fl_") || part.includes(",")) return false;
+    return true;
+  });
+  const path = pieces.join("/");
+  const dot = path.lastIndexOf(".");
+  if (dot <= 0) return null;
+  return {
+    resourceType,
+    publicId: path.slice(0, dot),
+    format: path.slice(dot + 1).toLowerCase(),
+  };
+}
+
+/**
+ * Short-lived API URL for the original file.
+ * Public PDF links are blocked on the free Cloudinary plan, so downloads use this.
+ */
+export function cloudinaryOriginalDownloadUrl(asset: CloudinaryAssetRef): string {
+  // Raw uploads keep the extension inside the public id. Image uploads do not.
+  const publicId =
+    asset.resourceType === "raw" ? `${asset.publicId}.${asset.format}` : asset.publicId;
+  return cloudinary.utils.private_download_url(publicId, asset.format, {
+    resource_type: asset.resourceType,
+    type: "upload",
+    attachment: true,
+  });
+}
+
 /**
  * Permanently delete a file from Cloudinary by its public_id.
  * If the asset is already gone, this resolves silently.

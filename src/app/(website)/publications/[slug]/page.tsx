@@ -15,8 +15,8 @@ import {
   encodePublicationAssetUrl,
   publicationCategoryLabel,
   publicationDetailHref,
+  publicationFileHref,
   publicationHasPdf,
-  publicationPrimaryHref,
   type PublicationCategoryRow,
   type PublicationRow,
 } from "@/lib/publications";
@@ -112,7 +112,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   const isSuccessStory = publication.category === "success_story";
   const storyHtml = publication.body?.trim() ? await prepareStaffRichHtml(publication.body.trim()) : "";
   const href = publicationHasPdf(publication)
-    ? publicationPrimaryHref(publication)
+    ? publicationFileHref(publication)
     : publication.external_url?.trim() || "";
   const isPdf = publicationHasPdf(publication);
   const isFileOnly = Boolean(href && !storyHtml);
@@ -180,7 +180,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   }
 
   return lockWrapper(
-    <div className="pub-article-page program-detail-flush">
+    <div className={`pub-article-page program-detail-flush${isFileOnly ? " pub-article-page--file" : ""}`}>
         <header className="prog-article-hero">
           <div className="prog-article-hero-bg" aria-hidden>
             {publication.cover_image_url.trim() ? (

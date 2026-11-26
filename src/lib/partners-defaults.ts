@@ -12,7 +12,7 @@ export const DEFAULT_PARTNERS: Partner[] = [
   {
     name: "Secours Catholique France",
     logo_url:
-      "https://caritasrwanda.org/wp-content/uploads/2024/06/Secours-Catholique-France-Logo-OK.png",
+      "https://res.cloudinary.com/dddufhdak/image/upload/v1795703091/caritas_recovered/aHR0cHM6Ly9jYXJpdGFzcndhbmRhLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAyNC8wNi9TZWNvdXJz.png",
     url: "https://www.secours-catholique.org",
   },
   {
@@ -22,13 +22,14 @@ export const DEFAULT_PARTNERS: Partner[] = [
   },
   {
     name: "UNHCR",
-    logo_url: "https://caritasrwanda.org/wp-content/uploads/2022/09/UNHCR.png",
+    logo_url:
+      "https://res.cloudinary.com/dddufhdak/image/upload/v1795703109/caritas_recovered/aHR0cHM6Ly9jYXJpdGFzcndhbmRhLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAyMi8wOS9VTkhDUi5w.png",
     url: "https://www.unhcr.org",
   },
   {
     name: "Ministry of Health Rwanda",
     logo_url:
-      "https://caritasrwanda.org/wp-content/uploads/2022/09/Ministry-of-Health-of-rwanda.jpg",
+      "https://res.cloudinary.com/dddufhdak/image/upload/v1795703118/caritas_recovered/aHR0cHM6Ly9jYXJpdGFzcndhbmRhLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAyMi8wOS9NaW5pc3Ry.jpg",
     url: "https://www.moh.gov.rw",
   },
   {
@@ -53,19 +54,20 @@ export const DEFAULT_PARTNERS: Partner[] = [
   },
   {
     name: "PEPFAR",
-    logo_url: "https://caritasrwanda.org/wp-content/uploads/2022/09/PEPFAR-LOGO-OK.jpg",
+    logo_url:
+      "https://res.cloudinary.com/dddufhdak/image/upload/v1795703143/caritas_recovered/aHR0cHM6Ly9jYXJpdGFzcndhbmRhLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAyMi8wOS9QRVBGQVIt.jpg",
     url: "https://www.pepfar.gov",
   },
   {
     name: "Caritas Slovenia",
     logo_url:
-      "https://caritasrwanda.org/wp-content/uploads/2022/08/caritas_slovenia.png",
+      "https://res.cloudinary.com/dddufhdak/image/upload/v1795703151/caritas_recovered/aHR0cHM6Ly9jYXJpdGFzcndhbmRhLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAyMi8wOC9jYXJpdGFz.png",
     url: "https://www.caritas.eu/caritas-slovenia/",
   },
   {
     name: "Catholic Relief Services",
     logo_url:
-      "https://caritasrwanda.org/wp-content/uploads/2022/08/inter_crs-1.jpg",
+      "https://res.cloudinary.com/dddufhdak/image/upload/v1795703470/caritas_recovered/161160b5d9c77c44c3f00579.jpg",
     url: "https://www.crs.org",
   },
   {
