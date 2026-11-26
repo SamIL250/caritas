@@ -56,7 +56,7 @@ const navGroups: {
     label: "Content",
     items: [
       { name: "News", href: "/dashboard/news", icon: Newspaper },
-      { name: "Programs", href: "/dashboard/programs", icon: Grid3x3 },
+      { name: "Departments", href: "/dashboard/programs", icon: Grid3x3 },
       { name: "Publications", href: "/dashboard/publications", icon: BookOpen, children: [
         { name: "All Publications", href: "/dashboard/publications", icon: BookOpen },
         { name: "Access Requests", href: "/dashboard/publications/access-requests", icon: Lock },

@@ -79,7 +79,7 @@ export const ProgramRichTextEditor = forwardRef<ProgramRichTextEditorHandle, Pro
         Placeholder.configure({
           placeholder:
             placeholder ??
-            "Tell the program story… Use headings, lists, quotes, embed images, link out to PDFs or partner pages — anything that helps the reader understand what's happening on the ground.",
+            "Tell the story… Use headings, lists, quotes, embed images, link out to PDFs or partner pages — anything that helps the reader understand what's happening on the ground.",
         }),
         Link.configure({
           openOnClick: false,

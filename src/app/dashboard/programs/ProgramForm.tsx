@@ -76,7 +76,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!category) {
-      setMsg({ ok: false, text: "Pick a program category first." });
+      setMsg({ ok: false, text: "Pick a department first." });
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -98,7 +98,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    setMsg({ ok: true, text: mode === "create" ? "Program created." : "Changes saved." });
+    setMsg({ ok: true, text: mode === "create" ? "Article created." : "Changes saved." });
     router.refresh();
     if (mode === "create") {
       router.push(`/dashboard/programs?tab=${encodeURIComponent(category.slug)}`);
@@ -132,7 +132,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
                   className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
                   htmlFor="category"
                 >
-                  Program area
+                  Department
                 </label>
                 <select
                   id="category"
@@ -330,7 +330,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
               />
               <Star className="size-4" aria-hidden />
               <span className="flex-1">
-                Feature this program on the /programs hero (multiple featured programs cycle in the
+                Feature this article on the /programs hero (multiple featured articles cycle in the
                 featured slot).
               </span>
             </label>
@@ -361,7 +361,7 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
                 Cover image
               </h3>
               <p className="mt-1 text-xs text-stone-500">
-                Used on the program card and as the article hero background.
+                Used on the article card and as the article hero background.
               </p>
             </header>
             <div className="flex flex-col gap-4">
@@ -458,9 +458,9 @@ function ProgramForm({ mode, program, categories, initialCategorySlug, duplicate
               <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Saving…
             </>
           ) : mode === "create" && !duplicateFrom ? (
-            "Create program"
+            "Create article"
           ) : mode === "create" ? (
-            "Duplicate program"
+            "Duplicate article"
           ) : (
             "Save changes"
           )}

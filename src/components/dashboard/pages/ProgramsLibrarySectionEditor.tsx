@@ -229,13 +229,13 @@ export default function ProgramsLibrarySectionEditor({
         <div className="flex items-center justify-between gap-2">
           <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Project circles</p>
           <Link href="/dashboard/programs" className="text-[10px] font-bold text-[#7A1515] hover:underline">
-            Manage programs →
+            Manage departments →
           </Link>
         </div>
 
         {publishedPrograms.length === 0 ? (
           <p className="rounded-lg border border-dashed border-stone-200 px-3 py-4 text-[11px] text-stone-500">
-            No published programs yet. Add programs in Dashboard → Programs.
+            No published programs yet. Add them in Dashboard → Departments.
           </p>
         ) : (
           sortedCategories.map((cat) => {

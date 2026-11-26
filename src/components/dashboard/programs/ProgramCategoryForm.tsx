@@ -77,7 +77,7 @@ function ProgramCategoryForm(props: Props) {
         </Link>
         <div>
           <h2 className="text-lg font-bold text-stone-900">
-            {mode === "create" ? "New program category" : "Edit program category"}
+            {mode === "create" ? "New department" : "Edit department"}
           </h2>
           {mode === "edit" && cat ? (
             <p className="mt-0.5 inline-flex flex-wrap items-center gap-2 text-xs font-medium text-stone-500">
@@ -92,7 +92,7 @@ function ProgramCategoryForm(props: Props) {
             </p>
           ) : (
             <p className="mt-0.5 text-xs text-stone-500">
-              Categories appear as tabs on Programs and as anchors on the public page.
+              Categories appear as tabs on Departments and as anchors on the public page.
             </p>
           )}
         </div>
@@ -222,7 +222,7 @@ function ProgramCategoryForm(props: Props) {
             Cover image (optional)
           </h3>
           <p className="mt-1 text-xs text-stone-500">
-            Used as a banner image for the section if you ever need a fallback when no programs are
+            Used as a banner image for the section if you ever need a fallback when no articles are
             featured yet.
           </p>
         </header>

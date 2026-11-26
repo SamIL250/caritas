@@ -27,7 +27,7 @@ export default async function DashboardProgramsPage() {
   return (
     <div className="w-full max-w-full">
       <Topbar
-        title="Programs"
+        title="Departments"
         subtitle={
           <>
             Articles, projects and stories shown on{" "}

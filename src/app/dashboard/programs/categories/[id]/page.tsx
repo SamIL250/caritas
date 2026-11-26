@@ -21,8 +21,8 @@ export default async function EditProgramCategoryPage({ params }: PageProps) {
   return (
     <div className="w-full max-w-full">
       <Topbar
-        title="Edit program category"
-        subtitle="Tune the appearance, slug or description for this program area."
+        title="Edit department"
+        subtitle="Tune the appearance, slug or description for this department."
       />
       <ProgramCategoryForm mode="edit" category={category} />
     </div>

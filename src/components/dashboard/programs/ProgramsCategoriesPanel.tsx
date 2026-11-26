@@ -50,7 +50,7 @@ export function ProgramsCategoriesPanel({
               /programs
             </a>
             . Built-in pillars are locked but you can rename them, change icons or add new categories
-            when the team launches a new program area.
+            when the team launches a new department.
           </p>
         </div>
         <Link
@@ -73,7 +73,7 @@ export function ProgramsCategoriesPanel({
             <tr>
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Slug</th>
-              <th className="px-4 py-3">Programs</th>
+              <th className="px-4 py-3">Articles</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -105,7 +105,7 @@ export function ProgramsCategoriesPanel({
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-stone-500">{c.slug}</td>
                   <td className="px-4 py-3 text-xs text-stone-600">
-                    {count} {count === 1 ? "program" : "programs"}
+                    {count} {count === 1 ? "article" : "articles"}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-1">
@@ -147,7 +147,7 @@ export function ProgramsCategoriesPanel({
         onClose={() => setDeleteTarget(null)}
         onConfirm={confirmDelete}
         title="Delete category?"
-        description={`Delete “${deleteTarget?.label ?? ""}”? Existing programs must be reassigned or deleted first.`}
+        description={`Delete “${deleteTarget?.label ?? ""}”? Existing articles must be reassigned or deleted first.`}
         confirmLabel={busy ? "Deleting…" : "Delete"}
       />
     </div>

@@ -43,7 +43,7 @@ export default async function NewProgramPage({ searchParams }: PageProps) {
   return (
     <div className="w-full max-w-full">
       <Topbar
-        title={duplicateFrom ? "Duplicate program article" : "New program article"}
+        title={duplicateFrom ? "Duplicate article" : "New article"}
         subtitle={
           duplicateFrom
             ? `Pre-filled from "${duplicateFrom.title}". Change what you need and save.`

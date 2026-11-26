@@ -28,7 +28,7 @@ export default async function EditProgramPage({ params }: PageProps) {
   return (
     <div className="w-full max-w-full">
       <Topbar
-        title="Edit program article"
+        title="Edit article"
         subtitle="Update the article body, cover or category."
         backUrl="/dashboard/programs"
       />
@@ -38,7 +38,7 @@ export default async function EditProgramPage({ params }: PageProps) {
           className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-stone-500 transition-colors hover:bg-stone-100 hover:text-[#7A1515]"
         >
           <Copy size={13} aria-hidden />
-          Duplicate this program
+          Duplicate this article
         </Link>
       </div>
       <ProgramForm mode="edit" program={program} categories={categories} />

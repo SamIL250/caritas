@@ -125,7 +125,7 @@ export async function getContentStatusBreakdowns(
     },
     {
       type: "programs",
-      label: "Programs",
+      label: "Departments",
       statuses: { published: ["published"], draft: ["draft"] },
     },
     {
@@ -316,7 +316,7 @@ export async function getRecentContentItems(
   const configs = [
     { type: "pages", label: "Page", href: (id: string) => `/dashboard/pages/${id}` },
     { type: "news_articles", label: "News", href: (id: string) => `/dashboard/news/${id}` },
-    { type: "programs", label: "Program", href: (id: string) => `/dashboard/programs/${id}` },
+    { type: "programs", label: "Department", href: (id: string) => `/dashboard/programs/${id}` },
     { type: "publications", label: "Publication", href: (id: string) => `/dashboard/publications/${id}` },
     { type: "events", label: "Event", href: (id: string) => `/dashboard/events/${id}` },
     { type: "community_campaigns", label: "Campaign", href: (id: string) => `/dashboard/community-campaigns/${id}` },

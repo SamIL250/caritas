@@ -116,7 +116,7 @@ function ProgramsDashboardClient({
 
   const newCtaLabel = activeCategory
     ? `New ${activeCategory.label.toLowerCase()} article`
-    : "New program";
+    : "New article";
 
   return (
     <div className="space-y-10">
@@ -130,10 +130,10 @@ function ProgramsDashboardClient({
               <div className="min-w-0 space-y-2">
                 <div>
                   <h2 className="text-lg font-bold tracking-tight text-stone-900 sm:text-xl">
-                    Programs
+                    Departments
                   </h2>
                   <p className="mt-1 max-w-xl text-sm leading-relaxed text-stone-500">
-                    Activities, projects and stories for each program area. Articles support rich text,
+                    Activities, projects and stories for each department. Articles support rich text,
                     images, files and links — broken into categories so each pillar has its own tab.
                   </p>
                 </div>
@@ -258,8 +258,8 @@ function ProgramsDashboardClient({
 
       <ConfirmDialog
         isOpen={delId !== null}
-        title="Delete program?"
-        description="This removes the program article. Cover images and inline media stay in the Media Library unless deleted separately."
+        title="Delete article?"
+        description="This removes the article. Cover images and inline media stay in the Media Library unless deleted separately."
         confirmLabel={deletingPending ? "Deleting…" : "Delete"}
         onClose={() => setDelId(null)}
         onConfirm={() => {
@@ -330,11 +330,11 @@ function ProgramsListPanel({
           <h3 className="text-lg font-semibold text-stone-900">
             {activeCategory
               ? `No ${(activeCategory.plural_label || activeCategory.label).toLowerCase()} articles yet`
-              : "No programs yet"}
+              : "No articles yet"}
           </h3>
           <p className="mt-2 max-w-sm text-sm leading-relaxed text-stone-500">
             {activeCategory?.description ||
-              "Create your first program article to surface it on /programs once published."}
+              "Create your first article to surface it on /programs once published."}
           </p>
           <Link
             href={newProgramHref}

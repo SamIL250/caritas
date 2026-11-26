@@ -6,7 +6,7 @@ export default function NewProgramCategoryPage() {
   return (
     <div className="w-full max-w-full">
       <Topbar
-        title="New program category"
+        title="New department"
         subtitle="Add a new pillar — gives editors a tab in the dashboard and an anchor on /programs."
       />
       <ProgramCategoryForm mode="create" />

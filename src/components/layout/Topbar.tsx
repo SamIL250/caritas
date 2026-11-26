@@ -20,7 +20,7 @@ export function Topbar({ title, subtitle, actions, backUrl }: TopbarProps) {
   // Advanced breadcrumb generation
   const paths = pathname?.split("/").filter(Boolean).filter(p => p !== 'dashboard') || [];
   const breadcrumbs = paths.map((p, i) => ({
-    name: p.charAt(0).toUpperCase() + p.slice(1).replace(/-/g, ' '),
+    name: p === "programs" ? "Departments" : p.charAt(0).toUpperCase() + p.slice(1).replace(/-/g, ' '),
     href: '/dashboard' + (paths.slice(0, i + 1).length > 0 ? '/' + paths.slice(0, i + 1).join('/') : ''),
     isLast: i === paths.length - 1
   }));

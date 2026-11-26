@@ -78,7 +78,7 @@ async function ensureCategoryExists(
     .select("id, slug")
     .eq("id", categoryId)
     .maybeSingle();
-  if (error || !data) throw new Error("The selected program category no longer exists.");
+  if (error || !data) throw new Error("The selected department no longer exists.");
   return data;
 }
 
@@ -89,7 +89,7 @@ export async function createProgram(form: FormData): Promise<{ error?: string; i
     if (!fields.title) return { error: "Title is required." };
 
     const category_id = String(form.get("category_id") || "").trim();
-    if (!category_id) return { error: "Choose a program category." };
+    if (!category_id) return { error: "Choose a department." };
 
     await ensureCategoryExists(supabase, category_id);
 
@@ -162,7 +162,7 @@ export async function updateProgram(
     if (!fields.title) return { error: "Title is required." };
 
     const category_id = String(form.get("category_id") || "").trim();
-    if (!category_id) return { error: "Choose a program category." };
+    if (!category_id) return { error: "Choose a department." };
 
     await ensureCategoryExists(supabase, category_id);
 

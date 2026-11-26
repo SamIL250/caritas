@@ -309,7 +309,7 @@ export function PublicationForm({
                 className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
                 htmlFor="department_id"
               >
-                Program area (department)
+                Department
               </label>
               <select
                 id="department_id"
