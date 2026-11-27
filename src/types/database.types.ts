@@ -1653,6 +1653,51 @@ export interface Database {
         }
         Relationships: []
       }
+      compliance_notice_settings: {
+        Row: {
+          id: string
+          enabled: boolean
+          title: string
+          image_url: string
+          image_alt: string
+          report_label: string
+          contact_email: string
+          contact_phone: string
+          info_label: string
+          info_url: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          enabled?: boolean
+          title?: string
+          image_url?: string
+          image_alt?: string
+          report_label?: string
+          contact_email?: string
+          contact_phone?: string
+          info_label?: string
+          info_url?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          enabled?: boolean
+          title?: string
+          image_url?: string
+          image_alt?: string
+          report_label?: string
+          contact_email?: string
+          contact_phone?: string
+          info_label?: string
+          info_url?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       maintenance_settings: {
         Row: {
           id: string

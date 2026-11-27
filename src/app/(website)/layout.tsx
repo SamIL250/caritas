@@ -142,6 +142,8 @@ import {
   getMergedTypographySettings,
 } from "@/lib/site-settings";
 import { getMaintenanceSettings } from "@/lib/maintenance";
+import { getComplianceNoticeSettings } from "@/lib/compliance-notice";
+import { HomepageComplianceNotice } from "@/components/website/HomepageComplianceNotice";
 import { MaintenanceScreen } from "@/components/website/MaintenanceScreen";
 import { buildTypographyCss } from "@/lib/typography-settings";
 import { buildMediaCaptionRecord } from "@/lib/media-captions";
@@ -161,13 +163,14 @@ export default async function WebsiteLayout({
     );
   }
 
-  const [footerSettings, cookieSettings, captionMap, navMegaMenu, typography] =
+  const [footerSettings, cookieSettings, captionMap, navMegaMenu, typography, complianceNotice] =
     await Promise.all([
       getMergedFooterSettings(),
       getCookieConsentSettings(),
       loadAllMediaCaptions(),
       fetchNavMegaMenuData(),
       getMergedTypographySettings(),
+      getComplianceNoticeSettings(),
     ]);
   return (
     <VolunteerProvider>
@@ -194,6 +197,7 @@ export default async function WebsiteLayout({
           </SmoothScrollProvider>
 
           {cookieSettings && <CookieConsentBanner settings={cookieSettings} />}
+          <HomepageComplianceNotice settings={complianceNotice} />
 
           <DonationModalWrapper />
           <VolunteerModalWrapper />

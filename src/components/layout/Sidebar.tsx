@@ -30,6 +30,7 @@ import {
   Type,
   Construction,
   Smartphone,
+  ShieldAlert,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isDashboardNavActive } from "@/lib/dashboard-nav";
@@ -85,6 +86,7 @@ const navGroups: {
       { name: "Typography", href: "/dashboard/typography", icon: Type },
       { name: "Maintenance", href: "/dashboard/maintenance", icon: Construction },
       { name: "Cookies & Privacy", href: "/dashboard/cookies-privacy", icon: ShieldCheck },
+      { name: "Compliance notice", href: "/dashboard/compliance", icon: ShieldAlert },
     ],
   },
 ];
